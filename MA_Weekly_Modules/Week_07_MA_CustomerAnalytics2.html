@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 7 – Customer Analytics Part 2 | MA</title>
+<style>
+:root{--primary:#00897b;--primary-dark:#00695c;--accent:#ff7043;--success:#43a047;--danger:#e53935;--bg:#f5f8fb;--card:#fff;--text:#1a2332;--muted:#5a6a7a;--border:#dde5ec}
+body.dark{--bg:#0f1721;--card:#1a2535;--text:#e0e8f0;--muted:#a0b0c0;--border:#2a3545}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;padding:40px 20px 30px;position:relative}
+header h1{font-size:1.9em;margin-bottom:6px}
+header p{opacity:.85;font-size:1em}
+.dark-toggle{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.2);border:none;color:white;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:1.1em}
+nav{background:var(--card);border-bottom:2px solid var(--border);padding:10px 20px;position:sticky;top:0;z-index:100;display:flex;flex-wrap:wrap;gap:6px}
+nav button{background:none;border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:20px;cursor:pointer;font-size:.85em;transition:all .2s}
+nav button:hover,nav button.active{background:var(--primary);color:white;border-color:var(--primary)}
+main{max-width:1100px;margin:30px auto;padding:0 20px}
+section{margin-bottom:40px}
+h2{color:var(--primary-dark);margin-bottom:16px;font-size:1.6em;padding-bottom:8px;border-bottom:2px solid var(--border)}
+body.dark h2{color:#80cbc4}
+h3{color:var(--primary);margin:18px 0 10px;font-size:1.2em}
+body.dark h3{color:#4db6ac}
+p{margin-bottom:10px}
+ul,ol{margin:10px 0 10px 22px}
+li{margin-bottom:4px}
+.card{background:var(--card);padding:24px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:20px}
+.formula{background:linear-gradient(135deg,#e0f7fa,#b2ebf2);border-left:4px solid var(--primary);padding:14px 18px;border-radius:8px;font-family:monospace;font-size:1em;margin:12px 0}
+body.dark .formula{background:linear-gradient(135deg,#1a3a3a,#0d2626);color:#a8d8ea}
+.example{background:linear-gradient(135deg,#fff8e1,#fff3cd);border-left:4px solid #fbc02d;padding:16px;border-radius:8px;margin:12px 0}
+body.dark .example{background:linear-gradient(135deg,#3a3010,#2a2008);color:#ffe082}
+.code{background:#1e2a3a;color:#a8d8ea;padding:16px;border-radius:8px;font-family:monospace;font-size:.88em;overflow-x:auto;margin:12px 0;white-space:pre}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9em}
+th{background:var(--primary);color:white;padding:10px 12px;text-align:left}
+td{padding:9px 12px;border-bottom:1px solid var(--border)}
+tr:nth-child(even) td{background:var(--bg)}
+.quiz-q{background:var(--card);border-radius:10px;padding:18px;margin-bottom:16px;border-left:4px solid var(--primary);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.quiz-q p{font-weight:600;margin-bottom:10px}
+.quiz-q button{display:block;width:100%;text-align:left;padding:8px 12px;margin:4px 0;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);cursor:pointer;font-size:.9em;transition:background .2s}
+.quiz-q button:hover:not(:disabled){background:var(--border)}
+.tips{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-left:4px solid var(--success);padding:20px;border-radius:10px;margin:16px 0}
+body.dark .tips{background:linear-gradient(135deg,#0d2a10,#0a1f0c);color:#a5d6a7}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.78em;font-weight:700;margin-left:8px}
+.badge-blue{background:#e3f2fd;color:#1565c0}
+.badge-green{background:#e8f5e9;color:#2e7d32}
+.badge-orange{background:#fff3e0;color:#e65100}
+body.dark .badge-blue{background:#1a2a3a;color:#90caf9}
+body.dark .badge-green{background:#1a2a1a;color:#a5d6a7}
+body.dark .badge-orange{background:#3a2a1a;color:#ffcc80}
+.highlight{background:rgba(0,137,123,.12);border-radius:4px;padding:1px 5px;font-weight:600}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:12px 0}
+@media(max-width:680px){.two-col{grid-template-columns:1fr}}
+.svg-wrap{background:var(--card);padding:20px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin:16px 0;overflow-x:auto}
+.svg-wrap svg{display:block;margin:auto}
+.nav-links{display:flex;justify-content:space-between;margin-top:30px;padding-top:20px;border-top:2px solid var(--border);flex-wrap:wrap;gap:10px}
+.nav-links a{background:var(--primary);color:white;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:600;transition:background .2s}
+.nav-links a:hover{background:var(--primary-dark)}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.88em;margin-top:20px;border-top:1px solid var(--border)}
+.segment-chip{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.8em;font-weight:700;margin:2px}
+.chip-champion{background:#c8e6c9;color:#1b5e20}
+.chip-loyal{background:#bbdefb;color:#0d47a1}
+.chip-risk{background:#ffcdd2;color:#b71c1c}
+.chip-lost{background:#eeeeee;color:#424242}
+body.dark .chip-champion{background:#1b3a1b;color:#a5d6a7}
+body.dark .chip-loyal{background:#1a2a3a;color:#90caf9}
+body.dark .chip-risk{background:#3a1a1a;color:#ef9a9a}
+body.dark .chip-lost{background:#2a2a2a;color:#bdbdbd}
+</style>
+</head>
+<body>
+<script>
+function qa(el,c){
+  el.style.background=c?'#c8e6c9':'#ffcdd2';
+  el.style.color=c?'#1b5e20':'#b71c1c';
+  el.style.fontWeight='700';
+  el.disabled=true;
+  el.parentElement.querySelectorAll('button').forEach(b=>{if(b!==el)b.disabled=true});
+}
+function dark(){
+  document.body.classList.toggle('dark');
+  try{localStorage.setItem('ma_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}
+}
+if(localStorage.getItem('ma_dark')==='1')document.body.classList.add('dark');
+function nav(id,btn){
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+}
+</script>
+
+<header>
+  <button class="dark-toggle" onclick="dark()" title="Toggle dark mode">&#9790;</button>
+  <div style="max-width:1100px;margin:auto">
+    <p style="opacity:.7;font-size:.85em;margin-bottom:6px">Marketing Analytics &nbsp;|&nbsp; Week 7</p>
+    <h1>Customer Analytics &mdash; Part 2</h1>
+    <p>Share of Wallet &nbsp;&bull;&nbsp; Market Basket Analysis &nbsp;&bull;&nbsp; RFM Deep Dive</p>
+  </div>
+</header>
+
+<nav>
+  <button onclick="nav('sow',this)" class="active">Share of Wallet</button>
+  <button onclick="nav('mba',this)">Market Basket Analysis</button>
+  <button onclick="nav('rfm',this)">RFM Analysis</button>
+  <button onclick="nav('quiz',this)">Quiz (14 Qs)</button>
+  <button onclick="nav('summary',this)">Summary &amp; Tips</button>
+  <button onclick="nav('xn-extra',this)">🔢 Numericals</button>
+  <button onclick="nav('xn-mcq',this)">📝 MCQs</button>
+</nav>
+
+<main>
+
+<!-- ===================== SECTION 1: Share of Wallet ===================== -->
+<section id="sow">
+  <h2>1. Share of Wallet (SOW)</h2>
+
+  <div class="card">
+    <h3>Definition &amp; Formula</h3>
+    <p>Share of Wallet measures what percentage of a customer's total spend <em>within a category</em> is captured by your company. Unlike market share (which looks at the whole market), SOW zooms in on the <strong>individual customer</strong>.</p>
+    <div class="formula">SOW (%) = (Customer Spend with Company / Customer's Total Category Spend) &times; 100</div>
+    <div class="example">
+      <strong>Worked Example &mdash; Coffee Chain:</strong><br>
+      A customer spends <strong>&#8377;500/month</strong> total across all coffee shops.<br>
+      They spend <strong>&#8377;200/month</strong> at <em>our</em> coffee chain.<br><br>
+      SOW = (200 / 500) &times; 100 = <strong class="highlight">40%</strong><br><br>
+      Interpretation: We capture 40 paise of every rupee this customer spends on coffee. The remaining 60% goes to competitors &mdash; a <strong>growth opportunity</strong>.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>SOW vs Market Share</h3>
+    <table>
+      <tr><th>Dimension</th><th>Share of Wallet</th><th>Market Share</th></tr>
+      <tr><td><strong>Unit of Analysis</strong></td><td>Individual customer</td><td>Entire market / segment</td></tr>
+      <tr><td><strong>Data Source</strong></td><td>Customer transaction data, surveys</td><td>Industry sales data, Nielsen reports</td></tr>
+      <tr><td><strong>Use Case</strong></td><td>Retention, upsell, cross-sell</td><td>Competitive positioning, strategic planning</td></tr>
+      <tr><td><strong>Actionability</strong></td><td>Highly actionable &mdash; personalized campaigns</td><td>Strategic &amp; aggregate</td></tr>
+      <tr><td><strong>Typical Metric</strong></td><td>% of customer's category spend</td><td>% of total industry revenue</td></tr>
+    </table>
+    <p><strong>Key Insight:</strong> A company can have a <em>high market share</em> but <em>low SOW</em> per customer &mdash; meaning many customers buy from them but also frequently buy from competitors.</p>
+  </div>
+
+  <div class="card">
+    <h3>Amazon SOW Strategy &mdash; Case Study</h3>
+    <p>Amazon is the world's foremost example of SOW maximisation through ecosystem lock-in:</p>
+    <ul>
+      <li><strong>Prime Membership:</strong> Annual fee creates switching costs &mdash; customers justify subscription by buying more on Amazon</li>
+      <li><strong>Recommendations Engine:</strong> "Customers also bought" cross-sells across categories (electronics &rarr; accessories &rarr; consumables)</li>
+      <li><strong>Product Breadth:</strong> 350M+ products &mdash; one-stop-shop reduces motivation to visit competitors</li>
+      <li><strong>Amazon Fresh / Whole Foods:</strong> Captures grocery SOW (previously at supermarkets)</li>
+      <li><strong>Fire TV / Echo Devices:</strong> Device ecosystem creates content SOW and habitual Amazon usage</li>
+      <li><strong>AWS / Alexa Skills:</strong> B2B and developer ecosystem extends SOW into enterprise</li>
+    </ul>
+    <div class="example">
+      <strong>Result:</strong> Prime members spend on average <strong>4&times; more</strong> annually than non-Prime members. That is SOW strategy working at scale.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Strategies to Increase Share of Wallet</h3>
+    <div class="two-col">
+      <div>
+        <h3>Growth Levers</h3>
+        <ol>
+          <li><strong>Loyalty Programs:</strong> Reward incremental purchases to increase stickiness (Starbucks Stars, airline miles)</li>
+          <li><strong>Cross-Selling:</strong> Recommend adjacent categories the customer currently buys elsewhere</li>
+          <li><strong>Upselling:</strong> Higher-tier versions of existing purchases (economy &rarr; business class)</li>
+          <li><strong>Subscription / Auto-replenishment:</strong> Locks in repeat purchases (Amazon Subscribe &amp; Save)</li>
+          <li><strong>Bundle Deals:</strong> Price incentive to buy multiple categories at once</li>
+        </ol>
+      </div>
+      <div>
+        <h3>SOW Segmentation &amp; Strategy</h3>
+        <table>
+          <tr><th>SOW Range</th><th>Segment</th><th>Action</th></tr>
+          <tr><td>&gt; 70%</td><td>Loyal Core</td><td>Protect, VIP rewards</td></tr>
+          <tr><td>40–70%</td><td>Growth Opportunity</td><td>Cross-sell, deepen</td></tr>
+          <tr><td>20–40%</td><td>Competitive Market</td><td>Win-back offers</td></tr>
+          <tr><td>&lt; 20%</td><td>Trial / Occasional</td><td>Understand barriers</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOW SVG Diagram -->
+  <div class="svg-wrap">
+    <svg width="700" height="280" viewBox="0 0 700 280" font-family="Segoe UI,sans-serif">
+      <!-- Background -->
+      <rect width="700" height="280" rx="12" fill="none"/>
+      <text x="350" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#00695c">Share of Wallet: Visual Breakdown</text>
+
+      <!-- Wallet Rectangle -->
+      <rect x="40" y="60" width="200" height="160" rx="10" fill="#e0f7fa" stroke="#00897b" stroke-width="2"/>
+      <text x="140" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#00695c">Customer Wallet</text>
+      <text x="140" y="108" text-anchor="middle" font-size="11" fill="#5a6a7a">Total Category Spend: &#8377;500</text>
+
+      <!-- Our share slice -->
+      <rect x="55" y="118" width="170" height="42" rx="6" fill="#00897b"/>
+      <text x="140" y="138" text-anchor="middle" font-size="12" font-weight="700" fill="white">Our Share: &#8377;200 (40%)</text>
+      <text x="140" y="153" text-anchor="middle" font-size="10" fill="#e0f7fa">SOW = 200/500 &times; 100</text>
+
+      <!-- Competitor slice -->
+      <rect x="55" y="163" width="170" height="45" rx="6" fill="#b0bec5"/>
+      <text x="140" y="183" text-anchor="middle" font-size="12" font-weight="700" fill="#37474f">Competitors: &#8377;300 (60%)</text>
+      <text x="140" y="198" text-anchor="middle" font-size="10" fill="#546e7a">Growth opportunity</text>
+
+      <!-- Arrow -->
+      <line x1="255" y1="140" x2="305" y2="140" stroke="#00897b" stroke-width="2" marker-end="url(#arr)"/>
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#00897b"/>
+        </marker>
+      </defs>
+
+      <!-- Pie Chart -->
+      <!-- Circle center 450,155 radius 90 -->
+      <!-- Our 40% = 144 degrees; Competitor 60% = 216 degrees -->
+      <circle cx="460" cy="155" r="90" fill="#b0bec5"/>
+      <!-- Our slice: start at -90deg (top), sweep 144deg -->
+      <path d="M460,155 L460,65 A90,90 0 0,1 537.13,199 Z" fill="#00897b"/>
+      <!-- Spine overlay for visual only -->
+      <circle cx="460" cy="155" r="36" fill="white"/>
+      <text x="460" y="151" text-anchor="middle" font-size="13" font-weight="700" fill="#00695c">SOW</text>
+      <text x="460" y="167" text-anchor="middle" font-size="13" font-weight="700" fill="#00695c">40%</text>
+
+      <!-- Legend -->
+      <rect x="320" y="255" width="14" height="14" fill="#00897b" rx="3"/>
+      <text x="340" y="266" font-size="11" fill="#5a6a7a">Our Company (40%)</text>
+      <rect x="470" y="255" width="14" height="14" fill="#b0bec5" rx="3"/>
+      <text x="490" y="266" font-size="11" fill="#5a6a7a">Competitors (60%)</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ===================== SECTION 2: Market Basket Analysis ===================== -->
+<section id="mba">
+  <h2>2. Market Basket Analysis (Association Mining)</h2>
+
+  <div class="card">
+    <h3>Purpose &amp; Business Applications</h3>
+    <p>Market Basket Analysis (MBA) discovers which products are frequently purchased together. It enables:</p>
+    <ul>
+      <li><strong>Retail store layout:</strong> Place frequently associated products near each other</li>
+      <li><strong>E-commerce recommendations:</strong> "Frequently bought together" widgets</li>
+      <li><strong>Bundle pricing:</strong> Offer discounts on associated product pairs</li>
+      <li><strong>Inventory planning:</strong> Stock complementary items together</li>
+      <li><strong>Menu design:</strong> In restaurants, identify natural meal combinations</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Key Metrics &amp; Formulas</h3>
+    <div class="formula">Support(A) = Transactions containing A / Total Transactions<br>
+Measures: How frequently does item A appear overall?</div>
+    <div class="formula">Confidence(A &rarr; B) = Support(A &cup; B) / Support(A)<br>
+Measures: Given A is bought, how often is B also bought? (Rule reliability)</div>
+    <div class="formula">Lift(A &rarr; B) = Confidence(A &rarr; B) / Support(B)<br>
+Measures: How much more likely is B bought WITH A versus randomly?<br>
+  Lift &gt; 1: Positive association &nbsp;|&nbsp; Lift = 1: Independent &nbsp;|&nbsp; Lift &lt; 1: Negative</div>
+    <div class="formula">Leverage(A &rarr; B) = Support(A &cup; B) &minus; Support(A) &times; Support(B)<br>
+Measures: Deviation from independence. Positive = complementary products.</div>
+    <div class="formula">Conviction(A &rarr; B) = (1 &minus; Support(B)) / (1 &minus; Confidence(A &rarr; B))<br>
+Measures: Rule directionality. &infin; = perfect rule (B always follows A)</div>
+  </div>
+
+  <div class="card">
+    <h3>Fully Worked Example</h3>
+    <p><strong>Dataset:</strong> 10 transactions, Items: Apple (A), Banana (B), Cherry (C), Dates (D)</p>
+    <div class="example">
+      <strong>Transactions:</strong><br>
+      T1:{A,B} &nbsp; T2:{A,C} &nbsp; T3:{A,B,C} &nbsp; T4:{B,C} &nbsp; T5:{A,B}<br>
+      T6:{A,C,D} &nbsp; T7:{B} &nbsp; T8:{A,B,C} &nbsp; T9:{C,D} &nbsp; T10:{A,B}
+    </div>
+    <table>
+      <tr><th>Itemset</th><th>Count</th><th>Support</th></tr>
+      <tr><td>A (Apple)</td><td>7</td><td>7/10 = <strong>0.70</strong></td></tr>
+      <tr><td>B (Banana)</td><td>7</td><td>7/10 = <strong>0.70</strong></td></tr>
+      <tr><td>C (Cherry)</td><td>6</td><td>6/10 = <strong>0.60</strong></td></tr>
+      <tr><td>D (Dates)</td><td>2</td><td>2/10 = <strong>0.20</strong></td></tr>
+      <tr><td>A &cup; B</td><td>5</td><td>5/10 = <strong>0.50</strong></td></tr>
+      <tr><td>A &cup; C</td><td>4</td><td>4/10 = <strong>0.40</strong></td></tr>
+      <tr><td>B &cup; C</td><td>4</td><td>4/10 = <strong>0.40</strong></td></tr>
+    </table>
+    <div class="example">
+      <strong>Rule Calculations:</strong><br><br>
+      <strong>Confidence(A &rarr; B)</strong> = Support(A&cup;B) / Support(A) = 0.50 / 0.70 = <strong>0.714</strong><br>
+      Interpretation: 71.4% of Apple buyers also buy Banana.<br><br>
+      <strong>Lift(A &rarr; B)</strong> = Confidence(A&rarr;B) / Support(B) = 0.714 / 0.70 = <strong>1.02</strong><br>
+      Interpretation: Apple buyers are 1.02&times; more likely to buy Banana than a random customer. (Mild positive association)<br><br>
+      <strong>Confidence(A &rarr; C)</strong> = 0.40 / 0.70 = <strong>0.571</strong><br>
+      <strong>Lift(A &rarr; C)</strong> = 0.571 / 0.60 = <strong>0.952</strong><br>
+      Interpretation: Lift &lt; 1 &mdash; Apple buyers are <em>slightly less likely</em> to buy Cherry than average. Slight negative association.<br><br>
+      <strong>Leverage(A &rarr; B)</strong> = 0.50 &minus; (0.70 &times; 0.70) = 0.50 &minus; 0.49 = <strong>+0.01</strong> (mildly complementary)
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Mining Algorithms</h3>
+    <table>
+      <tr><th>Algorithm</th><th>Approach</th><th>Speed</th><th>Best For</th></tr>
+      <tr><td><strong>Apriori</strong></td><td>Level-by-level candidate generation using downward closure property</td><td>Slow for large datasets (many database scans)</td><td>Learning &amp; small datasets</td></tr>
+      <tr><td><strong>Eclat</strong></td><td>Vertical data format (transaction ID lists); intersects TID lists</td><td>Faster for dense datasets</td><td>Medium datasets, dense transactions</td></tr>
+      <tr><td><strong>FP-Growth</strong></td><td>FP-tree structure; no candidate generation</td><td>Most efficient &mdash; only 2 database scans</td><td>Large, sparse datasets (production)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Real-World Application: Store Layout Optimization</h3>
+    <p><strong>Association rules discovered:</strong></p>
+    <table>
+      <tr><th>Rule</th><th>Support</th><th>Confidence</th><th>Lift</th><th>Action</th></tr>
+      <tr><td>Beer &rarr; Diapers</td><td>0.25</td><td>0.68</td><td>3.2</td><td>Place beer near baby aisle</td></tr>
+      <tr><td>Bread &rarr; Butter</td><td>0.35</td><td>0.80</td><td>4.1</td><td>End-cap display together</td></tr>
+      <tr><td>Chips &rarr; Soda</td><td>0.30</td><td>0.72</td><td>2.8</td><td>Bundle deal 10% off</td></tr>
+    </table>
+    <p>The famous "beer and diapers" story (Walmart 1990s) is the canonical MBA example &mdash; Friday evening shopping showed fathers buying beer alongside diapers.</p>
+
+    <h3>Python Implementation</h3>
+    <div class="code">from mlxtend.frequent_patterns import apriori, association_rules
+import pandas as pd
+
+# df: one-hot encoded transaction matrix (rows=transactions, cols=items, values=0/1)
+# Example: df['Apple'], df['Banana'], etc.
+
+# Step 1: Find frequent itemsets
+frequent_itemsets = apriori(df, min_support=0.3, use_colnames=True)
+
+# Step 2: Generate association rules
+rules = association_rules(frequent_itemsets, metric='lift', min_threshold=1.2)
+
+# Step 3: View top rules
+print(rules[['antecedents','consequents','support','confidence','lift']]
+      .sort_values('lift', ascending=False).head(10))
+
+# Step 4: Filter high-confidence rules
+strong_rules = rules[(rules['confidence'] > 0.6) & (rules['lift'] > 1.5)]</div>
+  </div>
+
+  <!-- MBA SVG -->
+  <div class="svg-wrap">
+    <svg width="700" height="300" viewBox="0 0 700 300" font-family="Segoe UI,sans-serif">
+      <text x="350" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#00695c">Market Basket Analysis: Transaction Grid &amp; Rules</text>
+
+      <!-- Transaction grid -->
+      <text x="10" y="58" font-size="11" font-weight="700" fill="#5a6a7a">Transactions</text>
+      <!-- Header row -->
+      <rect x="10" y="65" width="60" height="22" fill="#00897b" rx="3"/>
+      <text x="40" y="80" text-anchor="middle" font-size="10" fill="white">Trans</text>
+      <rect x="72" y="65" width="38" height="22" fill="#00897b" rx="3"/>
+      <text x="91" y="80" text-anchor="middle" font-size="10" fill="white">A</text>
+      <rect x="112" y="65" width="38" height="22" fill="#00897b" rx="3"/>
+      <text x="131" y="80" text-anchor="middle" font-size="10" fill="white">B</text>
+      <rect x="152" y="65" width="38" height="22" fill="#00897b" rx="3"/>
+      <text x="171" y="80" text-anchor="middle" font-size="10" fill="white">C</text>
+      <rect x="192" y="65" width="38" height="22" fill="#00897b" rx="3"/>
+      <text x="211" y="80" text-anchor="middle" font-size="10" fill="white">D</text>
+
+      <!-- Rows T1-T5 -->
+      <rect x="10" y="89" width="60" height="20" fill="#f5f8fb" rx="2"/><text x="40" y="103" text-anchor="middle" font-size="10" fill="#5a6a7a">T1</text>
+      <rect x="72" y="89" width="38" height="20" fill="#a5d6a7" rx="2"/><text x="91" y="103" text-anchor="middle" font-size="10" fill="#1b5e20">1</text>
+      <rect x="112" y="89" width="38" height="20" fill="#a5d6a7" rx="2"/><text x="131" y="103" text-anchor="middle" font-size="10" fill="#1b5e20">1</text>
+      <rect x="152" y="89" width="38" height="20" fill="#f5f8fb" rx="2"/><text x="171" y="103" text-anchor="middle" font-size="10" fill="#ccc">0</text>
+      <rect x="192" y="89" width="38" height="20" fill="#f5f8fb" rx="2"/><text x="211" y="103" text-anchor="middle" font-size="10" fill="#ccc">0</text>
+
+      <rect x="10" y="111" width="60" height="20" fill="#f5f8fb" rx="2"/><text x="40" y="125" text-anchor="middle" font-size="10" fill="#5a6a7a">T2</text>
+      <rect x="72" y="111" width="38" height="20" fill="#a5d6a7" rx="2"/><text x="91" y="125" text-anchor="middle" font-size="10" fill="#1b5e20">1</text>
+      <rect x="112" y="111" width="38" height="20" fill="#f5f8fb" rx="2"/><text x="131" y="125" text-anchor="middle" font-size="10" fill="#ccc">0</text>
+      <rect x="152" y="111" width="38" height="20" fill="#a5d6a7" rx="2"/><text x="171" y="125" text-anchor="middle" font-size="10" fill="#1b5e20">1</text>
+      <rect x="192" y="111" width="38" height="20" fill="#f5f8fb" rx="2"/><text x="211" y="125" text-anchor="middle" font-size="10" fill="#ccc">0</text>
+
+      <rect x="10" y="133" width="60" height="20" fill="#f5f8fb" rx="2"/><text x="40" y="147" text-anchor="middle" font-size="10" fill="#5a6a7a">T3</text>
+      <rect x="72" y="133" width="38" height="20" fill="#a5d6a7" rx="2"/><text x="91" y="147" text-anchor="middle" font-size="10" fill="#1b5e20">1</text>
+      <rect x="112" y="133" width="38" height="20" fill="#a5d6a7" rx="2"/><text x="131" y="147" text-anchor="middle" font-size="10" fill="#1b5e20">1</text>
+      <rect x="152" y="133" width="38" height="20" fill="#a5d6a7" rx="2"/><text x="171" y="147" text-anchor="middle" font-size="10" fill="#1b5e20">1</text>
+      <rect x="192" y="133" width="38" height="20" fill="#f5f8fb" rx="2"/><text x="211" y="133" text-anchor="middle" font-size="10" fill="#ccc">0</text>
+
+      <rect x="10" y="155" width="60" height="20" fill="#f5f8fb" rx="2"/><text x="40" y="169" text-anchor="middle" font-size="10" fill="#5a6a7a">T8</text>
+      <rect x="72" y="155" width="38" height="20" fill="#a5d6a7" rx="2"/><text x="91" y="169" text-anchor="middle" font-size="10" fill="#1b5e20">1</text>
+      <rect x="112" y="155" width="38" height="20" fill="#a5d6a7" rx="2"/><text x="131" y="169" text-anchor="middle" font-size="10" fill="#1b5e20">1</text>
+      <rect x="152" y="155" width="38" height="20" fill="#a5d6a7" rx="2"/><text x="171" y="169" text-anchor="middle" font-size="10" fill="#1b5e20">1</text>
+      <rect x="192" y="155" width="38" height="20" fill="#f5f8fb" rx="2"/><text x="211" y="169" text-anchor="middle" font-size="10" fill="#ccc">0</text>
+
+      <text x="140" y="198" text-anchor="middle" font-size="10" fill="#5a6a7a">... 6 more transactions ...</text>
+
+      <!-- Arrow -->
+      <text x="270" y="148" font-size="22" fill="#00897b">&#8594;</text>
+
+      <!-- Rules box -->
+      <rect x="305" y="60" width="385" height="200" rx="10" fill="#e0f7fa" stroke="#00897b" stroke-width="1.5"/>
+      <text x="497" y="85" text-anchor="middle" font-size="13" font-weight="700" fill="#00695c">Association Rules Discovered</text>
+
+      <rect x="320" y="96" width="355" height="34" rx="6" fill="white"/>
+      <text x="497" y="112" text-anchor="middle" font-size="11" font-weight="700" fill="#1a2332">A &rarr; B</text>
+      <text x="497" y="126" text-anchor="middle" font-size="10" fill="#5a6a7a">Conf: 0.714 &nbsp;&nbsp; Lift: 1.02 &nbsp;&nbsp; Support: 0.50</text>
+
+      <rect x="320" y="135" width="355" height="34" rx="6" fill="white"/>
+      <text x="497" y="151" text-anchor="middle" font-size="11" font-weight="700" fill="#1a2332">A &rarr; C</text>
+      <text x="497" y="165" text-anchor="middle" font-size="10" fill="#5a6a7a">Conf: 0.571 &nbsp;&nbsp; Lift: 0.95 &nbsp;&nbsp; Support: 0.40</text>
+
+      <rect x="320" y="174" width="355" height="34" rx="6" fill="white"/>
+      <text x="497" y="190" text-anchor="middle" font-size="11" font-weight="700" fill="#1a2332">B &rarr; C</text>
+      <text x="497" y="204" text-anchor="middle" font-size="10" fill="#5a6a7a">Conf: 0.571 &nbsp;&nbsp; Lift: 0.95 &nbsp;&nbsp; Support: 0.40</text>
+
+      <!-- Lift bar -->
+      <text x="320" y="232" font-size="10" fill="#5a6a7a">Lift scale:</text>
+      <rect x="380" y="220" width="200" height="12" rx="3" fill="#e0e0e0"/>
+      <rect x="380" y="220" width="100" height="12" rx="3" fill="#ff7043"/>
+      <line x1="480" y1="217" x2="480" y2="235" stroke="#00897b" stroke-width="2"/>
+      <text x="478" y="245" text-anchor="middle" font-size="9" fill="#00695c">1.0 (independent)</text>
+      <text x="375" y="245" font-size="9" fill="#e53935">&lt;1 neg</text>
+      <text x="555" y="245" font-size="9" fill="#43a047">&gt;1 positive</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ===================== SECTION 3: RFM Analysis ===================== -->
+<section id="rfm">
+  <h2>3. RFM Analysis (Detailed)</h2>
+
+  <div class="card">
+    <h3>The Three Dimensions</h3>
+    <div class="two-col">
+      <div>
+        <h3>R &mdash; Recency</h3>
+        <p><em>Days since last purchase.</em> More recent = better. A customer who bought yesterday is more engaged than one who bought 18 months ago.</p>
+        <div class="formula">R Score: 4 = 1–90 days<br>3 = 91–180 days<br>2 = 181–365 days<br>1 = &gt;365 days</div>
+      </div>
+      <div>
+        <h3>F &mdash; Frequency</h3>
+        <p><em>Number of transactions in a period.</em> More = better. High frequency signals loyalty and habitual purchasing.</p>
+        <div class="formula">F Score: 4 = &gt;12 orders/year<br>3 = 7–12 orders<br>2 = 3–6 orders<br>1 = 1–2 orders</div>
+      </div>
+    </div>
+    <div style="margin-top:12px">
+      <h3>M &mdash; Monetary</h3>
+      <p><em>Total spend in the period.</em> Higher = more valuable. Combine with F to identify high-value but infrequent buyers (big ticket items) vs. low-value frequent buyers.</p>
+      <div class="formula">M Score: 4 = &gt;&#8377;50,000 &nbsp;|&nbsp; 3 = &#8377;20,000–50,000 &nbsp;|&nbsp; 2 = &#8377;5,000–20,000 &nbsp;|&nbsp; 1 = &lt;&#8377;5,000</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Fully Worked Example &mdash; 5 Customers</h3>
+    <table>
+      <tr><th>Customer</th><th>Last Purchase</th><th>Orders/Year</th><th>Total Spend</th><th>R</th><th>F</th><th>M</th><th>RFM Code</th><th>Segment</th></tr>
+      <tr><td><strong>C1</strong></td><td>15 days ago</td><td>15</td><td>&#8377;75,000</td><td>4</td><td>4</td><td>4</td><td><strong>444</strong></td><td><span class="segment-chip chip-champion">Champion</span></td></tr>
+      <tr><td><strong>C2</strong></td><td>45 days ago</td><td>8</td><td>&#8377;28,000</td><td>3</td><td>3</td><td>3</td><td><strong>333</strong></td><td><span class="segment-chip chip-loyal">Loyal</span></td></tr>
+      <tr><td><strong>C3</strong></td><td>200 days ago</td><td>3</td><td>&#8377;12,000</td><td>2</td><td>2</td><td>2</td><td><strong>222</strong></td><td><span class="segment-chip chip-risk">Need Attention</span></td></tr>
+      <tr><td><strong>C4</strong></td><td>5 days ago</td><td>2</td><td>&#8377;60,000</td><td>4</td><td>1</td><td>4</td><td><strong>414</strong></td><td><span class="segment-chip chip-loyal">Big Spender</span></td></tr>
+      <tr><td><strong>C5</strong></td><td>380 days ago</td><td>1</td><td>&#8377;2,500</td><td>1</td><td>1</td><td>1</td><td><strong>111</strong></td><td><span class="segment-chip chip-lost">Lost</span></td></tr>
+    </table>
+    <div class="example">
+      <strong>Key Insight &mdash; C4 (414) vs C2 (333):</strong><br>
+      C4 bought recently and spends heavily but rarely visits &mdash; likely a luxury/infrequent buyer. Strategy: invite to exclusive events, push high-value items.<br>
+      C2 is a balanced, loyal mid-tier customer &mdash; ideal for loyalty program enrolment to upgrade to Champion.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Standard 11-Segment RFM Framework</h3>
+    <table>
+      <tr><th>Segment</th><th>R</th><th>F</th><th>M</th><th>Description</th><th>Strategy</th></tr>
+      <tr><td><span class="segment-chip chip-champion">Champions</span></td><td>4</td><td>4</td><td>4</td><td>Best customers, recent &amp; frequent</td><td>VIP rewards, upsell premium</td></tr>
+      <tr><td><span class="segment-chip chip-loyal">Loyal Customers</span></td><td>3–4</td><td>3–4</td><td>2–4</td><td>Buy regularly, decent value</td><td>Loyalty program, early access</td></tr>
+      <tr><td><span class="segment-chip chip-loyal">Potential Loyalists</span></td><td>3–4</td><td>1–2</td><td>1–2</td><td>Recent but low freq</td><td>Nurture, 2nd-purchase incentive</td></tr>
+      <tr><td><span class="segment-chip chip-loyal">Recent Customers</span></td><td>4</td><td>1</td><td>1</td><td>Just acquired, unknown value</td><td>Welcome series, onboarding</td></tr>
+      <tr><td><span class="segment-chip chip-loyal">Promising</span></td><td>3</td><td>1</td><td>1</td><td>Recent but not repeated yet</td><td>Welcome discount, product tour</td></tr>
+      <tr><td><span class="segment-chip chip-risk">Need Attention</span></td><td>2–3</td><td>2–3</td><td>2–3</td><td>Above-average but declining</td><td>Reactivation, limited offer</td></tr>
+      <tr><td><span class="segment-chip chip-risk">About to Sleep</span></td><td>2</td><td>1–2</td><td>1–2</td><td>Declining engagement</td><td>Win-back offer, personalized</td></tr>
+      <tr><td><span class="segment-chip chip-risk">At Risk</span></td><td>1–2</td><td>2–3</td><td>2–3</td><td>Were good; now going silent</td><td>Retention campaign, survey</td></tr>
+      <tr><td><span class="segment-chip chip-risk">Can't Lose Them</span></td><td>1</td><td>4</td><td>4</td><td>High value but lapsed</td><td>Emergency retention, CEO call</td></tr>
+      <tr><td><span class="segment-chip chip-lost">Hibernating</span></td><td>1</td><td>1–2</td><td>1–2</td><td>Low activity, long lapsed</td><td>Reminder, re-engagement email</td></tr>
+      <tr><td><span class="segment-chip chip-lost">Lost</span></td><td>1</td><td>1</td><td>1</td><td>No recent activity, minimal value</td><td>Last-chance offer or suppress</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Real-World Applications</h3>
+    <div class="two-col">
+      <div>
+        <h3>Amazon</h3>
+        <ul>
+          <li>Personalized homepage driven by F and M scores</li>
+          <li>Prime upgrade offers targeted at high-R, low-F customers</li>
+          <li>"It's been a while" emails triggered by R score drop</li>
+          <li>Re-engagement discount for "At Risk" customers</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Fuel Company / B2B</h3>
+        <ul>
+          <li>High-M, high-F = fleet operators &rarr; fleet contract offer</li>
+          <li>High-R, low-F = casual drivers &rarr; loyalty card push</li>
+          <li>Low-R = lapsed fleets &rarr; account manager outreach</li>
+        </ul>
+      </div>
+    </div>
+    <h3>Python RFM Implementation</h3>
+    <div class="code">import pandas as pd
+from datetime import datetime
+
+# df columns: customer_id, order_date, order_id, order_value
+snapshot_date = datetime(2024, 12, 31)
+
+rfm = df.groupby('customer_id').agg(
+    R=('order_date', lambda x: (snapshot_date - x.max()).days),
+    F=('order_id', 'count'),
+    M=('order_value', 'sum')
+).reset_index()
+
+# Score 1-4 using quartiles
+rfm['R_score'] = pd.qcut(rfm['R'], q=4, labels=[4, 3, 2, 1])   # Lower days = better R
+rfm['F_score'] = pd.qcut(rfm['F'], q=4, labels=[1, 2, 3, 4])   # Higher orders = better F
+rfm['M_score'] = pd.qcut(rfm['M'], q=4, labels=[1, 2, 3, 4])   # Higher spend = better M
+
+rfm['RFM_Score'] = rfm['R_score'].astype(str) + rfm['F_score'].astype(str) + rfm['M_score'].astype(str)
+
+# Segment mapping
+def segment(row):
+    r, f, m = int(row['R_score']), int(row['F_score']), int(row['M_score'])
+    if r == 4 and f == 4 and m == 4: return 'Champion'
+    if r >= 3 and f >= 3: return 'Loyal Customer'
+    if r == 1 and f >= 4 and m >= 4: return "Can't Lose Them"
+    if r == 1 and f == 1 and m == 1: return 'Lost'
+    return 'Other'
+
+rfm['Segment'] = rfm.apply(segment, axis=1)
+print(rfm.head(10))</div>
+  </div>
+
+  <!-- RFM SVG -->
+  <div class="svg-wrap">
+    <svg width="700" height="290" viewBox="0 0 700 290" font-family="Segoe UI,sans-serif">
+      <text x="350" y="25" text-anchor="middle" font-size="15" font-weight="700" fill="#00695c">RFM Scoring: Segment Distribution</text>
+
+      <!-- Axes -->
+      <line x1="60" y1="240" x2="650" y2="240" stroke="#dde5ec" stroke-width="2"/>
+      <line x1="60" y1="50" x2="60" y2="240" stroke="#dde5ec" stroke-width="2"/>
+      <text x="355" y="270" text-anchor="middle" font-size="11" fill="#5a6a7a">RFM Segment</text>
+      <text x="20" y="145" text-anchor="middle" font-size="11" fill="#5a6a7a" transform="rotate(-90,20,145)">% Customers</text>
+
+      <!-- Bars -->
+      <!-- Champion: 15% -->
+      <rect x="75" y="142" width="55" height="98" rx="4" fill="#00897b"/>
+      <text x="102" y="137" text-anchor="middle" font-size="10" font-weight="700" fill="#00695c">15%</text>
+      <text x="102" y="256" text-anchor="middle" font-size="9" fill="#5a6a7a">Champion</text>
+
+      <!-- Loyal: 22% -->
+      <rect x="143" y="112" width="55" height="128" rx="4" fill="#26a69a"/>
+      <text x="170" y="107" text-anchor="middle" font-size="10" font-weight="700" fill="#00695c">22%</text>
+      <text x="170" y="256" text-anchor="middle" font-size="9" fill="#5a6a7a">Loyal</text>
+
+      <!-- Potential: 12% -->
+      <rect x="211" y="163" width="55" height="77" rx="4" fill="#4db6ac"/>
+      <text x="238" y="158" text-anchor="middle" font-size="10" font-weight="700" fill="#00695c">12%</text>
+      <text x="238" y="256" text-anchor="middle" font-size="9" fill="#5a6a7a">Potential</text>
+
+      <!-- At Risk: 18% -->
+      <rect x="279" y="125" width="55" height="115" rx="4" fill="#ff7043"/>
+      <text x="306" y="120" text-anchor="middle" font-size="10" font-weight="700" fill="#e53935">18%</text>
+      <text x="306" y="256" text-anchor="middle" font-size="9" fill="#5a6a7a">At Risk</text>
+
+      <!-- Need Attn: 10% -->
+      <rect x="347" y="176" width="55" height="64" rx="4" fill="#ffa726"/>
+      <text x="374" y="171" text-anchor="middle" font-size="10" font-weight="700" fill="#e65100">10%</text>
+      <text x="374" y="256" text-anchor="middle" font-size="9" fill="#5a6a7a">Need Attn</text>
+
+      <!-- Cant Lose: 5% -->
+      <rect x="415" y="208" width="55" height="32" rx="4" fill="#e53935"/>
+      <text x="442" y="203" text-anchor="middle" font-size="10" font-weight="700" fill="#b71c1c">5%</text>
+      <text x="442" y="256" text-anchor="middle" font-size="9" fill="#5a6a7a">Can't Lose</text>
+
+      <!-- Hibernating: 8% -->
+      <rect x="483" y="189" width="55" height="51" rx="4" fill="#90a4ae"/>
+      <text x="510" y="184" text-anchor="middle" font-size="10" font-weight="700" fill="#546e7a">8%</text>
+      <text x="510" y="256" text-anchor="middle" font-size="9" fill="#5a6a7a">Hibernating</text>
+
+      <!-- Lost: 10% -->
+      <rect x="551" y="176" width="55" height="64" rx="4" fill="#78909c"/>
+      <text x="578" y="171" text-anchor="middle" font-size="10" font-weight="700" fill="#546e7a">10%</text>
+      <text x="578" y="256" text-anchor="middle" font-size="9" fill="#5a6a7a">Lost</text>
+
+      <!-- Y axis labels -->
+      <text x="52" y="243" text-anchor="end" font-size="9" fill="#5a6a7a">0%</text>
+      <text x="52" y="176" text-anchor="end" font-size="9" fill="#5a6a7a">10%</text>
+      <text x="52" y="112" text-anchor="end" font-size="9" fill="#5a6a7a">20%</text>
+      <text x="52" y="50" text-anchor="end" font-size="9" fill="#5a6a7a">30%</text>
+      <line x1="58" y1="176" x2="650" y2="176" stroke="#dde5ec" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="58" y1="112" x2="650" y2="112" stroke="#dde5ec" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="58" y1="50" x2="650" y2="50" stroke="#dde5ec" stroke-width="1" stroke-dasharray="4,4"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ===================== SECTION 4: Quiz ===================== -->
+<section id="quiz">
+  <h2>4. Self-Assessment Quiz (14 Questions)</h2>
+
+  <div class="quiz-q">
+    <p>Q1. A customer spends &#8377;800/month on electronics total and &#8377;200 at your store. What is the Share of Wallet?</p>
+    <button onclick="qa(this,false)">A) 40%</button>
+    <button onclick="qa(this,true)">B) 25%</button>
+    <button onclick="qa(this,false)">C) 20%</button>
+    <button onclick="qa(this,false)">D) 30%</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q2. What does a Lift value of 1.0 mean in Market Basket Analysis?</p>
+    <button onclick="qa(this,false)">A) Strong positive association between items</button>
+    <button onclick="qa(this,false)">B) Strong negative association between items</button>
+    <button onclick="qa(this,true)">C) The two items are statistically independent</button>
+    <button onclick="qa(this,false)">D) One item always causes purchase of the other</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q3. An RFM score of 444 represents which type of customer?</p>
+    <button onclick="qa(this,true)">A) Champion &mdash; most recent, frequent, highest value</button>
+    <button onclick="qa(this,false)">B) Lost customer who needs reactivation</button>
+    <button onclick="qa(this,false)">C) New customer with high potential</button>
+    <button onclick="qa(this,false)">D) At-risk customer declining in activity</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q4. Given Support(A) = 0.70, Support(A&cup;B) = 0.50, what is Confidence(A &rarr; B)?</p>
+    <button onclick="qa(this,false)">A) 0.50</button>
+    <button onclick="qa(this,false)">B) 0.70</button>
+    <button onclick="qa(this,true)">C) 0.714</button>
+    <button onclick="qa(this,false)">D) 1.40</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q5. Which association mining algorithm uses an FP-tree structure and requires only two database scans?</p>
+    <button onclick="qa(this,false)">A) Apriori</button>
+    <button onclick="qa(this,false)">B) Eclat</button>
+    <button onclick="qa(this,true)">C) FP-Growth</button>
+    <button onclick="qa(this,false)">D) K-Means</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q6. Amazon Prime members spending 4&times; more than non-Prime members is an example of:</p>
+    <button onclick="qa(this,false)">A) Market share increase through acquisition</button>
+    <button onclick="qa(this,true)">B) Share of Wallet increase through ecosystem lock-in</button>
+    <button onclick="qa(this,false)">C) Customer lifetime value reduction</button>
+    <button onclick="qa(this,false)">D) Churn rate improvement via pricing</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q7. A customer last purchased 380 days ago. What Recency (R) score do they receive in standard RFM quartile scoring?</p>
+    <button onclick="qa(this,false)">A) 4</button>
+    <button onclick="qa(this,false)">B) 3</button>
+    <button onclick="qa(this,false)">C) 2</button>
+    <button onclick="qa(this,true)">D) 1</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q8. A Leverage value &gt; 0 in Market Basket Analysis means:</p>
+    <button onclick="qa(this,true)">A) Products are complementary &mdash; they appear together more than by chance</button>
+    <button onclick="qa(this,false)">B) Products are substitutes and negatively associated</button>
+    <button onclick="qa(this,false)">C) Products have no statistical relationship</button>
+    <button onclick="qa(this,false)">D) The rule is not statistically significant</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q9. Which SOW range represents the "Loyal Core" customer segment requiring protection and VIP treatment?</p>
+    <button onclick="qa(this,false)">A) &lt; 20%</button>
+    <button onclick="qa(this,false)">B) 20–40%</button>
+    <button onclick="qa(this,false)">C) 40–70%</button>
+    <button onclick="qa(this,true)">D) &gt; 70%</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q10. In RFM analysis, a customer with RFM score 144 (R=1, F=4, M=4) belongs to which segment?</p>
+    <button onclick="qa(this,false)">A) Champion</button>
+    <button onclick="qa(this,true)">B) Can't Lose Them</button>
+    <button onclick="qa(this,false)">C) Lost</button>
+    <button onclick="qa(this,false)">D) Potential Loyalist</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q11. Confidence(B &rarr; A) = 0.50/0.70 = 0.714 and Lift = 0.714/0.70 = 1.02. What action should a retailer take?</p>
+    <button onclick="qa(this,false)">A) Separate products in store to avoid association</button>
+    <button onclick="qa(this,true)">B) Place products near each other; mild positive association worth testing a bundle deal</button>
+    <button onclick="qa(this,false)">C) Immediately create a mandatory bundle at no discount</button>
+    <button onclick="qa(this,false)">D) Discontinue one of the products</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q12. What is the primary difference between SOW and Market Share?</p>
+    <button onclick="qa(this,false)">A) SOW measures aggregate industry revenue; market share measures individual customers</button>
+    <button onclick="qa(this,true)">B) SOW measures an individual customer's spend allocation; market share measures a company's aggregate market position</button>
+    <button onclick="qa(this,false)">C) SOW is always higher than market share</button>
+    <button onclick="qa(this,false)">D) They measure exactly the same thing at different scales</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q13. In a 10-transaction dataset, if item A appears in 7 transactions and item B appears in 7 transactions but together in only 2, what is Lift(A &rarr; B)?</p>
+    <button onclick="qa(this,false)">A) 1.0</button>
+    <button onclick="qa(this,false)">B) 1.5</button>
+    <button onclick="qa(this,true)">C) 0.41 (approx) &mdash; negative association</button>
+    <button onclick="qa(this,false)">D) 2.0 &mdash; strong positive association</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q14. Which RFM strategy is appropriate for a customer in the "About to Sleep" segment (R=2, F=1-2, M=1-2)?</p>
+    <button onclick="qa(this,false)">A) VIP upgrade and loyalty tier promotion</button>
+    <button onclick="qa(this,false)">B) Emergency CEO-level outreach call</button>
+    <button onclick="qa(this,true)">C) Personalized win-back offer or limited-time discount to re-engage</button>
+    <button onclick="qa(this,false)">D) Remove from mailing list immediately</button>
+  </div>
+</section>
+
+<!-- ===================== SECTION 5: Summary ===================== -->
+<section id="summary">
+  <h2>5. Summary &amp; Exam Tips</h2>
+
+  <div class="card">
+    <h3>Key Formulas to Memorise</h3>
+    <div class="formula">SOW (%) = (Customer Spend with Us / Total Category Spend) &times; 100</div>
+    <div class="formula">Support(A) = Transactions with A / Total Transactions</div>
+    <div class="formula">Confidence(A &rarr; B) = Support(A &cup; B) / Support(A)</div>
+    <div class="formula">Lift(A &rarr; B) = Confidence(A &rarr; B) / Support(B)</div>
+    <div class="formula">Leverage(A &rarr; B) = Support(A &cup; B) &minus; Support(A) &times; Support(B)</div>
+  </div>
+
+  <div class="tips">
+    <h3>Exam Tips</h3>
+    <ul>
+      <li><strong>RFM Recency trap:</strong> R score 4 means the customer bought <em>most recently</em> (low days). Do not reverse this. Fewer days = higher R score.</li>
+      <li><strong>Lift interpretation:</strong> Lift = 1 is the baseline (independence). Memorise: &gt;1 = buy together more than chance, &lt;1 = less than chance.</li>
+      <li><strong>SOW vs Market Share:</strong> Always state the unit of analysis &mdash; individual customer (SOW) vs. whole market (Market Share).</li>
+      <li><strong>FP-Growth is fastest</strong> for large datasets; Apriori is slowest but conceptually simplest. Exam questions often ask "which is most efficient?"</li>
+      <li><strong>444 = Champion; 111 = Lost.</strong> For RFM 141/144 = "Can't Lose Them" &mdash; historically high value but recently disengaged. Requires urgent action.</li>
+      <li><strong>Confidence is not symmetric:</strong> Confidence(A&rarr;B) &ne; Confidence(B&rarr;A) unless Support(A) = Support(B).</li>
+      <li><strong>Amazon Fresh capturing grocery SOW</strong> is a frequently-cited exam example for category-level SOW expansion.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Quick Reference Cheat Sheet</h3>
+    <table>
+      <tr><th>Concept</th><th>What It Measures</th><th>Key Range / Interpretation</th></tr>
+      <tr><td>SOW</td><td>Customer's wallet captured by us</td><td>0–100%; &gt;70% = loyal core</td></tr>
+      <tr><td>Support</td><td>Item frequency in transactions</td><td>0–1; higher = more common</td></tr>
+      <tr><td>Confidence</td><td>Rule reliability P(B|A)</td><td>0–1; &gt;0.6 = strong rule</td></tr>
+      <tr><td>Lift</td><td>Association strength vs random</td><td>&gt;1=positive, 1=independent, &lt;1=negative</td></tr>
+      <tr><td>Leverage</td><td>Deviation from independence</td><td>&gt;0=complementary, &lt;0=substitute</td></tr>
+      <tr><td>RFM</td><td>Customer value via 3 dimensions</td><td>444=Champion, 111=Lost</td></tr>
+    </table>
+  </div>
+
+  <div class="nav-links">
+    <a href="Week_06_MA_CustomerAnalytics1.html">&larr; Week 6: Customer Analytics Part 1</a>
+    <a href="Week_08_MA_Metrics1.html">Week 8: Marketing Metrics Part 1 &rarr;</a>
+  </div>
+</section>
+
+<style>
+#xn-extra .xn-intro{background:rgba(0,137,123,.08);border-left:4px solid var(--primary);border-radius:0 8px 8px 0;padding:12px 16px;margin:6px 0 18px;color:var(--muted);font-size:.92em;}
+.xn-prob{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.xn-q{margin-bottom:10px;font-weight:600;}
+.xn-tag{display:inline-block;background:var(--primary);color:#fff;font-size:.72em;font-weight:700;padding:2px 9px;border-radius:20px;margin-right:7px;vertical-align:middle;}
+.xn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.xn-in{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:.95em;min-width:180px;font-family:monospace;}
+.xn-in:focus{outline:none;border-color:var(--primary);}
+.xn-check,.xn-toggle{border:none;border-radius:8px;padding:8px 18px;cursor:pointer;font-weight:700;font-size:.88em;}
+.xn-check{background:var(--primary);color:#fff;}
+.xn-check:hover{background:var(--primary-dark);}
+.xn-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.xn-toggle:hover{border-color:var(--primary);color:var(--primary);}
+.xn-fb{margin-top:10px;font-weight:700;font-size:.9em;min-height:1em;}
+.xn-fb.xn-ok{color:#1b5e20;}
+body.dark .xn-fb.xn-ok{color:#a5d6a7;}
+.xn-fb.xn-no{color:#b71c1c;}
+body.dark .xn-fb.xn-no{color:#ef9a9a;}
+.xn-fb.xn-warn{color:#e65100;}
+.xn-sol{display:none;margin-top:12px;padding:14px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-left:4px solid var(--success);border-radius:8px;font-size:.92em;}
+body.dark .xn-sol{background:linear-gradient(135deg,#1a3a2e,#2a4a3e);color:#e8e8f0;}
+.xn-sol.open{display:block;animation:xnfade .25s ease;}
+@keyframes xnfade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.xn-sol .xf{background:#2c3e50;color:#ecf0f1;font-family:'Courier New',monospace;padding:10px 14px;border-radius:8px;margin:8px 0;overflow-x:auto;white-space:pre-wrap;font-size:.9em;}
+.xn-sol b{color:#1b5e20;}
+body.dark .xn-sol b{color:#a5d6a7;}
+.xn-opts{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
+.xn-opt{text-align:left;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;cursor:pointer;font-size:.9em;}
+.xn-opt:hover:not(:disabled){background:var(--border);}
+.xn-opt.xn-ok{background:#c8e6c9;border-color:var(--success);color:#1b5e20;font-weight:700;}
+body.dark .xn-opt.xn-ok{background:#1a3a2e;color:#a5d6a7;}
+.xn-opt.xn-no{background:#ffcdd2;border-color:var(--danger);color:#b71c1c;}
+body.dark .xn-opt.xn-no{background:#3a1a1a;color:#ef9a9a;}
+#xn-extra table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9em;}
+#xn-extra th{background:var(--primary);color:#fff;padding:8px 12px;text-align:left;}
+#xn-extra td{padding:7px 12px;border-bottom:1px solid var(--border);}
+</style>
+
+<section id="xn-extra">
+  <h2>🔢 Engineered Numerical Practice</h2>
+  <div class="xn-intro">
+    Fresh exam-style numerical problems built from this week's formulas — Share of Wallet, the market-basket metrics (Support, Confidence, Lift, Leverage) and RFM scoring. Enter your answer and press
+    <strong>Check</strong> for instant feedback, or reveal the full worked solution. <em>(Press Enter in any answer box to check.)</em>
+  </div>
+
+  <div class="xn-prob" data-ans="30" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP1</span>A customer spends <strong>₹60,000</strong> per year across the coffee category, of which
+      <strong>₹18,000</strong> goes to Brand X. What is Brand X's <strong>Share of Wallet</strong> (%)?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 30 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">SOW = (Spending with Company / Total Category Spending) × 100
+          = (18,000 / 60,000) × 100 = <b>30%</b></div>
+      30% of this customer's coffee budget goes to Brand X; the remaining 70% is up for grabs.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="0.25" data-tol="0.01" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP2</span>In a transaction log of <strong>600</strong> orders, the itemset {Milk, Bread} appears together in
+      <strong>150</strong> orders. What is the <strong>Support</strong> of {Milk, Bread} (as a decimal)?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 0.25">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Support = Transactions containing itemset / Total transactions
+            = 150 / 600 = <b>0.25</b></div>
+      The pair co-occurs in 25% of all baskets.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="0.4" data-tol="0.01" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP3</span>Support(Bread ∪ Butter) = <strong>0.18</strong> and Support(Bread) = <strong>0.45</strong>.
+      What is the <strong>Confidence</strong> of the rule Bread → Butter?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 0.4">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Confidence(A → B) = Support(A ∪ B) / Support(A)
+                = 0.18 / 0.45 = <b>0.40</b></div>
+      Of all baskets containing bread, 40% also contain butter.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="1.5" data-tol="0.01" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP4</span>For the rule A → B, Confidence(A → B) = <strong>0.60</strong> and Support(B) = <strong>0.40</strong>.
+      Compute the <strong>Lift</strong>.</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 1.5">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Lift(A → B) = Confidence(A → B) / Support(B)
+            = 0.60 / 0.40 = <b>1.5</b></div>
+      Lift &gt; 1 ⇒ A and B are positively correlated; buying A makes B 1.5× more likely than baseline.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="1" data-tol="0.01" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP5</span>Support(A ∩ B) = <strong>0.20</strong>, Support(A) = <strong>0.40</strong>, Support(B) = <strong>0.50</strong>.
+      Compute the <strong>Lift</strong> using Lift = P(A∩B) / (P(A)·P(B)).</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 1.0">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Lift = P(A ∩ B) / (P(A) × P(B))
+       = 0.20 / (0.40 × 0.50)
+       = 0.20 / 0.20 = <b>1.0</b></div>
+      Lift = 1 means A and B are statistically <b>independent</b> — no useful association.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="45" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP6</span>After a loyalty campaign, the same coffee customer (total category spend still <strong>₹60,000</strong>)
+      now directs <strong>₹27,000</strong> to Brand X. What is the new <strong>Share of Wallet</strong> (%)?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 45 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">SOW = (27,000 / 60,000) × 100 = <b>45%</b></div>
+      SOW rose from 30% to 45% — a 15-point gain in this customer's wallet share.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="30" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP7</span>Out of <strong>800</strong> transactions, {Chips, Soda} co-occur in <strong>240</strong> of them.
+      Express the <strong>Support</strong> of {Chips, Soda} as a percentage.</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 30 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Support = (240 / 800) × 100 = <b>30%</b></div>
+      A 30% support is high — this pair would be a strong candidate for co-placement on the shelf.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="0.1" data-tol="0.01" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP8</span>For items A and B: P(A∩B) = <strong>0.30</strong>, P(A) = <strong>0.50</strong>, P(B) = <strong>0.40</strong>.
+      Compute the <strong>Leverage</strong> = P(A∩B) − P(A)·P(B).</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 0.1">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Leverage = P(A ∩ B) − P(A) × P(B)
+           = 0.30 − (0.50 × 0.40)
+           = 0.30 − 0.20 = <b>0.10</b></div>
+      Leverage &gt; 0 ⇒ the pair co-occurs more often than chance would predict — a genuine association.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="29" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP9</span>Of <strong>500</strong> customers who bought a laptop, <strong>145</strong> also bought a carry bag.
+      What is the <strong>cross-sell rate</strong> (%) for the bag?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 29 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Cross-sell % = Buyers of both / Buyers of primary × 100
+             = 145 / 500 × 100 = <b>29%</b></div>
+      This is also the confidence of the rule Laptop → Bag (0.29).
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">NP10</span>In a 1–4 quartile RFM system (4 = best), a customer scores <strong>R=4, F=4, M=4</strong>
+      (very recent, very frequent, top spender). Which segment do they belong to?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) Champions</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Hibernating Customers</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) At-Risk Customers</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Lost Customers</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">High recency, frequency and monetary scores (4-4-4) define <b>Champions</b> — the most valuable segment, to be rewarded with special offers. Hibernating/At-Risk customers have <em>low</em> recency and frequency.</div>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  if(window.__xnInit) return; window.__xnInit=true;
+  function num(s){
+    if(s==null) return NaN;
+    s=(''+s).replace(/−/g,'-').replace(/[^0-9.\-]/g,'');
+    if(s===''||s==='-'||s==='.') return NaN;
+    return parseFloat(s);
+  }
+  window.xnCheck=function(btn){
+    var p=btn.closest('.xn-prob'); if(!p) return;
+    var ans=parseFloat(p.getAttribute('data-ans'));
+    var tol=parseFloat(p.getAttribute('data-tol')||'0.05');
+    var unit=p.getAttribute('data-unit')||'';
+    var inp=p.querySelector('.xn-in'); var fb=p.querySelector('.xn-fb');
+    var v=num(inp.value);
+    if(isNaN(v)){ fb.className='xn-fb xn-warn'; fb.textContent='⚠ Enter a numeric answer first.'; return; }
+    if(Math.abs(v-ans)<=tol){ fb.className='xn-fb xn-ok'; fb.innerHTML='✓ Correct! Answer = '+ans+unit; }
+    else { fb.className='xn-fb xn-no'; fb.innerHTML='✗ Not quite — you entered '+v+'. Try again, or reveal the steps.'; }
+  };
+  window.xnToggle=function(btn){
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol');
+    var open=s.classList.toggle('open'); btn.textContent=open?'Hide steps':'Show steps';
+  };
+  window.xnPick=function(btn,ok){
+    var box=btn.parentElement;
+    box.querySelectorAll('.xn-opt').forEach(function(b){b.disabled=true; b.style.cursor='default';});
+    btn.classList.add(ok?'xn-ok':'xn-no');
+    if(!ok){ box.querySelectorAll('.xn-opt').forEach(function(b){ if(b.getAttribute('data-correct')==='1') b.classList.add('xn-ok'); }); }
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol'); if(s) s.classList.add('open');
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter' && e.target.classList && e.target.classList.contains('xn-in')){
+      var b=e.target.closest('.xn-prob').querySelector('.xn-check'); if(b) b.click();
+    }
+  });
+})();
+</script>
+
+<section id="xn-mcq">
+  <h2>📝 Exam-Style MCQs — 2 Marks Each</h2>
+  <p style="opacity:.85;font-size:.95em;margin-bottom:14px;">Each question is worth 2 marks — a mix of applied numerical and conceptual items. Click an option to check it; the correct answer and explanation appear instantly.</p>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q1 · 2 marks</span> A customer spends ₹1,00,000 per year across the fitness-apparel category, of which ₹35,000 goes to Brand Z. What is Brand Z's Share of Wallet?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) 35%</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 65%</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 2.86%</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 28.6%</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">SOW = (Spend with Company / Total Category Spend) × 100
+          = (35,000 / 1,00,000) × 100 = <b>35%</b></div>
+      Brand Z captures 35 paise of every rupee this customer spends on fitness apparel; the other 65% is competitor share — the growth headroom.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q2 · 2 marks</span> For the rule {Coffee} → {Cake}, Support(Coffee ∪ Cake) = 0.21 and Support(Coffee) = 0.35. What is the Confidence of the rule?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 0.21</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 0.075</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 0.60</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 1.67</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Confidence(A → B) = Support(A ∪ B) / Support(A)
+                = 0.21 / 0.35 = <b>0.60</b></div>
+      Of all baskets containing coffee, 60% also contain cake. (1.67 inverts the ratio; 0.075 multiplies instead of divides.)
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q3 · 2 marks</span> For the rule {Diapers} → {Beer}, Confidence = 0.72 and the overall Support(Beer) = 0.45. Compute the Lift.</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 0.625</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) 1.6</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 0.324</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 0.27</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Lift(A → B) = Confidence(A → B) / Support(B)
+            = 0.72 / 0.45 = <b>1.6</b></div>
+      Lift = 1.6 &gt; 1 ⇒ buyers of diapers are 1.6× more likely than the average shopper to also buy beer — a positive, actionable association. (0.625 inverts the ratio.)
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q4 · 2 marks</span> A market-basket analysis finds that the rule {Bread} → {Jam} has a Lift of 0.7. How should a category manager interpret and act on this?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Strong positive association — co-locate bread and jam to boost cross-sell</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) Negative association — buying bread makes jam less likely than baseline, so they are substitutes or rarely combined</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) The items are statistically independent — the rule carries no information</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) The rule is invalid because Lift cannot be below 1</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Lift &lt; 1 ⇒ negative correlation · Lift = 1 ⇒ independent · Lift &gt; 1 ⇒ positive</div>
+      A Lift of 0.7 (&lt; 1) means bread buyers are <b>less</b> likely than average to buy jam — bundling or co-location would not pay off. Lift = 1 (not 0.7) would mean independence.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q5 · 2 marks</span> In market-basket analysis, what is the key distinction between Support and Confidence for a rule A → B?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Support measures the strength of the rule given A; Confidence measures how common the itemset is overall</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) Support is how frequently the itemset appears across all transactions; Confidence is the conditional probability of B given A</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) They are identical metrics expressed in different units</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Support is always larger than Confidence for any rule</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Support(A∪B) = P(A and B) — frequency across ALL baskets
+Confidence(A→B) = P(B | A) = Support(A∪B) / Support(A)</div>
+      <b>Support</b> tells you how often the combination occurs at all (popularity); <b>Confidence</b> tells you how reliable the "if A then B" prediction is. A rule needs both high support (worth acting on) and high confidence (trustworthy).
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q6 · 2 marks</span> An RFM analysis scores a customer 1-1-5 (Recency = 1, Frequency = 1, Monetary = 5 on a 1–5 best scale). Which segment label best fits, and what action is most appropriate?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Champion — reward and upsell immediately</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) New customer — onboard and nurture</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) Can't-Lose / At-Risk high-value — win back with personalised reactivation</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Lost low-value — ignore; not worth re-engaging</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">R=1 (long since last purchase) + F=1 (rarely buys) + M=5 (spends big when they do)</div>
+      A high-monetary customer who has lapsed (low recency) is a <b>Can't-Lose / At-Risk</b> high-value account — the priority is targeted win-back, because their spend is large. Champions score high on all three; a low-monetary lapsed buyer would be "Lost".
+    </div>
+  </div>
+</section>
+</main>
+<footer>Marketing Analytics &mdash; Week 7 &nbsp;|&nbsp; Customer Analytics Part 2 &nbsp;|&nbsp; Study Module</footer>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

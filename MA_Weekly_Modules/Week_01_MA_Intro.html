@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 1 – Introduction to Marketing Analytics | MA Study Modules</title>
+<style>
+:root{--primary:#00897b;--primary-dark:#00695c;--accent:#ff7043;--success:#43a047;--danger:#e53935;--bg:#f5f8fb;--card:#fff;--text:#1a2332;--muted:#5a6a7a;--border:#dde5ec}
+body.dark{--bg:#0f1721;--card:#1a2535;--text:#e0e8f0;--muted:#a0b0c0;--border:#2a3545}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;transition:background .3s,color .3s}
+a{color:var(--primary)}
+h2{font-size:1.45rem;font-weight:800;margin:0 0 16px;color:var(--primary)}
+h3{font-size:1.1rem;font-weight:700;margin:18px 0 8px}
+p{margin-bottom:10px}
+ul,ol{margin:8px 0 12px 22px}
+li{margin-bottom:4px}
+
+/* Header */
+header{background:linear-gradient(135deg,#00897b,#00695c);color:#fff;padding:40px 20px 30px}
+.breadcrumb{font-size:.82rem;opacity:.8;margin-bottom:10px}
+.breadcrumb a{color:rgba(255,255,255,.85)}
+header h1{font-size:2rem;font-weight:800;margin-bottom:6px}
+header p{opacity:.9;max-width:680px}
+.week-badge{display:inline-block;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:3px 12px;font-size:.8rem;margin-top:8px}
+
+/* Sticky nav */
+.sticky-nav{position:sticky;top:0;z-index:100;background:var(--card);border-bottom:2px solid var(--border);padding:0 16px;display:flex;align-items:center;gap:6px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.sticky-nav a{white-space:nowrap;padding:12px 10px;font-size:.82rem;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;text-decoration:none;transition:all .2s}
+.sticky-nav a:hover{color:var(--primary);border-bottom-color:var(--primary)}
+.nav-spacer{flex:1}
+.dark-btn{background:var(--primary);color:#fff;border:none;padding:6px 14px;border-radius:16px;cursor:pointer;font-size:.8rem;white-space:nowrap;font-weight:600}
+
+/* Content */
+.container{max-width:960px;margin:0 auto;padding:32px 20px 60px}
+section{margin-bottom:48px}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.06);margin-bottom:20px}
+.card-accent{border-left:4px solid var(--primary)}
+
+/* Definition box */
+.def-box{background:rgba(0,137,123,.07);border-left:4px solid var(--primary);border-radius:0 10px 10px 0;padding:14px 18px;margin:12px 0}
+body.dark .def-box{background:rgba(0,137,123,.15)}
+
+/* Formula box */
+.formula-box{background:rgba(255,112,67,.08);border:1px solid rgba(255,112,67,.3);border-radius:10px;padding:14px 18px;margin:12px 0;font-family:'Courier New',monospace;font-size:.95rem}
+body.dark .formula-box{background:rgba(255,112,67,.12)}
+
+/* Example box */
+.example-box{background:rgba(67,160,71,.07);border:1px solid rgba(67,160,71,.3);border-radius:10px;padding:16px 18px;margin:14px 0}
+body.dark .example-box{background:rgba(67,160,71,.12)}
+.example-box .ex-title{font-weight:700;color:var(--success);font-size:.85rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+
+/* Table */
+.data-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.9rem}
+.data-table th{background:var(--primary);color:#fff;padding:10px 14px;text-align:left}
+.data-table td{padding:9px 14px;border-bottom:1px solid var(--border)}
+.data-table tr:hover td{background:rgba(0,137,123,.05)}
+.data-table tbody tr:nth-child(even) td{background:rgba(0,0,0,.02)}
+body.dark .data-table tbody tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+
+/* Code block */
+.code-block{background:#1e2a3a;color:#a8d8b0;border-radius:10px;padding:18px;font-family:'Courier New',monospace;font-size:.87rem;overflow-x:auto;margin:14px 0;line-height:1.6}
+.code-block .kw{color:#82b1ff}
+.code-block .fn{color:#80cbc4}
+.code-block .st{color:#f48fb1}
+.code-block .cm{color:#546e7a;font-style:italic}
+.code-block .nm{color:#ffcc80}
+
+/* SVG containers */
+.svg-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin:16px 0;overflow-x:auto;text-align:center}
+.svg-caption{font-size:.8rem;color:var(--muted);margin-top:8px;font-style:italic}
+
+/* Quiz */
+.quiz-grid{display:grid;gap:20px}
+.q-block{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.q-block .q-num{font-size:.78rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px}
+.q-block .q-text{font-weight:600;margin:6px 0 12px;font-size:.97rem}
+.q-options{display:flex;flex-direction:column;gap:8px}
+.q-options button{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:9px 14px;text-align:left;cursor:pointer;font-size:.9rem;color:var(--text);transition:border-color .2s,background .2s}
+.q-options button:hover:not([disabled]){border-color:var(--primary);background:rgba(0,137,123,.05)}
+
+/* Summary */
+.tip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:14px}
+.tip-card{background:rgba(0,137,123,.06);border-left:3px solid var(--primary);border-radius:0 8px 8px 0;padding:12px 14px}
+body.dark .tip-card{background:rgba(0,137,123,.14)}
+.tip-card h4{font-size:.88rem;font-weight:700;color:var(--primary);margin-bottom:4px}
+.tip-card p{font-size:.82rem;color:var(--muted);margin:0}
+
+/* Navigation */
+.page-nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0 0;border-top:2px solid var(--border);margin-top:32px;gap:12px;flex-wrap:wrap}
+.nav-btn{background:var(--primary);color:#fff;padding:10px 20px;border-radius:8px;font-weight:600;font-size:.9rem;text-decoration:none;transition:background .2s}
+.nav-btn:hover{background:var(--primary-dark);color:#fff}
+.nav-btn.disabled{background:var(--muted);pointer-events:none}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="index.html">MA Modules</a> › Week 1</div>
+  <h1>Week 1 – Introduction to Marketing Analytics</h1>
+  <p>Foundations of marketing analytics: frameworks, models, RFM, attribution, statistics, and A/B testing.</p>
+  <span class="week-badge">7 Sections &bull; 14 Quiz Questions &bull; 5 SVG Diagrams</span>
+</header>
+
+<nav class="sticky-nav">
+  <a href="#analytics">What is MA?</a>
+  <a href="#7ps">7Ps</a>
+  <a href="#models">Decision Models</a>
+  <a href="#rfm">RFM</a>
+  <a href="#attribution">Attribution</a>
+  <a href="#stats">Statistics</a>
+  <a href="#abtest">A/B &amp; MMM</a>
+  <a href="#tools">Tools</a>
+  <a href="#privacy">Privacy &amp; Ethics</a>
+  <a href="#quiz">Quiz</a>
+  <a href="#summary">Summary</a>
+  <a href="#xn-extra">🔢 Numericals</a>
+  <a href="#xn-mcq">📝 MCQs</a>
+  <span class="nav-spacer"></span>
+  <button class="dark-btn" onclick="dark()">🌙</button>
+</nav>
+
+<div class="container">
+
+<!-- ===== SECTION 1: What is Marketing Analytics ===== -->
+<section id="analytics">
+<h2>1. What is Marketing Analytics?</h2>
+<div class="def-box">
+  <strong>Marketing Analytics</strong> is the practice of measuring, managing and analysing marketing performance data to maximise its effectiveness and optimise return on investment. It uses statistics, data science and business models to understand customer behaviour and guide decisions.
+</div>
+
+<h3>The 4 Levels of Marketing Analytics</h3>
+<p>Analytics capabilities progress across four levels, each answering a different business question:</p>
+
+<div class="svg-wrap">
+<svg viewBox="0 0 560 320" width="100%" style="max-width:560px">
+  <!-- Pyramid levels bottom to top -->
+  <!-- Level 1: Descriptive -->
+  <polygon points="60,300 500,300 430,240 130,240" fill="#e0f2f1" stroke="#00897b" stroke-width="1.5"/>
+  <text x="280" y="276" text-anchor="middle" font-size="14" font-weight="700" fill="#00695c">Descriptive Analytics</text>
+  <text x="280" y="293" text-anchor="middle" font-size="11" fill="#00897b">"What happened?" — Dashboards, Reports, KPIs</text>
+  <!-- Level 2: Diagnostic -->
+  <polygon points="130,240 430,240 370,180 190,180" fill="#b2dfdb" stroke="#00897b" stroke-width="1.5"/>
+  <text x="280" y="216" text-anchor="middle" font-size="14" font-weight="700" fill="#00695c">Diagnostic Analytics</text>
+  <text x="280" y="233" text-anchor="middle" font-size="11" fill="#00695c">"Why did it happen?" — Drill-down, Root Cause</text>
+  <!-- Level 3: Predictive -->
+  <polygon points="190,180 370,180 310,120 250,120" fill="#80cbc4" stroke="#00897b" stroke-width="1.5"/>
+  <text x="280" y="156" text-anchor="middle" font-size="13" font-weight="700" fill="#004d40">Predictive</text>
+  <text x="280" y="172" text-anchor="middle" font-size="10" fill="#004d40">"What will happen?" — ML, Regression</text>
+  <!-- Level 4: Prescriptive -->
+  <polygon points="250,120 310,120 280,60" fill="#00897b" stroke="#00695c" stroke-width="1.5"/>
+  <text x="280" y="98" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Prescriptive</text>
+  <!-- Labels on right -->
+  <text x="520" y="278" text-anchor="start" font-size="11" fill="#5a6a7a">Most data</text>
+  <text x="520" y="218" text-anchor="start" font-size="11" fill="#5a6a7a">Moderate</text>
+  <text x="520" y="158" text-anchor="start" font-size="11" fill="#5a6a7a">Advanced</text>
+  <text x="520" y="98" text-anchor="start" font-size="11" fill="#5a6a7a">Most value</text>
+  <!-- Arrows -->
+  <line x1="510" y1="270" x2="500" y2="278" stroke="#ddd" stroke-width="1"/>
+  <line x1="510" y1="210" x2="440" y2="238" stroke="#ddd" stroke-width="1"/>
+  <line x1="510" y1="150" x2="380" y2="175" stroke="#ddd" stroke-width="1"/>
+  <line x1="510" y1="90" x2="315" y2="90" stroke="#ddd" stroke-width="1"/>
+</svg>
+<div class="svg-caption">Fig 1.1 – The Analytics Pyramid: from descriptive (most common) to prescriptive (most valuable)</div>
+</div>
+
+<table class="data-table">
+  <thead><tr><th>Level</th><th>Question</th><th>Technique</th><th>Marketing Example</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Descriptive</strong></td><td>What happened?</td><td>Dashboards, Pivot tables</td><td>Monthly sales by region report</td></tr>
+    <tr><td><strong>Diagnostic</strong></td><td>Why did it happen?</td><td>Drill-down, ANOVA</td><td>Why did Q3 sales drop in Mumbai?</td></tr>
+    <tr><td><strong>Predictive</strong></td><td>What will happen?</td><td>Regression, ML models</td><td>Which customers will churn next month?</td></tr>
+    <tr><td><strong>Prescriptive</strong></td><td>What should we do?</td><td>Optimisation, A/B testing</td><td>Send coupon X to segment Y to maximise CLV</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ===== SECTION 2: 7Ps ===== -->
+<section id="7ps">
+<h2>2. The 7Ps of Marketing Mix</h2>
+<p>The marketing mix evolved from the original <strong>4Ps</strong> (McCarthy, 1960) to the extended <strong>7Ps</strong> for services marketing. The three additional Ps address the human and process elements critical in service delivery.</p>
+
+<div class="svg-wrap">
+<svg viewBox="0 0 480 480" width="100%" style="max-width:480px">
+  <!-- Center circle -->
+  <circle cx="240" cy="240" r="55" fill="#00897b" stroke="#00695c" stroke-width="2"/>
+  <text x="240" y="234" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">Marketing</text>
+  <text x="240" y="252" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">Mix</text>
+  <!-- 7 outer hexagons / circles -->
+  <!-- Product: top -->
+  <circle cx="240" cy="100" r="42" fill="#e0f2f1" stroke="#00897b" stroke-width="2"/>
+  <text x="240" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#00695c">Product</text>
+  <text x="240" y="113" text-anchor="middle" font-size="10" fill="#5a6a7a">Features &amp; Quality</text>
+  <line x1="240" y1="142" x2="240" y2="185" stroke="#b2dfdb" stroke-width="2" stroke-dasharray="4,3"/>
+  <!-- Price: top-right -->
+  <circle cx="370" cy="155" r="42" fill="#e0f2f1" stroke="#00897b" stroke-width="2"/>
+  <text x="370" y="151" text-anchor="middle" font-size="13" font-weight="700" fill="#00695c">Price</text>
+  <text x="370" y="168" text-anchor="middle" font-size="10" fill="#5a6a7a">Skimming/Penetrate</text>
+  <line x1="332" y1="177" x2="291" y2="205" stroke="#b2dfdb" stroke-width="2" stroke-dasharray="4,3"/>
+  <!-- Place: bottom-right -->
+  <circle cx="370" cy="325" r="42" fill="#e0f2f1" stroke="#00897b" stroke-width="2"/>
+  <text x="370" y="321" text-anchor="middle" font-size="13" font-weight="700" fill="#00695c">Place</text>
+  <text x="370" y="338" text-anchor="middle" font-size="10" fill="#5a6a7a">Distribution Channels</text>
+  <line x1="332" y1="303" x2="291" y2="275" stroke="#b2dfdb" stroke-width="2" stroke-dasharray="4,3"/>
+  <!-- Promotion: bottom -->
+  <circle cx="240" cy="380" r="42" fill="#e0f2f1" stroke="#00897b" stroke-width="2"/>
+  <text x="240" y="376" text-anchor="middle" font-size="13" font-weight="700" fill="#00695c">Promotion</text>
+  <text x="240" y="393" text-anchor="middle" font-size="10" fill="#5a6a7a">Ads, PR, Social</text>
+  <line x1="240" y1="338" x2="240" y2="295" stroke="#b2dfdb" stroke-width="2" stroke-dasharray="4,3"/>
+  <!-- People: bottom-left -->
+  <circle cx="110" cy="325" r="42" fill="#fff3e0" stroke="#ff7043" stroke-width="2"/>
+  <text x="110" y="321" text-anchor="middle" font-size="13" font-weight="700" fill="#e64a19">People</text>
+  <text x="110" y="338" text-anchor="middle" font-size="10" fill="#5a6a7a">Staff &amp; Culture</text>
+  <line x1="148" y1="303" x2="189" y2="275" stroke="#ffccbc" stroke-width="2" stroke-dasharray="4,3"/>
+  <!-- Process: top-left -->
+  <circle cx="110" cy="155" r="42" fill="#fff3e0" stroke="#ff7043" stroke-width="2"/>
+  <text x="110" y="151" text-anchor="middle" font-size="13" font-weight="700" fill="#e64a19">Process</text>
+  <text x="110" y="168" text-anchor="middle" font-size="10" fill="#5a6a7a">Service Delivery</text>
+  <line x1="148" y1="177" x2="189" y2="205" stroke="#ffccbc" stroke-width="2" stroke-dasharray="4,3"/>
+  <!-- Physical Evidence: far left -->
+  <circle cx="48" cy="240" r="42" fill="#fff3e0" stroke="#ff7043" stroke-width="2"/>
+  <text x="48" y="232" text-anchor="middle" font-size="11" font-weight="700" fill="#e64a19">Physical</text>
+  <text x="48" y="247" text-anchor="middle" font-size="11" font-weight="700" fill="#e64a19">Evidence</text>
+  <text x="48" y="262" text-anchor="middle" font-size="10" fill="#5a6a7a">Ambience, Branding</text>
+  <line x1="90" y1="240" x2="185" y2="240" stroke="#ffccbc" stroke-width="2" stroke-dasharray="4,3"/>
+  <!-- Legend -->
+  <rect x="20" y="440" width="12" height="12" fill="#e0f2f1" stroke="#00897b" stroke-width="1.5" rx="2"/>
+  <text x="38" y="451" font-size="11" fill="#5a6a7a">Original 4Ps</text>
+  <rect x="130" y="440" width="12" height="12" fill="#fff3e0" stroke="#ff7043" stroke-width="1.5" rx="2"/>
+  <text x="148" y="451" font-size="11" fill="#5a6a7a">Extended 3Ps (Services)</text>
+</svg>
+<div class="svg-caption">Fig 1.2 – The 7Ps Marketing Mix. Teal = original 4Ps; Orange = extended 3Ps for services</div>
+</div>
+
+<table class="data-table">
+  <thead><tr><th>P</th><th>Description</th><th>Key Decisions</th><th>Example (Starbucks)</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Product</strong></td><td>What you sell</td><td>Features, quality, branding, variants</td><td>Frappuccino, seasonal drinks</td></tr>
+    <tr><td><strong>Price</strong></td><td>What you charge</td><td>Skimming, penetration, bundling</td><td>Premium pricing strategy</td></tr>
+    <tr><td><strong>Place</strong></td><td>Where you sell</td><td>Channels, logistics, coverage</td><td>High-footfall locations, app delivery</td></tr>
+    <tr><td><strong>Promotion</strong></td><td>How you communicate</td><td>Advertising, PR, social media, sales promos</td><td>Seasonal campaigns, loyalty rewards</td></tr>
+    <tr><td><strong>People</strong></td><td>Staff who deliver service</td><td>Training, culture, customer interaction</td><td>Barista knowledge &amp; friendliness</td></tr>
+    <tr><td><strong>Process</strong></td><td>How service is delivered</td><td>Order flow, waiting time, standardisation</td><td>Mobile order-ahead, store flow</td></tr>
+    <tr><td><strong>Physical Evidence</strong></td><td>Tangible cues of quality</td><td>Ambience, layout, packaging</td><td>Green store design, cups, music</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ===== SECTION 3: Decision Models ===== -->
+<section id="models">
+<h2>3. Decision Models</h2>
+
+<h3>AIDA Model</h3>
+<p>AIDA describes the cognitive stages a consumer passes through from first exposure to a brand to the purchase decision.</p>
+<div class="svg-wrap">
+<svg viewBox="0 0 500 280" width="100%" style="max-width:500px">
+  <!-- Funnel stages -->
+  <polygon points="60,20 440,20 390,80 110,80" fill="#b2dfdb" stroke="#00897b" stroke-width="2"/>
+  <text x="250" y="48" text-anchor="middle" font-size="15" font-weight="700" fill="#004d40">AWARENESS</text>
+  <text x="250" y="68" text-anchor="middle" font-size="11" fill="#00695c">100% — All exposed to ad/brand</text>
+
+  <polygon points="110,86 390,86 345,146 155,146" fill="#80cbc4" stroke="#00897b" stroke-width="2"/>
+  <text x="250" y="114" text-anchor="middle" font-size="15" font-weight="700" fill="#004d40">INTEREST</text>
+  <text x="250" y="134" text-anchor="middle" font-size="11" fill="#00695c">60% — Engage &amp; research</text>
+
+  <polygon points="155,152 345,152 300,212 200,212" fill="#4db6ac" stroke="#00897b" stroke-width="2"/>
+  <text x="250" y="180" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">DESIRE</text>
+  <text x="250" y="200" text-anchor="middle" font-size="11" fill="#e0f2f1">30% — Want the product</text>
+
+  <polygon points="200,218 300,218 270,270 230,270" fill="#00897b" stroke="#00695c" stroke-width="2"/>
+  <text x="250" y="248" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">ACTION</text>
+  <text x="250" y="265" text-anchor="middle" font-size="10" fill="#e0f2f1">10% — Purchase</text>
+
+  <!-- Percentage labels on right -->
+  <text x="465" y="52" text-anchor="middle" font-size="12" fill="#5a6a7a">100%</text>
+  <text x="465" y="118" text-anchor="middle" font-size="12" fill="#5a6a7a">60%</text>
+  <text x="465" y="184" text-anchor="middle" font-size="12" fill="#5a6a7a">30%</text>
+  <text x="465" y="248" text-anchor="middle" font-size="12" fill="#5a6a7a">10%</text>
+</svg>
+<div class="svg-caption">Fig 1.3 – AIDA Funnel showing dropout at each stage</div>
+</div>
+
+<h3>STP Framework</h3>
+<p>STP is the strategic process of defining who to target and how to position the brand.</p>
+<div class="svg-wrap">
+<svg viewBox="0 0 520 120" width="100%" style="max-width:520px">
+  <!-- Step 1: Segmentation -->
+  <rect x="10" y="20" width="148" height="80" rx="12" fill="#e0f2f1" stroke="#00897b" stroke-width="2"/>
+  <text x="84" y="50" text-anchor="middle" font-size="14" font-weight="700" fill="#00695c">Segmentation</text>
+  <text x="84" y="68" text-anchor="middle" font-size="10" fill="#5a6a7a">Geo / Demo</text>
+  <text x="84" y="82" text-anchor="middle" font-size="10" fill="#5a6a7a">Psycho / Behav</text>
+  <text x="84" y="96" text-anchor="middle" font-size="10" fill="#5a6a7a">Divide the market</text>
+  <!-- Arrow -->
+  <polygon points="162,56 182,46 182,66" fill="#00897b"/>
+  <line x1="158" y1="60" x2="183" y2="60" stroke="#00897b" stroke-width="2"/>
+  <!-- Step 2: Targeting -->
+  <rect x="186" y="20" width="148" height="80" rx="12" fill="#b2dfdb" stroke="#00897b" stroke-width="2"/>
+  <text x="260" y="50" text-anchor="middle" font-size="14" font-weight="700" fill="#004d40">Targeting</text>
+  <text x="260" y="68" text-anchor="middle" font-size="10" fill="#5a6a7a">Undifferentiated</text>
+  <text x="260" y="82" text-anchor="middle" font-size="10" fill="#5a6a7a">Differentiated</text>
+  <text x="260" y="96" text-anchor="middle" font-size="10" fill="#5a6a7a">Concentrated</text>
+  <!-- Arrow -->
+  <polygon points="338,56 358,46 358,66" fill="#00897b"/>
+  <line x1="334" y1="60" x2="359" y2="60" stroke="#00897b" stroke-width="2"/>
+  <!-- Step 3: Positioning -->
+  <rect x="362" y="20" width="148" height="80" rx="12" fill="#00897b" stroke="#00695c" stroke-width="2"/>
+  <text x="436" y="50" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">Positioning</text>
+  <text x="436" y="68" text-anchor="middle" font-size="10" fill="#e0f2f1">Perceptual map</text>
+  <text x="436" y="82" text-anchor="middle" font-size="10" fill="#e0f2f1">USP / Tagline</text>
+  <text x="436" y="96" text-anchor="middle" font-size="10" fill="#e0f2f1">Brand image</text>
+</svg>
+<div class="svg-caption">Fig 1.4 – STP: Segmentation → Targeting → Positioning framework</div>
+</div>
+
+<h3>Porter's Five Forces – Coffee Shop Case</h3>
+<div class="svg-wrap">
+<svg viewBox="0 0 500 420" width="100%" style="max-width:500px">
+  <!-- Center box -->
+  <rect x="160" y="170" width="180" height="80" rx="10" fill="#00897b" stroke="#00695c" stroke-width="2"/>
+  <text x="250" y="200" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Competitive</text>
+  <text x="250" y="218" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Rivalry</text>
+  <text x="250" y="236" text-anchor="middle" font-size="11" fill="#b2dfdb">HIGH</text>
+  <text x="250" y="250" text-anchor="middle" font-size="10" fill="#e0f2f1">Starbucks, local cafes</text>
+  <!-- Top: New Entrants -->
+  <rect x="155" y="20" width="190" height="60" rx="10" fill="#e0f2f1" stroke="#00897b" stroke-width="2"/>
+  <text x="250" y="46" text-anchor="middle" font-size="12" font-weight="700" fill="#00695c">Threat of New Entrants</text>
+  <text x="250" y="63" text-anchor="middle" font-size="11" fill="#5a6a7a">MEDIUM — Moderate capital req.</text>
+  <line x1="250" y1="80" x2="250" y2="170" stroke="#b2dfdb" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <!-- Bottom: Substitutes -->
+  <rect x="155" y="340" width="190" height="60" rx="10" fill="#e0f2f1" stroke="#00897b" stroke-width="2"/>
+  <text x="250" y="366" text-anchor="middle" font-size="12" font-weight="700" fill="#00695c">Threat of Substitutes</text>
+  <text x="250" y="383" text-anchor="middle" font-size="11" fill="#5a6a7a">HIGH — Tea, energy drinks</text>
+  <line x1="250" y1="340" x2="250" y2="250" stroke="#b2dfdb" stroke-width="2" stroke-dasharray="5,3"/>
+  <!-- Left: Supplier Power -->
+  <rect x="10" y="180" width="140" height="60" rx="10" fill="#fff3e0" stroke="#ff7043" stroke-width="2"/>
+  <text x="80" y="203" text-anchor="middle" font-size="11" font-weight="700" fill="#e64a19">Supplier Power</text>
+  <text x="80" y="220" text-anchor="middle" font-size="10" fill="#5a6a7a">LOW — Many coffee</text>
+  <text x="80" y="234" text-anchor="middle" font-size="10" fill="#5a6a7a">suppliers available</text>
+  <line x1="150" y1="210" x2="160" y2="210" stroke="#ffccbc" stroke-width="2" stroke-dasharray="5,3"/>
+  <!-- Right: Buyer Power -->
+  <rect x="350" y="180" width="140" height="60" rx="10" fill="#fff3e0" stroke="#ff7043" stroke-width="2"/>
+  <text x="420" y="203" text-anchor="middle" font-size="11" font-weight="700" fill="#e64a19">Buyer Power</text>
+  <text x="420" y="220" text-anchor="middle" font-size="10" fill="#5a6a7a">HIGH — Many</text>
+  <text x="420" y="234" text-anchor="middle" font-size="10" fill="#5a6a7a">alternatives exist</text>
+  <line x1="340" y1="210" x2="350" y2="210" stroke="#ffccbc" stroke-width="2" stroke-dasharray="5,3"/>
+  <!-- Intensity legend -->
+  <rect x="10" y="390" width="10" height="10" fill="#e0f2f1" stroke="#00897b" stroke-width="1" rx="2"/>
+  <text x="25" y="400" font-size="10" fill="#5a6a7a">Low/Medium forces</text>
+  <rect x="160" y="390" width="10" height="10" fill="#fff3e0" stroke="#ff7043" stroke-width="1" rx="2"/>
+  <text x="175" y="400" font-size="10" fill="#5a6a7a">High forces</text>
+</svg>
+<div class="svg-caption">Fig 1.5 – Porter's Five Forces applied to a coffee shop business</div>
+</div>
+
+<h3>Ansoff Matrix – Teknivo Electronics Case</h3>
+<div class="card card-accent">
+<table class="data-table" style="margin:0">
+  <thead>
+    <tr><th></th><th>Existing Products</th><th>New Products</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Existing Markets</strong></td>
+      <td><span style="color:var(--primary);font-weight:700">Market Penetration</span><br><small>Bundle accessories; loyalty discounts to increase wallet share</small></td>
+      <td><span style="color:var(--accent);font-weight:700">Product Development</span><br><small>Launch IoT home devices for current customers</small></td>
+    </tr>
+    <tr>
+      <td><strong>New Markets</strong></td>
+      <td><span style="color:var(--accent);font-weight:700">Market Development</span><br><small>Export existing product line to South-East Asia</small></td>
+      <td><span style="color:var(--danger);font-weight:700">Diversification</span><br><small>Enter software-as-a-service for enterprise clients</small></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Kano Model – Smartphone Features</h3>
+<div class="svg-wrap">
+<svg viewBox="0 0 500 320" width="100%" style="max-width:500px">
+  <!-- Axes -->
+  <line x1="60" y1="280" x2="480" y2="280" stroke="#5a6a7a" stroke-width="2" marker-end="url(#axarr)"/>
+  <line x1="60" y1="280" x2="60" y2="20" stroke="#5a6a7a" stroke-width="2"/>
+  <text x="480" y="296" text-anchor="middle" font-size="12" fill="#5a6a7a">Feature Implementation →</text>
+  <text x="20" y="150" text-anchor="middle" font-size="12" fill="#5a6a7a" transform="rotate(-90,20,150)">Customer Satisfaction →</text>
+  <!-- Basic Needs curve: flat negative → rises to flat 0 -->
+  <path d="M80,260 Q180,260 280,210 Q360,170 460,155" stroke="#ff7043" stroke-width="2.5" fill="none" stroke-dasharray="6,3"/>
+  <text x="430" y="148" font-size="11" font-weight="700" fill="#ff7043">Basic Needs</text>
+  <text x="340" y="260" font-size="10" fill="#ff7043">(must-have: battery, calls)</text>
+  <!-- Performance curve: diagonal -->
+  <path d="M80,260 Q200,180 340,120 Q400,90 460,70" stroke="#00897b" stroke-width="2.5" fill="none"/>
+  <text x="430" y="65" font-size="11" font-weight="700" fill="#00897b">Performance</text>
+  <text x="200" y="148" font-size="10" fill="#00897b">(camera, speed)</text>
+  <!-- Excitement curve: flat then steep rise -->
+  <path d="M80,270 Q200,265 300,220 Q380,150 460,40" stroke="#4db6ac" stroke-width="2.5" fill="none" stroke-dasharray="3,2"/>
+  <text x="370" y="32" font-size="11" font-weight="700" fill="#004d40">Excitement (Delight)</text>
+  <text x="100" y="200" font-size="10" fill="#004d40">(face unlock, foldable)</text>
+  <!-- Origin label -->
+  <text x="55" y="295" font-size="11" fill="#5a6a7a">0</text>
+</svg>
+<div class="svg-caption">Fig 1.6 – Kano Model: Basic needs cause dissatisfaction if absent; Delight features surprise positively</div>
+</div>
+</section>
+
+<!-- ===== SECTION 4: RFM ===== -->
+<section id="rfm">
+<h2>4. RFM Analysis</h2>
+<p>RFM is a customer segmentation technique based on purchasing behaviour. It scores each customer on three dimensions:</p>
+
+<div class="svg-wrap">
+<svg viewBox="0 0 400 300" width="100%" style="max-width:400px">
+  <!-- 3D cube representation -->
+  <!-- Front face -->
+  <polygon points="80,160 220,160 220,300 80,300" fill="#e0f2f1" stroke="#00897b" stroke-width="2"/>
+  <!-- Top face -->
+  <polygon points="80,160 150,100 290,100 220,160" fill="#b2dfdb" stroke="#00897b" stroke-width="2"/>
+  <!-- Right face -->
+  <polygon points="220,160 290,100 290,240 220,300" fill="#80cbc4" stroke="#00897b" stroke-width="2"/>
+  <!-- Labels -->
+  <text x="150" y="240" text-anchor="middle" font-size="16" font-weight="800" fill="#00695c">Recency</text>
+  <text x="150" y="262" text-anchor="middle" font-size="11" fill="#5a6a7a">Days since last purchase</text>
+  <text x="180" y="128" text-anchor="middle" font-size="15" font-weight="800" fill="#004d40">Frequency</text>
+  <text x="175" y="145" text-anchor="middle" font-size="11" fill="#5a6a7a">Number of transactions</text>
+  <text x="260" y="185" text-anchor="middle" font-size="15" font-weight="800" fill="#006064">Monetary</text>
+  <text x="258" y="202" text-anchor="middle" font-size="11" fill="#5a6a7a">Total spend (₹)</text>
+  <!-- Score labels -->
+  <text x="50" y="180" font-size="12" fill="#ff7043" font-weight="700">Score</text>
+  <text x="50" y="195" font-size="11" fill="#ff7043">1–4</text>
+  <text x="50" y="210" font-size="10" fill="#5a6a7a">(4 = best)</text>
+</svg>
+<div class="svg-caption">Fig 1.7 – RFM Cube: each dimension scored 1–4 (4 = most favourable)</div>
+</div>
+
+<div class="formula-box">
+  <strong>Recency Score:</strong> 4 = purchased within last 7 days; 1 = purchased 90+ days ago<br>
+  <strong>Frequency Score:</strong> 4 = 10+ purchases; 1 = only 1 purchase<br>
+  <strong>Monetary Score:</strong> 4 = top 25% spender; 1 = bottom 25% spender<br>
+  <strong>RFM Score</strong> = concatenation of R, F, M scores (e.g., 4-4-4 = Champion)
+</div>
+
+<h3>Worked Example</h3>
+<table class="data-table">
+  <thead><tr><th>Customer</th><th>Last Purchase</th><th>Transactions</th><th>Total Spend (₹)</th><th>R</th><th>F</th><th>M</th><th>Segment</th></tr></thead>
+  <tbody>
+    <tr><td>Amit</td><td>2 days ago</td><td>15</td><td>₹18,000</td><td>4</td><td>4</td><td>4</td><td><strong style="color:#00897b">Champion</strong></td></tr>
+    <tr><td>Priya</td><td>5 days ago</td><td>8</td><td>₹9,500</td><td>4</td><td>3</td><td>3</td><td><strong style="color:#43a047">Loyal</strong></td></tr>
+    <tr><td>Rohit</td><td>30 days ago</td><td>3</td><td>₹4,200</td><td>2</td><td>2</td><td>2</td><td><strong style="color:#ff7043">At Risk</strong></td></tr>
+    <tr><td>Sneha</td><td>60 days ago</td><td>1</td><td>₹800</td><td>1</td><td>1</td><td>1</td><td><strong style="color:#e53935">Lost</strong></td></tr>
+    <tr><td>Vikas</td><td>10 days ago</td><td>2</td><td>₹15,000</td><td>3</td><td>1</td><td>4</td><td><strong style="color:#ff7043">Big Spender</strong></td></tr>
+  </tbody>
+</table>
+
+<h3>RFM Segment Strategy</h3>
+<table class="data-table">
+  <thead><tr><th>Segment</th><th>R</th><th>F</th><th>M</th><th>Action</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Champions</strong></td><td>4</td><td>4</td><td>4</td><td>Reward, ask for reviews, early access</td></tr>
+    <tr><td><strong>Loyal Customers</strong></td><td>3–4</td><td>3–4</td><td>3–4</td><td>Upsell, loyalty programme</td></tr>
+    <tr><td><strong>At Risk</strong></td><td>1–2</td><td>2–3</td><td>2–3</td><td>Win-back campaigns, personalised offers</td></tr>
+    <tr><td><strong>Lost</strong></td><td>1</td><td>1</td><td>1</td><td>Reactivation email, steep discount</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ===== SECTION 5: Attribution ===== -->
+<section id="attribution">
+<h2>5. Attribution Modeling</h2>
+<p>Attribution determines how credit for a conversion is assigned across multiple customer touchpoints (e.g., impressions, clicks, emails).</p>
+
+<div class="svg-wrap">
+<svg viewBox="0 0 580 260" width="100%" style="max-width:580px">
+  <!-- Journey line -->
+  <line x1="40" y1="60" x2="540" y2="60" stroke="#b2dfdb" stroke-width="3"/>
+  <!-- Touchpoints -->
+  <circle cx="80" cy="60" r="18" fill="#00897b" stroke="#00695c" stroke-width="2"/>
+  <text x="80" y="65" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">SEO</text>
+  <circle cx="190" cy="60" r="18" fill="#80cbc4" stroke="#00897b" stroke-width="2"/>
+  <text x="190" y="65" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Email</text>
+  <circle cx="300" cy="60" r="18" fill="#80cbc4" stroke="#00897b" stroke-width="2"/>
+  <text x="300" y="65" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Social</text>
+  <circle cx="410" cy="60" r="18" fill="#80cbc4" stroke="#00897b" stroke-width="2"/>
+  <text x="410" y="65" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Display</text>
+  <circle cx="510" cy="60" r="18" fill="#ff7043" stroke="#e64a19" stroke-width="2"/>
+  <text x="510" y="57" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">Paid</text>
+  <text x="510" y="69" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">Search</text>
+  <!-- Conversion -->
+  <polygon points="555,50 575,60 555,70" fill="#ff7043"/>
+  <text x="568" y="82" text-anchor="middle" font-size="10" font-weight="700" fill="#ff7043">SALE</text>
+  <!-- Attribution rows -->
+  <!-- First Touch -->
+  <text x="10" y="108" font-size="11" font-weight="700" fill="#00695c">First-Touch</text>
+  <rect x="62" y="94" width="36" height="20" rx="4" fill="#00897b"/>
+  <text x="80" y="109" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">100%</text>
+  <text x="190" y="109" text-anchor="middle" font-size="10" fill="#ccc">0%</text>
+  <text x="300" y="109" text-anchor="middle" font-size="10" fill="#ccc">0%</text>
+  <text x="410" y="109" text-anchor="middle" font-size="10" fill="#ccc">0%</text>
+  <text x="510" y="109" text-anchor="middle" font-size="10" fill="#ccc">0%</text>
+  <!-- Last Touch -->
+  <text x="10" y="138" font-size="11" font-weight="700" fill="#00695c">Last-Touch</text>
+  <text x="80" y="138" text-anchor="middle" font-size="10" fill="#ccc">0%</text>
+  <text x="190" y="138" text-anchor="middle" font-size="10" fill="#ccc">0%</text>
+  <text x="300" y="138" text-anchor="middle" font-size="10" fill="#ccc">0%</text>
+  <text x="410" y="138" text-anchor="middle" font-size="10" fill="#ccc">0%</text>
+  <rect x="492" y="124" width="36" height="20" rx="4" fill="#ff7043"/>
+  <text x="510" y="139" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">100%</text>
+  <!-- Linear -->
+  <text x="10" y="168" font-size="11" font-weight="700" fill="#00695c">Linear</text>
+  <rect x="62" y="154" width="36" height="20" rx="4" fill="#4db6ac"/>
+  <text x="80" y="169" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">20%</text>
+  <rect x="172" y="154" width="36" height="20" rx="4" fill="#4db6ac"/>
+  <text x="190" y="169" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">20%</text>
+  <rect x="282" y="154" width="36" height="20" rx="4" fill="#4db6ac"/>
+  <text x="300" y="169" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">20%</text>
+  <rect x="392" y="154" width="36" height="20" rx="4" fill="#4db6ac"/>
+  <text x="410" y="169" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">20%</text>
+  <rect x="492" y="154" width="36" height="20" rx="4" fill="#4db6ac"/>
+  <text x="510" y="169" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">20%</text>
+  <!-- U-shaped -->
+  <text x="10" y="198" font-size="11" font-weight="700" fill="#00695c">U-Shaped</text>
+  <rect x="62" y="184" width="36" height="20" rx="4" fill="#00897b"/>
+  <text x="80" y="199" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">40%</text>
+  <text x="190" y="199" text-anchor="middle" font-size="10" fill="#aaa">6.7%</text>
+  <text x="300" y="199" text-anchor="middle" font-size="10" fill="#aaa">6.7%</text>
+  <text x="410" y="199" text-anchor="middle" font-size="10" fill="#aaa">6.7%</text>
+  <rect x="492" y="184" width="36" height="20" rx="4" fill="#00897b"/>
+  <text x="510" y="199" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">40%</text>
+  <!-- Time Decay -->
+  <text x="10" y="228" font-size="11" font-weight="700" fill="#00695c">Time Decay</text>
+  <rect x="62" y="214" width="36" height="20" rx="4" fill="#b2dfdb"/>
+  <text x="80" y="229" text-anchor="middle" font-size="10" font-weight="700" fill="#004d40">5%</text>
+  <rect x="172" y="214" width="36" height="20" rx="4" fill="#80cbc4"/>
+  <text x="190" y="229" text-anchor="middle" font-size="10" font-weight="700" fill="#004d40">10%</text>
+  <rect x="282" y="214" width="36" height="20" rx="4" fill="#4db6ac"/>
+  <text x="300" y="229" text-anchor="middle" font-size="10" font-weight="700" fill="#004d40">20%</text>
+  <rect x="392" y="214" width="36" height="20" rx="4" fill="#26a69a"/>
+  <text x="410" y="229" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">30%</text>
+  <rect x="492" y="214" width="36" height="20" rx="4" fill="#00695c"/>
+  <text x="510" y="229" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">35%</text>
+</svg>
+<div class="svg-caption">Fig 1.8 – Attribution models: how ₹100 credit is split across 5 touchpoints</div>
+</div>
+
+<table class="data-table">
+  <thead><tr><th>Model</th><th>Logic</th><th>Best for</th><th>Limitation</th></tr></thead>
+  <tbody>
+    <tr><td><strong>First-Touch</strong></td><td>100% to first touchpoint</td><td>Awareness campaigns</td><td>Ignores rest of journey</td></tr>
+    <tr><td><strong>Last-Touch</strong></td><td>100% to last touchpoint</td><td>Direct response</td><td>Ignores awareness drivers</td></tr>
+    <tr><td><strong>Linear</strong></td><td>Equal credit to all</td><td>Long sales cycles</td><td>Treats all touchpoints equally</td></tr>
+    <tr><td><strong>U-Shaped</strong></td><td>40%–20%–40% first–mid–last</td><td>Lead generation</td><td>Middle touchpoints under-valued</td></tr>
+    <tr><td><strong>Time Decay</strong></td><td>More credit to recent touchpoints</td><td>Short purchase cycles</td><td>Discounts early awareness</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ===== SECTION 6: Statistics ===== -->
+<section id="stats">
+<h2>6. Statistical Foundations</h2>
+
+<h3>Key Distributions</h3>
+<table class="data-table">
+  <thead><tr><th>Distribution</th><th>Shape</th><th>Key Property</th><th>Marketing Use</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Normal</strong></td><td>Bell curve, symmetric</td><td>μ±σ=68%, μ±2σ=95%, μ±3σ=99.7%</td><td>Sales data, customer ratings</td></tr>
+    <tr><td><strong>t-distribution</strong></td><td>Bell, heavier tails</td><td>Used for small samples (n &lt; 30)</td><td>A/B test with small group</td></tr>
+    <tr><td><strong>Chi-square</strong></td><td>Right-skewed</td><td>Used for categorical independence tests</td><td>Ad preference by gender</td></tr>
+    <tr><td><strong>Bernoulli</strong></td><td>Discrete, 2 outcomes</td><td>P(X=1)=p, P(X=0)=1−p</td><td>Single click/no-click, buy/no-buy</td></tr>
+    <tr><td><strong>Binomial</strong></td><td>Discrete, symmetric for p=0.5</td><td>P(X=k) = C(n,k)·pᵏ·(1−p)ⁿ⁻ᵏ; n Bernoulli trials</td><td>Probability k customers convert</td></tr>
+    <tr><td><strong>Poisson</strong></td><td>Discrete, right-skewed</td><td>Events per time interval; λ = mean rate</td><td>Customer arrivals per hour</td></tr>
+  </tbody>
+</table>
+
+<h3>Hypothesis Testing Framework</h3>
+<div class="card card-accent">
+<ol style="margin-left:18px">
+  <li><strong>State H₀</strong> (null: no effect) and <strong>H₁</strong> (alternative: there is an effect)</li>
+  <li>Choose significance level <strong>α = 0.05</strong> (5% chance of Type I error)</li>
+  <li>Select the appropriate test (z-test, t-test, ANOVA, chi-square)</li>
+  <li>Calculate <strong>test statistic</strong> and corresponding <strong>p-value</strong></li>
+  <li>Decision: if <strong>p &lt; α</strong>, reject H₀ → result is statistically significant</li>
+</ol>
+</div>
+
+<div class="formula-box">
+  <strong>p-value:</strong> Probability of observing the result (or more extreme) IF H₀ is true<br>
+  <strong>Reject H₀</strong> when p-value &lt; α (typically 0.05)<br>
+  <strong>Type I Error (α):</strong> Rejecting a TRUE null hypothesis → False Positive<br>
+  <strong>Type II Error (β):</strong> Failing to reject a FALSE null hypothesis → False Negative<br>
+  <strong>Power = 1 − β</strong> (probability of correctly detecting a real effect)
+</div>
+
+<div class="example-box">
+<div class="ex-title">Exam Mnemonic: Error Types</div>
+<p><strong>Type I = "Cry Wolf"</strong> — You alarm people about nothing (false positive, you reject H₀ when it was true)</p>
+<p><strong>Type II = "Miss the Wolf"</strong> — The wolf was real but you ignored it (false negative, you failed to reject H₀ when it was false)</p>
+</div>
+</section>
+
+<!-- ===== SECTION 7: A/B Testing & MMM ===== -->
+<section id="abtest">
+<h2>7. A/B Testing &amp; Marketing Mix Modelling</h2>
+
+<h3>A/B Testing</h3>
+<p>A/B testing (split testing) is a controlled experiment where two variants are compared on a target metric to determine which performs better.</p>
+
+<div class="example-box">
+<div class="ex-title">Worked Example – Email Campaign</div>
+<table class="data-table" style="margin:6px 0 0">
+  <thead><tr><th>Group</th><th>n</th><th>Conversions</th><th>Rate</th></tr></thead>
+  <tbody>
+    <tr><td><strong>A (Control)</strong> – Original subject line</td><td>5,000</td><td>250</td><td>5.0%</td></tr>
+    <tr><td><strong>B (Treatment)</strong> – New subject line</td><td>5,000</td><td>325</td><td>6.5%</td></tr>
+  </tbody>
+</table>
+<p style="margin-top:10px"><strong>Lift</strong> = (6.5% − 5.0%) / 5.0% = <strong>30% relative improvement</strong></p>
+<p>Run a <strong>two-proportion z-test</strong>: H₀: p_A = p_B; H₁: p_B &gt; p_A</p>
+<p>If calculated z &gt; 1.645 (one-tailed) or p-value &lt; 0.05 → <strong>Significant!</strong> Adopt variant B.</p>
+</div>
+
+<div class="formula-box">
+  <strong>z = (p̂_B − p̂_A) / √[p̂(1−p̂)(1/n_A + 1/n_B)]</strong><br>
+  where p̂ = (x_A + x_B) / (n_A + n_B) is the pooled proportion
+</div>
+
+<h3>A/B Testing Checklist</h3>
+<ul>
+  <li>Randomly assign users to ensure groups are comparable</li>
+  <li>Test one variable at a time (isolate the effect)</li>
+  <li>Run until minimum sample size is reached (power analysis)</li>
+  <li>Watch for <strong>novelty effect</strong> and <strong>Simpson's paradox</strong></li>
+  <li>Report absolute AND relative lift</li>
+</ul>
+
+<h3>Marketing Mix Modelling (MMM)</h3>
+<p>MMM uses regression to decompose sales into contributions from each marketing channel while controlling for price, seasonality and external factors.</p>
+
+<div class="formula-box">
+  <strong>Sales = β₀ + β₁(TV_spend) + β₂(Digital_spend) + β₃(Price) + β₄(Seasonality) + ε</strong><br><br>
+  β₀ = baseline sales (without any marketing)<br>
+  β₁, β₂ = revenue generated per ₹ of TV/Digital spend<br>
+  β₃ = price elasticity effect<br>
+  ε = unexplained residual
+</div>
+
+<div class="example-box">
+<div class="ex-title">MMM Interpretation Example</div>
+<p>Fitted model: <strong>Sales = 120,000 + 4.2(TV) + 6.8(Digital) − 3,500(Price) + ε</strong></p>
+<p>→ Each ₹1 of Digital spend generates ₹6.80 in sales (ROMI = 5.8x)</p>
+<p>→ Each ₹1 of TV spend generates ₹4.20 in sales (ROMI = 3.2x)</p>
+<p>→ A ₹1 price increase reduces sales by ₹3,500 (elastic demand)</p>
+<p><strong>Decision:</strong> Reallocate budget from TV to Digital for better ROI</p>
+</div>
+
+<div class="code-block">
+<span class="cm"># Simple MMM using OLS regression (Python)</span>
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> statsmodels.api <span class="kw">as</span> sm
+
+<span class="cm"># Load marketing spend and sales data</span>
+df = pd.read_csv(<span class="st">'marketing_data.csv'</span>)
+X = df[[<span class="st">'tv_spend'</span>, <span class="st">'digital_spend'</span>, <span class="st">'price'</span>]]
+y = df[<span class="st">'sales'</span>]
+
+X = sm.add_constant(X)  <span class="cm"># adds β₀ intercept</span>
+model = sm.OLS(y, X).fit()
+<span class="fn">print</span>(model.summary())
+<span class="cm"># Check R², p-values, and coefficients</span>
+</div>
+</section>
+
+<!-- ===== MARKETING ANALYTICS TOOLS ===== -->
+<section id="tools">
+<h2>8. Marketing Analytics Tools</h2>
+<p>Modern marketing analytics relies on specialised software for each functional area:</p>
+
+<h3>8.1 Web Analytics Tools</h3>
+<ul>
+  <li><strong>Google Analytics</strong> — tracks website traffic, user behaviour, and conversion metrics; offers insights into visitor demographics and acquisition channels.</li>
+  <li><strong>Adobe Analytics</strong> — advanced insights into customer behaviour across digital channels, helping businesses optimise their online presence.</li>
+</ul>
+
+<h3>8.2 Customer Relationship Management (CRM) Tools</h3>
+<ul>
+  <li><strong>Salesforce</strong> — tracks customer interactions, sales data, and marketing campaigns with analytical capabilities for engagement and performance.</li>
+  <li><strong>HubSpot</strong> — marketing, sales, and service software with CRM features and campaign-effectiveness analytics.</li>
+</ul>
+
+<h3>8.3 Social Media Analytics Tools</h3>
+<ul>
+  <li><strong>Hootsuite</strong> — social media management tool tracking engagement, reach, and audience growth.</li>
+  <li>Other platforms: Sprout Social, Buffer, Brandwatch.</li>
+</ul>
+
+<h3>8.4 Data Visualisation Tools</h3>
+<ul>
+  <li><strong>Tableau, Power BI, Qlik</strong> — turn raw data into dashboards and visual stories for decision-makers.</li>
+</ul>
+
+<h3>8.5 Email Marketing Analytics Tools</h3>
+<ul>
+  <li><strong>Mailchimp, Constant Contact</strong> — track open rates, click-through, conversions, and audience segmentation.</li>
+</ul>
+
+<h3>8.6 Predictive Analytics Tools</h3>
+<ul>
+  <li><strong>SAS, IBM SPSS, RapidMiner</strong> — statistical and machine-learning platforms enabling analysis of large datasets and forecasting customer behaviour.</li>
+</ul>
+
+<h3>8.7 Marketing Automation Tools</h3>
+<ul>
+  <li><strong>Marketo, Pardot</strong> — automation platforms for campaign management, lead nurturing, and behaviour-triggered communications.</li>
+</ul>
+</section>
+
+<!-- ===== DATA PRIVACY & ETHICS ===== -->
+<section id="privacy">
+<h2>9. Data Privacy &amp; Ethics</h2>
+
+<p>Compliance with data privacy regulations is <strong>crucial when collecting and analysing customer data</strong>. Ethical data usage helps build customer trust and safeguards organisations from legal issues.</p>
+
+<h3>Key Regulations</h3>
+<ul>
+  <li><strong>GDPR</strong> (General Data Protection Regulation) — European Union rules covering consent, data minimisation, the right to be forgotten, and breach notification.</li>
+  <li><strong>CCPA</strong> (California Consumer Privacy Act) — gives California consumers rights to know what personal data is collected, request deletion, and opt out of sale of data.</li>
+</ul>
+
+<h3>Data-Driven Marketing &amp; Ethical Use</h3>
+<ul>
+  <li>Marketing analytics drives <strong>data-driven decision-making</strong> — but with that power comes responsibility for how data is gathered and used.</li>
+  <li>Customer trust is built by clear consent, transparency, and lawful processing.</li>
+  <li>Non-compliance can result in heavy fines and reputational damage.</li>
+</ul>
+</section>
+
+<!-- ===== QUIZ ===== -->
+<section id="quiz">
+<h2>Quiz – Week 1 (14 Questions)</h2>
+<div class="quiz-grid">
+
+  <div class="q-block">
+    <div class="q-num">Q1</div>
+    <div class="q-text">Which level of analytics answers the question "What should we do next?"</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) Descriptive Analytics</button>
+      <button onclick="qa(this,0)">B) Diagnostic Analytics</button>
+      <button onclick="qa(this,0)">C) Predictive Analytics</button>
+      <button onclick="qa(this,1)">D) Prescriptive Analytics</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q2</div>
+    <div class="q-text">In the AIDA model, which stage involves creating a want or preference for the product?</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) Awareness</button>
+      <button onclick="qa(this,0)">B) Interest</button>
+      <button onclick="qa(this,1)">C) Desire</button>
+      <button onclick="qa(this,0)">D) Action</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q3</div>
+    <div class="q-text">A customer scores R=4, F=4, M=4 in RFM analysis. What segment do they belong to?</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) Loyal Customer</button>
+      <button onclick="qa(this,0)">B) At Risk</button>
+      <button onclick="qa(this,1)">C) Champion</button>
+      <button onclick="qa(this,0)">D) Big Spender</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q4</div>
+    <div class="q-text">Which of the following is NOT one of Porter's Five Forces?</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) Threat of new entrants</button>
+      <button onclick="qa(this,0)">B) Bargaining power of suppliers</button>
+      <button onclick="qa(this,1)">C) SWOT Analysis</button>
+      <button onclick="qa(this,0)">D) Competitive rivalry</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q5</div>
+    <div class="q-text">In A/B testing, committing a Type I error means:</div>
+    <div class="q-options">
+      <button onclick="qa(this,1)">A) Rejecting a true null hypothesis (false positive)</button>
+      <button onclick="qa(this,0)">B) Failing to reject a false null hypothesis</button>
+      <button onclick="qa(this,0)">C) Using an insufficient sample size</button>
+      <button onclick="qa(this,0)">D) Assigning users non-randomly</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q6</div>
+    <div class="q-text">The three "extended" Ps added to create the 7Ps (beyond the original 4Ps) are:</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) Packaging, Positioning, Profit</button>
+      <button onclick="qa(this,1)">B) People, Process, Physical Evidence</button>
+      <button onclick="qa(this,0)">C) Partnership, Personalisation, Platform</button>
+      <button onclick="qa(this,0)">D) Planning, Publicity, Performance</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q7</div>
+    <div class="q-text">Teknivo Electronics launches its existing product line in South-East Asia. According to the Ansoff Matrix, this is:</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) Market Penetration</button>
+      <button onclick="qa(this,1)">B) Market Development</button>
+      <button onclick="qa(this,0)">C) Product Development</button>
+      <button onclick="qa(this,0)">D) Diversification</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q8</div>
+    <div class="q-text">In attribution modelling, the U-shaped model assigns which credit split to the first and last touchpoints respectively?</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) 50% / 50%</button>
+      <button onclick="qa(this,1)">B) 40% / 40%</button>
+      <button onclick="qa(this,0)">C) 100% / 0%</button>
+      <button onclick="qa(this,0)">D) 20% / 60%</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q9</div>
+    <div class="q-text">Which distribution is most appropriate for testing whether ad preference differs significantly by gender?</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) Normal distribution</button>
+      <button onclick="qa(this,0)">B) Binomial distribution</button>
+      <button onclick="qa(this,0)">C) Poisson distribution</button>
+      <button onclick="qa(this,1)">D) Chi-square distribution</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q10</div>
+    <div class="q-text">In the Kano Model, which category of features causes dissatisfaction when absent but no delight when present?</div>
+    <div class="q-options">
+      <button onclick="qa(this,1)">A) Basic Needs (Must-haves)</button>
+      <button onclick="qa(this,0)">B) Performance Needs</button>
+      <button onclick="qa(this,0)">C) Excitement (Delight) Features</button>
+      <button onclick="qa(this,0)">D) Indifferent Features</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q11</div>
+    <div class="q-text">Statistical Power is defined as:</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) The probability of committing a Type I error</button>
+      <button onclick="qa(this,0)">B) Equal to the significance level α</button>
+      <button onclick="qa(this,1)">C) 1 minus the probability of a Type II error (1 − β)</button>
+      <button onclick="qa(this,0)">D) The p-value threshold for rejection</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q12</div>
+    <div class="q-text">In Marketing Mix Modelling (MMM), the β₀ (intercept) represents:</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) TV advertising return</button>
+      <button onclick="qa(this,0)">B) Price elasticity</button>
+      <button onclick="qa(this,1)">C) Baseline sales without any marketing spend</button>
+      <button onclick="qa(this,0)">D) Digital ROMI</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q13</div>
+    <div class="q-text">In the STP framework, which comes FIRST?</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) Targeting</button>
+      <button onclick="qa(this,0)">B) Positioning</button>
+      <button onclick="qa(this,1)">C) Segmentation</button>
+      <button onclick="qa(this,0)">D) Promotion</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q14</div>
+    <div class="q-text">Which attribution model gives MORE credit to touchpoints closer in time to the conversion?</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) First-Touch</button>
+      <button onclick="qa(this,0)">B) Linear</button>
+      <button onclick="qa(this,1)">C) Time Decay</button>
+      <button onclick="qa(this,0)">D) U-Shaped</button>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ===== SUMMARY ===== -->
+<section id="summary">
+<h2>Summary &amp; Exam Tips</h2>
+<div class="tip-grid">
+  <div class="tip-card">
+    <h4>4 Analytics Levels</h4>
+    <p>Descriptive → Diagnostic → Predictive → Prescriptive. Know one example for each.</p>
+  </div>
+  <div class="tip-card">
+    <h4>7Ps vs 4Ps</h4>
+    <p>Original 4Ps: Product, Price, Place, Promotion. Added 3: People, Process, Physical Evidence.</p>
+  </div>
+  <div class="tip-card">
+    <h4>RFM Scoring</h4>
+    <p>Score 1–4 per dimension. 4=best for all. 4-4-4 = Champion. Low recency score = churned.</p>
+  </div>
+  <div class="tip-card">
+    <h4>Porter's Five Forces</h4>
+    <p>New Entrants, Suppliers, Buyers, Substitutes, Rivalry. NOT SWOT — don't confuse!</p>
+  </div>
+  <div class="tip-card">
+    <h4>Error Types</h4>
+    <p>Type I = false positive (cry wolf). Type II = false negative (miss the wolf). Power = 1−β.</p>
+  </div>
+  <div class="tip-card">
+    <h4>Attribution Models</h4>
+    <p>5 models: First, Last, Linear, U-shaped (40/20/40), Time Decay. Know the split for U-shaped.</p>
+  </div>
+  <div class="tip-card">
+    <h4>Ansoff Matrix</h4>
+    <p>2×2: existing/new markets vs existing/new products. Diversification = highest risk.</p>
+  </div>
+  <div class="tip-card">
+    <h4>MMM Formula</h4>
+    <p>Sales = β₀ + β₁(TV) + β₂(Digital) + β₃(Price) + ε. β₀ = baseline without marketing.</p>
+  </div>
+</div>
+
+<div class="example-box" style="margin-top:20px">
+<div class="ex-title">Common Exam Pitfalls</div>
+<ul>
+  <li>Confusing <strong>Prescriptive</strong> (what to do) with <strong>Predictive</strong> (what will happen)</li>
+  <li>Forgetting the 3 extended Ps — exam often asks about "7Ps vs 4Ps"</li>
+  <li>Mixing up Type I error (α, false positive) and Type II error (β, false negative)</li>
+  <li>Applying U-shaped model incorrectly — middle touchpoints share only 20% collectively</li>
+  <li>Confusing Market Development (existing product, new market) with Market Penetration</li>
+  <li>RFM: higher recency score = MORE recent purchase (4 = last week, not last year)</li>
+</ul>
+</div>
+
+<div class="page-nav">
+  <span class="nav-btn disabled">← No Previous</span>
+  <a href="index.html" class="nav-btn" style="background:var(--muted)">🏠 Hub</a>
+  <a href="Week_02_MA_ResearchTools1.html" class="nav-btn">Next: Research Tools 1 →</a>
+</div>
+</section>
+
+
+<style>
+#xn-extra .xn-intro{background:rgba(0,137,123,.08);border-left:4px solid var(--primary);border-radius:0 8px 8px 0;padding:12px 16px;margin:6px 0 18px;color:var(--muted);font-size:.92em;}
+.xn-prob{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.xn-q{margin-bottom:10px;font-weight:600;}
+.xn-tag{display:inline-block;background:var(--primary);color:#fff;font-size:.72em;font-weight:700;padding:2px 9px;border-radius:20px;margin-right:7px;vertical-align:middle;}
+.xn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.xn-in{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:.95em;min-width:180px;font-family:monospace;}
+.xn-in:focus{outline:none;border-color:var(--primary);}
+.xn-check,.xn-toggle{border:none;border-radius:8px;padding:8px 18px;cursor:pointer;font-weight:700;font-size:.88em;}
+.xn-check{background:var(--primary);color:#fff;}
+.xn-check:hover{background:var(--primary-dark);}
+.xn-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.xn-toggle:hover{border-color:var(--primary);color:var(--primary);}
+.xn-fb{margin-top:10px;font-weight:700;font-size:.9em;min-height:1em;}
+.xn-fb.xn-ok{color:#1b5e20;}
+body.dark .xn-fb.xn-ok{color:#a5d6a7;}
+.xn-fb.xn-no{color:#b71c1c;}
+body.dark .xn-fb.xn-no{color:#ef9a9a;}
+.xn-fb.xn-warn{color:#e65100;}
+.xn-sol{display:none;margin-top:12px;padding:14px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-left:4px solid var(--success);border-radius:8px;font-size:.92em;}
+body.dark .xn-sol{background:linear-gradient(135deg,#1a3a2e,#2a4a3e);color:#e8e8f0;}
+.xn-sol.open{display:block;animation:xnfade .25s ease;}
+@keyframes xnfade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.xn-sol .xf{background:#2c3e50;color:#ecf0f1;font-family:'Courier New',monospace;padding:10px 14px;border-radius:8px;margin:8px 0;overflow-x:auto;white-space:pre-wrap;font-size:.9em;}
+.xn-sol b{color:#1b5e20;}
+body.dark .xn-sol b{color:#a5d6a7;}
+.xn-opts{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
+.xn-opt{text-align:left;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;cursor:pointer;font-size:.9em;}
+.xn-opt:hover:not(:disabled){background:var(--border);}
+.xn-opt.xn-ok{background:#c8e6c9;border-color:var(--success);color:#1b5e20;font-weight:700;}
+body.dark .xn-opt.xn-ok{background:#1a3a2e;color:#a5d6a7;}
+.xn-opt.xn-no{background:#ffcdd2;border-color:var(--danger);color:#b71c1c;}
+body.dark .xn-opt.xn-no{background:#3a1a1a;color:#ef9a9a;}
+#xn-extra table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9em;}
+#xn-extra th{background:var(--primary);color:#fff;padding:8px 12px;text-align:left;}
+#xn-extra td{padding:7px 12px;border-bottom:1px solid var(--border);}
+</style>
+
+<section id="xn-extra">
+  <h2>🔢 Engineered Numerical Practice</h2>
+  <div class="xn-intro">
+    Fresh exam-style numerical problems built from this week's formulas and frameworks. Enter your answer and press
+    <strong>Check</strong> for instant feedback, or reveal the full worked solution. <em>(Press Enter in any answer box to check.)</em>
+  </div>
+
+  <div class="xn-prob" data-ans="435" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP1</span>In RFM analysis a customer is scored on a 1&ndash;5 scale: Recency = <strong>4</strong>, Frequency = <strong>3</strong>, Monetary = <strong>5</strong>. The combined RFM score is formed by concatenating the three digits (R, then F, then M). What 3-digit RFM code does this customer receive?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="e.g. 435">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">RFM code = (R)(F)(M)
+         = (4)(3)(5)
+         = <b>435</b></div>
+      A 435 customer bought recently (R=4) and is a top spender (M=5) &mdash; a high-value, low-frequency target for cross-sell campaigns.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="27.5" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP2</span>An A/B test runs each variant on <strong>12,000</strong> visitors. Variant A (control) gets <strong>480</strong> conversions; Variant B gets <strong>612</strong>. What is the <strong>relative lift</strong> of B over A, in %? &nbsp;<em>Lift = (B&minus;A)/A × 100 on conversions.</em></div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 27.5 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Conv A = 480/12,000 = 4.0%   Conv B = 612/12,000 = 5.1%
+Relative lift = (B &minus; A) / A × 100
+             = (612 &minus; 480) / 480 × 100
+             = 132 / 480 × 100
+             = <b>27.5%</b></div>
+      Because the sample sizes are equal, the lift on counts equals the lift on rates. B improves conversions by 27.5% over A.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="3" data-tol="0.05" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP3</span>An AIDA funnel starts with <strong>50,000</strong> people in the Attention stage. By the Action stage only <strong>1,500</strong> complete a purchase. What is the overall funnel conversion rate (%)?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 3 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Overall conversion = (Action / Attention) × 100
+                  = (1,500 / 50,000) × 100
+                  = <b>3%</b></div>
+      Only 3 in 100 who notice the campaign reach Action &mdash; typical of a top-of-funnel awareness push.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="40" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP4</span>In the same funnel, the Interest stage holds <strong>18,000</strong> users and the next stage (Desire) holds <strong>7,200</strong>. What percentage of Interest-stage users are <strong>retained</strong> into Desire?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 40 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Retention = (Desire / Interest) × 100
+          = (7,200 / 18,000) × 100
+          = <b>40%</b></div>
+      The drop-off here is 60% &mdash; the biggest leak in this funnel and the priority for optimisation.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="30" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP5</span>A campaign lifts monthly revenue from <strong>&#8377;240,000</strong> to <strong>&#8377;312,000</strong>. What is the percentage change in revenue?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 30 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">% change = (New &minus; Old) / Old × 100
+        = (312,000 &minus; 240,000) / 240,000 × 100
+        = 72,000 / 240,000 × 100
+        = <b>30%</b></div>
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="12" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP6</span>A brand sells <strong>&#8377;3.6 million</strong> in a category whose total market size is <strong>&#8377;30 million</strong>. What is the brand's market share (%)?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 12 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Market share = (Brand sales / Total market) × 100
+            = (3.6 / 30) × 100
+            = <b>12%</b></div>
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="10200" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP7</span>Customer Lifetime Value (simple model) = average purchase value × purchases per year × retention (years). A customer spends <strong>&#8377;850</strong> per purchase, buys <strong>4</strong> times a year, and stays for <strong>3</strong> years. What is the CLV (in &#8377;)?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="e.g. 10200">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">CLV = avg purchase × purchases/year × retention years
+    = 850 × 4 × 3
+    = <b>&#8377;10,200</b></div>
+      This figure caps how much you can profitably spend to acquire and retain that customer.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">NP8</span>A hypothesis test on a campaign returns a p-value of <strong>0.03</strong> with significance level &alpha; = <strong>0.05</strong>. What is the correct decision?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) Reject the null hypothesis &mdash; the effect is statistically significant</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Fail to reject the null &mdash; there is no significant effect</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Accept the null hypothesis as definitively true</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) The test is inconclusive; p must equal &alpha; exactly to decide</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Decision rule: if <b>p &lt; &alpha;</b>, reject H&#8320;. Here 0.03 &lt; 0.05, so we <b>reject the null hypothesis</b> and conclude the result is statistically significant.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">NP9</span>A team uses dashboards to report what happened last quarter, then builds a regression model to forecast next quarter's sales. These two activities map to which two levels of analytics, respectively?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) Descriptive, then Predictive</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Predictive, then Descriptive</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Diagnostic, then Prescriptive</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Prescriptive, then Descriptive</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">The 4 levels are Descriptive (what happened), Diagnostic (why), Predictive (what will happen), Prescriptive (what to do). Reporting past results = <b>Descriptive</b>; forecasting with regression = <b>Predictive</b>.</div>
+  </div>
+
+</section>
+
+<section id="xn-mcq">
+  <h2>📝 Exam-Style MCQs — 2 Marks Each</h2>
+  <p style="opacity:.85;font-size:.95em;margin-bottom:14px;">Each question is worth 2 marks — a mix of applied numerical and conceptual items. Click an option to check it; the correct answer and explanation appear instantly.</p>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q1 · 2 marks</span> A customer is scored on a 1&ndash;5 RFM scale: Recency = 5, Frequency = 2, Monetary = 4. The RFM code is the three scores concatenated in R-F-M order. What code does this customer receive?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 425</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) 524</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 245</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 11</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">The code is R then F then M, concatenated (not summed or reordered).<div class="xf">RFM = (R)(F)(M) = (5)(2)(4) = <b>524</b></div>This is a recent, high-spending but infrequent buyer — a strong cross-sell / loyalty target. (425 reverses the order; 11 wrongly sums the digits.)</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q2 · 2 marks</span> An A/B email test sends each variant to 8,000 recipients. Control A gets 320 conversions; treatment B gets 400 conversions. What is the <strong>relative lift</strong> of B over A?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 1% (absolute difference)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 20%</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 25%</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 125%</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Equal sample sizes, so lift on counts equals lift on rates.<div class="xf">Rate A = 320/8,000 = 4.0%   Rate B = 400/8,000 = 5.0%
+Relative lift = (B &minus; A)/A × 100 = (5.0 &minus; 4.0)/4.0 × 100 = <b>25%</b></div>1% is only the absolute (percentage-point) gap; 20% wrongly divides by B; 125% is the ratio B/A, not the lift.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q3 · 2 marks</span> A campaign funnel begins with 80,000 people aware of the brand; 2,400 of them ultimately purchase. What is the <strong>overall funnel conversion rate</strong>?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) 3%</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 2.4%</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 30%</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 33.3%</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Overall conversion divides the final stage by the first stage.<div class="xf">Conversion = (Purchasers / Aware) × 100 = (2,400 / 80,000) × 100 = <b>3%</b></div>2.4% wrongly uses 100,000 as the base; 33.3% inverts the ratio; 30% misplaces the decimal.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q4 · 2 marks</span> A retailer builds a dashboard reporting last quarter's regional sales, then drills down to discover that a stock-out in Mumbai caused the dip, and finally runs an optimiser that recommends the exact reorder quantity to maximise margin. These three activities map, in order, to which analytics levels?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Predictive → Descriptive → Diagnostic</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Descriptive → Predictive → Diagnostic</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) Descriptive → Diagnostic → Prescriptive</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Diagnostic → Predictive → Prescriptive</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Reporting what happened = <b>Descriptive</b>; finding the root cause (why) = <b>Diagnostic</b>; recommending the optimal action = <b>Prescriptive</b>. No forecasting of a future value occurs here, so Predictive does not appear.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q5 · 2 marks</span> A services firm wants to formalise the tangible cues customers use to judge quality — store ambience, layout and packaging. Which element of the 7Ps marketing mix is this, and is it one of the original 4Ps or one of the extended 3Ps?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Promotion — an original 4P</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Place — an original 4P</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Process — an extended 3P</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">D) Physical Evidence — an extended 3P</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Tangible cues of quality (ambience, layout, packaging) are <b>Physical Evidence</b>, one of the three extended Ps added for services (People, Process, Physical Evidence). The original 4Ps are Product, Price, Place, Promotion. Process is <em>how</em> the service is delivered, not the tangible cues.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q6 · 2 marks</span> An analyst maps a coffee-shop market with Porter's Five Forces. Coffee beans are available from countless suppliers, while customers can easily switch to tea, energy drinks or home brewing. Which two forces are being described, respectively?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Competitive Rivalry (low) and Threat of New Entrants (high)</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) Supplier Power (low) and Threat of Substitutes (high)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Buyer Power (low) and Supplier Power (high)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Threat of Substitutes (low) and Buyer Power (high)</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Many interchangeable bean suppliers means each supplier has little leverage → <b>Supplier Power is low</b>. Easy alternatives like tea or home brewing → <b>Threat of Substitutes is high</b>. These are two of the five forces (the others being Rivalry, New Entrants, and Buyer Power).</div>
+  </div>
+</section>
+
+<script>
+(function(){
+  if(window.__xnInit) return; window.__xnInit=true;
+  function num(s){
+    if(s==null) return NaN;
+    s=(''+s).replace(/−/g,'-').replace(/[^0-9.\-]/g,'');
+    if(s===''||s==='-'||s==='.') return NaN;
+    return parseFloat(s);
+  }
+  window.xnCheck=function(btn){
+    var p=btn.closest('.xn-prob'); if(!p) return;
+    var ans=parseFloat(p.getAttribute('data-ans'));
+    var tol=parseFloat(p.getAttribute('data-tol')||'0.05');
+    var unit=p.getAttribute('data-unit')||'';
+    var inp=p.querySelector('.xn-in'); var fb=p.querySelector('.xn-fb');
+    var v=num(inp.value);
+    if(isNaN(v)){ fb.className='xn-fb xn-warn'; fb.textContent='⚠ Enter a numeric answer first.'; return; }
+    if(Math.abs(v-ans)<=tol){ fb.className='xn-fb xn-ok'; fb.innerHTML='✓ Correct! Answer = '+ans+unit; }
+    else { fb.className='xn-fb xn-no'; fb.innerHTML='✗ Not quite — you entered '+v+'. Try again, or reveal the steps.'; }
+  };
+  window.xnToggle=function(btn){
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol');
+    var open=s.classList.toggle('open'); btn.textContent=open?'Hide steps':'Show steps';
+  };
+  window.xnPick=function(btn,ok){
+    var box=btn.parentElement;
+    box.querySelectorAll('.xn-opt').forEach(function(b){b.disabled=true; b.style.cursor='default';});
+    btn.classList.add(ok?'xn-ok':'xn-no');
+    if(!ok){ box.querySelectorAll('.xn-opt').forEach(function(b){ if(b.getAttribute('data-correct')==='1') b.classList.add('xn-ok'); }); }
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol'); if(s) s.classList.add('open');
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter' && e.target.classList && e.target.classList.contains('xn-in')){
+      var b=e.target.closest('.xn-prob').querySelector('.xn-check'); if(b) b.click();
+    }
+  });
+})();
+</script>
+</div><!-- /container -->
+
+<script>
+function qa(el,c){
+  el.style.background=c?'#c8e6c9':'#ffcdd2';
+  el.style.color=c?'#1b5e20':'#b71c1c';
+  el.style.borderColor=c?'#43a047':'#e53935';
+  el.disabled=true;
+  el.parentElement.querySelectorAll('button').forEach(b=>{if(b!==el)b.disabled=true});
+}
+function dark(){
+  document.body.classList.toggle('dark');
+  try{localStorage.setItem('ma_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}
+}
+if(localStorage.getItem('ma_dark')==='1')document.body.classList.add('dark');
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

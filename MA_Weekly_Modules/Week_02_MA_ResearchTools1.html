@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 2 – Marketing Research Tools Part 1 | MA Study Modules</title>
+<style>
+:root{--primary:#00897b;--primary-dark:#00695c;--accent:#ff7043;--success:#43a047;--danger:#e53935;--bg:#f5f8fb;--card:#fff;--text:#1a2332;--muted:#5a6a7a;--border:#dde5ec}
+body.dark{--bg:#0f1721;--card:#1a2535;--text:#e0e8f0;--muted:#a0b0c0;--border:#2a3545}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;transition:background .3s,color .3s}
+a{color:var(--primary)}
+h2{font-size:1.45rem;font-weight:800;margin:0 0 16px;color:var(--primary)}
+h3{font-size:1.1rem;font-weight:700;margin:18px 0 8px}
+h4{font-size:.98rem;font-weight:700;margin:14px 0 6px;color:var(--primary-dark)}
+p{margin-bottom:10px}
+ul,ol{margin:8px 0 12px 22px}
+li{margin-bottom:4px}
+
+/* Header */
+header{background:linear-gradient(135deg,#00897b,#00695c);color:#fff;padding:40px 20px 30px}
+.breadcrumb{font-size:.82rem;opacity:.8;margin-bottom:10px}
+.breadcrumb a{color:rgba(255,255,255,.85)}
+header h1{font-size:2rem;font-weight:800;margin-bottom:6px}
+header p{opacity:.9;max-width:680px}
+.week-badge{display:inline-block;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:3px 12px;font-size:.8rem;margin-top:8px}
+
+/* Sticky nav */
+.sticky-nav{position:sticky;top:0;z-index:100;background:var(--card);border-bottom:2px solid var(--border);padding:0 16px;display:flex;align-items:center;gap:6px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.sticky-nav a{white-space:nowrap;padding:12px 10px;font-size:.82rem;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;text-decoration:none;transition:all .2s}
+.sticky-nav a:hover{color:var(--primary);border-bottom-color:var(--primary)}
+.nav-spacer{flex:1}
+.dark-btn{background:var(--primary);color:#fff;border:none;padding:6px 14px;border-radius:16px;cursor:pointer;font-size:.8rem;white-space:nowrap;font-weight:600}
+
+/* Content */
+.container{max-width:960px;margin:0 auto;padding:32px 20px 60px}
+section{margin-bottom:48px}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.06);margin-bottom:20px}
+.card-accent{border-left:4px solid var(--primary)}
+
+/* Definition box */
+.def-box{background:rgba(0,137,123,.07);border-left:4px solid var(--primary);border-radius:0 10px 10px 0;padding:14px 18px;margin:12px 0}
+body.dark .def-box{background:rgba(0,137,123,.15)}
+
+/* Formula box */
+.formula-box{background:rgba(255,112,67,.08);border:1px solid rgba(255,112,67,.3);border-radius:10px;padding:14px 18px;margin:12px 0;font-family:'Courier New',monospace;font-size:.93rem;line-height:1.8}
+body.dark .formula-box{background:rgba(255,112,67,.12)}
+
+/* Example box */
+.example-box{background:rgba(67,160,71,.07);border:1px solid rgba(67,160,71,.3);border-radius:10px;padding:16px 18px;margin:14px 0}
+body.dark .example-box{background:rgba(67,160,71,.12)}
+.example-box .ex-title{font-weight:700;color:var(--success);font-size:.85rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+
+/* Warning/Note box */
+.note-box{background:rgba(255,112,67,.07);border:1px solid rgba(255,112,67,.25);border-radius:10px;padding:14px 18px;margin:12px 0}
+body.dark .note-box{background:rgba(255,112,67,.12)}
+.note-box strong{color:var(--accent)}
+
+/* Table */
+.data-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.9rem}
+.data-table th{background:var(--primary);color:#fff;padding:10px 14px;text-align:left}
+.data-table td{padding:9px 14px;border-bottom:1px solid var(--border)}
+.data-table tr:hover td{background:rgba(0,137,123,.05)}
+.data-table tbody tr:nth-child(even) td{background:rgba(0,0,0,.02)}
+body.dark .data-table tbody tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+
+/* ANOVA table styling */
+.anova-table th{background:#00695c}
+.anova-table .calc{color:var(--accent);font-weight:700}
+.anova-table .result{color:var(--success);font-weight:700}
+
+/* Code block */
+.code-block{background:#1e2a3a;color:#a8d8b0;border-radius:10px;padding:18px;font-family:'Courier New',monospace;font-size:.87rem;overflow-x:auto;margin:14px 0;line-height:1.6}
+.code-block .kw{color:#82b1ff}
+.code-block .fn{color:#80cbc4}
+.code-block .st{color:#f48fb1}
+.code-block .cm{color:#546e7a;font-style:italic}
+.code-block .nm{color:#ffcc80}
+
+/* SVG containers */
+.svg-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin:16px 0;overflow-x:auto;text-align:center}
+.svg-caption{font-size:.8rem;color:var(--muted);margin-top:8px;font-style:italic}
+
+/* Steps list */
+.steps{counter-reset:step;list-style:none;margin:10px 0 14px;padding:0}
+.steps li{counter-increment:step;display:flex;gap:12px;margin-bottom:10px;align-items:flex-start}
+.steps li::before{content:counter(step);background:var(--primary);color:#fff;border-radius:50%;min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;margin-top:2px}
+
+/* Method chips */
+.method-chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{background:rgba(0,137,123,.1);border:1px solid rgba(0,137,123,.25);color:var(--primary);padding:4px 12px;border-radius:16px;font-size:.82rem;font-weight:600}
+body.dark .chip{background:rgba(0,137,123,.2)}
+
+/* Two-col layout */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0}
+@media(max-width:600px){.two-col{grid-template-columns:1fr}}
+
+/* Highlight row */
+.hl-row td{background:rgba(0,137,123,.12) !important;font-weight:700}
+body.dark .hl-row td{background:rgba(0,137,123,.2) !important}
+
+/* Quiz */
+.quiz-grid{display:grid;gap:20px}
+.q-block{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.q-block .q-num{font-size:.78rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px}
+.q-block .q-text{font-weight:600;margin:6px 0 12px;font-size:.97rem}
+.q-options{display:flex;flex-direction:column;gap:8px}
+.q-options button{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:9px 14px;text-align:left;cursor:pointer;font-size:.9rem;color:var(--text);transition:border-color .2s,background .2s}
+.q-options button:hover:not([disabled]){border-color:var(--primary);background:rgba(0,137,123,.05)}
+
+/* Summary */
+.tip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:14px}
+.tip-card{background:rgba(0,137,123,.06);border-left:3px solid var(--primary);border-radius:0 8px 8px 0;padding:12px 14px}
+body.dark .tip-card{background:rgba(0,137,123,.14)}
+.tip-card h4{font-size:.88rem;font-weight:700;color:var(--primary);margin-bottom:4px}
+.tip-card p{font-size:.82rem;color:var(--muted);margin:0}
+
+/* Navigation */
+.page-nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0 0;border-top:2px solid var(--border);margin-top:32px;gap:12px;flex-wrap:wrap}
+.nav-btn{background:var(--primary);color:#fff;padding:10px 20px;border-radius:8px;font-weight:600;font-size:.9rem;text-decoration:none;transition:background .2s}
+.nav-btn:hover{background:var(--primary-dark);color:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="index.html">MA Modules</a> › Week 2</div>
+  <h1>Week 2 – Marketing Research Tools Part 1</h1>
+  <p>Statistical techniques for marketing research: ANOVA, Factor Analysis, Cluster Analysis, and MDS.</p>
+  <span class="week-badge">4 Sections &bull; 14 Quiz Questions &bull; 4 SVG Diagrams &bull; Python Code</span>
+</header>
+
+<nav class="sticky-nav">
+  <a href="#anova">ANOVA</a>
+  <a href="#factor">Factor Analysis</a>
+  <a href="#cluster">Cluster Analysis</a>
+  <a href="#mds">MDS</a>
+  <a href="#quiz">Quiz</a>
+  <a href="#summary">Summary</a>
+  <a href="#xn-extra">🔢 Numericals</a>
+  <a href="#xn-mcq">📝 MCQs</a>
+  <span class="nav-spacer"></span>
+  <button class="dark-btn" onclick="dark()">🌙</button>
+</nav>
+
+<div class="container">
+
+<!-- ===== SECTION 1: ANOVA ===== -->
+<section id="anova">
+<h2>1. One-Way ANOVA</h2>
+
+<div class="def-box">
+  <strong>ANOVA (Analysis of Variance)</strong> tests whether the <em>means of three or more groups</em> differ significantly. It partitions total variation into <em>between-group</em> variation (explained by the factor) and <em>within-group</em> variation (random error).
+</div>
+
+<h3>Core Formulas</h3>
+<div class="formula-box">
+  <strong>SST = SSB + SSW</strong>  (Total = Between-group + Within-group)<br><br>
+  <strong>SSB = Σ nᵢ(x̄ᵢ − x̄)²</strong>  &nbsp;where x̄ᵢ = group mean, x̄ = grand mean, nᵢ = group size<br>
+  <strong>SSW = Σ Σ (xᵢⱼ − x̄ᵢ)²</strong>  &nbsp;(sum of squared deviations within each group)<br><br>
+  <strong>MSB = SSB / (k − 1)</strong>  &nbsp;df_between = k − 1  (k = number of groups)<br>
+  <strong>MSW = SSW / (N − k)</strong>  &nbsp;df_within = N − k  (N = total observations)<br><br>
+  <strong>F = MSB / MSW</strong><br><br>
+  <strong>Decision:</strong> Reject H₀ (means are equal) if F &gt; F_critical(k−1, N−k) at α = 0.05
+</div>
+
+<div class="svg-wrap">
+<svg viewBox="0 0 560 200" width="100%" style="max-width:560px">
+  <!-- Total box -->
+  <rect x="10" y="80" width="110" height="50" rx="8" fill="#00897b" stroke="#00695c" stroke-width="2"/>
+  <text x="65" y="101" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">SST</text>
+  <text x="65" y="118" text-anchor="middle" font-size="10" fill="#e0f2f1">Total Variance</text>
+  <!-- Arrow split -->
+  <line x1="120" y1="105" x2="165" y2="70" stroke="#b2dfdb" stroke-width="2"/>
+  <line x1="120" y1="105" x2="165" y2="140" stroke="#b2dfdb" stroke-width="2"/>
+  <!-- SSB box -->
+  <rect x="168" y="46" width="130" height="50" rx="8" fill="#b2dfdb" stroke="#00897b" stroke-width="2"/>
+  <text x="233" y="67" text-anchor="middle" font-size="12" font-weight="700" fill="#004d40">SSB</text>
+  <text x="233" y="84" text-anchor="middle" font-size="10" fill="#00695c">Between-Group</text>
+  <!-- SSW box -->
+  <rect x="168" y="116" width="130" height="50" rx="8" fill="#e0f2f1" stroke="#00897b" stroke-width="2"/>
+  <text x="233" y="137" text-anchor="middle" font-size="12" font-weight="700" fill="#004d40">SSW</text>
+  <text x="233" y="154" text-anchor="middle" font-size="10" fill="#00695c">Within-Group (Error)</text>
+  <!-- Arrows to ratios -->
+  <line x1="298" y1="71" x2="330" y2="71" stroke="#b2dfdb" stroke-width="2"/>
+  <line x1="298" y1="141" x2="330" y2="141" stroke="#b2dfdb" stroke-width="2"/>
+  <!-- MSB box -->
+  <rect x="333" y="46" width="100" height="50" rx="8" fill="#80cbc4" stroke="#00897b" stroke-width="2"/>
+  <text x="383" y="67" text-anchor="middle" font-size="12" font-weight="700" fill="#004d40">MSB</text>
+  <text x="383" y="84" text-anchor="middle" font-size="10" fill="#004d40">SSB / (k−1)</text>
+  <!-- MSW box -->
+  <rect x="333" y="116" width="100" height="50" rx="8" fill="#e8f5e9" stroke="#43a047" stroke-width="2"/>
+  <text x="383" y="137" text-anchor="middle" font-size="12" font-weight="700" fill="#2e7d32">MSW</text>
+  <text x="383" y="154" text-anchor="middle" font-size="10" fill="#2e7d32">SSW / (N−k)</text>
+  <!-- Arrow to F -->
+  <line x1="433" y1="71" x2="455" y2="100" stroke="#ff7043" stroke-width="2"/>
+  <line x1="433" y1="141" x2="455" y2="112" stroke="#ff7043" stroke-width="2"/>
+  <!-- F box -->
+  <rect x="458" y="80" width="90" height="50" rx="8" fill="#ff7043" stroke="#e64a19" stroke-width="2"/>
+  <text x="503" y="101" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">F-stat</text>
+  <text x="503" y="118" text-anchor="middle" font-size="10" fill="#fff">MSB / MSW</text>
+  <!-- Division symbol between MSB and MSW -->
+  <text x="452" y="108" text-anchor="middle" font-size="18" fill="#ff7043" font-weight="700">÷</text>
+</svg>
+<div class="svg-caption">Fig 2.1 – ANOVA variance partitioning: SST splits into SSB (explained) and SSW (error), producing the F-statistic</div>
+</div>
+
+<h3>Worked Case Study – CTR of Ad Formats</h3>
+<div class="example-box">
+<div class="ex-title">Case: Which ad format has the highest Click-Through Rate?</div>
+<p>An e-commerce company tests three ad formats across 4 weeks each.</p>
+</div>
+
+<table class="data-table anova-table">
+  <thead><tr><th>Ad Format</th><th>Week 1</th><th>Week 2</th><th>Week 3</th><th>Week 4</th><th>Group Mean (x̄ᵢ)</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Video</strong></td><td>5.2%</td><td>4.8%</td><td>5.5%</td><td>5.1%</td><td><strong class="calc">5.150%</strong></td></tr>
+    <tr><td><strong>Banner</strong></td><td>3.1%</td><td>3.4%</td><td>2.9%</td><td>3.2%</td><td><strong class="calc">3.150%</strong></td></tr>
+    <tr><td><strong>Text</strong></td><td>4.0%</td><td>3.8%</td><td>4.2%</td><td>4.1%</td><td><strong class="calc">4.025%</strong></td></tr>
+  </tbody>
+</table>
+
+<div class="card card-accent">
+<h4>Step-by-Step Calculation</h4>
+<ol class="steps">
+  <li><strong>Grand Mean:</strong> x̄ = (5.15 + 3.15 + 4.025) / 3 = <strong>4.108%</strong></li>
+  <li><strong>SSB</strong> = 4(5.15−4.108)² + 4(3.15−4.108)² + 4(4.025−4.108)²<br>
+      = 4(1.083)² + 4(0.930)² + 4(0.007)² = 4(1.172) + 4(0.865) + 4(0.000)<br>
+      = 4.690 + 3.460 + 0.000 = <strong class="calc">≈ 7.97</strong></li>
+  <li><strong>SSW</strong> = [(5.2−5.15)²+(4.8−5.15)²+(5.5−5.15)²+(5.1−5.15)²]<br>
+      + [(3.1−3.15)²+(3.4−3.15)²+(2.9−3.15)²+(3.2−3.15)²]<br>
+      + [(4.0−4.025)²+(3.8−4.025)²+(4.2−4.025)²+(4.1−4.025)²]<br>
+      ≈ 0.255 + 0.145 + 0.095 = <strong class="calc">≈ 0.495</strong></li>
+  <li><strong>Degrees of Freedom:</strong> df_B = k−1 = 3−1 = <strong>2</strong>; df_W = N−k = 12−3 = <strong>9</strong></li>
+  <li><strong>MSB</strong> = 7.97 / 2 = <strong class="calc">3.985</strong></li>
+  <li><strong>MSW</strong> = 0.495 / 9 = <strong class="calc">0.055</strong></li>
+  <li><strong>F = MSB / MSW</strong> = 3.985 / 0.055 = <strong class="result">F ≈ 72.5</strong></li>
+  <li><strong>Decision:</strong> F_critical(2, 9) at α=0.05 = 4.26. Since 72.5 &gg; 4.26 → <strong class="result">Reject H₀!</strong><br>
+      The ad formats differ significantly in CTR. Video has the highest CTR.</li>
+</ol>
+</div>
+
+<table class="data-table anova-table">
+  <thead><tr><th>Source</th><th>SS</th><th>df</th><th>MS</th><th>F-stat</th><th>F-crit (α=0.05)</th><th>Decision</th></tr></thead>
+  <tbody>
+    <tr><td>Between (SSB)</td><td>7.97</td><td>2</td><td>3.985</td><td rowspan="2" style="vertical-align:middle;font-size:1.2rem;font-weight:800;color:#ff7043">72.5</td><td rowspan="2" style="vertical-align:middle">4.26</td><td rowspan="2" class="result" style="vertical-align:middle">Reject H₀</td></tr>
+    <tr><td>Within (SSW)</td><td>0.495</td><td>9</td><td>0.055</td></tr>
+    <tr class="hl-row"><td><strong>Total (SST)</strong></td><td><strong>8.465</strong></td><td><strong>11</strong></td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<h3>Post-Hoc Testing: Tukey HSD</h3>
+<p>When ANOVA rejects H₀, we know <em>at least one</em> pair of means differs. <strong>Tukey's Honestly Significant Difference (HSD)</strong> test identifies <em>which</em> specific pairs are different while controlling the family-wise error rate.</p>
+<div class="formula-box">
+  <strong>HSD = q × √(MSW / n)</strong><br>
+  where q = Studentised range statistic, n = group size
+</div>
+<p>If |x̄ᵢ − x̄ⱼ| &gt; HSD → that pair of groups differs significantly.</p>
+
+<h3>Two-Way ANOVA</h3>
+<div class="def-box">
+  <strong>Two-Way ANOVA</strong> tests main effects of TWO factors AND their <strong>interaction effect</strong> simultaneously. An interaction occurs when the effect of one factor depends on the level of the other.
+</div>
+
+<div class="example-box">
+<div class="ex-title">Case: Restaurant Satisfaction</div>
+<p><strong>Factor A:</strong> Menu Type (Traditional vs Fusion) &nbsp;|&nbsp; <strong>Factor B:</strong> Price Range (Budget vs Premium)</p>
+<table class="data-table" style="margin:8px 0">
+  <thead><tr><th></th><th>Budget Price</th><th>Premium Price</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Traditional</strong></td><td>Satisfaction: 6.5/10</td><td>Satisfaction: 7.0/10</td></tr>
+    <tr><td><strong>Fusion</strong></td><td>Satisfaction: 6.8/10</td><td>Satisfaction: <strong style="color:#00897b">8.9/10</strong></td></tr>
+  </tbody>
+</table>
+<p><strong>Interaction Effect:</strong> Fusion food at premium price yields 8.9 satisfaction — far more than the sum of individual effects. Customers expect (and receive) a premium experience from fusion cuisine at higher price points.</p>
+</div>
+
+<h3>Python Implementation</h3>
+<div class="code-block">
+<span class="kw">from</span> scipy <span class="kw">import</span> stats
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># One-Way ANOVA</span>
+video  = [<span class="nm">5.2</span>, <span class="nm">4.8</span>, <span class="nm">5.5</span>, <span class="nm">5.1</span>]
+banner = [<span class="nm">3.1</span>, <span class="nm">3.4</span>, <span class="nm">2.9</span>, <span class="nm">3.2</span>]
+text   = [<span class="nm">4.0</span>, <span class="nm">3.8</span>, <span class="nm">4.2</span>, <span class="nm">4.1</span>]
+
+f_stat, p_val = stats.f_oneway(video, banner, text)
+<span class="fn">print</span>(<span class="st">f"F={f_stat:.2f}, p={p_val:.6f}"</span>)
+<span class="cm"># Output: F=72.45, p=0.000002 → Highly significant</span>
+
+<span class="cm"># Tukey HSD post-hoc (using statsmodels)</span>
+<span class="kw">from</span> statsmodels.stats.multicomp <span class="kw">import</span> pairwise_tukeyhsd
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+data   = video + banner + text
+groups = [<span class="st">'Video'</span>]*<span class="nm">4</span> + [<span class="st">'Banner'</span>]*<span class="nm">4</span> + [<span class="st">'Text'</span>]*<span class="nm">4</span>
+result = pairwise_tukeyhsd(data, groups, alpha=<span class="nm">0.05</span>)
+<span class="fn">print</span>(result)
+</div>
+</section>
+
+<!-- ===== SECTION 2: Factor Analysis ===== -->
+<section id="factor">
+<h2>2. Factor Analysis</h2>
+
+<div class="def-box">
+  <strong>Factor Analysis</strong> is a dimensionality reduction technique that identifies <em>latent (hidden) factors</em> underlying a set of observed, correlated variables. Instead of analysing 20 survey variables separately, we might find they reduce to 3–4 underlying dimensions.
+</div>
+
+<div class="two-col">
+  <div class="card card-accent">
+    <h4>EFA – Exploratory</h4>
+    <p>Used when you <em>don't know</em> the factor structure in advance. The algorithm finds factors from the data. Common in early marketing research.</p>
+  </div>
+  <div class="card card-accent">
+    <h4>CFA – Confirmatory</h4>
+    <p>Used when you <em>have a theory</em> about factor structure. Tests whether observed data fits a pre-specified model. Common in scale validation.</p>
+  </div>
+</div>
+
+<h3>5-Step Process</h3>
+<ol class="steps">
+  <li><strong>Collect &amp; standardise data:</strong> Survey N respondents on p variables (e.g., 500 customers on 10 brand attributes)</li>
+  <li><strong>Test suitability:</strong> KMO statistic &gt; 0.5 (ideally &gt; 0.7); Bartlett's test of sphericity p &lt; 0.05</li>
+  <li><strong>Extract factors:</strong> Use <strong>Principal Component Analysis (PCA)</strong> — the most common extraction technique — which transforms correlated variables into a set of uncorrelated <em>principal components</em>, retaining only the most significant ones. Retain factors with eigenvalue &gt; 1 (Kaiser criterion) OR use the scree-plot elbow.</li>
+  <li><strong>Rotate factors:</strong> <strong>Orthogonal rotation</strong> (e.g., Varimax — produces uncorrelated factors) or <strong>Oblique rotation</strong> (e.g., Promax — allows correlated factors)</li>
+  <li><strong>Interpret loadings:</strong> |loading| &gt; 0.5 = strong association; name each factor based on its high-loading variables</li>
+</ol>
+
+<div class="svg-wrap">
+<svg viewBox="0 0 540 260" width="100%" style="max-width:540px">
+  <!-- Observed variables (left) -->
+  <rect x="10" y="20" width="120" height="34" rx="6" fill="#e0f2f1" stroke="#00897b" stroke-width="1.5"/>
+  <text x="70" y="43" text-anchor="middle" font-size="11" font-weight="600" fill="#00695c">Price Sensitivity</text>
+  <rect x="10" y="64" width="120" height="34" rx="6" fill="#e0f2f1" stroke="#00897b" stroke-width="1.5"/>
+  <text x="70" y="87" text-anchor="middle" font-size="11" font-weight="600" fill="#00695c">Brand Loyalty</text>
+  <rect x="10" y="108" width="120" height="34" rx="6" fill="#e0f2f1" stroke="#00897b" stroke-width="1.5"/>
+  <text x="70" y="131" text-anchor="middle" font-size="11" font-weight="600" fill="#00695c">Quality Perception</text>
+  <rect x="10" y="152" width="120" height="34" rx="6" fill="#e0f2f1" stroke="#00897b" stroke-width="1.5"/>
+  <text x="70" y="175" text-anchor="middle" font-size="11" font-weight="600" fill="#00695c">Social Influence</text>
+  <rect x="10" y="196" width="120" height="34" rx="6" fill="#e0f2f1" stroke="#00897b" stroke-width="1.5"/>
+  <text x="70" y="219" text-anchor="middle" font-size="11" font-weight="600" fill="#00695c">Convenience</text>
+  <!-- Labels -->
+  <text x="70" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#5a6a7a">Observed Variables</text>
+
+  <!-- Loading arrows to Factor 1 -->
+  <line x1="130" y1="81" x2="300" y2="90" stroke="#00897b" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="210" y="78" text-anchor="middle" font-size="10" fill="#00897b">0.87</text>
+  <line x1="130" y1="125" x2="300" y2="100" stroke="#00897b" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="210" y="113" text-anchor="middle" font-size="10" fill="#00897b">0.82</text>
+  <line x1="130" y1="37" x2="300" y2="82" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="210" y="50" text-anchor="middle" font-size="10" fill="#aaa">−0.65</text>
+
+  <!-- Loading arrows to Factor 2 -->
+  <line x1="130" y1="169" x2="300" y2="168" stroke="#ff7043" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="210" y="161" text-anchor="middle" font-size="10" fill="#ff7043">0.74</text>
+  <line x1="130" y1="213" x2="300" y2="178" stroke="#ff7043" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="210" y="204" text-anchor="middle" font-size="10" fill="#ff7043">0.79</text>
+
+  <!-- Factor boxes (right) -->
+  <rect x="303" y="60" width="148" height="60" rx="10" fill="#00897b" stroke="#00695c" stroke-width="2"/>
+  <text x="377" y="83" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Factor 1</text>
+  <text x="377" y="100" text-anchor="middle" font-size="10" fill="#e0f2f1">Quality &amp; Brand</text>
+  <text x="377" y="114" text-anchor="middle" font-size="10" fill="#b2dfdb">(λ = 2.41)</text>
+
+  <rect x="303" y="148" width="148" height="60" rx="10" fill="#ff7043" stroke="#e64a19" stroke-width="2"/>
+  <text x="377" y="171" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Factor 2</text>
+  <text x="377" y="188" text-anchor="middle" font-size="10" fill="#fff">Convenience &amp; Social</text>
+  <text x="377" y="202" text-anchor="middle" font-size="10" fill="#ffccbc">(λ = 1.73)</text>
+
+  <text x="377" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#5a6a7a">Latent Factors</text>
+  <text x="377" y="250" text-anchor="middle" font-size="10" fill="#5a6a7a">λ = Eigenvalue</text>
+
+  <!-- Variance explained -->
+  <text x="470" y="60" font-size="10" fill="#5a6a7a">48.2%</text>
+  <text x="470" y="72" font-size="10" fill="#5a6a7a">variance</text>
+  <text x="470" y="84" font-size="10" fill="#5a6a7a">explained</text>
+  <text x="470" y="148" font-size="10" fill="#5a6a7a">34.6%</text>
+  <text x="470" y="160" font-size="10" fill="#5a6a7a">variance</text>
+  <text x="470" y="172" font-size="10" fill="#5a6a7a">explained</text>
+</svg>
+<div class="svg-caption">Fig 2.2 – Factor Analysis: 5 observed variables reduce to 2 latent factors with factor loadings shown</div>
+</div>
+
+<h3>KMO &amp; Bartlett's Test</h3>
+<table class="data-table">
+  <thead><tr><th>KMO Value</th><th>Interpretation</th><th>Bartlett's Test</th><th>Action</th></tr></thead>
+  <tbody>
+    <tr><td>0.90 – 1.00</td><td>Marvelous</td><td rowspan="5" style="vertical-align:middle">p &lt; 0.05 = proceed<br>p ≥ 0.05 = do not run FA</td><td rowspan="5" style="vertical-align:middle">All KMO ≥ 0.5: proceed<br>KMO &lt; 0.5: drop variable</td></tr>
+    <tr><td>0.80 – 0.89</td><td>Meritorious</td></tr>
+    <tr><td>0.70 – 0.79</td><td>Middling (acceptable)</td></tr>
+    <tr><td>0.60 – 0.69</td><td>Mediocre</td></tr>
+    <tr><td>&lt; 0.50</td><td>Unacceptable</td></tr>
+  </tbody>
+</table>
+
+<h3>Factor Rotation Methods</h3>
+<div class="method-chips">
+  <span class="chip">Varimax (orthogonal)</span>
+  <span class="chip">Oblimin (oblique)</span>
+  <span class="chip">Promax (oblique)</span>
+  <span class="chip">Quartimax</span>
+  <span class="chip">Equamax</span>
+</div>
+<div class="note-box">
+  <strong>Exam tip:</strong> <em>Varimax</em> produces uncorrelated (orthogonal) factors — easier to interpret but may not reflect reality. <em>Promax/Oblimin</em> allow correlated factors — more realistic for marketing constructs (e.g., brand loyalty and quality perception ARE likely correlated).
+</div>
+
+<h3>Python Implementation</h3>
+<div class="code-block">
+<span class="kw">from</span> factor_analyzer <span class="kw">import</span> FactorAnalyzer
+<span class="kw">from</span> factor_analyzer.factor_analyzer <span class="kw">import</span> calculate_kmo, calculate_bartlett_sphericity
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+<span class="cm"># Test suitability</span>
+chi_sq, p_val = calculate_bartlett_sphericity(df)
+kmo_all, kmo_model = calculate_kmo(df)
+<span class="fn">print</span>(<span class="st">f"KMO: {kmo_model:.3f}"</span>)  <span class="cm"># should be > 0.6</span>
+<span class="fn">print</span>(<span class="st">f"Bartlett p-value: {p_val:.4f}"</span>)  <span class="cm"># should be < 0.05</span>
+
+<span class="cm"># Fit factor analysis</span>
+fa = FactorAnalyzer(n_factors=<span class="nm">2</span>, rotation=<span class="st">'varimax'</span>)
+fa.fit(df)
+
+<span class="cm"># Get results</span>
+loadings   = fa.loadings_           <span class="cm"># factor loading matrix</span>
+eigenvalues, _ = fa.get_eigenvalues()
+
+<span class="cm"># Scree plot</span>
+plt.plot(range(<span class="nm">1</span>, len(eigenvalues)+<span class="nm">1</span>), eigenvalues, <span class="st">'bo-'</span>)
+plt.axhline(y=<span class="nm">1</span>, color=<span class="st">'r'</span>, linestyle=<span class="st">'--'</span>, label=<span class="st">'Eigenvalue = 1'</span>)
+plt.xlabel(<span class="st">'Factor Number'</span>); plt.ylabel(<span class="st">'Eigenvalue'</span>)
+plt.title(<span class="st">'Scree Plot'</span>); plt.legend(); plt.show()
+</div>
+</section>
+
+<!-- ===== SECTION 3: CLUSTER ANALYSIS ===== -->
+<section id="cluster">
+<h2>3. Cluster Analysis</h2>
+
+<div class="def-box">
+  <strong>Cluster Analysis</strong> is an <em>unsupervised</em> machine learning technique that groups similar observations together without predefined labels. In marketing, it's used for customer segmentation, market segmentation, and product grouping.
+</div>
+
+<h3>K-Means Algorithm</h3>
+<div class="svg-wrap">
+<svg viewBox="0 0 560 200" width="100%" style="max-width:560px">
+  <!-- Step boxes -->
+  <rect x="10" y="70" width="90" height="60" rx="8" fill="#e0f2f1" stroke="#00897b" stroke-width="2"/>
+  <text x="55" y="93" text-anchor="middle" font-size="11" font-weight="700" fill="#00695c">Step 1</text>
+  <text x="55" y="109" text-anchor="middle" font-size="10" fill="#5a6a7a">Choose k</text>
+  <text x="55" y="123" text-anchor="middle" font-size="10" fill="#5a6a7a">centroids</text>
+  <!-- Arrow -->
+  <polygon points="104,100 116,94 116,106" fill="#00897b"/>
+  <!-- Step 2 -->
+  <rect x="119" y="70" width="90" height="60" rx="8" fill="#b2dfdb" stroke="#00897b" stroke-width="2"/>
+  <text x="164" y="93" text-anchor="middle" font-size="11" font-weight="700" fill="#00695c">Step 2</text>
+  <text x="164" y="109" text-anchor="middle" font-size="10" fill="#5a6a7a">Assign points</text>
+  <text x="164" y="123" text-anchor="middle" font-size="10" fill="#5a6a7a">to nearest</text>
+  <!-- Arrow -->
+  <polygon points="213,100 225,94 225,106" fill="#00897b"/>
+  <!-- Step 3 -->
+  <rect x="228" y="70" width="90" height="60" rx="8" fill="#80cbc4" stroke="#00897b" stroke-width="2"/>
+  <text x="273" y="93" text-anchor="middle" font-size="11" font-weight="700" fill="#004d40">Step 3</text>
+  <text x="273" y="109" text-anchor="middle" font-size="10" fill="#004d40">Recalculate</text>
+  <text x="273" y="123" text-anchor="middle" font-size="10" fill="#004d40">centroids</text>
+  <!-- Arrow -->
+  <polygon points="322,100 334,94 334,106" fill="#00897b"/>
+  <!-- Step 4 -->
+  <rect x="337" y="70" width="90" height="60" rx="8" fill="#4db6ac" stroke="#00695c" stroke-width="2"/>
+  <text x="382" y="93" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Step 4</text>
+  <text x="382" y="109" text-anchor="middle" font-size="10" fill="#e0f2f1">Check</text>
+  <text x="382" y="123" text-anchor="middle" font-size="10" fill="#e0f2f1">convergence</text>
+  <!-- Arrow to converge/repeat -->
+  <polygon points="431,100 443,94 443,106" fill="#00897b"/>
+  <!-- Step 5 -->
+  <rect x="446" y="70" width="90" height="60" rx="8" fill="#00897b" stroke="#00695c" stroke-width="2"/>
+  <text x="491" y="93" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Done</text>
+  <text x="491" y="109" text-anchor="middle" font-size="10" fill="#e0f2f1">Final cluster</text>
+  <text x="491" y="123" text-anchor="middle" font-size="10" fill="#e0f2f1">assignments</text>
+  <!-- Back arrow (repeat loop) from Step 4 back to Step 2 -->
+  <path d="M382,130 Q382,165 273,165 Q164,165 164,130" fill="none" stroke="#ff7043" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <polygon points="160,130 164,140 168,130" fill="#ff7043"/>
+  <text x="273" y="183" text-anchor="middle" font-size="10" fill="#ff7043">Repeat until no change (convergence)</text>
+</svg>
+<div class="svg-caption">Fig 2.3 – K-Means algorithm iteration: assign → update → repeat until convergence</div>
+</div>
+
+<h3>Customer Segmentation Example</h3>
+<table class="data-table">
+  <thead><tr><th>Cluster</th><th>Label</th><th>Avg Monthly Spend</th><th>Avg Frequency</th><th>Size</th><th>Marketing Action</th></tr></thead>
+  <tbody>
+    <tr><td><strong>1</strong></td><td><span style="color:#00897b;font-weight:700">High Value</span></td><td>₹8,000</td><td>8 purchases/month</td><td>12%</td><td>VIP rewards, early access</td></tr>
+    <tr><td><strong>2</strong></td><td><span style="color:#ff7043;font-weight:700">Mid Value</span></td><td>₹4,000</td><td>4 purchases/month</td><td>35%</td><td>Loyalty programme, upsell</td></tr>
+    <tr><td><strong>3</strong></td><td><span style="color:#5a6a7a;font-weight:700">Occasional</span></td><td>₹1,200</td><td>1.5 purchases/month</td><td>53%</td><td>Re-engagement campaigns</td></tr>
+  </tbody>
+</table>
+
+<h3>Choosing the Right k: Elbow Method</h3>
+<div class="svg-wrap">
+<svg viewBox="0 0 400 220" width="100%" style="max-width:400px">
+  <!-- Axes -->
+  <line x1="50" y1="20" x2="50" y2="190" stroke="#5a6a7a" stroke-width="2"/>
+  <line x1="50" y1="190" x2="390" y2="190" stroke="#5a6a7a" stroke-width="2"/>
+  <text x="220" y="212" text-anchor="middle" font-size="12" fill="#5a6a7a">Number of Clusters (k)</text>
+  <text x="14" y="105" text-anchor="middle" font-size="11" fill="#5a6a7a" transform="rotate(-90,14,105)">WCSS</text>
+  <!-- x-axis ticks -->
+  <text x="80" y="204" text-anchor="middle" font-size="11" fill="#5a6a7a">1</text>
+  <text x="130" y="204" text-anchor="middle" font-size="11" fill="#5a6a7a">2</text>
+  <text x="180" y="204" text-anchor="middle" font-size="11" fill="#5a6a7a">3</text>
+  <text x="230" y="204" text-anchor="middle" font-size="11" fill="#5a6a7a">4</text>
+  <text x="280" y="204" text-anchor="middle" font-size="11" fill="#5a6a7a">5</text>
+  <text x="330" y="204" text-anchor="middle" font-size="11" fill="#5a6a7a">6</text>
+  <!-- WCSS elbow curve: steep drop then flattening -->
+  <polyline points="80,30 130,75 180,110 230,135 280,150 330,160" fill="none" stroke="#00897b" stroke-width="2.5"/>
+  <!-- Data points -->
+  <circle cx="80" cy="30" r="5" fill="#00897b"/>
+  <circle cx="130" cy="75" r="5" fill="#00897b"/>
+  <circle cx="180" cy="110" r="6" fill="#ff7043"/>
+  <circle cx="230" cy="135" r="5" fill="#00897b"/>
+  <circle cx="280" cy="150" r="5" fill="#00897b"/>
+  <circle cx="330" cy="160" r="5" fill="#00897b"/>
+  <!-- Elbow annotation -->
+  <line x1="180" y1="110" x2="180" y2="185" stroke="#ff7043" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="180" y="175" text-anchor="middle" font-size="11" font-weight="700" fill="#ff7043">Elbow → k=3</text>
+</svg>
+<div class="svg-caption">Fig 2.4 – Elbow Method: plot WCSS vs k; choose k at the "elbow" where improvement diminishes</div>
+</div>
+
+<h3>Cluster Validation Metrics</h3>
+<table class="data-table">
+  <thead><tr><th>Metric</th><th>Formula/Range</th><th>Good Value</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Silhouette Score</strong></td><td>−1 to +1<br>s = (b−a)/max(a,b)</td><td>&gt; 0.5 = good<br>&gt; 0.7 = strong</td><td>Measures how well a point fits its own cluster vs neighbours</td></tr>
+    <tr><td><strong>Davies-Bouldin Index</strong></td><td>≥ 0</td><td>Lower is better; 0 = perfect</td><td>Ratio of within-cluster to between-cluster distances</td></tr>
+    <tr><td><strong>WCSS (Inertia)</strong></td><td>Sum of squared distances to centroid</td><td>Smaller is better</td><td>Used in elbow method to choose k</td></tr>
+    <tr><td><strong>Calinski-Harabasz</strong></td><td>≥ 0</td><td>Higher is better</td><td>Ratio of between-cluster to within-cluster dispersion</td></tr>
+  </tbody>
+</table>
+
+<h3>Other Clustering Methods</h3>
+<table class="data-table">
+  <thead><tr><th>Method</th><th>Key Idea</th><th>Best For</th><th>Limitation</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Hierarchical</strong></td><td>Build dendrogram; Ward's linkage minimises within-cluster variance</td><td>Small datasets, when k is unknown</td><td>Computationally expensive for large data</td></tr>
+    <tr><td><strong>DBSCAN</strong></td><td>Density-based; connects high-density regions; marks low-density points as noise</td><td>Arbitrary-shaped clusters, outlier detection</td><td>Sensitive to ε and minPts parameters</td></tr>
+    <tr><td><strong>GMM (Gaussian Mixture)</strong></td><td>Probabilistic; each cluster is a Gaussian; allows soft (probabilistic) assignment</td><td>Overlapping clusters, soft membership</td><td>Assumes Gaussian distribution per cluster</td></tr>
+  </tbody>
+</table>
+
+<h3>Python Implementation</h3>
+<div class="code-block">
+<span class="kw">from</span> sklearn.cluster <span class="kw">import</span> KMeans
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> silhouette_score
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># Elbow method to find optimal k</span>
+wcss = []
+K_range = range(<span class="nm">1</span>, <span class="nm">10</span>)
+<span class="kw">for</span> k <span class="kw">in</span> K_range:
+    km = KMeans(n_clusters=k, random_state=<span class="nm">42</span>, n_init=<span class="nm">10</span>)
+    km.fit(X)
+    wcss.append(km.inertia_)
+
+plt.plot(K_range, wcss, <span class="st">'bo-'</span>)
+plt.xlabel(<span class="st">'k'</span>); plt.ylabel(<span class="st">'WCSS'</span>); plt.title(<span class="st">'Elbow Method'</span>); plt.show()
+
+<span class="cm"># Fit final model</span>
+kmeans = KMeans(n_clusters=<span class="nm">3</span>, random_state=<span class="nm">42</span>, n_init=<span class="nm">10</span>)
+kmeans.fit(X)
+labels = kmeans.labels_
+centroids = kmeans.cluster_centers_
+
+<span class="cm"># Validate with silhouette score</span>
+sil = silhouette_score(X, labels)
+<span class="fn">print</span>(<span class="st">f"Silhouette Score: {sil:.3f}"</span>)  <span class="cm"># target > 0.5</span>
+</div>
+</section>
+
+<!-- ===== SECTION 4: MDS ===== -->
+<section id="mds">
+<h2>4. Multidimensional Scaling (MDS)</h2>
+
+<div class="def-box">
+  <strong>MDS</strong> is a dimensionality reduction technique that visualises similarity/dissimilarity data in 2D or 3D space. Given a matrix of pairwise distances or dissimilarities between brands, MDS finds coordinates that best preserve those distances in a low-dimensional map.
+</div>
+
+<h3>Goodness of Fit Metrics</h3>
+<div class="formula-box">
+  <strong>Stress value</strong> = √[Σ(d_ij − δ_ij)² / Σδ_ij²]<br>
+  where d_ij = observed distance, δ_ij = reproduced distance in MDS map<br><br>
+  <strong>Interpretation:</strong><br>
+  Stress = 0.00 → Perfect fit (ideal)<br>
+  Stress &lt; 0.05 → Excellent fit<br>
+  Stress 0.05–0.10 → Good fit (acceptable)<br>
+  Stress 0.10–0.20 → Fair fit (interpret with caution)<br>
+  Stress &gt; 0.20 → Poor fit (do not use)<br><br>
+  <strong>R² &gt; 0.90</strong> is required for acceptable MDS solution
+</div>
+
+<h3>5-Step Process</h3>
+<ol class="steps">
+  <li><strong>Collect similarity/dissimilarity data:</strong> Ask respondents to rate brand pairs on similarity (1–9 scale) or measure inter-brand distances</li>
+  <li><strong>Build distance matrix:</strong> Convert similarity ratings to dissimilarities (dissimilarity = 10 − similarity)</li>
+  <li><strong>Run MDS algorithm:</strong> Specify number of dimensions (usually 2); metric MDS for ratio/interval data, non-metric for ordinal</li>
+  <li><strong>Assess fit:</strong> Check stress value and R². If stress &gt; 0.15, consider adding a dimension</li>
+  <li><strong>Interpret the perceptual map:</strong> Label axes based on which brands appear at extremes; identify gaps (opportunities) and clusters (competition)</li>
+</ol>
+
+<h3>Brand Positioning Perceptual Map – Automobile Sector</h3>
+<div class="svg-wrap">
+<svg viewBox="0 0 480 380" width="100%" style="max-width:480px">
+  <!-- Background grid -->
+  <line x1="240" y1="20" x2="240" y2="360" stroke="#dde5ec" stroke-width="1"/>
+  <line x1="20" y1="190" x2="460" y2="190" stroke="#dde5ec" stroke-width="1"/>
+  <!-- Axis labels -->
+  <text x="240" y="15" text-anchor="middle" font-size="12" font-weight="700" fill="#00897b">LUXURY</text>
+  <text x="240" y="375" text-anchor="middle" font-size="12" font-weight="700" fill="#5a6a7a">ECONOMICAL</text>
+  <text x="15" y="194" text-anchor="end" font-size="12" font-weight="700" fill="#5a6a7a">FAMILY</text>
+  <text x="465" y="194" text-anchor="start" font-size="12" font-weight="700" fill="#5a6a7a">SPORTY</text>
+  <!-- Axis arrows -->
+  <polygon points="236,22 240,10 244,22" fill="#00897b"/>
+  <polygon points="236,358 240,370 244,358" fill="#5a6a7a"/>
+  <polygon points="452,186 464,190 452,194" fill="#5a6a7a"/>
+  <polygon points="28,186 16,190 28,194" fill="#5a6a7a"/>
+
+  <!-- Brand plots -->
+  <!-- BMW: luxury + sporty -->
+  <circle cx="370" cy="75" r="20" fill="#00897b" opacity=".85"/>
+  <text x="370" y="79" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">BMW</text>
+  <!-- Ferrari: very luxury + very sporty -->
+  <circle cx="430" cy="40" r="20" fill="#e53935" opacity=".85"/>
+  <text x="430" y="44" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Ferrari</text>
+  <!-- Mercedes: luxury + slightly family -->
+  <circle cx="310" cy="95" r="20" fill="#00695c" opacity=".85"/>
+  <text x="310" y="99" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Mercedes</text>
+  <!-- Audi: luxury + sporty-ish -->
+  <circle cx="360" cy="130" r="20" fill="#004d40" opacity=".85"/>
+  <text x="360" y="134" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Audi</text>
+  <!-- Toyota: economical + family -->
+  <circle cx="130" cy="280" r="20" fill="#ff7043" opacity=".85"/>
+  <text x="130" y="277" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Toyota</text>
+  <text x="130" y="290" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Corolla</text>
+  <!-- Maruti Alto: very economical + family -->
+  <circle cx="80" cy="320" r="20" fill="#ff8a65" opacity=".85"/>
+  <text x="80" y="317" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Maruti</text>
+  <text x="80" y="330" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Alto</text>
+  <!-- Honda: economical + sporty -->
+  <circle cx="330" cy="270" r="20" fill="#ff7043" opacity=".75"/>
+  <text x="330" y="274" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Honda</text>
+  <!-- Hyundai: economical + slightly sporty -->
+  <circle cx="180" cy="250" r="20" fill="#ffb74d" opacity=".85"/>
+  <text x="180" y="254" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Hyundai</text>
+
+  <!-- Stress label -->
+  <rect x="10" y="350" width="200" height="22" rx="4" fill="rgba(0,137,123,.1)" stroke="#00897b" stroke-width="1"/>
+  <text x="110" y="366" text-anchor="middle" font-size="11" fill="#00695c">Stress = 0.04 (Excellent fit)</text>
+</svg>
+<div class="svg-caption">Fig 2.5 – MDS Perceptual Map: Automobile brands positioned on Luxury/Economy and Sporty/Family dimensions</div>
+</div>
+
+<h3>Interpreting the Perceptual Map</h3>
+<table class="data-table">
+  <thead><tr><th>Finding</th><th>Strategic Implication</th></tr></thead>
+  <tbody>
+    <tr><td><strong>BMW, Mercedes, Ferrari, Audi</strong> cluster in luxury-sporty quadrant</td><td>Intense competition; differentiation needed (e.g., tech, sustainability)</td></tr>
+    <tr><td><strong>Maruti Alto, Toyota Corolla</strong> cluster in economical-family</td><td>High price sensitivity; focus on reliability and value</td></tr>
+    <tr><td><strong>Gap in luxury-family quadrant</strong></td><td>Market opportunity: premium family SUV with luxury positioning</td></tr>
+    <tr><td><strong>Honda</strong> positioned economical-sporty</td><td>Appeals to value-seeking performance buyers</td></tr>
+  </tbody>
+</table>
+
+<h3>Python Implementation</h3>
+<div class="code-block">
+<span class="kw">from</span> sklearn.manifold <span class="kw">import</span> MDS
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+<span class="cm"># Dissimilarity matrix (8×8 for 8 car brands)</span>
+brands = [<span class="st">'BMW'</span>, <span class="st">'Ferrari'</span>, <span class="st">'Mercedes'</span>, <span class="st">'Audi'</span>,
+          <span class="st">'Toyota'</span>, <span class="st">'Alto'</span>, <span class="st">'Honda'</span>, <span class="st">'Hyundai'</span>]
+
+<span class="cm"># dissimilarity_matrix: higher value = more different</span>
+dissim = np.array([
+    [<span class="nm">0</span>, <span class="nm">1.2</span>, <span class="nm">1.1</span>, <span class="nm">1.5</span>, <span class="nm">4.2</span>, <span class="nm">5.1</span>, <span class="nm">3.8</span>, <span class="nm">4.0</span>],
+    <span class="cm"># ... full 8×8 matrix</span>
+])
+
+mds = MDS(n_components=<span class="nm">2</span>, dissimilarity=<span class="st">'precomputed'</span>,
+          metric=<span class="nm">True</span>, random_state=<span class="nm">42</span>)
+coords = mds.fit_transform(dissim)
+
+<span class="fn">print</span>(<span class="st">f"Stress: {mds.stress_:.4f}"</span>)
+
+plt.figure(figsize=(<span class="nm">8</span>, <span class="nm">6</span>))
+<span class="kw">for</span> i, brand <span class="kw">in</span> enumerate(brands):
+    plt.scatter(coords[i, <span class="nm">0</span>], coords[i, <span class="nm">1</span>], s=<span class="nm">100</span>)
+    plt.annotate(brand, (coords[i, <span class="nm">0</span>]+<span class="nm">.05</span>, coords[i, <span class="nm">1</span>]+<span class="nm">.05</span>))
+plt.xlabel(<span class="st">'Dimension 1'</span>); plt.ylabel(<span class="st">'Dimension 2'</span>)
+plt.title(<span class="st">'MDS Perceptual Map'</span>); plt.show()
+</div>
+</section>
+
+<!-- ===== QUIZ ===== -->
+<section id="quiz">
+<h2>Quiz – Week 2 (14 Questions)</h2>
+<div class="quiz-grid">
+
+  <div class="q-block">
+    <div class="q-num">Q1</div>
+    <div class="q-text">In one-way ANOVA, what does the F-statistic measure?</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) The difference between two means</button>
+      <button onclick="qa(this,1)">B) The ratio of between-group variance to within-group variance</button>
+      <button onclick="qa(this,0)">C) The total sum of squares</button>
+      <button onclick="qa(this,0)">D) The correlation between groups</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q2</div>
+    <div class="q-text">In the CTR ANOVA case study (3 groups, n=4 each), what are the degrees of freedom for SSB and SSW respectively?</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) 3 and 9</button>
+      <button onclick="qa(this,1)">B) 2 and 9</button>
+      <button onclick="qa(this,0)">C) 2 and 10</button>
+      <button onclick="qa(this,0)">D) 3 and 12</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q3</div>
+    <div class="q-text">Tukey's HSD test is used AFTER ANOVA to:</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) Calculate the F-statistic</button>
+      <button onclick="qa(this,0)">B) Determine if any group means differ at all</button>
+      <button onclick="qa(this,1)">C) Identify which specific pairs of groups differ significantly</button>
+      <button onclick="qa(this,0)">D) Test the normality assumption</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q4</div>
+    <div class="q-text">Which KMO value indicates the data is "meritorious" for factor analysis?</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) 0.55</button>
+      <button onclick="qa(this,0)">B) 0.65</button>
+      <button onclick="qa(this,1)">C) 0.85</button>
+      <button onclick="qa(this,0)">D) 0.45</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q5</div>
+    <div class="q-text">In factor analysis, which rotation method produces uncorrelated (orthogonal) factors?</div>
+    <div class="q-options">
+      <button onclick="qa(this,1)">A) Varimax</button>
+      <button onclick="qa(this,0)">B) Promax</button>
+      <button onclick="qa(this,0)">C) Oblimin</button>
+      <button onclick="qa(this,0)">D) Direct Quartimin</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q6</div>
+    <div class="q-text">A factor loading of 0.82 on a variable means:</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) 82% of respondents agree with the variable</button>
+      <button onclick="qa(this,1)">B) The variable has a strong positive association with that factor</button>
+      <button onclick="qa(this,0)">C) The factor explains 82% of total variance</button>
+      <button onclick="qa(this,0)">D) The KMO for that variable is 0.82</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q7</div>
+    <div class="q-text">In K-Means clustering, the "elbow" in the WCSS plot indicates:</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) The maximum number of clusters possible</button>
+      <button onclick="qa(this,0)">B) The point where silhouette score is lowest</button>
+      <button onclick="qa(this,1)">C) The optimal k where adding more clusters yields diminishing improvement</button>
+      <button onclick="qa(this,0)">D) The point where all clusters have equal size</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q8</div>
+    <div class="q-text">A silhouette score of 0.62 for a clustering solution indicates:</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) Poor clustering — points are closer to neighbouring clusters</button>
+      <button onclick="qa(this,1)">B) Good clustering — points are well-matched to their own cluster</button>
+      <button onclick="qa(this,0)">C) Perfect clustering</button>
+      <button onclick="qa(this,0)">D) The clusters overlap significantly</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q9</div>
+    <div class="q-text">Which clustering algorithm is most suitable for detecting clusters of arbitrary shapes with noise/outliers?</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) K-Means</button>
+      <button onclick="qa(this,0)">B) GMM</button>
+      <button onclick="qa(this,1)">C) DBSCAN</button>
+      <button onclick="qa(this,0)">D) Hierarchical (Ward's)</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q10</div>
+    <div class="q-text">In MDS, a stress value of 0.04 indicates:</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) Poor fit — the map should not be used</button>
+      <button onclick="qa(this,0)">B) Fair fit — interpret with caution</button>
+      <button onclick="qa(this,0)">C) Good fit — acceptable for interpretation</button>
+      <button onclick="qa(this,1)">D) Excellent fit — the spatial map closely represents the data</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q11</div>
+    <div class="q-text">Two-Way ANOVA differs from One-Way ANOVA in that it:</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) Uses a chi-square statistic instead of F</button>
+      <button onclick="qa(this,1)">B) Tests both main effects AND the interaction between two factors</button>
+      <button onclick="qa(this,0)">C) Can only be used with equal group sizes</button>
+      <button onclick="qa(this,0)">D) Does not require Tukey HSD post-hoc tests</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q12</div>
+    <div class="q-text">In factor analysis, the "eigenvalue &gt; 1" rule (Kaiser criterion) is used to:</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) Determine the sample size needed</button>
+      <button onclick="qa(this,0)">B) Set the threshold for acceptable factor loadings</button>
+      <button onclick="qa(this,1)">C) Decide how many factors to retain from the analysis</button>
+      <button onclick="qa(this,0)">D) Test Bartlett's sphericity</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q13</div>
+    <div class="q-text">Which clustering method builds a hierarchical tree (dendrogram) of nested clusters?</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) K-Means</button>
+      <button onclick="qa(this,1)">B) Hierarchical Clustering</button>
+      <button onclick="qa(this,0)">C) DBSCAN</button>
+      <button onclick="qa(this,0)">D) Gaussian Mixture Model</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-num">Q14</div>
+    <div class="q-text">In the CTR ANOVA case, if MSB = 3.985 and MSW = 0.055, what is the F-statistic?</div>
+    <div class="q-options">
+      <button onclick="qa(this,0)">A) 0.014</button>
+      <button onclick="qa(this,0)">B) 3.93</button>
+      <button onclick="qa(this,1)">C) 72.5</button>
+      <button onclick="qa(this,0)">D) 8.04</button>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ===== SUMMARY ===== -->
+<section id="summary">
+<h2>Summary &amp; Exam Tips</h2>
+<div class="tip-grid">
+  <div class="tip-card">
+    <h4>ANOVA Formula Chain</h4>
+    <p>SST = SSB + SSW → MSB = SSB/(k−1) → MSW = SSW/(N−k) → F = MSB/MSW</p>
+  </div>
+  <div class="tip-card">
+    <h4>ANOVA Decision Rule</h4>
+    <p>Reject H₀ if F &gt; F_critical (table value). Post-hoc: use Tukey HSD to find which pairs differ.</p>
+  </div>
+  <div class="tip-card">
+    <h4>Factor Analysis Thresholds</h4>
+    <p>KMO &gt; 0.6 = acceptable; Bartlett p &lt; 0.05; eigenvalue &gt; 1 to retain; loading &gt; 0.5 = strong.</p>
+  </div>
+  <div class="tip-card">
+    <h4>Cluster Validation</h4>
+    <p>Silhouette &gt; 0.5 = good; Davies-Bouldin: lower = better; elbow = optimal k for WCSS.</p>
+  </div>
+  <div class="tip-card">
+    <h4>MDS Stress Values</h4>
+    <p>&lt;0.05 = excellent; 0.05–0.10 = good; 0.10–0.20 = fair; &gt;0.20 = poor. R² &gt; 0.9 needed.</p>
+  </div>
+  <div class="tip-card">
+    <h4>Rotation Types</h4>
+    <p>Varimax = orthogonal (uncorrelated factors). Promax/Oblimin = oblique (correlated factors allowed).</p>
+  </div>
+  <div class="tip-card">
+    <h4>DBSCAN vs K-Means</h4>
+    <p>K-Means: spherical clusters, need to specify k. DBSCAN: arbitrary shapes, handles outliers, no k needed.</p>
+  </div>
+  <div class="tip-card">
+    <h4>Two-Way ANOVA</h4>
+    <p>Tests: main effect A + main effect B + A×B interaction. Interaction = effect of A depends on B.</p>
+  </div>
+</div>
+
+<div class="example-box" style="margin-top:20px">
+<div class="ex-title">Common Exam Pitfalls</div>
+<ul>
+  <li><strong>df error:</strong> df_between = k−1 (not k), df_within = N−k (not N−1)</li>
+  <li><strong>F-statistic direction:</strong> Always MSB/MSW (between ÷ within), never reversed</li>
+  <li><strong>KMO confusion:</strong> KMO &lt; 0.5 means do NOT proceed with factor analysis</li>
+  <li><strong>Eigenvalue rule:</strong> Retain factors with eigenvalue &gt; 1 (not ≥ 1, the scree plot elbow may differ)</li>
+  <li><strong>MDS stress:</strong> Lower stress = better fit. Stress of 0.25 = poor (do NOT interpret the map)</li>
+  <li><strong>DBSCAN does NOT require specifying k</strong> — this is its key advantage over K-Means</li>
+  <li><strong>Silhouette Score range:</strong> −1 to +1 (not 0 to 1). Negative score = point in wrong cluster</li>
+</ul>
+</div>
+
+<div class="page-nav">
+  <a href="Week_01_MA_Intro.html" class="nav-btn">← Week 1: MA Intro</a>
+  <a href="index.html" class="nav-btn" style="background:var(--muted)">🏠 Hub</a>
+  <a href="Week_03_MA_ResearchTools2.html" class="nav-btn">Next: Research Tools 2 →</a>
+</div>
+</section>
+
+
+<style>
+#xn-extra .xn-intro{background:rgba(0,137,123,.08);border-left:4px solid var(--primary);border-radius:0 8px 8px 0;padding:12px 16px;margin:6px 0 18px;color:var(--muted);font-size:.92em;}
+.xn-prob{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.xn-q{margin-bottom:10px;font-weight:600;}
+.xn-tag{display:inline-block;background:var(--primary);color:#fff;font-size:.72em;font-weight:700;padding:2px 9px;border-radius:20px;margin-right:7px;vertical-align:middle;}
+.xn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.xn-in{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:.95em;min-width:180px;font-family:monospace;}
+.xn-in:focus{outline:none;border-color:var(--primary);}
+.xn-check,.xn-toggle{border:none;border-radius:8px;padding:8px 18px;cursor:pointer;font-weight:700;font-size:.88em;}
+.xn-check{background:var(--primary);color:#fff;}
+.xn-check:hover{background:var(--primary-dark);}
+.xn-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.xn-toggle:hover{border-color:var(--primary);color:var(--primary);}
+.xn-fb{margin-top:10px;font-weight:700;font-size:.9em;min-height:1em;}
+.xn-fb.xn-ok{color:#1b5e20;}
+body.dark .xn-fb.xn-ok{color:#a5d6a7;}
+.xn-fb.xn-no{color:#b71c1c;}
+body.dark .xn-fb.xn-no{color:#ef9a9a;}
+.xn-fb.xn-warn{color:#e65100;}
+.xn-sol{display:none;margin-top:12px;padding:14px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-left:4px solid var(--success);border-radius:8px;font-size:.92em;}
+body.dark .xn-sol{background:linear-gradient(135deg,#1a3a2e,#2a4a3e);color:#e8e8f0;}
+.xn-sol.open{display:block;animation:xnfade .25s ease;}
+@keyframes xnfade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.xn-sol .xf{background:#2c3e50;color:#ecf0f1;font-family:'Courier New',monospace;padding:10px 14px;border-radius:8px;margin:8px 0;overflow-x:auto;white-space:pre-wrap;font-size:.9em;}
+.xn-sol b{color:#1b5e20;}
+body.dark .xn-sol b{color:#a5d6a7;}
+.xn-opts{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
+.xn-opt{text-align:left;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;cursor:pointer;font-size:.9em;}
+.xn-opt:hover:not(:disabled){background:var(--border);}
+.xn-opt.xn-ok{background:#c8e6c9;border-color:var(--success);color:#1b5e20;font-weight:700;}
+body.dark .xn-opt.xn-ok{background:#1a3a2e;color:#a5d6a7;}
+.xn-opt.xn-no{background:#ffcdd2;border-color:var(--danger);color:#b71c1c;}
+body.dark .xn-opt.xn-no{background:#3a1a1a;color:#ef9a9a;}
+#xn-extra table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9em;}
+#xn-extra th{background:var(--primary);color:#fff;padding:8px 12px;text-align:left;}
+#xn-extra td{padding:7px 12px;border-bottom:1px solid var(--border);}
+</style>
+
+<section id="xn-extra">
+  <h2>🔢 Engineered Numerical Practice</h2>
+  <div class="xn-intro">
+    Fresh exam-style numerical problems built from this week's formulas and frameworks. Enter your answer and press
+    <strong>Check</strong> for instant feedback, or reveal the full worked solution. <em>(Press Enter in any answer box to check.)</em>
+  </div>
+
+  <div class="xn-prob" data-ans="3" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP1</span>A one-way ANOVA compares the mean click-through rate across <strong>k = 4</strong> advertising channels. What is the <strong>between-groups degrees of freedom</strong> (df<sub>between</sub>)?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="e.g. 3">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">df_between = k &minus; 1
+           = 4 &minus; 1
+           = <b>3</b></div>
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="20" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP2</span>The same study has <strong>N = 24</strong> total observations across the <strong>k = 4</strong> channels. What is the <strong>within-groups degrees of freedom</strong> (df<sub>within</sub>)?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="e.g. 20">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">df_within = N &minus; k
+          = 24 &minus; 4
+          = <b>20</b></div>
+      (Check: df_total = N &minus; 1 = 23 = df_between + df_within = 3 + 20.)
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="820" data-tol="0.5" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP3</span>The between-groups sum of squares is <strong>SSB = 2,460</strong> with df<sub>between</sub> = <strong>3</strong>. Compute the mean square between groups (MSB).</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 820">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">MSB = SSB / df_between
+    = 2,460 / 3
+    = <b>820</b></div>
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="5" data-tol="0.01" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP4</span>From the ANOVA, MSB = <strong>820</strong> and the mean square within (MSW) = <strong>164</strong>. Compute the <strong>F-statistic</strong>.</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 5">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">F = MSB / MSW
+  = 820 / 164
+  = <b>5.0</b></div>
+      A larger F means group means differ more relative to within-group noise &mdash; stronger evidence against H&#8320;.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="14" data-tol="0.05" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP5</span>Four equal-sized groups (n = 5 each) have means of <strong>12, 15, 18, and 11</strong>. What is the <strong>grand mean</strong> of all observations?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 14">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Equal n ⇒ grand mean = average of the group means
+X̄ = (12 + 15 + 18 + 11) / 4
+   = 56 / 4
+   = <b>14</b></div>
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="0.98" data-tol="0.01" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP6</span>In factor analysis, a variable loads on three factors with loadings <strong>0.72, 0.55, and 0.40</strong>. The communality is the sum of the squared loadings. Compute the communality (2 dp).</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 0.98">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Communality = Σ (loading)²
+            = 0.72² + 0.55² + 0.40²
+            = 0.5184 + 0.3025 + 0.1600
+            = 0.9809
+            ≈ <b>0.98</b></div>
+      About 98% of this variable's variance is explained by the three retained factors.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="45" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP7</span>A factor has an <strong>eigenvalue of 3.6</strong> in an analysis of <strong>8</strong> standardised variables. What percentage of total variance does this factor explain? &nbsp;<em>(% = eigenvalue / #variables × 100)</em></div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 45 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">% variance = eigenvalue / number of variables × 100
+           = 3.6 / 8 × 100
+           = <b>45%</b></div>
+      Each standardised variable contributes 1 unit of variance, so total variance = 8.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="36" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP8</span>In an MDS study, respondents rate the similarity of every possible <strong>pair</strong> of <strong>9 brands</strong>. How many distinct brand pairs must be evaluated? &nbsp;<em>(pairs = n(n&minus;1)/2)</em></div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="e.g. 36">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">pairs = n(n &minus; 1) / 2
+      = 9 × 8 / 2
+      = 72 / 2
+      = <b>36</b></div>
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="6" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP9</span>A two-way (factorial) ANOVA crosses Factor A with <strong>3</strong> levels and Factor B with <strong>4</strong> levels. What is the degrees of freedom for the <strong>interaction</strong> term (A×B)? &nbsp;<em>(df = (a&minus;1)(b&minus;1))</em></div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="e.g. 6">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">df_interaction = (a &minus; 1)(b &minus; 1)
+              = (3 &minus; 1)(4 &minus; 1)
+              = 2 × 3
+              = <b>6</b></div>
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">NP10</span>A K-Means solution yields an average <strong>silhouette score of 0.68</strong> using S = (b&minus;a)/max(a,b). How should this be interpreted?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) Reasonably well-separated clusters &mdash; points sit closer to their own cluster than to neighbours</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Poor clustering &mdash; most points are mis-assigned</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) The clusters overlap completely; choose fewer clusters</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) A negative result indicating wrong cluster assignments</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Silhouette ranges from &minus;1 to +1. Values near <b>+1</b> mean tight, well-separated clusters; near 0 means overlapping; negative means likely mis-assignment. <b>0.68 indicates reasonably good, well-separated clustering.</b></div>
+  </div>
+
+</section>
+
+<section id="xn-mcq">
+  <h2>📝 Exam-Style MCQs — 2 Marks Each</h2>
+  <p style="opacity:.85;font-size:.95em;margin-bottom:14px;">Each question is worth 2 marks — a mix of applied numerical and conceptual items. Click an option to check it; the correct answer and explanation appear instantly.</p>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q1 · 2 marks</span> A one-way ANOVA gives SSB = 1,200 with df<sub>between</sub> = 2, and SSW = 2,400 with df<sub>within</sub> = 24. What is the F-statistic?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 0.5</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 2.0</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 6.0</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 60.0</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">F is the ratio of mean squares, each being a sum of squares divided by its df.<div class="xf">MSB = SSB / df_between = 1,200 / 2 = 600
+MSW = SSW / df_within  = 2,400 / 24 = 100
+F = MSB / MSW = 600 / 100 = <b>6.0</b></div>0.5 reverses the ratio (MSW/MSB); 60 forgets to divide MSW by its df.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q2 · 2 marks</span> In a factor analysis, one variable loads on three retained factors with loadings 0.6, 0.5 and 0.4. What is its <strong>communality</strong> (2 dp)?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 1.50</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) 0.77</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 0.88</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 0.50</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Communality = the sum of the <em>squared</em> loadings.<div class="xf">h² = 0.6² + 0.5² + 0.4² = 0.36 + 0.25 + 0.16 = <b>0.77</b></div>About 77% of this variable's variance is captured by the three factors. 1.50 wrongly sums the raw loadings.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q3 · 2 marks</span> A factor analysis of 9 standardised variables produces a factor with an eigenvalue of 4.5. What percentage of total variance does this factor explain?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 4.5%</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 45%</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 50%</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 20%</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Each standardised variable carries 1 unit of variance, so total variance = number of variables.<div class="xf">% variance = eigenvalue / #variables × 100 = 4.5 / 9 × 100 = <b>50%</b></div>45% wrongly divides by 10; 20% inverts the ratio.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q4 · 2 marks</span> A manager wants to know whether mean customer-satisfaction scores differ across four store formats (flagship, mall, high-street, kiosk). Which technique is the appropriate choice, and what is its null hypothesis?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) One-way ANOVA; H₀: all four format means are equal</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Factor analysis; H₀: the four formats load on one factor</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Cluster analysis; H₀: there are four clusters</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) MDS; H₀: the formats are equidistant</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Comparing the means of three or more groups on one metric is the job of <b>one-way ANOVA</b>. Its null is that <b>all group means are equal</b> (μ₁ = μ₂ = μ₃ = μ₄); rejecting it says at least one format differs. Factor analysis reduces variables, cluster analysis groups cases, and MDS maps perceived distances — none tests group-mean equality.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q5 · 2 marks</span> A researcher has 30 attitudinal survey items and suspects they really measure only a few underlying dimensions (e.g. "value", "trust", "convenience"). Which technique should be used, and why?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Cluster analysis — to group respondents into segments</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) ANOVA — to compare item means</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) Factor analysis — to reduce many correlated variables into a few latent factors</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) MDS — to position brands on a perceptual map</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol"><b>Factor analysis</b> is a data-reduction technique: it collapses many inter-correlated variables into a smaller set of latent factors. Cluster analysis groups <em>cases</em> (respondents), not variables; ANOVA compares means; MDS maps perceived similarity/distance between objects.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q6 · 2 marks</span> A K-Means run returns an average silhouette score of 0.71. What does this indicate about the clustering quality?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Poor clustering — most points are mis-assigned</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Clusters overlap heavily; reduce the number of clusters</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) Strong, well-separated clusters — points sit much closer to their own cluster than to neighbours</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Invalid result, because silhouette scores cannot exceed 0.5</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">The silhouette score ranges from &minus;1 to +1. Values near +1 mean tight, well-separated clusters; near 0 means overlap; negative means likely mis-assignment. <b>0.71 indicates strong, well-separated clustering.</b> Scores can legitimately exceed 0.5, so option D is false.</div>
+  </div>
+</section>
+
+<script>
+(function(){
+  if(window.__xnInit) return; window.__xnInit=true;
+  function num(s){
+    if(s==null) return NaN;
+    s=(''+s).replace(/−/g,'-').replace(/[^0-9.\-]/g,'');
+    if(s===''||s==='-'||s==='.') return NaN;
+    return parseFloat(s);
+  }
+  window.xnCheck=function(btn){
+    var p=btn.closest('.xn-prob'); if(!p) return;
+    var ans=parseFloat(p.getAttribute('data-ans'));
+    var tol=parseFloat(p.getAttribute('data-tol')||'0.05');
+    var unit=p.getAttribute('data-unit')||'';
+    var inp=p.querySelector('.xn-in'); var fb=p.querySelector('.xn-fb');
+    var v=num(inp.value);
+    if(isNaN(v)){ fb.className='xn-fb xn-warn'; fb.textContent='⚠ Enter a numeric answer first.'; return; }
+    if(Math.abs(v-ans)<=tol){ fb.className='xn-fb xn-ok'; fb.innerHTML='✓ Correct! Answer = '+ans+unit; }
+    else { fb.className='xn-fb xn-no'; fb.innerHTML='✗ Not quite — you entered '+v+'. Try again, or reveal the steps.'; }
+  };
+  window.xnToggle=function(btn){
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol');
+    var open=s.classList.toggle('open'); btn.textContent=open?'Hide steps':'Show steps';
+  };
+  window.xnPick=function(btn,ok){
+    var box=btn.parentElement;
+    box.querySelectorAll('.xn-opt').forEach(function(b){b.disabled=true; b.style.cursor='default';});
+    btn.classList.add(ok?'xn-ok':'xn-no');
+    if(!ok){ box.querySelectorAll('.xn-opt').forEach(function(b){ if(b.getAttribute('data-correct')==='1') b.classList.add('xn-ok'); }); }
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol'); if(s) s.classList.add('open');
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter' && e.target.classList && e.target.classList.contains('xn-in')){
+      var b=e.target.closest('.xn-prob').querySelector('.xn-check'); if(b) b.click();
+    }
+  });
+})();
+</script>
+</div><!-- /container -->
+
+<script>
+function qa(el,c){
+  el.style.background=c?'#c8e6c9':'#ffcdd2';
+  el.style.color=c?'#1b5e20':'#b71c1c';
+  el.style.borderColor=c?'#43a047':'#e53935';
+  el.disabled=true;
+  el.parentElement.querySelectorAll('button').forEach(b=>{if(b!==el)b.disabled=true});
+}
+function dark(){
+  document.body.classList.toggle('dark');
+  try{localStorage.setItem('ma_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}
+}
+if(localStorage.getItem('ma_dark')==='1')document.body.classList.add('dark');
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

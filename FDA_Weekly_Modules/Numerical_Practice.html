@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Numerical Practice — Financial Data Analytics</title>
+<style>
+  :root { --primary:#1e88e5; --primary-dark:#0d47a1; --success:#43a047; --danger:#e53935; --bg:#f5f8fb; --card:#fff; --text:#1a2332; --muted:#5a6a7a; --border:#dde5ec; }
+  body.dark { --bg:#0f1721; --card:#1a2535; --text:#e0e8f0; --muted:#a0b0c0; --border:#2a3545; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; transition:background .3s,color .3s; }
+  header { background:linear-gradient(135deg,#1e88e5,#0d47a1); color:white; padding:40px 20px; text-align:center; position:relative; }
+  header h1 { font-size:2.1em; margin-bottom:6px; }
+  header .breadcrumb { font-size:0.95em; opacity:0.9; }
+  header .breadcrumb a { color:#ffd700; text-decoration:none; }
+  .dark-toggle { position:absolute; top:18px; right:18px; background:rgba(255,255,255,.2); border:none; color:#fff; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:1.2em; }
+  main { max-width:1080px; margin:25px auto; padding:0 18px; }
+  section { background:var(--card); margin:25px 0; padding:26px 28px; border-radius:14px; box-shadow:0 4px 16px rgba(0,0,0,0.06); }
+  section h2 { color:var(--primary-dark); border-bottom:3px solid var(--primary); padding-bottom:8px; margin-bottom:6px; font-size:1.5em; }
+  body.dark section h2 { color:#82b1ff; }
+  .wk { font-size:0.82em; color:var(--muted); margin-bottom:16px; display:block; }
+  p { margin-bottom:10px; }
+  ul, ol { margin:8px 0 12px 26px; }
+  li { margin-bottom:5px; }
+  table { width:100%; border-collapse:collapse; margin:12px 0; }
+  th, td { padding:7px 9px; border:1px solid var(--border); text-align:left; font-size:0.9em; }
+  th { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; }
+  tr:nth-child(even) td { background:var(--bg); }
+  .problem { background:linear-gradient(135deg,#fff8e1,#ffecb3); border-left:4px solid #ff9800; padding:16px; border-radius:8px; margin:18px 0 10px; }
+  body.dark .problem { background:linear-gradient(135deg,#3a2a1a,#4a3525); }
+  .problem h4 { color:#bf360c; margin-bottom:6px; }
+  body.dark .problem h4 { color:#ffb55a; }
+  .formula { background:#0d2741; color:#ecf0f1; padding:11px 14px; border-radius:8px; font-family:'Courier New',monospace; margin:10px 0; white-space:pre-wrap; }
+  .solution { display:none; background:linear-gradient(135deg,#e8f5e9,#c8e6c9); border-left:4px solid var(--success); padding:14px 16px; border-radius:8px; margin:10px 0 4px; }
+  body.dark .solution { background:linear-gradient(135deg,#1a3a2e,#2a4a3e); }
+  .solution h4 { color:#1b5e20; margin-bottom:6px; }
+  body.dark .solution h4 { color:#a5d6a7; }
+  .answer-box { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:10px 0 4px; }
+  .answer-box label { font-size:0.9em; font-weight:600; min-width:110px; }
+  .answer-box input { padding:8px 10px; border:1px solid var(--border); border-radius:6px; font-size:0.95em; width:130px; background:var(--card); color:var(--text); }
+  .btn { background:var(--primary); color:#fff; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:0.88em; font-weight:600; }
+  .btn:hover { opacity:0.9; }
+  .btn-sol { background:#37474f; }
+  .choices { margin:10px 0 4px; }
+  .choice-btn { background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 14px; border-radius:6px; cursor:pointer; margin:3px 4px 3px 0; font-size:0.9em; }
+  .choice-btn:hover { border-color:var(--primary); }
+  .fb { font-weight:700; margin-left:8px; font-size:0.92em; }
+  .fb.ok { color:var(--success); }
+  .fb.no { color:var(--danger); }
+  /* ---- MCQ exam ---- */
+  .scorebar { position:sticky; top:0; z-index:50; background:var(--primary-dark); color:#fff; padding:10px 16px; border-radius:8px; font-weight:700; margin-bottom:18px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .scorebar .btn { background:rgba(255,255,255,.22); margin-left:auto; }
+  .mcq { border:1px solid var(--border); border-radius:10px; padding:16px 18px; margin:16px 0; background:var(--card); }
+  .mcq-q { font-weight:600; margin-bottom:10px; }
+  .marks { display:inline-block; background:var(--primary); color:#fff; font-size:0.7em; font-weight:700; padding:2px 8px; border-radius:10px; margin-right:8px; vertical-align:middle; letter-spacing:.5px; }
+  .opts { display:flex; flex-direction:column; gap:8px; }
+  .opt { text-align:left; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:10px 12px; border-radius:8px; cursor:pointer; font-size:0.92em; transition:border-color .15s; }
+  .opt:hover:not(:disabled) { border-color:var(--primary); }
+  .opt:disabled { cursor:default; }
+  .opt.correct { background:#c8e6c9; border-color:#27ae60; color:#1b5e20; font-weight:700; }
+  .opt.wrong { background:#ffcdd2; border-color:#e53935; color:#b71c1c; font-weight:700; }
+  body.dark .opt.correct { background:#1b5e20; color:#c8e6c9; }
+  body.dark .opt.wrong { background:#5a1a1a; color:#ffcdd2; }
+  .mcq-exp { display:none; margin-top:10px; padding:10px 12px; border-left:3px solid var(--success); background:var(--bg); border-radius:6px; font-size:0.9em; }
+  nav.toc { background:var(--card); padding:18px; border-radius:10px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+  nav.toc h3 { color:var(--primary-dark); margin-bottom:8px; }
+  body.dark nav.toc h3 { color:#82b1ff; }
+  nav.toc a { color:var(--primary); margin-right:12px; display:inline-block; margin-bottom:4px; text-decoration:none; }
+  nav.toc a:hover { text-decoration:underline; }
+  .tip { background:rgba(30,136,229,.08); border:1px dashed var(--primary); border-radius:8px; padding:12px 14px; font-size:0.9em; margin:14px 0; }
+  footer { text-align:center; padding:24px; color:var(--muted); font-size:0.9em; border-top:1px solid var(--border); margin-top:30px; }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="dark-toggle" onclick="dark()" title="Toggle dark mode">🌓</button>
+  <div class="breadcrumb"><a href="index.html">← Weekly Modules</a> &nbsp;·&nbsp; <a href="Numerical_Problems.html">Worked Examples</a></div>
+  <h1>🧮 Interactive Numerical Practice — FDA</h1>
+  <p style="opacity:0.95;">Solve it yourself, check your answer, then reveal the full working. Problems mined from the Week 1–12 PDFs.</p>
+</header>
+
+<main>
+
+<nav class="toc">
+  <h3>📑 Jump to a week</h3>
+  <a href="#w2">W2 · Ratios</a>
+  <a href="#w3">W3 · Statistics</a>
+  <a href="#w4">W4 · Time Value of Money</a>
+  <a href="#w5">W5 · Moving Averages</a>
+  <a href="#w6">W6 · Predictive ML</a>
+  <a href="#w8">W8 · Risk</a>
+  <a href="#w9">W9 · Portfolio</a>
+  <a href="#w10">W10 · Trading</a>
+  <a href="#mcq">📝 MCQ Exam (2 marks each)</a>
+</nav>
+
+<div class="tip">💡 <strong>How to use:</strong> type your answer and press <em>Check</em> (numeric answers are accepted within a small tolerance), or click a choice. Enter ratios as decimals (e.g. 1.67) and margins/returns as percentages (e.g. 37.5) as the prompt specifies. Use <em>Show working</em> only after attempting. These complement the fully worked <a href="Numerical_Problems.html">Numerical Problems</a>.</div>
+
+<!-- ===================== WEEK 2 ===================== -->
+<section id="w2">
+  <h2>Week 2 — Financial Ratios</h2>
+  <span class="wk">Liquidity, leverage &amp; profitability ratios · the XYZ Corporation case · profit margins</span>
+
+  <div class="problem">
+    <h4>Q2.1 — Liquidity ratios</h4>
+    <p>A firm reports Current Assets = ₹200,000, Inventory = ₹50,000, Current Liabilities = ₹120,000.</p>
+    <div class="formula">Current Ratio = CA / CL        Quick Ratio = (CA − Inventory) / CL</div>
+    <div class="answer-box">
+      <label>Current Ratio =</label>
+      <input id="f2cr" type="text" placeholder="e.g. 1.67">
+      <button class="btn" onclick="check('f2cr',1.667,0.01)">Check</button>
+      <span id="f2cr_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>Quick Ratio =</label>
+      <input id="f2qr" type="text" placeholder="e.g. 1.25">
+      <button class="btn" onclick="check('f2qr',1.25,0.01)">Check</button>
+      <span id="f2qr_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f2l_s')">Show working</button>
+    <div class="solution" id="f2l_s">
+      <h4>Solution</h4>
+      <div class="formula">Current Ratio = 200,000 / 120,000 = 1.67
+Quick Ratio   = (200,000 − 50,000) / 120,000 = 150,000/120,000 = 1.25</div>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q2.2 — Leverage &amp; return ratios</h4>
+    <p>Total Liabilities = ₹300,000, Shareholders' Equity = ₹500,000, Total Assets = ₹800,000, Net Income = ₹100,000.</p>
+    <div class="answer-box">
+      <label>Debt-to-Equity =</label>
+      <input id="f2de" type="text" placeholder="e.g. 0.6">
+      <button class="btn" onclick="check('f2de',0.6,0.01)">Check</button>
+      <span id="f2de_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>Debt Ratio =</label>
+      <input id="f2dr" type="text" placeholder="e.g. 0.375">
+      <button class="btn" onclick="check('f2dr',0.375,0.005)">Check</button>
+      <span id="f2dr_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>ROE (%) =</label>
+      <input id="f2roe" type="text" placeholder="e.g. 20">
+      <button class="btn" onclick="check('f2roe',20,0.3)">Check</button>
+      <span id="f2roe_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f2lev_s')">Show working</button>
+    <div class="solution" id="f2lev_s">
+      <h4>Solution</h4>
+      <div class="formula">Debt-to-Equity = 300,000 / 500,000 = 0.60
+Debt Ratio     = 300,000 / 800,000 = 0.375  (37.5% of assets financed by debt)
+ROE            = 100,000 / 500,000 × 100 = 20%
+Equity Ratio   = 500,000 / 800,000 = 0.625</div>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q2.3 — Case study: XYZ Corporation</h4>
+    <p>From XYZ Corp's balance sheet: Current Assets = ₹170,000 (incl. Inventory ₹40,000), Current Liabilities = ₹90,000, Total Liabilities = ₹240,000, Total Assets = ₹400,000, Shareholders' Equity = ₹160,000, Net Income = ₹40,000.</p>
+    <div class="answer-box">
+      <label>Current Ratio =</label>
+      <input id="f2x1" type="text" placeholder="e.g. 1.89">
+      <button class="btn" onclick="check('f2x1',1.889,0.02)">Check</button>
+      <span id="f2x1_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>Quick Ratio =</label>
+      <input id="f2x2" type="text" placeholder="e.g. 1.44">
+      <button class="btn" onclick="check('f2x2',1.444,0.02)">Check</button>
+      <span id="f2x2_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>ROE (%) =</label>
+      <input id="f2x3" type="text" placeholder="e.g. 25">
+      <button class="btn" onclick="check('f2x3',25,0.3)">Check</button>
+      <span id="f2x3_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>Working Capital (₹) =</label>
+      <input id="f2x4" type="text" placeholder="e.g. 80000">
+      <button class="btn" onclick="check('f2x4',80000,1)">Check</button>
+      <span id="f2x4_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f2x_s')">Show working</button>
+    <div class="solution" id="f2x_s">
+      <h4>Solution</h4>
+      <div class="formula">Current Ratio   = 170,000 / 90,000 = 1.89
+Quick Ratio     = (170,000 − 40,000) / 90,000 = 1.44
+ROE             = 40,000 / 160,000 × 100 = 25%
+Working Capital = 170,000 − 90,000 = ₹80,000</div>
+      <p>Also: Debt-to-Equity = 240/160 = 1.5; Debt Ratio = 240/400 = 0.6; Asset Turnover = 500,000/400,000 = 1.25; ROA = 40,000/400,000 = 10%; Equity Ratio = 0.4.</p>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q2.4 — Profit margins</h4>
+    <p>Revenue = ₹40,00,000, COGS = ₹25,00,000, Operating Income = ₹8,00,000, Net Income = ₹5,00,000.</p>
+    <div class="answer-box">
+      <label>Gross margin (%) =</label>
+      <input id="f2gm" type="text" placeholder="e.g. 37.5">
+      <button class="btn" onclick="check('f2gm',37.5,0.3)">Check</button>
+      <span id="f2gm_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>Operating (%) =</label>
+      <input id="f2om" type="text" placeholder="e.g. 20">
+      <button class="btn" onclick="check('f2om',20,0.3)">Check</button>
+      <span id="f2om_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>Net margin (%) =</label>
+      <input id="f2nm" type="text" placeholder="e.g. 12.5">
+      <button class="btn" onclick="check('f2nm',12.5,0.3)">Check</button>
+      <span id="f2nm_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f2m_s')">Show working</button>
+    <div class="solution" id="f2m_s">
+      <h4>Solution</h4>
+      <div class="formula">Gross Profit  = 40,00,000 − 25,00,000 = 15,00,000
+Gross Margin  = 15,00,000 / 40,00,000 = 37.5%
+Operating     = 8,00,000  / 40,00,000 = 20%
+Net Margin    = 5,00,000  / 40,00,000 = 12.5%</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WEEK 3 ===================== -->
+<section id="w3">
+  <h2>Week 3 — Descriptive Statistics &amp; Regression</h2>
+  <span class="wk">Central tendency · dispersion · hypothesis testing · simple linear regression</span>
+
+  <div class="problem">
+    <h4>Q3.1 — Mean &amp; median of fund returns</h4>
+    <p>Weekly returns of five funds: <strong>3%, 5%, −2%, 8%, 3%</strong>.</p>
+    <div class="answer-box">
+      <label>Mean (%) =</label>
+      <input id="f3mean" type="text" placeholder="e.g. 3.4">
+      <button class="btn" onclick="check('f3mean',3.4,0.05)">Check</button>
+      <span id="f3mean_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>Median (%) =</label>
+      <input id="f3med" type="text" placeholder="e.g. 3">
+      <button class="btn" onclick="check('f3med',3,0.01)">Check</button>
+      <span id="f3med_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f3c_s')">Show working</button>
+    <div class="solution" id="f3c_s">
+      <h4>Solution</h4>
+      <div class="formula">Mean   = (3 + 5 − 2 + 8 + 3)/5 = 17/5 = 3.4%
+Sorted = −2, 3, 3, 5, 8  →  Median = 3% (middle value)
+Mode   = 3% (appears twice)</div>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q3.2 — Variance &amp; standard deviation</h4>
+    <p>Returns: <strong>5%, −3%, 7%, 10%, 2%</strong>. The mean is 4.2%. Compute the (population) variance and standard deviation.</p>
+    <div class="formula">σ² = (1/n) Σ (xᵢ − μ)²        σ = √σ²</div>
+    <div class="answer-box">
+      <label>Variance =</label>
+      <input id="f3var" type="text" placeholder="e.g. 19.76">
+      <button class="btn" onclick="check('f3var',19.76,0.1)">Check</button>
+      <span id="f3var_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>Std dev (%) =</label>
+      <input id="f3sd" type="text" placeholder="e.g. 4.44">
+      <button class="btn" onclick="check('f3sd',4.44,0.05)">Check</button>
+      <span id="f3sd_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f3d_s')">Show working</button>
+    <div class="solution" id="f3d_s">
+      <h4>Solution</h4>
+      <div class="formula">deviations: 0.8, −7.2, 2.8, 5.8, −2.2
+squares:    0.64 + 51.84 + 7.84 + 33.64 + 4.84 = 98.8
+σ² = 98.8 / 5 = 19.76
+σ  = √19.76 = 4.44%</div>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q3.3 — Hypothesis test decision</h4>
+    <p>You test whether a strategy beats an 8% benchmark. The test returns a <strong>p-value of 0.02</strong> at significance level <strong>α = 0.05</strong>. What is the decision?</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="choice(this,true)">Reject H₀ — significant</button>
+      <button class="choice-btn" onclick="choice(this,false)">Fail to reject H₀</button>
+      <span class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f3h_s')">Show working</button>
+    <div class="solution" id="f3h_s">
+      <h4>Solution</h4>
+      <p>Since p (0.02) &lt; α (0.05), <strong>reject H₀</strong>. There is statistically significant evidence the strategy outperforms the 8% benchmark.</p>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q3.4 — Simple linear regression</h4>
+    <p>Advertising X (₹'000) vs sales Y (₹'000): (10,50), (15,65), (20,80), (25,95), (30,110). The relationship is perfectly linear.</p>
+    <div class="formula">Y = β₀ + β₁X</div>
+    <div class="answer-box">
+      <label>Slope β₁ =</label>
+      <input id="f3b1" type="text" placeholder="e.g. 3">
+      <button class="btn" onclick="check('f3b1',3,0.01)">Check</button>
+      <span id="f3b1_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>Predict Y at X=25 =</label>
+      <input id="f3pred" type="text" placeholder="e.g. 95">
+      <button class="btn" onclick="check('f3pred',95,0.5)">Check</button>
+      <span id="f3pred_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f3r_s')">Show working</button>
+    <div class="solution" id="f3r_s">
+      <h4>Solution</h4>
+      <div class="formula">β₁ = ΔY/ΔX = (65−50)/(15−10) = 15/5 = 3
+β₀ = 50 − 3×10 = 20      →   Y = 20 + 3X
+At X = 25:  Y = 20 + 3×25 = 20 + 75 = ₹95 ('000)</div>
+      <p>Interpretation: every extra ₹1,000 of advertising lifts sales by ₹3,000.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WEEK 4 ===================== -->
+<section id="w4">
+  <h2>Week 4 — Time Value of Money</h2>
+  <span class="wk">Present/future value · compounding frequency · perpetuity · weighted return</span>
+
+  <div class="problem">
+    <h4>Q4.1 — Discount-rate sensitivity</h4>
+    <p>Find the present value of <strong>₹15,000</strong> received in <strong>8 years</strong> at discount rates of 3% and 7%.</p>
+    <div class="formula">PV = FV / (1 + r)ⁿ</div>
+    <div class="answer-box">
+      <label>PV at 3% (₹) =</label>
+      <input id="f4pv3" type="text" placeholder="e.g. 11842">
+      <button class="btn" onclick="check('f4pv3',11841.7,40)">Check</button>
+      <span id="f4pv3_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>PV at 7% (₹) =</label>
+      <input id="f4pv7" type="text" placeholder="e.g. 8730">
+      <button class="btn" onclick="check('f4pv7',8729.6,40)">Check</button>
+      <span id="f4pv7_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f4pv_s')">Show working</button>
+    <div class="solution" id="f4pv_s">
+      <h4>Solution</h4>
+      <div class="formula">PV(3%) = 15,000 / 1.03⁸ = 15,000 / 1.2668 ≈ ₹11,842
+PV(7%) = 15,000 / 1.07⁸ = 15,000 / 1.7182 ≈ ₹8,730</div>
+      <p>A higher discount rate gives a lower present value. (The PDF rounds these to ₹11,850.27 and ₹8,736.51.)</p>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q4.2 — Future value &amp; compounding frequency</h4>
+    <p>Invest <strong>₹5,000</strong> at <strong>6%</strong> for <strong>5 years</strong>. Compare annual vs quarterly compounding.</p>
+    <div class="formula">FV = PV · (1 + r/m)^(n·m)</div>
+    <div class="answer-box">
+      <label>Annual (₹) =</label>
+      <input id="f4fa" type="text" placeholder="e.g. 6691">
+      <button class="btn" onclick="check('f4fa',6691.13,3)">Check</button>
+      <span id="f4fa_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>Quarterly (₹) =</label>
+      <input id="f4fq" type="text" placeholder="e.g. 6734">
+      <button class="btn" onclick="check('f4fq',6734.28,30)">Check</button>
+      <span id="f4fq_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f4f_s')">Show working</button>
+    <div class="solution" id="f4f_s">
+      <h4>Solution</h4>
+      <div class="formula">Annual    = 5,000 × 1.06⁵            = ₹6,691.13
+Quarterly = 5,000 × (1 + 0.06/4)^20  = 5,000 × 1.015^20 ≈ ₹6,734</div>
+      <p>More frequent compounding earns a little more. (The PDF states the quarterly figure as ₹6,744.25.)</p>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q4.3 — Present value of a perpetuity</h4>
+    <p>A preferred share pays a fixed dividend of <strong>₹500</strong> forever; the discount rate is <strong>10%</strong>. What is its present value?</p>
+    <div class="formula">PV = C / r</div>
+    <div class="answer-box">
+      <label>PV (₹) =</label>
+      <input id="f4perp" type="text" placeholder="e.g. 5000">
+      <button class="btn" onclick="check('f4perp',5000,1)">Check</button>
+      <span id="f4perp_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f4p_s')">Show working</button>
+    <div class="solution" id="f4p_s">
+      <h4>Solution</h4>
+      <div class="formula">PV = 500 / 0.10 = ₹5,000</div>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q4.4 — Weighted portfolio return</h4>
+    <p>A portfolio holds four stocks:</p>
+    <table>
+      <tr><th>Stock</th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+      <tr><td>Weight</td><td>40%</td><td>30%</td><td>20%</td><td>10%</td></tr>
+      <tr><td>Return</td><td>8%</td><td>10%</td><td>6%</td><td>12%</td></tr>
+    </table>
+    <div class="answer-box">
+      <label>Portfolio return (%) =</label>
+      <input id="f4w" type="text" placeholder="e.g. 8.6">
+      <button class="btn" onclick="check('f4w',8.6,0.05)">Check</button>
+      <span id="f4w_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f4w_s')">Show working</button>
+    <div class="solution" id="f4w_s">
+      <h4>Solution</h4>
+      <div class="formula">= 0.40×8 + 0.30×10 + 0.20×6 + 0.10×12
+= 3.2 + 3.0 + 1.2 + 1.2 = 8.6%</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WEEK 5 ===================== -->
+<section id="w5">
+  <h2>Week 5 — Moving Averages</h2>
+  <span class="wk">Simple &amp; weighted moving averages on a price series</span>
+
+  <div class="problem">
+    <h4>Q5.1 — 3-period Simple Moving Average</h4>
+    <p>Series: <strong>10, 20, 30, 40, 50</strong>. Compute the 3-period SMA at period 3 and period 5.</p>
+    <div class="answer-box">
+      <label>SMA at period 3 =</label>
+      <input id="f5s3" type="text" placeholder="e.g. 20">
+      <button class="btn" onclick="check('f5s3',20,0.1)">Check</button>
+      <span id="f5s3_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>SMA at period 5 =</label>
+      <input id="f5s5" type="text" placeholder="e.g. 40">
+      <button class="btn" onclick="check('f5s5',40,0.1)">Check</button>
+      <span id="f5s5_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f5s_s')">Show working</button>
+    <div class="solution" id="f5s_s">
+      <h4>Solution</h4>
+      <div class="formula">P3 = (10+20+30)/3 = 20
+P4 = (20+30+40)/3 = 30
+P5 = (30+40+50)/3 = 40</div>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q5.2 — Weighted Moving Average</h4>
+    <p>Same series. Use weights <strong>3</strong> (most recent), <strong>2</strong>, <strong>1</strong> (oldest). Compute the 3-period WMA at period 3 (window 10, 20, 30).</p>
+    <div class="formula">WMA = (3·newest + 2·mid + 1·oldest) / (3+2+1)</div>
+    <div class="answer-box">
+      <label>WMA at period 3 =</label>
+      <input id="f5w" type="text" placeholder="e.g. 23.33">
+      <button class="btn" onclick="check('f5w',23.33,0.1)">Check</button>
+      <span id="f5w_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f5w_s')">Show working</button>
+    <div class="solution" id="f5w_s">
+      <h4>Solution</h4>
+      <div class="formula">= (3×30 + 2×20 + 1×10) / 6
+= (90 + 40 + 10) / 6 = 140/6 = 23.33</div>
+      <p>The WMA (23.33) sits above the SMA (20) because it weights the larger, most-recent value more heavily.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WEEK 6 ===================== -->
+<section id="w6">
+  <h2>Week 6 — Predictive Analytics &amp; ML</h2>
+  <span class="wk">Expected monetary value · accuracy · logistic default model</span>
+
+  <div class="problem">
+    <h4>Q6.1 — Expected Monetary Value (investment decision)</h4>
+    <p><strong>Project A:</strong> 60% chance of ₹100,000 gain, 40% chance of ₹50,000 loss.<br>
+       <strong>Project B:</strong> 90% chance of ₹30,000 gain, 10% chance of ₹10,000 loss.</p>
+    <div class="formula">EMV = Σ (outcome × probability)</div>
+    <div class="answer-box">
+      <label>EMV(A) (₹) =</label>
+      <input id="f6a" type="text" placeholder="e.g. 40000">
+      <button class="btn" onclick="check('f6a',40000,1)">Check</button>
+      <span id="f6a_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>EMV(B) (₹) =</label>
+      <input id="f6b" type="text" placeholder="e.g. 26000">
+      <button class="btn" onclick="check('f6b',26000,1)">Check</button>
+      <span id="f6b_fb" class="fb"></span>
+    </div>
+    <p>Which project should be chosen?</p>
+    <div class="choices">
+      <button class="choice-btn" onclick="choice(this,true)">Project A</button>
+      <button class="choice-btn" onclick="choice(this,false)">Project B</button>
+      <span class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f6e_s')">Show working</button>
+    <div class="solution" id="f6e_s">
+      <h4>Solution</h4>
+      <div class="formula">EMV(A) = 0.6×100,000 + 0.4×(−50,000) = 60,000 − 20,000 = ₹40,000
+EMV(B) = 0.9×30,000  + 0.1×(−10,000) = 27,000 − 1,000  = ₹26,000</div>
+      <p>Project A has the higher expected value → choose <strong>A</strong>.</p>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q6.2 — Classification accuracy</h4>
+    <p>A model makes <strong>930 correct</strong> predictions out of <strong>1,000</strong>. What is its accuracy?</p>
+    <div class="answer-box">
+      <label>Accuracy (%) =</label>
+      <input id="f6acc" type="text" placeholder="e.g. 93">
+      <button class="btn" onclick="check('f6acc',93,0.2)">Check</button>
+      <span id="f6acc_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f6ac_s')">Show working</button>
+    <div class="solution" id="f6ac_s">
+      <h4>Solution</h4>
+      <div class="formula">Accuracy = (TP+TN)/total = 930 / 1,000 = 0.93 = 93%</div>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q6.3 — Logistic default model</h4>
+    <p>The PDF's loan-default model is P(Default) = σ(2.5 − 0.02·CreditScore + 0.1·DebtRatio). For an applicant with <strong>CreditScore = 300</strong> and <strong>DebtRatio = 50</strong>:</p>
+    <div class="formula">z = 2.5 − 0.02·CS + 0.1·DR        P = 1/(1 + e^−z)</div>
+    <div class="answer-box">
+      <label>z =</label>
+      <input id="f6z" type="text" placeholder="e.g. 1.5">
+      <button class="btn" onclick="check('f6z',1.5,0.01)">Check</button>
+      <span id="f6z_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>P(Default) =</label>
+      <input id="f6p" type="text" placeholder="e.g. 0.82">
+      <button class="btn" onclick="check('f6p',0.818,0.02)">Check</button>
+      <span id="f6p_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f6l_s')">Show working</button>
+    <div class="solution" id="f6l_s">
+      <h4>Solution</h4>
+      <div class="formula">z = 2.5 − 0.02×300 + 0.1×50 = 2.5 − 6 + 5 = 1.5
+P = 1/(1 + e^−1.5) = 1/(1 + 0.2231) = 0.818</div>
+      <p>≈ 82% default probability → a high-risk applicant.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WEEK 8 ===================== -->
+<section id="w8">
+  <h2>Week 8 — Risk Management</h2>
+  <span class="wk">Parametric VaR · market-risk sensitivity</span>
+
+  <div class="problem">
+    <h4>Q8.1 — Parametric (variance–covariance) VaR</h4>
+    <p>At <strong>99% confidence</strong> the Z-score is <strong>2.33</strong>. A portfolio's daily standard deviation is <strong>σ = 2.5%</strong>, horizon <strong>t = 1</strong> day. Compute the 1-day VaR (as a %).</p>
+    <div class="formula">VaR = Z · σ · √t</div>
+    <div class="answer-box">
+      <label>VaR (%) =</label>
+      <input id="f8var" type="text" placeholder="e.g. 5.83">
+      <button class="btn" onclick="check('f8var',5.825,0.1)">Check</button>
+      <span id="f8var_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f8v_s')">Show working</button>
+    <div class="solution" id="f8v_s">
+      <h4>Solution</h4>
+      <div class="formula">VaR = 2.33 × 2.5% × √1 = 5.825%</div>
+      <p>At 99% confidence the daily loss is not expected to exceed ≈5.83% (vs 3.30% at 95% with σ=2%).</p>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q8.2 — Interest-rate sensitivity</h4>
+    <p>A <strong>$1,000,000</strong> portfolio holds <strong>40%</strong> in equities and the rest in rate-sensitive assets. An interest-rate shift changes the non-equity portion by <strong>1%</strong>. What is the dollar change from the rate move?</p>
+    <div class="formula">Δ = rate_sensitivity × portfolio_value × (1 − equity_weight)</div>
+    <div class="answer-box">
+      <label>Change ($) =</label>
+      <input id="f8ir" type="text" placeholder="e.g. 6000">
+      <button class="btn" onclick="check('f8ir',6000,1)">Check</button>
+      <span id="f8ir_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f8i_s')">Show working</button>
+    <div class="solution" id="f8i_s">
+      <h4>Solution</h4>
+      <div class="formula">= 0.01 × 1,000,000 × (1 − 0.40)
+= 0.01 × 1,000,000 × 0.60 = $6,000</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WEEK 9 ===================== -->
+<section id="w9">
+  <h2>Week 9 — Portfolio Performance</h2>
+  <span class="wk">Sharpe / Treynor / Jensen's alpha · CAPM</span>
+
+  <div class="problem">
+    <h4>Q9.1 — Treynor ratio &amp; Jensen's alpha</h4>
+    <p>Portfolio returns average <strong>14%</strong>; the benchmark averages <strong>12.8%</strong>. Risk-free rate <strong>R_f = 3%</strong>, beta <strong>β = 1.2</strong>. (So mean excess return = 14% − 3% = 11%.)</p>
+    <div class="formula">Treynor = (R_p − R_f) / β        Alpha = R_p − R_benchmark</div>
+    <div class="answer-box">
+      <label>Treynor =</label>
+      <input id="f9t" type="text" placeholder="e.g. 0.092">
+      <button class="btn" onclick="check('f9t',0.0917,0.004)">Check</button>
+      <span id="f9t_fb" class="fb"></span>
+    </div>
+    <div class="answer-box">
+      <label>Alpha =</label>
+      <input id="f9al" type="text" placeholder="e.g. 0.012">
+      <button class="btn" onclick="check('f9al',0.012,0.003)">Check</button>
+      <span id="f9al_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f9t_s')">Show working</button>
+    <div class="solution" id="f9t_s">
+      <h4>Solution</h4>
+      <div class="formula">Treynor = (0.14 − 0.03) / 1.2 = 0.11 / 1.2 = 0.0917
+Alpha   = 0.14 − 0.128 = 0.012   (1.2% over benchmark)
+Sharpe  = 0.11 / σ = 0.11 / 0.0283 ≈ 3.89</div>
+    </div>
+  </div>
+
+  <div class="problem">
+    <h4>Q9.2 — CAPM expected return</h4>
+    <p>Risk-free rate <strong>3%</strong>, market return <strong>10%</strong>, stock beta <strong>β = 1.2</strong>. What return does CAPM expect?</p>
+    <div class="formula">E(R) = R_f + β · (R_m − R_f)</div>
+    <div class="answer-box">
+      <label>E(R) (%) =</label>
+      <input id="f9capm" type="text" placeholder="e.g. 11.4">
+      <button class="btn" onclick="check('f9capm',11.4,0.1)">Check</button>
+      <span id="f9capm_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f9c_s')">Show working</button>
+    <div class="solution" id="f9c_s">
+      <h4>Solution</h4>
+      <div class="formula">E(R) = 3% + 1.2 × (10% − 3%) = 3% + 1.2×7% = 3% + 8.4% = 11.4%</div>
+      <p>This benchmark return is exactly what Jensen's alpha measures performance against.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WEEK 10 ===================== -->
+<section id="w10">
+  <h2>Week 10 — Algorithmic Trading</h2>
+  <span class="wk">Moving-average crossover on a real price series</span>
+
+  <div class="problem">
+    <h4>Q10.1 — First 3-day moving average</h4>
+    <p>Closing prices for the first three days are <strong>296.24, 298.85, 299.74</strong>. Compute the 3-day simple moving average at day 3.</p>
+    <div class="answer-box">
+      <label>3-day SMA =</label>
+      <input id="f10s" type="text" placeholder="e.g. 298.28">
+      <button class="btn" onclick="check('f10s',298.28,0.1)">Check</button>
+      <span id="f10s_fb" class="fb"></span>
+    </div>
+    <button class="btn btn-sol" onclick="sol('f10_s')">Show working</button>
+    <div class="solution" id="f10_s">
+      <h4>Solution</h4>
+      <div class="formula">= (296.24 + 298.85 + 299.74) / 3 = 894.83 / 3 = 298.28</div>
+      <p>A buy signal fires when this short MA crosses above the longer (e.g. 5-day or 200-day) MA — the golden cross.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MCQ EXAM ===================== -->
+<section id="mcq">
+  <h2>📝 MCQ Exam — 2 Marks Each</h2>
+  <span class="wk">Single best answer · click an option for instant feedback &amp; explanation · live score below</span>
+  <div class="scorebar">📊 Score: <span id="sgot">0</span>/12 &nbsp;|&nbsp; <span id="smarks">0</span>/24 marks <button class="btn" onclick="resetMCQ()">↻ Reset</button></div>
+
+  <div class="mcq">
+    <p class="mcq-q"><span class="marks">2 MARKS</span> Current Assets = ₹200,000, Current Liabilities = ₹120,000. The Current Ratio is:</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(this)">A) 0.60</button>
+      <button class="opt" onclick="pick(this)">B) 1.25</button>
+      <button class="opt" data-correct="1" onclick="pick(this)">C) 1.67</button>
+      <button class="opt" onclick="pick(this)">D) 2.00</button>
+    </div>
+    <div class="mcq-exp"><strong>Answer: C.</strong> Current Ratio = CA/CL = 200,000/120,000 = 1.67.</div>
+  </div>
+
+  <div class="mcq">
+    <p class="mcq-q"><span class="marks">2 MARKS</span> With CA = ₹200,000, Inventory = ₹50,000, CL = ₹120,000, the Quick (acid-test) Ratio is:</p>
+    <div class="opts">
+      <button class="opt" data-correct="1" onclick="pick(this)">A) 1.25</button>
+      <button class="opt" onclick="pick(this)">B) 1.50</button>
+      <button class="opt" onclick="pick(this)">C) 1.67</button>
+      <button class="opt" onclick="pick(this)">D) 0.42</button>
+    </div>
+    <div class="mcq-exp"><strong>Answer: A.</strong> (CA − Inventory)/CL = (200,000 − 50,000)/120,000 = 1.25.</div>
+  </div>
+
+  <div class="mcq">
+    <p class="mcq-q"><span class="marks">2 MARKS</span> Net Income = ₹40,000 and Shareholders' Equity = ₹160,000. The Return on Equity (ROE) is:</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(this)">A) 10%</button>
+      <button class="opt" onclick="pick(this)">B) 16%</button>
+      <button class="opt" data-correct="1" onclick="pick(this)">C) 25%</button>
+      <button class="opt" onclick="pick(this)">D) 40%</button>
+    </div>
+    <div class="mcq-exp"><strong>Answer: C.</strong> ROE = NI/Equity = 40,000/160,000 = 25%.</div>
+  </div>
+
+  <div class="mcq">
+    <p class="mcq-q"><span class="marks">2 MARKS</span> Weekly returns are 3%, 5%, −2%, 8%, 3%. The mean return is:</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(this)">A) 3.0%</button>
+      <button class="opt" data-correct="1" onclick="pick(this)">B) 3.4%</button>
+      <button class="opt" onclick="pick(this)">C) 4.2%</button>
+      <button class="opt" onclick="pick(this)">D) 5.0%</button>
+    </div>
+    <div class="mcq-exp"><strong>Answer: B.</strong> (3 + 5 − 2 + 8 + 3)/5 = 17/5 = 3.4%. (Median and mode are both 3%.)</div>
+  </div>
+
+  <div class="mcq">
+    <p class="mcq-q"><span class="marks">2 MARKS</span> Returns are 5%, −3%, 7%, 10%, 2% with mean 4.2%. The population variance is:</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(this)">A) 4.44</button>
+      <button class="opt" onclick="pick(this)">B) 13.0</button>
+      <button class="opt" data-correct="1" onclick="pick(this)">C) 19.76</button>
+      <button class="opt" onclick="pick(this)">D) 98.8</button>
+    </div>
+    <div class="mcq-exp"><strong>Answer: C.</strong> Σ(x−μ)² = 0.64+51.84+7.84+33.64+4.84 = 98.8; ÷5 = 19.76 (σ = √19.76 = 4.44%).</div>
+  </div>
+
+  <div class="mcq">
+    <p class="mcq-q"><span class="marks">2 MARKS</span> A perpetuity pays ₹500 every year forever at a 10% discount rate. Its present value is:</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(this)">A) ₹500</button>
+      <button class="opt" data-correct="1" onclick="pick(this)">B) ₹5,000</button>
+      <button class="opt" onclick="pick(this)">C) ₹50,000</button>
+      <button class="opt" onclick="pick(this)">D) ₹550</button>
+    </div>
+    <div class="mcq-exp"><strong>Answer: B.</strong> PV = C/r = 500/0.10 = ₹5,000.</div>
+  </div>
+
+  <div class="mcq">
+    <p class="mcq-q"><span class="marks">2 MARKS</span> A portfolio holds weights 40/30/20/10% in stocks returning 8/10/6/12%. The portfolio return is:</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(this)">A) 9.0%</button>
+      <button class="opt" data-correct="1" onclick="pick(this)">B) 8.6%</button>
+      <button class="opt" onclick="pick(this)">C) 10.0%</button>
+      <button class="opt" onclick="pick(this)">D) 8.0%</button>
+    </div>
+    <div class="mcq-exp"><strong>Answer: B.</strong> 0.4·8 + 0.3·10 + 0.2·6 + 0.1·12 = 3.2 + 3.0 + 1.2 + 1.2 = 8.6%.</div>
+  </div>
+
+  <div class="mcq">
+    <p class="mcq-q"><span class="marks">2 MARKS</span> Project A: 60% chance of +₹100,000 and 40% chance of −₹50,000. Its expected monetary value (EMV) is:</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(this)">A) ₹26,000</button>
+      <button class="opt" data-correct="1" onclick="pick(this)">B) ₹40,000</button>
+      <button class="opt" onclick="pick(this)">C) ₹50,000</button>
+      <button class="opt" onclick="pick(this)">D) ₹60,000</button>
+    </div>
+    <div class="mcq-exp"><strong>Answer: B.</strong> 0.6·100,000 + 0.4·(−50,000) = 60,000 − 20,000 = ₹40,000.</div>
+  </div>
+
+  <div class="mcq">
+    <p class="mcq-q"><span class="marks">2 MARKS</span> Parametric VaR at 99% confidence (Z = 2.33) with σ = 2.5% over 1 day is:</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(this)">A) 2.33%</button>
+      <button class="opt" onclick="pick(this)">B) 2.50%</button>
+      <button class="opt" onclick="pick(this)">C) 4.65%</button>
+      <button class="opt" data-correct="1" onclick="pick(this)">D) 5.83%</button>
+    </div>
+    <div class="mcq-exp"><strong>Answer: D.</strong> VaR = Z·σ·√t = 2.33 × 2.5% × √1 = 5.83%.</div>
+  </div>
+
+  <div class="mcq">
+    <p class="mcq-q"><span class="marks">2 MARKS</span> Using CAPM with Rf = 3%, β = 1.2, market return Rm = 10%, the expected return is:</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(this)">A) 8.4%</button>
+      <button class="opt" onclick="pick(this)">B) 10.0%</button>
+      <button class="opt" data-correct="1" onclick="pick(this)">C) 11.4%</button>
+      <button class="opt" onclick="pick(this)">D) 13.0%</button>
+    </div>
+    <div class="mcq-exp"><strong>Answer: C.</strong> E(R) = Rf + β(Rm − Rf) = 3% + 1.2·(10% − 3%) = 3% + 8.4% = 11.4%.</div>
+  </div>
+
+  <div class="mcq">
+    <p class="mcq-q"><span class="marks">2 MARKS</span> A hypothesis test returns p = 0.02 at significance level α = 0.05. The correct decision is:</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(this)">A) Fail to reject H₀</button>
+      <button class="opt" data-correct="1" onclick="pick(this)">B) Reject H₀ — the result is statistically significant</button>
+      <button class="opt" onclick="pick(this)">C) Accept H₀ as proven true</button>
+      <button class="opt" onclick="pick(this)">D) The test is inconclusive</button>
+    </div>
+    <div class="mcq-exp"><strong>Answer: B.</strong> p (0.02) &lt; α (0.05) → reject H₀. (We never "accept/prove" H₀.)</div>
+  </div>
+
+  <div class="mcq">
+    <p class="mcq-q"><span class="marks">2 MARKS</span> The Sharpe ratio measures a portfolio's excess return per unit of:</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(this)">A) systematic risk (beta)</button>
+      <button class="opt" data-correct="1" onclick="pick(this)">B) total risk (standard deviation)</button>
+      <button class="opt" onclick="pick(this)">C) benchmark tracking error</button>
+      <button class="opt" onclick="pick(this)">D) maximum drawdown</button>
+    </div>
+    <div class="mcq-exp"><strong>Answer: B.</strong> Sharpe = (Rp − Rf)/σp uses total risk (σ); the Treynor ratio is the one that divides by beta.</div>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  📊 Financial Data Analytics • Interactive Numerical Practice • Generated from the VIT Week 1–12 PDFs
+</footer>
+
+<script>
+  function check(id, correct, tol){
+    var el=document.getElementById(id), fb=document.getElementById(id+'_fb');
+    var raw=(el.value||'').toString().replace(/[,%₹$\s]/g,'');
+    var v=parseFloat(raw);
+    if(isNaN(v)){ fb.textContent='⌨ enter a number'; fb.className='fb no'; return; }
+    if(Math.abs(v-correct)<=tol){ fb.textContent='✓ Correct'; fb.className='fb ok'; }
+    else { fb.textContent='✗ not quite — try again'; fb.className='fb no'; }
+  }
+  function choice(btn, ok){
+    var grp=btn.parentNode;
+    grp.querySelectorAll('.choice-btn').forEach(function(b){ b.style.outline=''; });
+    btn.style.outline='3px solid '+(ok?'#43a047':'#e53935');
+    var fb=grp.querySelector('.fb');
+    if(fb){ fb.textContent=ok?'✓ Correct':'✗ try again'; fb.className='fb '+(ok?'ok':'no'); }
+  }
+  function sol(id){
+    var e=document.getElementById(id);
+    e.style.display=(e.style.display==='block')?'none':'block';
+  }
+  function pick(btn){
+    var mcq=btn.closest('.mcq');
+    if(mcq.classList.contains('answered')) return;
+    mcq.classList.add('answered');
+    var correct=btn.getAttribute('data-correct')==='1';
+    mcq.querySelectorAll('.opt').forEach(function(o){ o.disabled=true; if(o.getAttribute('data-correct')==='1') o.classList.add('correct'); });
+    if(!correct) btn.classList.add('wrong');
+    var exp=mcq.querySelector('.mcq-exp'); if(exp) exp.style.display='block';
+    if(correct) window._g=(window._g||0)+1;
+    var sg=document.getElementById('sgot'); if(sg) sg.textContent=(window._g||0);
+    var sm=document.getElementById('smarks'); if(sm) sm.textContent=(window._g||0)*2;
+  }
+  function resetMCQ(){ location.reload(); }
+  function dark(){
+    document.body.classList.toggle('dark');
+    try{ localStorage.setItem('fda_np_dark', document.body.classList.contains('dark')?'1':'0'); }catch(e){}
+  }
+  if(localStorage.getItem('fda_np_dark')==='1') document.body.classList.add('dark');
+</script>
+<script src="../claude-tutor.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 10 – Java Frameworks: Spring Framework & Spring MVC</title>
+<style>
+  :root {
+    --bg:#0f1117; --card:#1a1d2e; --accent:#6c63ff; --accent2:#00d4aa;
+    --yellow:#f7c948; --text:#e2e8f0; --muted:#94a3b8;
+    --border:#2d3748; --code:#2d3748;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+  header { background:linear-gradient(135deg,#6c63ff,#00d4aa); padding:3rem 2rem; text-align:center; }
+  header h1 { font-size:2.5rem; font-weight:800; color:#fff; }
+  header p { font-size:1.1rem; color:rgba(255,255,255,0.85); margin-top:0.5rem; }
+  nav { background:var(--card); border-bottom:2px solid var(--accent); display:flex; flex-wrap:wrap; gap:0.25rem; padding:0.75rem 1rem; position:sticky; top:0; z-index:100; }
+  nav a { color:var(--muted); text-decoration:none; padding:0.4rem 1rem; border-radius:6px; font-size:0.85rem; transition:all 0.2s; }
+  nav a:hover, nav a.active { background:var(--accent); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:2rem 1.5rem; }
+  section { margin-bottom:3rem; }
+  h2 { font-size:1.8rem; color:var(--accent); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  h3 { font-size:1.2rem; color:var(--accent2); margin:1.2rem 0 0.6rem; }
+  h4 { font-size:1rem; color:var(--yellow); margin:0.8rem 0 0.3rem; }
+  p { margin-bottom:0.8rem; color:var(--text); }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .highlight { border-left:4px solid var(--accent); background:rgba(108,99,255,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight2 { border-left:4px solid var(--accent2); background:rgba(0,212,170,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight3 { border-left:4px solid var(--yellow); background:rgba(247,201,72,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+  th { background:var(--accent); color:#fff; padding:0.7rem 1rem; text-align:left; }
+  td { padding:0.6rem 1rem; border-bottom:1px solid var(--border); vertical-align:top; }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.03); }
+  ul, ol { padding-left:1.5rem; margin-bottom:0.8rem; }
+  li { margin-bottom:0.3rem; }
+  .tag { background:var(--accent); color:#fff; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag2 { background:var(--accent2); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag3 { background:var(--yellow); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  svg text { font-family:'Segoe UI',sans-serif; }
+  .step { display:flex; gap:1rem; align-items:flex-start; margin-bottom:0.8rem; }
+  .step-num { background:var(--accent); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+  .four-col { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:1rem; }
+  @media(max-width:700px) { .two-col,.three-col,.four-col { grid-template-columns:1fr; } header h1 { font-size:1.8rem; } }
+  .interactive-box { background:var(--card); border:2px solid var(--accent); border-radius:12px; padding:1.5rem; margin:1.5rem 0; }
+  input[type=text], input[type=password], select {
+    background:var(--code); color:var(--text); border:1px solid var(--border);
+    border-radius:6px; padding:0.4rem 0.8rem; font-size:0.95rem; width:100%; margin-bottom:0.5rem;
+  }
+  button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:0.6rem 1.5rem; cursor:pointer; font-size:0.95rem; font-weight:600; transition:opacity 0.2s; }
+  button:hover { opacity:0.85; }
+  button.btn2 { background:var(--accent2); color:#000; }
+  button.btn3 { background:var(--yellow); color:#000; }
+  .result-box { background:rgba(0,212,170,0.1); border:1px solid var(--accent2); border-radius:8px; padding:1rem; margin-top:1rem; font-weight:600; color:var(--accent2); min-height:2rem; }
+
+  /* ── Code Blocks ─────────────────────────────────────────────── */
+  .code-block { background:#12151f; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:1rem 0; }
+  .code-header { background:#1e2235; padding:0.5rem 1rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); }
+  .code-lang { font-size:0.78rem; color:var(--muted); font-weight:600; letter-spacing:1px; text-transform:uppercase; }
+  .run-btn { background:var(--accent2); color:#000; border:none; border-radius:6px; padding:0.25rem 0.9rem; font-size:0.8rem; font-weight:700; cursor:pointer; }
+  .run-btn:hover { opacity:0.85; }
+  pre { padding:1.2rem; overflow-x:auto; font-size:0.88rem; line-height:1.6; font-family:'Fira Code','Cascadia Code','Consolas',monospace; }
+  code { font-family:'Fira Code','Cascadia Code','Consolas',monospace; }
+  .output-box { background:#0a0d14; border-top:1px solid var(--border); padding:0.8rem 1.2rem; font-size:0.85rem; font-family:monospace; color:var(--accent2); display:none; }
+  .output-box.visible { display:block; }
+
+  /* Java syntax highlighting */
+  .kw { color:#c792ea; font-weight:600; }
+  .cls { color:#82aaff; }
+  .fn { color:#82aaff; }
+  .str { color:#c3e88d; }
+  .cmt { color:#546e7a; font-style:italic; }
+  .ann { color:var(--yellow); }
+  .num { color:#f78c6c; }
+  .var { color:#e2e8f0; }
+  .xml-tag { color:#f07178; }
+  .xml-attr { color:#ffcb6b; }
+  .xml-val { color:#c3e88d; }
+
+  /* Benefit cards */
+  .benefit-card { border-radius:12px; padding:1.2rem; text-align:center; }
+  .benefit-card .icon { font-size:2rem; margin-bottom:0.5rem; }
+  .benefit-card h4 { font-size:1rem; margin-bottom:0.4rem; }
+
+  /* Stack diagram */
+  .stack-box { border-radius:8px; padding:0.7rem 1.5rem; text-align:center; font-weight:600; margin:0.3rem 0; }
+
+  /* Feature cards */
+  .feature-card { border-radius:12px; padding:1.2rem; border:1px solid var(--border); text-align:center; }
+
+  /* MVC sim */
+  .mvc-page { display:none; }
+  .mvc-page.active { display:block; }
+  .mvc-nav { display:flex; gap:0.5rem; margin-bottom:1rem; }
+  .mvc-nav button { padding:0.4rem 1rem; font-size:0.85rem; }
+  .mvc-nav button.active { background:var(--accent2); color:#000; }
+
+  /* scrollspy */
+  section[id] { scroll-margin-top:60px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>&#9749; Week 10: Java Frameworks</h1>
+  <p>Spring Framework &middot; Spring MVC &middot; Coupling &middot; Beans &middot; Autowiring</p>
+</header>
+
+<nav id="main-nav">
+  <a href="#frameworks" class="active">Frameworks</a>
+  <a href="#spring-overview">Spring Overview</a>
+  <a href="#architecture">Architecture</a>
+  <a href="#ecosystem">Ecosystem</a>
+  <a href="#spring-vs-traditional">Spring vs Traditional</a>
+  <a href="#setup">Setup</a>
+  <a href="#coupling">Coupling</a>
+  <a href="#beans">Spring Beans</a>
+  <a href="#autowiring">Autowiring</a>
+  <a href="#mvc">Spring MVC</a>
+  <a href="#mvc-example">MVC Example</a>
+  <a href="#xn-extra">🔢 Numericals</a>
+  <a href="#xn-mcq">📝 MCQs</a>
+</nav>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 1 — Introduction to Java Frameworks
+════════════════════════════════════════════════════════════════ -->
+<section id="frameworks">
+  <h2>&#127381; 1. Introduction to Java Frameworks</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>Definition:</strong> A Java framework is a <em>pre-built code skeleton</em> (set of classes, interfaces, and conventions) that developers build upon. Instead of writing everything from scratch, you fill in the blanks and let the framework handle the plumbing.
+    </div>
+    <p>Think of it like buying a house shell — the walls, roof, and foundation are done; you just decorate the inside to your needs.</p>
+
+    <h3>Types of Java Frameworks</h3>
+    <div class="four-col" style="margin-top:0.8rem;">
+      <div class="card" style="border-top:3px solid var(--accent); padding:1rem;">
+        <h4 style="margin-top:0;">&#127760; Web Frameworks</h4>
+        <p style="font-size:0.9rem;">Handle HTTP requests, routing, templating. e.g., Spring MVC, Struts, JSF.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent2); padding:1rem;">
+        <h4 style="margin-top:0;">&#128451; ORM Frameworks</h4>
+        <p style="font-size:0.9rem;">Map Java objects to database tables. e.g., Hibernate, JPA, MyBatis.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--yellow); padding:1rem;">
+        <h4 style="margin-top:0;">&#9989; Testing Frameworks</h4>
+        <p style="font-size:0.9rem;">Automate unit/integration tests. e.g., JUnit, TestNG, Mockito.</p>
+      </div>
+      <div class="card" style="border-top:3px solid #f07178; padding:1rem;">
+        <h4 style="margin-top:0;">&#128196; Logging Frameworks</h4>
+        <p style="font-size:0.9rem;">Structured application logging. e.g., Log4j, SLF4J, Logback.</p>
+      </div>
+    </div>
+
+    <h3>4 Key Benefits of Using Frameworks</h3>
+    <div class="four-col" style="margin-top:0.8rem;">
+      <div class="benefit-card card" style="border-top:4px solid #6c63ff;">
+        <div class="icon">&#128274;</div>
+        <h4>Security</h4>
+        <p style="font-size:0.88rem;">Built-in protection against SQL injection, XSS, CSRF. Security best practices baked in by experts.</p>
+      </div>
+      <div class="benefit-card card" style="border-top:4px solid #00d4aa;">
+        <div class="icon">&#128101;</div>
+        <h4>Community Support</h4>
+        <p style="font-size:0.88rem;">Large communities, extensive documentation, Stack Overflow answers, tutorials, and plugins.</p>
+      </div>
+      <div class="benefit-card card" style="border-top:4px solid #f7c948;">
+        <div class="icon">&#9851;</div>
+        <h4>Code Reuse</h4>
+        <p style="font-size:0.88rem;">Avoid reinventing the wheel. Reusable components accelerate development cycles dramatically.</p>
+      </div>
+      <div class="benefit-card card" style="border-top:4px solid #f07178;">
+        <div class="icon">&#128200;</div>
+        <h4>Scalability</h4>
+        <p style="font-size:0.88rem;">Designed to handle growth — from small apps to enterprise systems serving millions of users.</p>
+      </div>
+    </div>
+
+    <h3>Drawbacks of Frameworks</h3>
+    <div class="highlight3">
+      <ul>
+        <li><strong>API Restrictions:</strong> You must follow the framework's rules and conventions — limited freedom to do things your own way.</li>
+        <li><strong>Public Code:</strong> Open-source frameworks expose internals; potential vulnerabilities if not kept updated.</li>
+        <li><strong>Encapsulation:</strong> Much of the logic is hidden inside the framework, making debugging harder and increasing the learning curve.</li>
+      </ul>
+    </div>
+
+    <h3>Popular Java Frameworks</h3>
+    <div style="display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:0.5rem;">
+      <span class="tag">Spring</span>
+      <span class="tag2">Hibernate</span>
+      <span class="tag3">Grails</span>
+      <span class="tag">JSF (JavaServer Faces)</span>
+      <span class="tag2">GWT (Google Web Toolkit)</span>
+      <span class="tag3">Struts</span>
+      <span class="tag">Micronaut</span>
+      <span class="tag2">Quarkus</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 2 — Spring Framework Overview
+════════════════════════════════════════════════════════════════ -->
+<section id="spring-overview">
+  <h2>&#127807; 2. Spring Framework Overview</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>Spring Framework</strong> is an <em>open-source, lightweight, enterprise application framework</em> for Java. Its primary goal is to <strong>manage business objects</strong> — wiring them together and handling cross-cutting concerns so you don't have to.
+    </div>
+    <p>Created by Rod Johnson in 2003, Spring has grown into the most widely-used Java enterprise framework, with a vast ecosystem of sub-projects.</p>
+
+    <h3>Key Capabilities (Without Raw APIs)</h3>
+    <p>Spring lets you focus on business logic by abstracting away complex infrastructure code:</p>
+    <table>
+      <tr><th>Capability</th><th>Without Spring</th><th>With Spring</th></tr>
+      <tr><td>Database Transactions</td><td>Manual JDBC + TransactionAPI boilerplate</td><td><code>@Transactional</code> annotation</td></tr>
+      <tr><td>Remote Procedures</td><td>Complex Remote API + marshalling code</td><td>Spring Remoting / REST templates</td></tr>
+      <tr><td>JMX Management</td><td>Register MBeans manually with JMX API</td><td>Auto-exposure via <code>@ManagedResource</code></td></tr>
+      <tr><td>Message Handling</td><td>JMS API boilerplate for producers/consumers</td><td><code>@JmsListener</code> annotation</td></tr>
+    </table>
+
+    <h3>6 Core Spring Capabilities</h3>
+    <div class="three-col" style="margin-top:0.8rem;">
+      <div class="feature-card card" style="border-top:4px solid #6c63ff;">
+        <div style="font-size:1.8rem; margin-bottom:0.4rem;">&#128268;</div>
+        <h4 style="margin-top:0;">Microservices</h4>
+        <p style="font-size:0.85rem;">Build independently deployable microservices with Spring Boot and Spring Cloud.</p>
+      </div>
+      <div class="feature-card card" style="border-top:4px solid #00d4aa;">
+        <div style="font-size:1.8rem; margin-bottom:0.4rem;">&#9729;</div>
+        <h4 style="margin-top:0;">Cloud</h4>
+        <p style="font-size:0.85rem;">Native cloud support — connect to cloud services, config servers, and service discovery.</p>
+      </div>
+      <div class="feature-card card" style="border-top:4px solid #f7c948;">
+        <div style="font-size:1.8rem; margin-bottom:0.4rem;">&#127760;</div>
+        <h4 style="margin-top:0;">Web Apps</h4>
+        <p style="font-size:0.85rem;">Full-featured MVC framework for building fast, testable web applications and REST APIs.</p>
+      </div>
+      <div class="feature-card card" style="border-top:4px solid #f07178;">
+        <div style="font-size:1.8rem; margin-bottom:0.4rem;">&#128640;</div>
+        <h4 style="margin-top:0;">Serverless</h4>
+        <p style="font-size:0.85rem;">Spring Cloud Function enables writing serverless functions targeting AWS Lambda, Azure Functions.</p>
+      </div>
+      <div class="feature-card card" style="border-top:4px solid #89ddff;">
+        <div style="font-size:1.8rem; margin-bottom:0.4rem;">&#9889;</div>
+        <h4 style="margin-top:0;">Event Driven</h4>
+        <p style="font-size:0.85rem;">Integrate with Kafka, RabbitMQ, and more for reactive, event-driven architectures.</p>
+      </div>
+      <div class="feature-card card" style="border-top:4px solid #c3e88d;">
+        <div style="font-size:1.8rem; margin-bottom:0.4rem;">&#128190;</div>
+        <h4 style="margin-top:0;">Batch</h4>
+        <p style="font-size:0.85rem;">Spring Batch handles large-scale bulk data processing — ETL jobs, reports, data migration.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 3 — Spring Architecture
+════════════════════════════════════════════════════════════════ -->
+<section id="architecture">
+  <h2>&#127963; 3. Spring Architecture</h2>
+  <div class="card">
+    <p>The Spring Framework is organized into several modules grouped by layer. The diagram below shows the <strong>Spring Framework Runtime</strong> layer stack:</p>
+
+    <svg viewBox="0 0 700 380" width="100%" style="max-height:400px;">
+      <!-- Test -->
+      <rect x="30" y="20" width="640" height="55" rx="8" fill="#1e2a1a" stroke="#c3e88d" stroke-width="2"/>
+      <text x="350" y="52" fill="#c3e88d" font-size="15" font-weight="bold" text-anchor="middle">Test</text>
+      <text x="350" y="68" fill="#94a3b8" font-size="11" text-anchor="middle">Spring Test · JUnit Integration · Mock Objects</text>
+
+      <!-- Web -->
+      <rect x="30" y="90" width="640" height="55" rx="8" fill="#1e1b3a" stroke="#6c63ff" stroke-width="2"/>
+      <text x="350" y="118" fill="#6c63ff" font-size="15" font-weight="bold" text-anchor="middle">Web Layer</text>
+      <text x="160" y="135" fill="#94a3b8" font-size="11" text-anchor="middle">Web</text>
+      <text x="350" y="135" fill="#94a3b8" font-size="11" text-anchor="middle">Servlet (Spring MVC)</text>
+      <text x="540" y="135" fill="#94a3b8" font-size="11" text-anchor="middle">Portlet</text>
+      <line x1="265" y1="100" x2="265" y2="140" stroke="#2d3748" stroke-width="1"/>
+      <line x1="435" y1="100" x2="435" y2="140" stroke="#2d3748" stroke-width="1"/>
+
+      <!-- Data -->
+      <rect x="30" y="160" width="640" height="55" rx="8" fill="#0d2230" stroke="#00d4aa" stroke-width="2"/>
+      <text x="350" y="188" fill="#00d4aa" font-size="15" font-weight="bold" text-anchor="middle">Data Access / Integration</text>
+      <text x="100" y="205" fill="#94a3b8" font-size="10" text-anchor="middle">JDBC</text>
+      <text x="200" y="205" fill="#94a3b8" font-size="10" text-anchor="middle">ORM</text>
+      <text x="300" y="205" fill="#94a3b8" font-size="10" text-anchor="middle">OXM</text>
+      <text x="400" y="205" fill="#94a3b8" font-size="10" text-anchor="middle">JMS</text>
+      <text x="500" y="205" fill="#94a3b8" font-size="10" text-anchor="middle">Transactions</text>
+      <line x1="150" y1="168" x2="150" y2="210" stroke="#1a3040" stroke-width="1"/>
+      <line x1="250" y1="168" x2="250" y2="210" stroke="#1a3040" stroke-width="1"/>
+      <line x1="350" y1="168" x2="350" y2="210" stroke="#1a3040" stroke-width="1"/>
+      <line x1="450" y1="168" x2="450" y2="210" stroke="#1a3040" stroke-width="1"/>
+
+      <!-- AOP -->
+      <rect x="30" y="230" width="640" height="55" rx="8" fill="#2a1f10" stroke="#f7c948" stroke-width="2"/>
+      <text x="350" y="258" fill="#f7c948" font-size="15" font-weight="bold" text-anchor="middle">AOP / Aspects / Instrumentation</text>
+      <text x="350" y="275" fill="#94a3b8" font-size="11" text-anchor="middle">Spring AOP · AspectJ Integration · Load-time Weaving · Messaging</text>
+
+      <!-- Core Container -->
+      <rect x="30" y="300" width="640" height="65" rx="8" fill="#2a1520" stroke="#f07178" stroke-width="2"/>
+      <text x="350" y="328" fill="#f07178" font-size="15" font-weight="bold" text-anchor="middle">Core Container</text>
+      <text x="140" y="350" fill="#94a3b8" font-size="11" text-anchor="middle">Beans</text>
+      <text x="270" y="350" fill="#94a3b8" font-size="11" text-anchor="middle">Core</text>
+      <text x="400" y="350" fill="#94a3b8" font-size="11" text-anchor="middle">Context</text>
+      <text x="540" y="350" fill="#94a3b8" font-size="11" text-anchor="middle">Spring Expression (SpEL)</text>
+      <line x1="210" y1="308" x2="210" y2="360" stroke="#3a2030" stroke-width="1"/>
+      <line x1="340" y1="308" x2="340" y2="360" stroke="#3a2030" stroke-width="1"/>
+      <line x1="470" y1="308" x2="470" y2="360" stroke="#3a2030" stroke-width="1"/>
+    </svg>
+
+    <h3>Module Descriptions</h3>
+    <table>
+      <tr><th>Module Group</th><th>Module</th><th>Description</th></tr>
+      <tr><td rowspan="3"><span class="tag" style="background:#00d4aa;color:#000;">Data Access</span></td>
+          <td><strong>JDBC</strong></td><td>Abstracts JDBC boilerplate — no more try/catch/finally for connections.</td></tr>
+      <tr><td><strong>ORM</strong></td><td>Integration with Hibernate, JPA, JDO — consistent exception hierarchy.</td></tr>
+      <tr><td><strong>Transactions</strong></td><td>Declarative transaction management via <code>@Transactional</code>.</td></tr>
+      <tr><td rowspan="2"><span class="tag">Web Layer</span></td>
+          <td><strong>Servlet</strong></td><td>Spring MVC framework — DispatcherServlet, controllers, view resolvers.</td></tr>
+      <tr><td><strong>Web</strong></td><td>Basic web integration features — multipart file uploads, IoC init.</td></tr>
+      <tr><td rowspan="2"><span class="tag3">AOP</span></td>
+          <td><strong>AOP</strong></td><td>Aspect-oriented programming — logging, security, transactions as cross-cutting concerns.</td></tr>
+      <tr><td><strong>Aspects</strong></td><td>AspectJ integration for compile-time and load-time weaving.</td></tr>
+      <tr><td rowspan="4"><span class="tag" style="background:#f07178;">Core Container</span></td>
+          <td><strong>Beans</strong></td><td>BeanFactory — the IoC container core. Manages bean lifecycle and wiring.</td></tr>
+      <tr><td><strong>Core</strong></td><td>Fundamental utilities used by all Spring modules.</td></tr>
+      <tr><td><strong>Context</strong></td><td>ApplicationContext — builds on BeanFactory with enterprise features.</td></tr>
+      <tr><td><strong>SpEL</strong></td><td>Spring Expression Language — dynamic queries and manipulation at runtime.</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 4 — Spring Ecosystem
+════════════════════════════════════════════════════════════════ -->
+<section id="ecosystem">
+  <h2>&#127758; 4. Spring Ecosystem</h2>
+  <div class="card">
+    <p>The Spring ecosystem organizes its modules into four distinct layers. Each layer builds on the one below it.</p>
+    <div class="two-col">
+      <div>
+        <h3>Web Layer</h3>
+        <div class="highlight">
+          <ul>
+            <li><strong>Spring MVC</strong> — traditional servlet-based MVC</li>
+            <li><strong>Spring WebFlux</strong> — reactive, non-blocking web</li>
+            <li><strong>Spring WebSocket</strong> — real-time bidirectional communication</li>
+            <li><strong>Spring REST Docs</strong> — document REST APIs</li>
+          </ul>
+        </div>
+        <h3>Common Layer</h3>
+        <div class="highlight2">
+          <ul>
+            <li><strong>Spring Security</strong> — auth, authorization, OAuth2</li>
+            <li><strong>Spring Session</strong> — distributed session management</li>
+            <li><strong>Spring HATEOAS</strong> — hypermedia-driven REST APIs</li>
+            <li><strong>Spring Mobile</strong> — device detection and switching</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3>Service Layer</h3>
+        <div class="highlight3">
+          <ul>
+            <li><strong>Spring Data</strong> — JPA, MongoDB, Redis, JDBC repositories</li>
+            <li><strong>Spring Integration</strong> — enterprise integration patterns (EIP)</li>
+            <li><strong>Spring Batch</strong> — bulk data processing, job scheduling</li>
+            <li><strong>Spring AMQP</strong> — RabbitMQ / messaging abstraction</li>
+          </ul>
+        </div>
+        <h3>Foundation Layer</h3>
+        <div class="highlight">
+          <ul>
+            <li><strong>Spring Boot</strong> — auto-config, embedded servers, actuator</li>
+            <li><strong>Spring Framework Core</strong> — IoC, AOP, DI</li>
+            <li><strong>Spring Cloud</strong> — distributed systems patterns</li>
+            <li><strong>Spring Test</strong> — unit &amp; integration testing support</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 5 — Spring vs Traditional
+════════════════════════════════════════════════════════════════ -->
+<section id="spring-vs-traditional">
+  <h2>&#9878; 5. Spring vs Traditional Java EE</h2>
+  <div class="card">
+    <p>Spring Boot and Spring Framework sit as an abstraction layer between your application type and raw Java EE complexity:</p>
+
+    <div style="max-width:500px; margin:1.5rem auto;">
+      <div class="stack-box" style="background:rgba(108,99,255,0.25); border:2px solid var(--accent); color:var(--accent);">
+        REST APIs &nbsp;&nbsp;|&nbsp;&nbsp; Web Applications &nbsp;&nbsp;|&nbsp;&nbsp; Micro Services
+      </div>
+      <div style="text-align:center; color:var(--muted); font-size:1.3rem; line-height:1;">&#8595;</div>
+      <div class="stack-box" style="background:rgba(247,201,72,0.25); border:2px solid var(--yellow); color:var(--yellow);">
+        Spring Boot (Auto-configuration, Embedded Tomcat, Starters)
+      </div>
+      <div style="text-align:center; color:var(--muted); font-size:1.3rem; line-height:1;">&#8595;</div>
+      <div class="stack-box" style="background:rgba(0,212,170,0.2); border:2px solid var(--accent2); color:var(--accent2);">
+        Spring Framework (IoC, DI, MVC, AOP, Data, Security ...)
+      </div>
+      <div style="text-align:center; color:var(--muted); font-size:1.3rem; line-height:1;">&#8595;</div>
+      <div class="stack-box" style="background:rgba(240,113,120,0.15); border:2px solid #f07178; color:#f07178;">
+        Java EE / Jakarta EE (Servlets, JPA, JMS, JTA, CDI ...)
+      </div>
+      <div style="text-align:center; color:var(--muted); font-size:1.3rem; line-height:1;">&#8595;</div>
+      <div class="stack-box" style="background:rgba(195,232,141,0.12); border:2px solid #c3e88d; color:#c3e88d;">
+        JVM (Java Virtual Machine)
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top:1rem;">
+      <div class="card" style="background:#1e1b3a;">
+        <h4>Traditional Java EE</h4>
+        <ul>
+          <li>Deploy to external app server (JBoss, WebLogic)</li>
+          <li>XML-heavy configuration</li>
+          <li>Heavyweight — long startup times</li>
+          <li>Tight coupling to server APIs</li>
+          <li>Complex testing setup</li>
+        </ul>
+      </div>
+      <div class="card" style="background:#0d2b1e;">
+        <h4>Spring Boot</h4>
+        <ul>
+          <li>Embedded Tomcat/Jetty — just run a JAR</li>
+          <li>Annotation + auto-configuration</li>
+          <li>Lightweight and fast startup</li>
+          <li>POJO-based — easy to test</li>
+          <li>Convention over configuration</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 6 — Setting Up Spring
+════════════════════════════════════════════════════════════════ -->
+<section id="setup">
+  <h2>&#9881; 6. Setting Up Spring (spring.initializr)</h2>
+  <div class="card">
+    <p>The easiest way to bootstrap a Spring project is via <strong>start.spring.io</strong> — Spring's official project generator.</p>
+
+    <h3>Step-by-Step Setup</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div><strong>Navigate to <code>start.spring.io</code></strong> in your browser. You'll see the Spring Initializr interface.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <strong>Configure the project:</strong>
+        <table style="margin-top:0.5rem;">
+          <tr><th>Setting</th><th>Value</th></tr>
+          <tr><td>Project</td><td>Maven Project</td></tr>
+          <tr><td>Language</td><td>Java</td></tr>
+          <tr><td>Spring Boot</td><td>3.2.0</td></tr>
+          <tr><td>Java</td><td>17</td></tr>
+          <tr><td>Group</td><td>com.example</td></tr>
+          <tr><td>Artifact</td><td>demo</td></tr>
+          <tr><td>Packaging</td><td>Jar</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div><strong>Add Dependencies:</strong> Click "Add Dependencies" and add <span class="tag">Spring Web</span> and any other starters you need.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div><strong>Generate &amp; Download:</strong> Click "Generate" to download a <code>.zip</code> file with your project skeleton.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div><strong>Import into Eclipse as Maven Project:</strong> <code>File &rarr; Import &rarr; Existing Maven Projects &rarr; Browse to extracted folder &rarr; Finish</code></div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div><strong>Wait for Maven to download dependencies</strong> — check the Progress view. Once complete, you're ready to code.</div>
+    </div>
+
+    <h3>Resulting Project Structure</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">Project Tree</span></div>
+      <pre><span style="color:#82aaff;">demo/</span>
+&#9500;&#9472;&#9472; <span style="color:#f7c948;">pom.xml</span>                    <span class="cmt">&#8592; Maven build file</span>
+&#9500;&#9472;&#9472; <span style="color:#82aaff;">src/</span>
+&#9474;   &#9500;&#9472;&#9472; <span style="color:#82aaff;">main/</span>
+&#9474;   &#9474;   &#9500;&#9472;&#9472; <span style="color:#82aaff;">java/com/example/demo/</span>
+&#9474;   &#9474;   &#9474;   &#9500;&#9472;&#9472; <span style="color:#c792ea;">DemoApplication.java</span>   <span class="cmt">&#8592; @SpringBootApplication main class</span>
+&#9474;   &#9474;   &#9492;&#9472;&#9472; <span style="color:#82aaff;">resources/</span>
+&#9474;   &#9474;       &#9492;&#9472;&#9472; <span style="color:#c3e88d;">application.properties</span> <span class="cmt">&#8592; config file</span>
+&#9474;   &#9492;&#9472;&#9472; <span style="color:#82aaff;">test/</span>
+&#9474;       &#9492;&#9472;&#9472; <span style="color:#82aaff;">java/com/example/demo/</span>
+&#9474;           &#9492;&#9472;&#9472; <span style="color:#c792ea;">DemoApplicationTests.java</span>
+&#9492;&#9472;&#9472; <span style="color:#82aaff;">.mvn/</span>, <span style="color:#82aaff;">mvnw</span>, <span style="color:#82aaff;">mvnw.cmd</span>        <span class="cmt">&#8592; Maven wrapper scripts</span></pre>
+    </div>
+
+    <h3>Minimal pom.xml</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">XML</span><button class="run-btn" onclick="toggleOutput('po1')">&#9654; Show</button></div>
+      <pre><span class="xml-tag">&lt;?xml version=</span><span class="xml-val">"1.0"</span><span class="xml-tag"> encoding=</span><span class="xml-val">"UTF-8"</span><span class="xml-tag">?&gt;</span>
+<span class="xml-tag">&lt;project&gt;</span>
+  <span class="xml-tag">&lt;modelVersion&gt;</span>4.0.0<span class="xml-tag">&lt;/modelVersion&gt;</span>
+  <span class="xml-tag">&lt;groupId&gt;</span>com.example<span class="xml-tag">&lt;/groupId&gt;</span>
+  <span class="xml-tag">&lt;artifactId&gt;</span>demo<span class="xml-tag">&lt;/artifactId&gt;</span>
+  <span class="xml-tag">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="xml-tag">&lt;/version&gt;</span>
+  <span class="xml-tag">&lt;parent&gt;</span>
+    <span class="xml-tag">&lt;groupId&gt;</span>org.springframework.boot<span class="xml-tag">&lt;/groupId&gt;</span>
+    <span class="xml-tag">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="xml-tag">&lt;/artifactId&gt;</span>
+    <span class="xml-tag">&lt;version&gt;</span>3.2.0<span class="xml-tag">&lt;/version&gt;</span>
+  <span class="xml-tag">&lt;/parent&gt;</span>
+  <span class="xml-tag">&lt;dependencies&gt;</span>
+    <span class="xml-tag">&lt;dependency&gt;</span>
+      <span class="xml-tag">&lt;groupId&gt;</span>org.springframework.boot<span class="xml-tag">&lt;/groupId&gt;</span>
+      <span class="xml-tag">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="xml-tag">&lt;/artifactId&gt;</span>
+    <span class="xml-tag">&lt;/dependency&gt;</span>
+  <span class="xml-tag">&lt;/dependencies&gt;</span>
+<span class="xml-tag">&lt;/project&gt;</span></pre>
+      <div class="output-box" id="po1">Loaded. Maven will download spring-boot-starter-web and its transitive deps (Spring MVC, embedded Tomcat, Jackson, etc.)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 7 — Coupling in Java
+════════════════════════════════════════════════════════════════ -->
+<section id="coupling">
+  <h2>&#128279; 7. Coupling in Java</h2>
+  <div class="card">
+    <h3>Why Coupling Matters</h3>
+    <p>In real projects, requirements change, technologies are swapped, and frameworks are upgraded. <strong>How tightly your classes depend on each other</strong> determines how easily you can make those changes.</p>
+    <div class="highlight2">
+      <strong>Analogy:</strong>
+      <ul style="margin-top:0.5rem;">
+        <li><strong>Loose coupling</strong> — like a bike seat cover. Easy to swap any time, doesn't affect the rest of the bike.</li>
+        <li><strong>Tight coupling</strong> — like a bike engine. Welded in; replacing it requires dismantling half the bike.</li>
+      </ul>
+    </div>
+
+    <h3>Problem: Tight Coupling</h3>
+    <p>Suppose we build an <code>IPLTeam</code> that is directly dependent on <code>TeamCSK</code>:</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">Java — Tight Coupling Problem</span><button class="run-btn" onclick="toggleOutput('tc1')">&#9654; Run</button></div>
+      <pre><span class="kw">public class</span> <span class="cls">TeamCSK</span> {
+    <span class="kw">public void</span> <span class="fn">captain</span>() { System.out.println(<span class="str">"MSD"</span>); }
+    <span class="kw">public void</span> <span class="fn">ower</span>()   { System.out.println(<span class="str">"India Cements"</span>); }
+}
+
+<span class="kw">public class</span> <span class="cls">IPLTeam</span> {
+    <span class="cls">TeamCSK</span> team;     <span class="cmt">// TIGHTLY COUPLED — hard-coded to CSK!</span>
+
+    <span class="kw">public</span> <span class="fn">IPLTeam</span>(<span class="cls">TeamCSK</span> team) {
+        <span class="kw">this</span>.team = team;
+    }
+
+    <span class="kw">public void</span> <span class="fn">run</span>() {
+        team.captain();  <span class="cmt">// always prints MSD</span>
+        team.ower();     <span class="cmt">// always prints India Cements</span>
+    }
+}
+
+<span class="cmt">// Main</span>
+<span class="kw">public class</span> <span class="cls">Main</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {
+        <span class="cls">IPLTeam</span> iplTeam = <span class="kw">new</span> <span class="cls">IPLTeam</span>(<span class="kw">new</span> <span class="cls">TeamCSK</span>());
+        iplTeam.run();
+        <span class="cmt">// To use TeamMI we'd have to change IPLTeam's type — BAD!</span>
+    }
+}</pre>
+      <div class="output-box" id="tc1">MSD
+India Cements</div>
+    </div>
+
+    <div class="highlight3">
+      <strong>Problem:</strong> To switch from CSK to MI, you must change <code>IPLTeam</code>'s field type, constructor, and all call sites. The class is not reusable or extensible.
+    </div>
+
+    <h3>Solution: Loose Coupling via Interface</h3>
+    <p>Extract the behaviour into an interface. <code>IPLTeam</code> now depends on the <em>abstraction</em>, not the concrete class:</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">Java — Interface-Based Loose Coupling</span><button class="run-btn" onclick="toggleOutput('lc1')">&#9654; Run</button></div>
+      <pre><span class="cmt">// Step 1: Define an interface (the contract)</span>
+<span class="kw">public interface</span> <span class="cls">IPLConsole</span> {
+    <span class="kw">void</span> <span class="fn">captain</span>();
+    <span class="kw">void</span> <span class="fn">ower</span>();
+}
+
+<span class="cmt">// Step 2: Implement for each team</span>
+<span class="kw">public class</span> <span class="cls">TeamCSK</span> <span class="kw">implements</span> <span class="cls">IPLConsole</span> {
+    <span class="ann">@Override</span> <span class="kw">public void</span> <span class="fn">captain</span>() { System.out.println(<span class="str">"MSD"</span>); }
+    <span class="ann">@Override</span> <span class="kw">public void</span> <span class="fn">ower</span>()   { System.out.println(<span class="str">"India Cements"</span>); }
+}
+
+<span class="kw">public class</span> <span class="cls">TeamMI</span> <span class="kw">implements</span> <span class="cls">IPLConsole</span> {
+    <span class="ann">@Override</span> <span class="kw">public void</span> <span class="fn">captain</span>() { System.out.println(<span class="str">"Ambani"</span>); }
+    <span class="ann">@Override</span> <span class="kw">public void</span> <span class="fn">ower</span>()   { System.out.println(<span class="str">"Reliance"</span>); }
+}
+
+<span class="cmt">// Step 3: IPLTeam depends on the INTERFACE, not the class</span>
+<span class="kw">public class</span> <span class="cls">IPLTeam</span> {
+    <span class="cls">IPLConsole</span> team;   <span class="cmt">// LOOSELY COUPLED via interface</span>
+
+    <span class="kw">public</span> <span class="fn">IPLTeam</span>(<span class="cls">IPLConsole</span> team) {
+        <span class="kw">this</span>.team = team;
+    }
+
+    <span class="kw">public void</span> <span class="fn">run</span>() {
+        team.captain();
+        team.ower();
+    }
+}
+
+<span class="cmt">// Main — swap team with ZERO changes to IPLTeam!</span>
+<span class="kw">public class</span> <span class="cls">Main</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {
+        <span class="cls">IPLTeam</span> csk = <span class="kw">new</span> <span class="cls">IPLTeam</span>(<span class="kw">new</span> <span class="cls">TeamCSK</span>());
+        csk.run();   <span class="cmt">// MSD / India Cements</span>
+
+        <span class="cls">IPLTeam</span> mi = <span class="kw">new</span> <span class="cls">IPLTeam</span>(<span class="kw">new</span> <span class="cls">TeamMI</span>());
+        mi.run();    <span class="cmt">// Ambani / Reliance</span>
+    }
+}</pre>
+      <div class="output-box" id="lc1">--- CSK ---
+MSD
+India Cements
+--- MI ---
+Ambani
+Reliance</div>
+    </div>
+
+    <!-- SVG before/after diagram -->
+    <h3>Before vs After: Dependency Arrow Changes</h3>
+    <svg viewBox="0 0 700 200" width="100%" style="max-height:220px;">
+      <defs>
+        <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#f07178"/>
+        </marker>
+        <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#00d4aa"/>
+        </marker>
+      </defs>
+
+      <!-- BEFORE -->
+      <text x="160" y="20" fill="#f07178" font-size="13" font-weight="bold" text-anchor="middle">BEFORE (Tight)</text>
+      <rect x="20" y="35" width="100" height="40" rx="6" fill="#2a1520" stroke="#f07178" stroke-width="2"/>
+      <text x="70" y="60" fill="#f07178" font-size="11" text-anchor="middle">IPLTeam</text>
+      <line x1="122" y1="55" x2="198" y2="55" stroke="#f07178" stroke-width="2" marker-end="url(#arr2)"/>
+      <text x="160" y="48" fill="#94a3b8" font-size="9" text-anchor="middle">depends on</text>
+      <rect x="200" y="35" width="100" height="40" rx="6" fill="#2a1520" stroke="#f07178" stroke-width="2"/>
+      <text x="250" y="60" fill="#f07178" font-size="11" text-anchor="middle">TeamCSK</text>
+      <text x="160" y="110" fill="#94a3b8" font-size="10" text-anchor="middle">IPLTeam knows EXACTLY what TeamCSK is.</text>
+      <text x="160" y="126" fill="#94a3b8" font-size="10" text-anchor="middle">Change = rewrite IPLTeam.</text>
+
+      <!-- AFTER -->
+      <text x="540" y="20" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">AFTER (Loose)</text>
+      <rect x="400" y="35" width="100" height="40" rx="6" fill="#0d2b1e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="450" y="60" fill="#00d4aa" font-size="11" text-anchor="middle">IPLTeam</text>
+      <line x1="502" y1="55" x2="568" y2="55" stroke="#00d4aa" stroke-width="2" marker-end="url(#arr3)"/>
+      <text x="535" y="48" fill="#94a3b8" font-size="9" text-anchor="middle">uses</text>
+      <rect x="570" y="35" width="110" height="40" rx="6" fill="#0d2b1e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="625" y="60" fill="#00d4aa" font-size="11" text-anchor="middle">IPLConsole</text>
+      <line x1="570" y1="90" x2="535" y2="130" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="4"/>
+      <line x1="680" y1="90" x2="635" y2="130" stroke="#f7c948" stroke-width="1.5" stroke-dasharray="4"/>
+      <rect x="490" y="132" width="80" height="30" rx="4" fill="#1a1d2e" stroke="#6c63ff"/>
+      <text x="530" y="152" fill="#6c63ff" font-size="10" text-anchor="middle">TeamCSK</text>
+      <rect x="590" y="132" width="80" height="30" rx="4" fill="#1a1d2e" stroke="#f7c948"/>
+      <text x="630" y="152" fill="#f7c948" font-size="10" text-anchor="middle">TeamMI</text>
+    </svg>
+
+    <!-- Interactive coupling demo -->
+    <div class="interactive-box">
+      <h3 style="color:var(--yellow); margin-top:0;">&#9881; Interactive: Team Selector</h3>
+      <p>Switch teams without changing <code>IPLTeam</code>:</p>
+      <label style="color:var(--muted); font-size:0.9rem;">Select Team:</label>
+      <select id="teamSelector" style="max-width:200px;">
+        <option value="csk">TeamCSK</option>
+        <option value="mi">TeamMI</option>
+        <option value="rcb">TeamRCB</option>
+        <option value="kkr">TeamKKR</option>
+      </select>
+      <button onclick="showTeam()" style="margin-top:0.5rem;">Run IPLTeam.run()</button>
+      <div class="result-box" id="teamResult" style="display:none;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 8 — Spring Beans
+════════════════════════════════════════════════════════════════ -->
+<section id="beans">
+  <h2>&#127873; 8. Spring Beans</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>Spring Bean:</strong> Any object that is initialized, managed, and injected by the <em>Spring IoC container</em> is called a Spring Bean. Beans are the building blocks of a Spring application.
+    </div>
+
+    <h3>4 Steps to Define and Use a Bean</h3>
+    <div class="four-col" style="margin-top:0.8rem;">
+      <div class="card" style="border-top:3px solid var(--accent); text-align:center; padding:1rem;">
+        <div style="font-size:2rem;">&#9654;</div>
+        <h4>1. Launch Context</h4>
+        <p style="font-size:0.85rem;"><code>AnnotationConfigApplicationContext</code></p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent2); text-align:center; padding:1rem;">
+        <div style="font-size:2rem;">&#9881;</div>
+        <h4>2. Configure</h4>
+        <p style="font-size:0.85rem;">Annotate class with <code>@Configuration</code></p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--yellow); text-align:center; padding:1rem;">
+        <div style="font-size:2rem;">&#127775;</div>
+        <h4>3. Declare</h4>
+        <p style="font-size:0.85rem;">Annotate method with <code>@Bean</code></p>
+      </div>
+      <div class="card" style="border-top:3px solid #f07178; text-align:center; padding:1rem;">
+        <div style="font-size:2rem;">&#128279;</div>
+        <h4>4. Retrieve</h4>
+        <p style="font-size:0.85rem;"><code>context.getBean("name")</code></p>
+      </div>
+    </div>
+
+    <h3>Minimal Bean Example</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">Java — Hello World Bean</span><button class="run-btn" onclick="toggleOutput('b1')">&#9654; Run</button></div>
+      <pre><span class="kw">import</span> org.springframework.context.annotation.*;
+
+<span class="ann">@Configuration</span>
+<span class="kw">public class</span> <span class="cls">HelloWorldConfiguration</span> {
+
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> String <span class="fn">name</span>() {
+        <span class="kw">return</span> <span class="str">"RELU"</span>;
+    }
+
+    <span class="ann">@Bean</span>
+    <span class="kw">public int</span> <span class="fn">age</span>() {
+        <span class="kw">return</span> <span class="num">25</span>;
+    }
+}
+
+<span class="cmt">// Main class</span>
+<span class="kw">public class</span> <span class="cls">App</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {
+        <span class="kw">var</span> context = <span class="kw">new</span> <span class="cls">AnnotationConfigApplicationContext</span>(
+                              HelloWorldConfiguration.class);
+
+        System.err.println(context.getBean(<span class="str">"name"</span>));  <span class="cmt">// RELU</span>
+        System.err.println(context.getBean(<span class="str">"age"</span>));   <span class="cmt">// 25</span>
+    }
+}</pre>
+      <div class="output-box" id="b1">RELU
+25</div>
+    </div>
+
+    <h3>Beans with Records and Dependencies</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">Java — Records + Bean Declarations</span><button class="run-btn" onclick="toggleOutput('b2')">&#9654; Run</button></div>
+      <pre><span class="cmt">// Record types — immutable data carriers (Java 16+)</span>
+<span class="kw">record</span> <span class="cls">University</span>(String uname, String city) {}
+<span class="kw">record</span> <span class="cls">Student</span>(String name, <span class="kw">int</span> rollNo, <span class="cls">University</span> university) {}
+
+<span class="ann">@Configuration</span>
+<span class="kw">public class</span> <span class="cls">AppConfig</span> {
+
+    <span class="cmt">// Approach 1: Direct — hardcode all values</span>
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> <span class="cls">University</span> <span class="fn">university</span>() {
+        <span class="kw">return new</span> <span class="cls">University</span>(<span class="str">"VIT University"</span>, <span class="str">"Vellore"</span>);
+    }
+
+    <span class="cmt">// Approach 2: Call-by-method — call another bean method</span>
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> <span class="cls">Student</span> <span class="fn">studentByMethod</span>() {
+        <span class="kw">return new</span> <span class="cls">Student</span>(<span class="str">"Alice"</span>, <span class="num">101</span>, university());
+    }
+
+    <span class="cmt">// Approach 3: Call-by-parameter — Spring injects the bean</span>
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> <span class="cls">Student</span> <span class="fn">studentByParam</span>(<span class="cls">University</span> university) {
+        <span class="kw">return new</span> <span class="cls">Student</span>(<span class="str">"Bob"</span>, <span class="num">102</span>, university);
+    }
+}
+
+<span class="cmt">// Retrieve and use</span>
+<span class="kw">var</span> context = <span class="kw">new</span> <span class="cls">AnnotationConfigApplicationContext</span>(<span class="cls">AppConfig</span>.class);
+
+<span class="cls">Student</span> s1 = context.getBean(<span class="str">"studentByMethod"</span>, <span class="cls">Student</span>.class);
+<span class="cls">Student</span> s2 = context.getBean(<span class="str">"studentByParam"</span>, <span class="cls">Student</span>.class);
+System.out.println(s1);
+System.out.println(s2);
+
+<span class="cmt">// List ALL beans defined in context</span>
+Arrays.stream(context.getBeanDefinitionNames())
+      .forEach(System.out::println);</pre>
+      <div class="output-box" id="b2">Student[name=Alice, rollNo=101, university=University[uname=VIT University, city=Vellore]]
+Student[name=Bob, rollNo=102, university=University[uname=VIT University, city=Vellore]]
+
+--- All Bean Names ---
+org.springframework.context.annotation.internalConfigurationAnnotationProcessor
+org.springframework.context.annotation.internalAutowiredAnnotationProcessor
+appConfig
+university
+studentByMethod
+studentByParam</div>
+    </div>
+
+    <h3>@Primary and @Qualifier</h3>
+    <p>When multiple beans of the same type exist, Spring needs to know which one to inject:</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">Java — @Primary and @Qualifier</span><button class="run-btn" onclick="toggleOutput('b3')">&#9654; Run</button></div>
+      <pre><span class="ann">@Configuration</span>
+<span class="kw">public class</span> <span class="cls">MultiConfig</span> {
+
+    <span class="ann">@Bean</span>
+    <span class="ann">@Primary</span>  <span class="cmt">// preferred when no qualifier specified</span>
+    <span class="kw">public</span> <span class="cls">Student</span> <span class="fn">studentPrimary</span>() {
+        <span class="kw">return new</span> <span class="cls">Student</span>(<span class="str">"Primary-Alice"</span>, <span class="num">1</span>, <span class="kw">null</span>);
+    }
+
+    <span class="ann">@Bean</span>
+    <span class="ann">@Qualifier</span>(<span class="str">"secondStudent"</span>)
+    <span class="kw">public</span> <span class="cls">Student</span> <span class="fn">studentSecond</span>() {
+        <span class="kw">return new</span> <span class="cls">Student</span>(<span class="str">"Second-Bob"</span>, <span class="num">2</span>, <span class="kw">null</span>);
+    }
+}
+
+<span class="cmt">// Injection in another bean — get the second student explicitly</span>
+<span class="ann">@Bean</span>
+<span class="kw">public</span> String <span class="fn">report</span>(<span class="ann">@Qualifier</span>(<span class="str">"secondStudent"</span>) <span class="cls">Student</span> s) {
+    <span class="kw">return</span> <span class="str">"Report for: "</span> + s.name();
+}
+
+<span class="cmt">// getBean without qualifier returns @Primary</span>
+context.getBean(<span class="cls">Student</span>.class);     <span class="cmt">// → Primary-Alice</span>
+context.getBean(<span class="str">"secondStudent"</span>, <span class="cls">Student</span>.class); <span class="cmt">// → Second-Bob</span></pre>
+      <div class="output-box" id="b3">Primary bean: Primary-Alice
+Qualified bean: Second-Bob
+Report for: Second-Bob</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 9 — Autowiring
+════════════════════════════════════════════════════════════════ -->
+<section id="autowiring">
+  <h2>&#128257; 9. Autowiring</h2>
+  <div class="card">
+    <div class="highlight2">
+      <strong>Autowiring</strong> is Spring's ability to <em>implicitly inject dependencies</em> into beans — you don't have to manually wire beans together; Spring figures it out automatically based on your configuration.
+    </div>
+
+    <h3>4 Autowiring Modes</h3>
+    <table>
+      <tr><th>Mode</th><th>How It Works</th><th>Use Case</th></tr>
+      <tr>
+        <td><span class="tag3">no</span></td>
+        <td>Default. No autowiring — you wire dependencies manually in XML or with <code>@Bean</code>.</td>
+        <td>When you need full explicit control over wiring.</td>
+      </tr>
+      <tr>
+        <td><span class="tag">byName</span></td>
+        <td>Spring looks for a bean whose <strong>name matches the property name</strong> in the target bean.</td>
+        <td>When property name and bean name follow the same convention.</td>
+      </tr>
+      <tr>
+        <td><span class="tag2">byType</span></td>
+        <td>Spring looks for a bean of the <strong>same type</strong> as the dependency. Fails if multiple beans of that type exist (use <code>@Primary</code> or <code>@Qualifier</code>).</td>
+        <td>Most common modern approach with annotations.</td>
+      </tr>
+      <tr>
+        <td><span class="tag" style="background:#f07178;">constructor</span></td>
+        <td>Similar to <em>byType</em> but applies to the <strong>constructor parameters</strong>. Spring injects matching beans into the constructor.</td>
+        <td>Recommended for mandatory dependencies; supports immutability.</td>
+      </tr>
+    </table>
+
+    <h3>@Autowired — Field, Setter, Constructor</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">Java — @Autowired Examples</span><button class="run-btn" onclick="toggleOutput('aw1')">&#9654; Run</button></div>
+      <pre><span class="ann">@Component</span>
+<span class="kw">public class</span> <span class="cls">VehicleService</span> {
+
+    <span class="cmt">// Field injection (convenient but not recommended for testing)</span>
+    <span class="ann">@Autowired</span>
+    <span class="kw">private</span> <span class="cls">EngineService</span> engineService;
+
+    <span class="cmt">// Setter injection</span>
+    <span class="ann">@Autowired</span>
+    <span class="kw">public void</span> <span class="fn">setFuelService</span>(<span class="cls">FuelService</span> fuelService) {
+        <span class="kw">this</span>.fuelService = fuelService;
+    }
+
+    <span class="cmt">// Constructor injection (RECOMMENDED — immutable, testable)</span>
+    <span class="kw">private final</span> <span class="cls">TyreService</span> tyreService;
+
+    <span class="ann">@Autowired</span>  <span class="cmt">// optional if only 1 constructor</span>
+    <span class="kw">public</span> <span class="fn">VehicleService</span>(<span class="cls">TyreService</span> tyreService) {
+        <span class="kw">this</span>.tyreService = tyreService;
+    }
+
+    <span class="kw">public</span> String <span class="fn">start</span>() {
+        <span class="kw">return</span> <span class="str">"Vehicle started with "</span> + tyreService.getType();
+    }
+}</pre>
+      <div class="output-box" id="aw1">Spring context created.
+VehicleService injected with: EngineService, FuelService, TyreService
+Vehicle started with Tubeless</div>
+    </div>
+
+    <h3>How Spring Resolves Autowiring</h3>
+    <div class="two-col">
+      <div class="highlight">
+        <strong>Step 1 — byType:</strong> Spring scans all beans for a type match to the dependency.
+      </div>
+      <div class="highlight2">
+        <strong>Step 2 — byName:</strong> If multiple matches, Spring tries to match by the property/parameter name.
+      </div>
+    </div>
+    <div class="highlight3">
+      <strong>Step 3 — Qualifier:</strong> If still ambiguous, <code>@Qualifier("beanName")</code> picks the exact bean. <code>@Primary</code> can also pre-select the default.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 10 — Spring MVC
+════════════════════════════════════════════════════════════════ -->
+<section id="mvc">
+  <h2>&#127760; 10. Spring MVC</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>Spring MVC</strong> (Model-View-Controller) is Spring's web framework. It follows the MVC design pattern, separating your application into three clearly defined layers: <em>Model</em> (data), <em>View</em> (presentation), and <em>Controller</em> (business logic).
+    </div>
+
+    <h3>Key Components</h3>
+    <table>
+      <tr><th>Component</th><th>Role</th></tr>
+      <tr>
+        <td><span class="tag">DispatcherServlet</span></td>
+        <td><strong>Front Controller</strong> — a single servlet that intercepts all incoming HTTP requests and routes them to the correct handler. Configured in <code>web.xml</code>.</td>
+      </tr>
+      <tr>
+        <td><span class="tag2">@Controller</span></td>
+        <td>Marks a class as a Spring MVC controller. Methods inside handle specific URL requests and return view names or response data.</td>
+      </tr>
+      <tr>
+        <td><span class="tag3">@RequestMapping</span></td>
+        <td>Maps a URL pattern (and optionally HTTP method) to a specific controller method. Also <code>@GetMapping</code>, <code>@PostMapping</code>, etc.</td>
+      </tr>
+      <tr>
+        <td><span class="tag">ViewResolver</span></td>
+        <td>Translates a view name (e.g., <code>"home"</code>) returned by a controller into an actual view file (e.g., <code>/WEB-INF/views/home.jsp</code>).</td>
+      </tr>
+      <tr>
+        <td><span class="tag2">Model</span></td>
+        <td>A map-like object passed to the view. Controllers add attributes to the model; the JSP reads them using EL expressions like <code>${serverTime}</code>.</td>
+      </tr>
+      <tr>
+        <td><span class="tag3">HandlerMapping</span></td>
+        <td>Determines which controller method handles a given request based on URL and method annotations.</td>
+      </tr>
+    </table>
+
+    <h3>Spring MVC Request Flow</h3>
+    <svg viewBox="0 0 700 160" width="100%" style="max-height:180px;">
+      <defs>
+        <marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#6c63ff"/>
+        </marker>
+        <marker id="a5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#00d4aa"/>
+        </marker>
+      </defs>
+
+      <!-- Nodes -->
+      <rect x="10"  y="55" width="90"  height="40" rx="6" fill="#1e1b3a" stroke="#6c63ff" stroke-width="2"/>
+      <text x="55" y="80" fill="#6c63ff" font-size="10" text-anchor="middle" font-weight="bold">Browser</text>
+
+      <rect x="130" y="55" width="110" height="40" rx="6" fill="#1e1b3a" stroke="#6c63ff" stroke-width="2"/>
+      <text x="185" y="73" fill="#6c63ff" font-size="9" text-anchor="middle">Dispatcher</text>
+      <text x="185" y="87" fill="#6c63ff" font-size="9" text-anchor="middle">Servlet</text>
+
+      <rect x="270" y="55" width="110" height="40" rx="6" fill="#1e1b3a" stroke="#f7c948" stroke-width="2"/>
+      <text x="325" y="73" fill="#f7c948" font-size="9" text-anchor="middle">Handler</text>
+      <text x="325" y="87" fill="#f7c948" font-size="9" text-anchor="middle">Mapping</text>
+
+      <rect x="410" y="55" width="100" height="40" rx="6" fill="#0d2b1e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="460" y="73" fill="#00d4aa" font-size="9" text-anchor="middle">Controller</text>
+      <text x="460" y="87" fill="#00d4aa" font-size="9" text-anchor="middle">Method</text>
+
+      <rect x="130" y="115" width="110" height="35" rx="6" fill="#2a1520" stroke="#f07178" stroke-width="2"/>
+      <text x="185" y="136" fill="#f07178" font-size="9" text-anchor="middle">View Resolver</text>
+
+      <rect x="270" y="115" width="110" height="35" rx="6" fill="#2a1520" stroke="#f07178" stroke-width="2"/>
+      <text x="325" y="136" fill="#f07178" font-size="9" text-anchor="middle">JSP / Template</text>
+
+      <!-- Forward arrows -->
+      <line x1="102" y1="75" x2="128" y2="75" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#a4)"/>
+      <text x="115" y="70" fill="#94a3b8" font-size="8" text-anchor="middle">GET</text>
+      <line x1="242" y1="75" x2="268" y2="75" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#a4)"/>
+      <line x1="382" y1="75" x2="408" y2="75" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#a4)"/>
+
+      <!-- Return path -->
+      <line x1="460" y1="95" x2="460" y2="125" stroke="#00d4aa" stroke-width="1.5"/>
+      <line x1="460" y1="130" x2="382" y2="130" stroke="#00d4aa" stroke-width="1.5" marker-end="url(#a5)"/>
+      <text x="420" y="122" fill="#94a3b8" font-size="8" text-anchor="middle">ModelAndView</text>
+      <line x1="268" y1="132" x2="242" y2="132" stroke="#00d4aa" stroke-width="1.5" marker-end="url(#a5)"/>
+      <line x1="185" y1="132" x2="185" y2="96" stroke="#00d4aa" stroke-width="1.5"/>
+      <line x1="100" y1="75" x2="100" y2="150" stroke="#00d4aa" stroke-width="1.5"/>
+      <line x1="100" y1="150" x2="50" y2="150" stroke="#00d4aa" stroke-width="1.5"/>
+      <line x1="50" y1="150" x2="50" y2="97" stroke="#00d4aa" stroke-width="1.5" marker-end="url(#a5)"/>
+      <text x="75" y="155" fill="#94a3b8" font-size="7" text-anchor="middle">HTML response</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECTION 11 — Complete Spring MVC Example
+════════════════════════════════════════════════════════════════ -->
+<section id="mvc-example">
+  <h2>&#128187; 11. Complete Spring MVC Example</h2>
+  <div class="card">
+    <h3>Project Structure</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">Project Tree</span></div>
+      <pre><span style="color:#82aaff;">SpringMVCApp/</span>
+&#9500;&#9472;&#9472; <span style="color:#f7c948;">pom.xml</span>
+&#9492;&#9472;&#9472; <span style="color:#82aaff;">src/main/webapp/</span>
+    &#9500;&#9472;&#9472; <span style="color:#82aaff;">WEB-INF/</span>
+    &#9474;   &#9500;&#9472;&#9472; <span style="color:#c3e88d;">web.xml</span>              <span class="cmt">&#8592; Configure DispatcherServlet</span>
+    &#9474;   &#9500;&#9472;&#9472; <span style="color:#c3e88d;">servlet-context.xml</span>  <span class="cmt">&#8592; Spring MVC config</span>
+    &#9474;   &#9492;&#9472;&#9472; <span style="color:#82aaff;">views/</span>
+    &#9474;       &#9500;&#9472;&#9472; <span style="color:#6c63ff;">home.jsp</span>
+    &#9474;       &#9500;&#9472;&#9472; <span style="color:#6c63ff;">login.jsp</span>
+    &#9474;       &#9492;&#9472;&#9472; <span style="color:#6c63ff;">user.jsp</span>
+    &#9492;&#9472;&#9472; <span style="color:#82aaff;">java/vit/com/example/</span>
+        &#9500;&#9472;&#9472; <span style="color:#c792ea;">HomeController.java</span>
+        &#9492;&#9472;&#9472; <span style="color:#c792ea;">User.java</span></pre>
+    </div>
+
+    <h3>web.xml — Register DispatcherServlet</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">XML</span><button class="run-btn" onclick="toggleOutput('wx1')">&#9654; View</button></div>
+      <pre><span class="xml-tag">&lt;web-app&gt;</span>
+  <span class="xml-tag">&lt;servlet&gt;</span>
+    <span class="xml-tag">&lt;servlet-name&gt;</span>appServlet<span class="xml-tag">&lt;/servlet-name&gt;</span>
+    <span class="xml-tag">&lt;servlet-class&gt;</span>
+      org.springframework.web.servlet.DispatcherServlet
+    <span class="xml-tag">&lt;/servlet-class&gt;</span>
+    <span class="xml-tag">&lt;init-param&gt;</span>
+      <span class="xml-tag">&lt;param-name&gt;</span>contextConfigLocation<span class="xml-tag">&lt;/param-name&gt;</span>
+      <span class="xml-tag">&lt;param-value&gt;</span>/WEB-INF/servlet-context.xml<span class="xml-tag">&lt;/param-value&gt;</span>
+    <span class="xml-tag">&lt;/init-param&gt;</span>
+    <span class="xml-tag">&lt;load-on-startup&gt;</span>1<span class="xml-tag">&lt;/load-on-startup&gt;</span>
+  <span class="xml-tag">&lt;/servlet&gt;</span>
+  <span class="xml-tag">&lt;servlet-mapping&gt;</span>
+    <span class="xml-tag">&lt;servlet-name&gt;</span>appServlet<span class="xml-tag">&lt;/servlet-name&gt;</span>
+    <span class="xml-tag">&lt;url-pattern&gt;</span>/<span class="xml-tag">&lt;/url-pattern&gt;</span>  <span class="cmt">&lt;!-- catch all --&gt;</span>
+  <span class="xml-tag">&lt;/servlet-mapping&gt;</span>
+<span class="xml-tag">&lt;/web-app&gt;</span></pre>
+      <div class="output-box" id="wx1">DispatcherServlet mapped to "/" — all requests routed through Spring MVC.</div>
+    </div>
+
+    <h3>servlet-context.xml — Spring MVC Configuration</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">XML</span><button class="run-btn" onclick="toggleOutput('sc1')">&#9654; View</button></div>
+      <pre><span class="xml-tag">&lt;beans xmlns=</span><span class="xml-val">"http://www.springframework.org/schema/beans"</span>
+       <span class="xml-attr">xmlns:mvc=</span><span class="xml-val">"http://www.springframework.org/schema/mvc"</span>
+       <span class="xml-attr">xmlns:context=</span><span class="xml-val">"http://www.springframework.org/schema/context"</span><span class="xml-tag">&gt;</span>
+
+  <span class="cmt">&lt;!-- Enable @Controller, @RequestMapping, etc. --&gt;</span>
+  <span class="xml-tag">&lt;mvc:annotation-driven/&gt;</span>
+
+  <span class="cmt">&lt;!-- Scan for @Controller classes --&gt;</span>
+  <span class="xml-tag">&lt;context:component-scan</span>
+    <span class="xml-attr">base-package=</span><span class="xml-val">"vit.com.example"</span><span class="xml-tag">/&gt;</span>
+
+  <span class="cmt">&lt;!-- View Resolver: maps "home" → /WEB-INF/views/home.jsp --&gt;</span>
+  <span class="xml-tag">&lt;bean class=</span><span class="xml-val">"org.springframework.web.servlet.view.InternalResourceViewResolver"</span><span class="xml-tag">&gt;</span>
+    <span class="xml-tag">&lt;property name=</span><span class="xml-val">"prefix"</span> <span class="xml-attr">value=</span><span class="xml-val">"/WEB-INF/views/"</span><span class="xml-tag">/&gt;</span>
+    <span class="xml-tag">&lt;property name=</span><span class="xml-val">"suffix"</span> <span class="xml-attr">value=</span><span class="xml-val">".jsp"</span><span class="xml-tag">/&gt;</span>
+  <span class="xml-tag">&lt;/bean&gt;</span>
+
+<span class="xml-tag">&lt;/beans&gt;</span></pre>
+      <div class="output-box" id="sc1">InternalResourceViewResolver: prefix="/WEB-INF/views/", suffix=".jsp"
+Controller scan base-package: vit.com.example</div>
+    </div>
+
+    <h3>HomeController.java</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">Java</span><button class="run-btn" onclick="toggleOutput('hc1')">&#9654; Run</button></div>
+      <pre><span class="kw">package</span> vit.com.example;
+
+<span class="kw">import</span> java.util.*;
+<span class="kw">import</span> org.springframework.stereotype.*;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+<span class="kw">import</span> org.springframework.ui.Model;
+<span class="kw">import</span> org.springframework.validation.annotation.Validated;
+
+<span class="ann">@Controller</span>
+<span class="kw">public class</span> <span class="cls">HomeController</span> {
+
+    <span class="cmt">/** GET /app → shows home.jsp with current server time */</span>
+    <span class="ann">@RequestMapping</span>(value = <span class="str">"/app"</span>, method = RequestMethod.GET)
+    <span class="kw">public</span> String <span class="fn">home</span>(Locale locale, Model model) {
+        Date date = <span class="kw">new</span> Date();
+        DateFormat df = DateFormat.getDateTimeInstance(
+                            DateFormat.LONG, DateFormat.LONG, locale);
+        String formattedDate = df.format(date);
+        model.addAttribute(<span class="str">"serverTime"</span>, formattedDate);
+        <span class="kw">return</span> <span class="str">"home"</span>;   <span class="cmt">// → /WEB-INF/views/home.jsp</span>
+    }
+
+    <span class="cmt">/** GET /login → shows login.jsp */</span>
+    <span class="ann">@RequestMapping</span>(value = <span class="str">"/login"</span>, method = RequestMethod.GET)
+    <span class="kw">public</span> String <span class="fn">loginPage</span>() {
+        <span class="kw">return</span> <span class="str">"login"</span>;  <span class="cmt">// → /WEB-INF/views/login.jsp</span>
+    }
+
+    <span class="cmt">/** POST /home → processes login form and shows user.jsp */</span>
+    <span class="ann">@RequestMapping</span>(value = <span class="str">"/home"</span>, method = RequestMethod.POST)
+    <span class="kw">public</span> String <span class="fn">login</span>(<span class="ann">@Validated</span> <span class="cls">User</span> user, Model model) {
+        model.addAttribute(<span class="str">"userName"</span>, user.getUserName());
+        model.addAttribute(<span class="str">"password"</span>, user.getPassword());
+        <span class="kw">return</span> <span class="str">"user"</span>;   <span class="cmt">// → /WEB-INF/views/user.jsp</span>
+    }
+}</pre>
+      <div class="output-box" id="hc1">GET /app    → renders home.jsp with serverTime attribute
+GET /login  → renders login.jsp
+POST /home  → renders user.jsp with userName and password attributes</div>
+    </div>
+
+    <h3>User.java (POJO Model)</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">Java</span></div>
+      <pre><span class="kw">package</span> vit.com.example;
+
+<span class="kw">public class</span> <span class="cls">User</span> {
+
+    <span class="kw">private</span> String userName;
+    <span class="kw">private</span> String password;
+
+    <span class="cmt">// Default constructor (required by Spring MVC data binding)</span>
+    <span class="kw">public</span> <span class="fn">User</span>() {}
+
+    <span class="kw">public</span> <span class="fn">User</span>(String userName, String password) {
+        <span class="kw">this</span>.userName = userName;
+        <span class="kw">this</span>.password = password;
+    }
+
+    <span class="kw">public</span> String <span class="fn">getUserName</span>()               { <span class="kw">return</span> userName; }
+    <span class="kw">public void</span>   <span class="fn">setUserName</span>(String userName) { <span class="kw">this</span>.userName = userName; }
+    <span class="kw">public</span> String <span class="fn">getPassword</span>()               { <span class="kw">return</span> password; }
+    <span class="kw">public void</span>   <span class="fn">setPassword</span>(String password) { <span class="kw">this</span>.password = password; }
+}</pre>
+    </div>
+
+    <h3>JSP Views</h3>
+    <div class="two-col">
+      <div>
+        <h4>home.jsp</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">JSP</span></div>
+          <pre><span class="xml-tag">&lt;%@ page</span> <span class="xml-attr">contentType=</span><span class="xml-val">"text/html"</span><span class="xml-tag"> %&gt;</span>
+<span class="xml-tag">&lt;html&gt;&lt;body&gt;</span>
+  <span class="xml-tag">&lt;h1&gt;</span>Welcome to Spring MVC!<span class="xml-tag">&lt;/h1&gt;</span>
+  <span class="xml-tag">&lt;p&gt;</span>Server Time:
+    <span style="color:#f7c948;">${serverTime}</span>
+  <span class="xml-tag">&lt;/p&gt;</span>
+  <span class="xml-tag">&lt;a href=</span><span class="xml-val">"login"</span><span class="xml-tag">&gt;</span>Login<span class="xml-tag">&lt;/a&gt;</span>
+<span class="xml-tag">&lt;/body&gt;&lt;/html&gt;</span></pre>
+        </div>
+        <h4>user.jsp</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">JSP</span></div>
+          <pre><span class="xml-tag">&lt;html&gt;&lt;body&gt;</span>
+  <span class="xml-tag">&lt;h2&gt;</span>Logged In<span class="xml-tag">&lt;/h2&gt;</span>
+  <span class="xml-tag">&lt;p&gt;</span>User Name is:
+    <span style="color:#f7c948;">${userName}</span>
+  <span class="xml-tag">&lt;/p&gt;</span>
+  <span class="xml-tag">&lt;p&gt;</span>Password is:
+    <span style="color:#f7c948;">${password}</span>
+  <span class="xml-tag">&lt;/p&gt;</span>
+<span class="xml-tag">&lt;/body&gt;&lt;/html&gt;</span></pre>
+        </div>
+      </div>
+      <div>
+        <h4>login.jsp</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">JSP</span></div>
+          <pre><span class="xml-tag">&lt;%@ taglib</span>
+  <span class="xml-attr">prefix=</span><span class="xml-val">"form"</span>
+  <span class="xml-attr">uri=</span><span class="xml-val">"http://www.springframework.org/tags/form"</span>
+<span class="xml-tag">%&gt;</span>
+<span class="xml-tag">&lt;html&gt;&lt;body&gt;</span>
+  <span class="xml-tag">&lt;h2&gt;</span>Login<span class="xml-tag">&lt;/h2&gt;</span>
+  <span class="xml-tag">&lt;form:form</span>
+    <span class="xml-attr">method=</span><span class="xml-val">"POST"</span>
+    <span class="xml-attr">action=</span><span class="xml-val">"/home"</span>
+    <span class="xml-attr">modelAttribute=</span><span class="xml-val">"user"</span><span class="xml-tag">&gt;</span>
+
+    <span class="xml-tag">&lt;label&gt;</span>Username:<span class="xml-tag">&lt;/label&gt;</span>
+    <span class="xml-tag">&lt;form:input</span>
+      <span class="xml-attr">path=</span><span class="xml-val">"userName"</span><span class="xml-tag">/&gt;</span>
+
+    <span class="xml-tag">&lt;label&gt;</span>Password:<span class="xml-tag">&lt;/label&gt;</span>
+    <span class="xml-tag">&lt;form:password</span>
+      <span class="xml-attr">path=</span><span class="xml-val">"password"</span><span class="xml-tag">/&gt;</span>
+
+    <span class="xml-tag">&lt;input</span>
+      <span class="xml-attr">type=</span><span class="xml-val">"submit"</span>
+      <span class="xml-attr">value=</span><span class="xml-val">"Login"</span><span class="xml-tag">/&gt;</span>
+  <span class="xml-tag">&lt;/form:form&gt;</span>
+<span class="xml-tag">&lt;/body&gt;&lt;/html&gt;</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive MVC Simulator -->
+    <h3>Interactive Spring MVC Simulator</h3>
+    <div class="interactive-box">
+      <div class="mvc-nav">
+        <button id="navHome" class="active" onclick="mvcNav('home')">GET /app</button>
+        <button id="navLogin" onclick="mvcNav('login')">GET /login</button>
+        <button id="navUser" style="display:none;" id="navUser2">POST /home result</button>
+      </div>
+
+      <!-- Home page -->
+      <div id="mvc-home" class="mvc-page active" style="background:#12151f; border-radius:8px; padding:1.2rem;">
+        <div style="background:#1e2235; padding:0.4rem 0.8rem; border-radius:6px 6px 0 0; font-size:0.8rem; color:var(--muted); margin-bottom:0.8rem;">
+          &#127760; localhost:8080/app &mdash; Spring MVC HomeController.home()
+        </div>
+        <h2 style="color:var(--text); font-size:1.4rem;">Welcome to Spring MVC!</h2>
+        <p style="color:var(--muted);">Server Time: <span id="simServerTime" style="color:var(--accent2);">loading...</span></p>
+        <button class="btn2" onclick="mvcNav('login')" style="margin-top:0.5rem; font-size:0.9rem; padding:0.4rem 1rem;">Login &rarr;</button>
+      </div>
+
+      <!-- Login page -->
+      <div id="mvc-login" class="mvc-page" style="background:#12151f; border-radius:8px; padding:1.2rem;">
+        <div style="background:#1e2235; padding:0.4rem 0.8rem; border-radius:6px 6px 0 0; font-size:0.8rem; color:var(--muted); margin-bottom:0.8rem;">
+          &#127760; localhost:8080/login &mdash; Spring MVC HomeController.loginPage()
+        </div>
+        <h2 style="color:var(--text); font-size:1.4rem;">Login</h2>
+        <div style="max-width:280px;">
+          <label style="color:var(--muted); font-size:0.9rem;">Username:</label>
+          <input type="text" id="simUser" placeholder="Enter username" style="margin-bottom:0.8rem;">
+          <label style="color:var(--muted); font-size:0.9rem;">Password:</label>
+          <input type="password" id="simPass" placeholder="Enter password" style="margin-bottom:1rem;">
+          <button class="btn3" onclick="mvcSubmit()" style="width:100%;">Login (POST /home)</button>
+        </div>
+      </div>
+
+      <!-- User page -->
+      <div id="mvc-user" class="mvc-page" style="background:#12151f; border-radius:8px; padding:1.2rem;">
+        <div style="background:#1e2235; padding:0.4rem 0.8rem; border-radius:6px 6px 0 0; font-size:0.8rem; color:var(--muted); margin-bottom:0.8rem;">
+          &#127760; localhost:8080/home &mdash; Spring MVC HomeController.login() POST
+        </div>
+        <h2 style="color:var(--text); font-size:1.4rem;">Logged In</h2>
+        <p style="color:var(--text);">User Name is: <strong id="simDispUser" style="color:var(--accent2);"></strong></p>
+        <p style="color:var(--text);">Password is: <strong id="simDispPass" style="color:var(--yellow);"></strong></p>
+        <button onclick="mvcNav('home')" style="margin-top:1rem; font-size:0.85rem; padding:0.4rem 1rem;">&#8592; Back to Home</button>
+      </div>
+
+      <div style="margin-top:1rem; background:#1a1d2e; border-radius:6px; padding:0.8rem; font-size:0.8rem; color:var(--muted);">
+        <strong style="color:var(--yellow);">MVC Flow:</strong> Browser &rarr; DispatcherServlet &rarr; HandlerMapping &rarr; Controller &rarr; ModelAndView &rarr; ViewResolver &rarr; JSP &rarr; Browser
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SUMMARY SECTION
+════════════════════════════════════════════════════════════════ -->
+<section id="summary" style="margin-bottom:4rem;">
+  <h2>&#128203; Week 10 Summary</h2>
+  <div class="card">
+    <div class="three-col">
+      <div class="card" style="border-top:4px solid var(--accent);">
+        <h4>Frameworks</h4>
+        <ul style="font-size:0.88rem;">
+          <li>Pre-built code skeletons</li>
+          <li>Types: Web, ORM, Testing, Logging</li>
+          <li>Benefits: Security, Community, Reuse, Scale</li>
+          <li>Popular: Spring, Hibernate, Grails</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent2);">
+        <h4>Spring Framework</h4>
+        <ul style="font-size:0.88rem;">
+          <li>Open-source, lightweight, enterprise</li>
+          <li>Manages business objects via IoC/DI</li>
+          <li>Modular architecture (Core, Web, Data, AOP)</li>
+          <li>Ecosystem: Boot, Cloud, Security, Data</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:4px solid var(--yellow);">
+        <h4>Coupling &amp; Beans</h4>
+        <ul style="font-size:0.88rem;">
+          <li>Tight coupling = hard to change</li>
+          <li>Interface = loose coupling solution</li>
+          <li>Beans = Spring-managed objects</li>
+          <li>@Configuration, @Bean, @Autowired</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight" style="margin-top:0.5rem;">
+      <strong>Spring MVC Flow:</strong> Browser &rarr; DispatcherServlet (Front Controller) &rarr; HandlerMapping &rarr; @Controller &rarr; Model + ViewName &rarr; ViewResolver &rarr; JSP &rarr; HTML Response &rarr; Browser
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<script>
+/* ── Toggle Code Output ─────────────────────────────────── */
+function toggleOutput(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('visible');
+  var btn = el.previousElementSibling ? el.previousElementSibling.querySelector('.run-btn') : null;
+  if (!btn) {
+    // search sibling
+    var p = el.parentElement;
+    btn = p.querySelector('.run-btn');
+  }
+}
+
+/* ── Coupling Demo ──────────────────────────────────────── */
+var teams = {
+  csk: { captain: 'MS Dhoni (MSD)',    owner: 'India Cements Ltd' },
+  mi:  { captain: 'Rohit Sharma',      owner: 'Reliance Industries' },
+  rcb: { captain: 'Faf du Plessis',    owner: 'United Spirits (Diageo)' },
+  kkr: { captain: 'Shreyas Iyer',      owner: 'Shah Rukh Khan / Red Chillies' }
+};
+
+function showTeam() {
+  var sel = document.getElementById('teamSelector').value;
+  var t = teams[sel];
+  var r = document.getElementById('teamResult');
+  r.style.display = 'block';
+  r.innerHTML =
+    '<strong style="color:var(--accent2);">IPLTeam.run() output:</strong><br>' +
+    '<span style="color:var(--yellow);">Captain: </span>' + t.captain + '<br>' +
+    '<span style="color:var(--accent);">Owner: </span>' + t.owner;
+}
+
+/* ── MVC Simulator ──────────────────────────────────────── */
+function mvcNav(page) {
+  ['mvc-home','mvc-login','mvc-user'].forEach(function(id) {
+    document.getElementById(id).classList.remove('active');
+  });
+  document.getElementById('mvc-' + page).classList.add('active');
+
+  ['navHome','navLogin'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove('active');
+  });
+  if (page === 'home' && document.getElementById('navHome'))
+    document.getElementById('navHome').classList.add('active');
+  if (page === 'login' && document.getElementById('navLogin'))
+    document.getElementById('navLogin').classList.add('active');
+}
+
+function mvcSubmit() {
+  var u = document.getElementById('simUser').value.trim();
+  var p = document.getElementById('simPass').value;
+  if (!u) { alert('Please enter a username'); return; }
+  document.getElementById('simDispUser').textContent = u;
+  document.getElementById('simDispPass').textContent = p || '(empty)';
+  mvcNav('user');
+}
+
+/* ── Set Server Time ────────────────────────────────────── */
+(function() {
+  var now = new Date();
+  var opts = { weekday:'long', year:'numeric', month:'long', day:'numeric',
+               hour:'2-digit', minute:'2-digit', second:'2-digit' };
+  var el = document.getElementById('simServerTime');
+  if (el) el.textContent = now.toLocaleDateString('en-IN', opts);
+})();
+
+/* ── Scrollspy ──────────────────────────────────────────── */
+(function() {
+  var sections = document.querySelectorAll('section[id]');
+  var links = document.querySelectorAll('nav a');
+  function onScroll() {
+    var scrollY = window.pageYOffset + 100;
+    var current = '';
+    sections.forEach(function(s) {
+      if (s.offsetTop <= scrollY) current = s.id;
+    });
+    links.forEach(function(l) {
+      l.classList.remove('active');
+      if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+
+<style>
+.xn-extra-wrap{max-width:1100px;margin:2.5rem auto;padding:0 1.5rem;}
+.xn-intro{background:rgba(108,99,255,.08);border-left:4px solid #6c63ff;border-radius:0 8px 8px 0;padding:1rem 1.2rem;margin:1rem 0 1.5rem;color:var(--muted);font-size:.92rem;}
+.xn-prob{background:var(--card);border:1px solid var(--border);border-left:4px solid #6c63ff;border-radius:10px;padding:1.1rem 1.2rem;margin:1rem 0;}
+.xn-q{margin-bottom:.75rem;color:var(--text);}
+.xn-tag{display:inline-block;background:#6c63ff;color:#fff;font-size:.72rem;font-weight:700;padding:.14rem .6rem;border-radius:20px;margin-right:.45rem;vertical-align:middle;}
+.xn-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.xn-in{background:#12152a;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.5rem .85rem;font-size:.95rem;min-width:180px;font-family:'Cascadia Code','Fira Code',monospace;}
+.xn-in:focus{outline:none;border-color:#6c63ff;}
+.xn-check,.xn-toggle{border:none;border-radius:8px;padding:.5rem 1.15rem;cursor:pointer;font-weight:700;font-size:.88rem;}
+.xn-check{background:#6c63ff;color:#fff;}
+.xn-check:hover{background:#574fd6;}
+.xn-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.xn-toggle:hover{border-color:#00d4aa;color:#00d4aa;}
+.xn-fb{margin-top:.65rem;font-weight:700;font-size:.9rem;min-height:1rem;}
+.xn-fb.xn-ok{color:#00d4aa;}
+.xn-fb.xn-no{color:#ff6b6b;}
+.xn-fb.xn-warn{color:#f7c948;}
+.xn-sol{display:none;margin-top:.85rem;padding:.95rem 1.05rem;background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.3);border-radius:8px;font-size:.9rem;color:var(--text);}
+.xn-sol.open{display:block;animation:xnfade .25s ease;}
+@keyframes xnfade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.xn-sol .xf{background:#12152a;color:#f7c948;font-family:'Cascadia Code','Fira Code',monospace;padding:.55rem .85rem;border-radius:6px;margin:.45rem 0;overflow-x:auto;white-space:pre-wrap;font-size:.86rem;}
+.xn-sol b{color:#00d4aa;}
+.xn-opts{display:flex;flex-direction:column;gap:.45rem;margin-top:.4rem;}
+.xn-opt{text-align:left;background:#12152a;border:1px solid var(--border);color:var(--text);padding:.55rem .85rem;border-radius:6px;cursor:pointer;font-size:.9rem;font-family:inherit;}
+.xn-opt:hover:not(:disabled){border-color:#6c63ff;}
+.xn-opt.xn-ok{background:rgba(0,212,170,.18);border-color:#00d4aa;color:#00d4aa;font-weight:700;}
+.xn-opt.xn-no{background:rgba(255,107,107,.15);border-color:#ff6b6b;color:#ff6b6b;}
+.xn-codeblock{background:#12152a;border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;font-family:'Cascadia Code','Fira Code',monospace;font-size:.85rem;line-height:1.6;white-space:pre;overflow-x:auto;margin:.5rem 0 .8rem;color:#e2e8f0;}
+</style>
+
+<section id="xn-extra" class="xn-extra-wrap">
+  <h2>🔢 Engineered Numerical Practice</h2>
+  <div class="xn-intro">
+    Fresh exam-style computational problems built from this week's concepts. Type your answer and hit
+    <b>Check</b> for instant feedback, or reveal the worked steps. <em>(Press Enter in any answer box to check.)</em>
+  </div>
+
+  <div class="xn-prob" data-ans="1" data-tol="0" data-unit=" instance">
+    <div class="xn-q"><span class="xn-tag">NP1</span><b>Singleton scope instance count.</b>
+      A bean uses Spring's default singleton scope. The container fetches it five times:
+      <div class="xn-codeblock">for (int i = 0; i &lt; 5; i++) {
+   context.getBean("name");
+}</div>
+      How many actual bean <em>instances</em> does the container create?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="instances">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The default scope is <code>singleton</code>: exactly one shared instance per bean definition, no matter how
+      many times <code>getBean</code> is called. All five calls return the same object.
+      <div class="xf">Instances created = 1</div>
+      Answer = <b>1</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="6" data-tol="0" data-unit=" beans">
+    <div class="xn-q"><span class="xn-tag">NP2</span><b>Counting @Bean definitions.</b>
+      How many beans does this <code>@Configuration</code> class register in the container?
+      <div class="xn-codeblock">@Configuration
+public class AppConfig {
+   @Bean public String name()        { return "RELU"; }
+   @Bean public int rollNo()         { return 2024; }
+   @Bean public Student student()    { ... }
+   @Bean public Student student2()   { ... }
+   @Bean public University univ()    { ... }
+   @Bean(name="address") public University univ2() { ... }
+}</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="bean count">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Each <code>@Bean</code>-annotated method contributes exactly one bean definition (the method name, or the
+      explicit <code>name=</code>, becomes the bean id).
+      <div class="xf">name, rollNo, student, student2, univ, address  →  6 methods</div>
+      Beans registered = <b>6</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="2024" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP3</span><b>Retrieving a primitive bean.</b>
+      Given the config in NP2, what does this line print?
+      <div class="xn-codeblock">System.out.println(context.getBean("rollNo"));</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="printed value">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>getBean("rollNo")</code> returns the value produced by the <code>rollNo()</code> @Bean method, which
+      returns the literal <code>2024</code>.
+      <div class="xf">rollNo() returns 2024</div>
+      Printed value = <b>2024</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="3000" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP4</span><b>Dependency injection arithmetic.</b>
+      An <code>@Bean unitPrice()</code> returns 250 and an <code>@Bean quantity()</code> returns 12. A service is wired
+      with both and computes the order total:
+      <div class="xn-codeblock">@Bean
+public int orderTotal() {
+   return unitPrice() * quantity();
+}</div>
+      What value does <code>getBean("orderTotal")</code> return?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="total">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The wired dependencies supply 250 and 12; the service multiplies them.
+      <div class="xf">250 * 12 = 3000</div>
+      Order total = <b>3000</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="4" data-tol="0" data-unit=" modes">
+    <div class="xn-q"><span class="xn-tag">NP5</span><b>Autowiring modes.</b>
+      How many autowiring modes does the notes list for injecting a dependency
+      (<code>no</code>, <code>byName</code>, <code>byType</code>, <code>constructor</code>)?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="how many modes">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The four modes are <code>no</code> (default, none), <code>byName</code>, <code>byType</code>, and <code>constructor</code>.
+      <div class="xf">no + byName + byType + constructor = 4</div>
+      Count = <b>4</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="1080" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP6</span><b>Service logic with integer division.</b>
+      A discount service is injected with <code>price = 1200</code> and applies a 10% discount using Java integer math:
+      <div class="xn-codeblock">int price = 1200;
+int finalPrice = price - (price / 10);</div>
+      What is <code>finalPrice</code>?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="final price">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>price / 10</code> is integer division.
+      <div class="xf">1200 / 10 = 120
+1200 - 120 = 1080</div>
+      finalPrice = <b>1080</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="3" data-tol="0" data-unit=" layers">
+    <div class="xn-q"><span class="xn-tag">NP7</span><b>Counting MVC roles handled by the controller.</b>
+      In the Spring MVC <code>HomeController</code> from the notes, three <code>@RequestMapping</code> handler methods are
+      defined — <code>home()</code> (GET <code>/app</code>), <code>loginPage()</code> (GET <code>/login</code>), and
+      <code>login()</code> (POST <code>/home</code>). How many request-mapped handler methods is that?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="handler methods">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Count the <code>@RequestMapping</code>-annotated methods.
+      <div class="xf">home() + loginPage() + login() = 3</div>
+      Handler methods = <b>3</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">NP8</span><b>Front controller class.</b>
+      In Spring MVC, which single class acts as the front controller that receives every incoming request and
+      dispatches it to the right handler?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) ApplicationContext</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) DispatcherServlet</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) ViewResolver</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) HandlerMapping</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The <code>DispatcherServlet</code> is the single front controller; it consults <code>HandlerMapping</code> and
+      <code>ViewResolver</code> but is itself the entry point for all requests. Answer = <b>DispatcherServlet</b>.
+    </div>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  if(window.__xnInit) return; window.__xnInit=true;
+  function num(s){
+    if(s==null) return NaN;
+    s=(''+s).replace(/−/g,'-').replace(/[^0-9.\-]/g,'');
+    if(s===''||s==='-'||s==='.') return NaN;
+    return parseFloat(s);
+  }
+  window.xnCheck=function(btn){
+    var p=btn.closest('.xn-prob'); if(!p) return;
+    var ans=parseFloat(p.getAttribute('data-ans'));
+    var tol=parseFloat(p.getAttribute('data-tol')||'0.05');
+    var unit=p.getAttribute('data-unit')||'';
+    var inp=p.querySelector('.xn-in'); var fb=p.querySelector('.xn-fb');
+    var v=num(inp.value);
+    if(isNaN(v)){ fb.className='xn-fb xn-warn'; fb.textContent='⚠ Enter a numeric answer first.'; return; }
+    if(Math.abs(v-ans)<=tol){ fb.className='xn-fb xn-ok'; fb.innerHTML='✓ Correct! Answer = '+ans+unit; }
+    else { fb.className='xn-fb xn-no'; fb.innerHTML='✗ Not quite — you entered '+v+'. Try again, or reveal the steps.'; }
+  };
+  window.xnToggle=function(btn){
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol');
+    var open=s.classList.toggle('open'); btn.textContent=open?'Hide steps':'Show steps';
+  };
+  window.xnPick=function(btn,ok){
+    var box=btn.parentElement;
+    box.querySelectorAll('.xn-opt').forEach(function(b){b.disabled=true; b.style.cursor='default';});
+    btn.classList.add(ok?'xn-ok':'xn-no');
+    if(!ok){ box.querySelectorAll('.xn-opt').forEach(function(b){ if(b.getAttribute('data-correct')==='1') b.classList.add('xn-ok'); }); }
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol'); if(s) s.classList.add('open');
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter' && e.target.classList && e.target.classList.contains('xn-in')){
+      var b=e.target.closest('.xn-prob').querySelector('.xn-check'); if(b) b.click();
+    }
+  });
+})();
+</script>
+<section id="xn-mcq" class="xn-extra-wrap">
+  <h2>📝 Exam-Style MCQs — 2 Marks Each</h2>
+  <p style="opacity:.85;font-size:.95em;margin-bottom:1rem;">Each question is worth 2 marks — a mix of applied numerical and conceptual items. Click an option to check it; the correct answer and explanation appear instantly.</p>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q1 · 2 marks</span> A bean is defined with the default <code>singleton</code> scope. If <code>context.getBean("car")</code> is called 1000 times, how many instances of that bean does the Spring container create?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) 1 instance</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 1000 instances</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 0 instances (lazy, never created)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 500 instances</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">A singleton-scoped bean has exactly one shared instance per Spring container.
+      <div class="xf">1000 getBean() calls → all return the same reference → instances created = 1</div>
+      Each call returns the identical object, so the container creates <b>1 instance</b>. (Prototype scope would create 1000.)</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q2 · 2 marks</span> How many beans does this <code>@Configuration</code> class register in the container?
+      <div class="xn-codeblock">@Configuration
+class AppConfig {
+  @Bean Engine engine() { return new Engine(); }
+  @Bean Car car() { return new Car(engine()); }
+  Wheel wheel() { return new Wheel(); }   // no @Bean
+  @Bean Driver driver() { return new Driver(); }
+}</div></div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 4</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) 3</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 2</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 1</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Only methods annotated with <code>@Bean</code> become container-managed beans.
+      <div class="xf">@Bean methods: engine, car, driver → 3   ·   wheel() has no @Bean → not registered</div>
+      So <b>3 beans</b> are registered. The plain <code>wheel()</code> method is ignored by the container.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q3 · 2 marks</span> A <code>BillingService</code> receives an injected unit price of 500 and a quantity of 3, then applies a 10% discount. What total does it return?
+      <div class="xn-codeblock">double total = price * qty;          // 500 * 3
+double payable = total - total * 0.10;
+return payable;</div></div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 1500.0</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 1485.0</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 1350.0</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 150.0</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">The dependency-injected values feed the service logic.
+      <div class="xf">total = 500 × 3 = 1500  →  discount = 1500 × 0.10 = 150  →  payable = 1500 − 150 = 1350.0</div>
+      The method returns <b>1350.0</b>.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q4 · 2 marks</span> Which statement best describes <em>Inversion of Control (IoC)</em> as implemented by Spring?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) The object creates and manages all of its own dependencies using <code>new</code></button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) The container creates objects and injects their dependencies, rather than the object doing it itself</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Control flow is inverted so that methods call themselves recursively</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) The database controls which classes get loaded at runtime</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">With IoC, the responsibility for object creation and wiring is handed over to the Spring container instead of the class controlling it with <code>new</code>. <b>Dependency Injection</b> is the mechanism that realises IoC — the container supplies collaborators (via constructor or setter). This promotes loose coupling. The answer is <b>the container creates objects and injects dependencies</b>.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q5 · 2 marks</span> Two beans implement the same interface <code>PaymentService</code>. When <code>@Autowired</code> tries to inject one of them, what is the correct way to remove the ambiguity by naming a specific bean at the injection point?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Mark both beans with @Primary</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Use @Component on the interface</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) Add @Qualifier("upiPayment") next to @Autowired</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Remove @Autowired entirely</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">When multiple candidates match a type, Spring throws <code>NoUniqueBeanDefinitionException</code>. <code>@Qualifier("beanName")</code> at the injection point selects one specific bean by name. <code>@Primary</code> sets a default winner but must mark exactly <em>one</em> bean (not both). The precise per-injection choice is <b>@Qualifier("upiPayment")</b>.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q6 · 2 marks</span> In Spring MVC, which component is the <em>front controller</em> that receives every incoming request and delegates it to the appropriate handler?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) ViewResolver</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) The @Controller class directly</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) DispatcherServlet</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) ModelAndView</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Spring MVC follows the Front Controller pattern: the <b>DispatcherServlet</b> is the single entry point that consults the HandlerMapping, invokes the matching <code>@Controller</code>, then uses a ViewResolver to render the view. The controller, view resolver, and ModelAndView are downstream pieces it orchestrates. The answer is <b>DispatcherServlet</b>.</div>
+  </div>
+</section>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

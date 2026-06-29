@@ -1,0 +1,1018 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 5 – Pricing Strategies | MA</title>
+<style>
+:root{--primary:#00897b;--primary-dark:#00695c;--accent:#ff7043;--success:#43a047;--danger:#e53935;--bg:#f5f8fb;--card:#fff;--text:#1a2332;--muted:#5a6a7a;--border:#dde5ec}
+body.dark{--bg:#0f1721;--card:#1a2535;--text:#e0e8f0;--muted:#a0b0c0;--border:#2a3545}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;padding:40px 20px 30px;position:relative}
+.dark-toggle{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.2);border:none;color:white;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:1.1em}
+nav{background:var(--card);border-bottom:2px solid var(--border);padding:10px 20px;position:sticky;top:0;z-index:100;display:flex;flex-wrap:wrap;gap:6px}
+nav button{background:none;border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:20px;cursor:pointer;font-size:.85em}
+nav button:hover,nav button.active{background:var(--primary);color:white;border-color:var(--primary)}
+main{max-width:1100px;margin:30px auto;padding:0 20px}
+section{margin-bottom:40px}
+h2{color:var(--primary-dark);margin-bottom:16px;font-size:1.6em;padding-bottom:8px;border-bottom:2px solid var(--border)}
+body.dark h2{color:#80cbc4}
+h3{color:var(--primary);margin:18px 0 10px;font-size:1.2em}
+body.dark h3{color:#4db6ac}
+.card{background:var(--card);padding:24px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:20px}
+.formula{background:linear-gradient(135deg,#e0f7fa,#b2ebf2);border-left:4px solid var(--primary);padding:14px 18px;border-radius:8px;font-family:monospace;font-size:1em;margin:12px 0}
+body.dark .formula{background:linear-gradient(135deg,#1a3a3a,#0d2626)}
+.example{background:linear-gradient(135deg,#fff8e1,#fff3cd);border-left:4px solid #fbc02d;padding:16px;border-radius:8px;margin:12px 0}
+body.dark .example{background:linear-gradient(135deg,#3a3010,#2a2008)}
+.code{background:#1e2a3a;color:#a8d8ea;padding:16px;border-radius:8px;font-family:monospace;font-size:.88em;overflow-x:auto;margin:12px 0;white-space:pre}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9em}
+th{background:var(--primary);color:white;padding:10px 12px;text-align:left}
+td{padding:9px 12px;border-bottom:1px solid var(--border)}
+tr:nth-child(even){background:var(--bg)}
+.quiz-q{background:var(--card);border-radius:10px;padding:18px;margin-bottom:16px;border-left:4px solid var(--primary);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.quiz-q p{font-weight:600;margin-bottom:10px}
+.quiz-q button{display:block;width:100%;text-align:left;padding:8px 12px;margin:4px 0;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);cursor:pointer;font-size:.9em}
+.quiz-q button:hover{background:var(--border)}
+.tips{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-left:4px solid var(--success);padding:20px;border-radius:10px;margin:16px 0}
+body.dark .tips{background:linear-gradient(135deg,#0d2a10,#0a1f0c)}
+.nav-links{display:flex;justify-content:space-between;margin-top:30px;padding-top:20px;border-top:2px solid var(--border)}
+.nav-links a{background:var(--primary);color:white;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:600}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.88em;margin-top:20px}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.78em;font-weight:700;margin-left:8px;vertical-align:middle}
+.badge-blue{background:#e3f2fd;color:#1565c0}
+.badge-green{background:#e8f5e9;color:#2e7d32}
+.badge-orange{background:#fff3e0;color:#e65100}
+body.dark .badge-blue{background:#1a2a3a;color:#90caf9}
+body.dark .badge-green{background:#0d2a10;color:#a5d6a7}
+body.dark .badge-orange{background:#3a2a10;color:#ffcc80}
+.highlight-box{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left:4px solid #8e24aa;padding:16px;border-radius:8px;margin:12px 0}
+body.dark .highlight-box{background:linear-gradient(135deg,#2a1a2e,#1e0f22)}
+ul{padding-left:20px;margin:8px 0}
+li{margin:4px 0}
+</style></head>
+<body>
+<script>
+function qa(el,c){el.style.background=c?'#c8e6c9':'#ffcdd2';el.style.color=c?'#1b5e20':'#b71c1c';el.disabled=true;el.parentElement.querySelectorAll('button').forEach(b=>{if(b!==el)b.disabled=true})}
+function dark(){document.body.classList.toggle('dark');try{localStorage.setItem('ma_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}}
+if(localStorage.getItem('ma_dark')==='1')document.body.classList.add('dark');
+function nav(id,btn){document.getElementById(id).scrollIntoView({behavior:'smooth'});document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+</script>
+
+<header>
+  <button class="dark-toggle" onclick="dark()" title="Toggle dark mode">🌙</button>
+  <div style="max-width:1100px;margin:0 auto">
+    <div style="font-size:.9em;opacity:.8;margin-bottom:6px">Marketing Analytics · Week 5</div>
+    <h1 style="font-size:2em;font-weight:700;margin-bottom:8px">New Product Decisions Part 2</h1>
+    <div style="font-size:1.1em;opacity:.9">Pricing Strategies: Linear &amp; Non-Linear, Bundling, Skimming, Penetration, Optimization</div>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="nav('s1',this)">1. Linear vs Non-Linear</button>
+  <button onclick="nav('s2',this)">2. Price Bundling</button>
+  <button onclick="nav('s3',this)">3. Skimming vs Penetration</button>
+  <button onclick="nav('s4',this)">4. Markdown Pricing</button>
+  <button onclick="nav('s5',this)">5. Price Optimization</button>
+  <button onclick="nav('s6',this)">6. Quiz</button>
+  <button onclick="nav('s7',this)">7. Summary</button>
+  <button onclick="nav('xn-extra',this)">🔢 Numericals</button>
+  <button onclick="nav('xn-mcq',this)">📝 MCQs</button>
+</nav>
+
+<main>
+
+<!-- SECTION 1: Linear vs Non-Linear Pricing -->
+<section id="s1">
+  <h2>1. Linear vs Non-Linear Pricing</h2>
+  <div class="card">
+    <h3>Linear Pricing</h3>
+    <p>In linear pricing, the price per unit stays <strong>constant</strong> regardless of quantity purchased. The total price scales proportionally with volume — simple, transparent, and predictable for consumers.</p>
+    <div class="formula">Total Price = Price per Unit × Quantity<br>
+Example: ₹50/unit × 10 units = ₹500 total</div>
+    <ul>
+      <li>Constant marginal price — every additional unit costs the same</li>
+      <li>Easy for customers to understand and budget</li>
+      <li>Used widely in utilities (per kWh), SaaS per-seat licensing</li>
+      <li><strong>Example:</strong> Netflix ₹649/month flat rate — stream as much or as little as you want</li>
+      <li><strong>Psychological Pricing pairing:</strong> Linear pricing is often enhanced with psychological pricing (e.g., £9.99 instead of £10.00) to boost perceived value.</li>
+      <li><strong>Tiered Pricing variant:</strong> Different price tiers for different quantity bands (e.g., wholesale or software-licence tiers) — attracts different customer segments and encourages higher sales volumes.</li>
+    </ul>
+
+    <h3>Non-Linear Pricing</h3>
+    <p>In non-linear pricing, the <strong>price per unit varies with quantity</strong>. Firms use this to extract more consumer surplus and segment buyers by their willingness to pay.</p>
+
+    <table>
+      <tr><th>Type</th><th>Mechanism</th><th>Real-World Example</th></tr>
+      <tr><td><strong>Volume Discounts</strong></td><td>Lower price per unit at higher quantities</td><td>First 100 units @₹100, next 100 @₹80, 200+ @₹60</td></tr>
+      <tr><td><strong>Two-Part Tariff</strong></td><td>Fixed access fee + variable per-unit charge</td><td>Gym: ₹1,500/month membership + ₹200/personal training session</td></tr>
+      <tr><td><strong>Bundling</strong></td><td>Multiple products sold together at a combined price</td><td>Microsoft Office suite, Airtel Black</td></tr>
+      <tr><td><strong>Versioning / Tiered</strong></td><td>Different feature/quality tiers at different prices</td><td>Spotify Free / Premium / Family</td></tr>
+      <tr><td><strong>Block Pricing</strong></td><td>Fixed price for a specified block of units</td><td>Electricity: first 100 kWh at one rate, next 200 at higher rate</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>XYZ Widgets — Demand Model &amp; Profit Maximization</h3>
+    <p>Let's walk through a complete worked example using a linear demand curve.</p>
+    <div class="example">
+      <strong>Given:</strong> Demand: Q = 250 − 3P &nbsp;|&nbsp; Marginal Cost (MC) = ₹0 (digital product simplification)
+    </div>
+    <div class="formula">
+Inverse Demand:  P = (250 − Q) / 3  =  83.33 − Q/3<br><br>
+Total Revenue:   TR = P × Q  =  (83.33 − Q/3) × Q  =  83.33Q − Q²/3<br><br>
+Marginal Revenue:  MR = dTR/dQ  =  83.33 − 2Q/3<br><br>
+Profit Max (MR = MC):  83.33 − 2Q/3 = 0<br>
+                       2Q/3 = 83.33<br>
+                       Q* = 125 units<br><br>
+Optimal Price:  P* = 83.33 − 125/3 = 83.33 − 41.67 = ₹41.67<br><br>
+Total Revenue:  TR* = 41.67 × 125 = ₹5,208.33<br><br>
+Consumer Surplus:  CS = ½ × 125 × (83.33 − 41.67) = ½ × 125 × 41.66 = ₹2,603.75
+    </div>
+
+    <!-- SVG: Demand/MR diagram -->
+    <div style="text-align:center;margin:20px 0">
+      <svg viewBox="0 0 520 340" width="100%" max-width="520" style="max-width:520px;background:var(--card);border-radius:10px;border:1px solid var(--border)" aria-label="Demand and MR curve diagram">
+        <!-- Axes -->
+        <line x1="60" y1="300" x2="490" y2="300" stroke="#888" stroke-width="2"/>
+        <line x1="60" y1="300" x2="60" y2="20" stroke="#888" stroke-width="2"/>
+        <!-- Axis labels -->
+        <text x="260" y="328" text-anchor="middle" fill="#666" font-size="13">Quantity (Q)</text>
+        <text x="20" y="165" text-anchor="middle" fill="#666" font-size="13" transform="rotate(-90,20,165)">Price (₹)</text>
+        <!-- Demand curve: from (60,30) at Q=0,P=83.33 to (477,300) at Q=250,P=0 -->
+        <!-- Scale: x: Q 0–250 maps to 60–490 (430px), y: P 0–90 maps to 300–20 (280px) -->
+        <!-- Q=0,P=83.33 → x=60, y=300-(83.33/90)*280=300-259=41 -->
+        <!-- Q=250,P=0 → x=490, y=300 -->
+        <line x1="60" y1="41" x2="490" y2="300" stroke="#00897b" stroke-width="2.5"/>
+        <text x="495" y="305" fill="#00897b" font-size="12">D</text>
+        <!-- MR curve: P=83.33-2Q/3, so at Q=0 P=83.33, at Q=125 P=0 -->
+        <!-- Q=0 → x=60,y=41; Q=125 → x=60+125*430/250=60+215=275, y=300 -->
+        <line x1="60" y1="41" x2="275" y2="300" stroke="#ff7043" stroke-width="2.5" stroke-dasharray="6,3"/>
+        <text x="280" y="295" fill="#ff7043" font-size="12">MR</text>
+        <!-- Shaded profit area (rectangle) -->
+        <rect x="60" y="133" width="215" height="167" fill="#00897b" fill-opacity="0.12"/>
+        <!-- P* horizontal dashed line: P*=41.67 → y=300-(41.67/90)*280=300-130=170 -->
+        <!-- Q* vertical dashed line: Q*=125 → x=60+125*430/250=275 -->
+        <line x1="60" y1="170" x2="275" y2="170" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <line x1="275" y1="300" x2="275" y2="170" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <!-- Consumer surplus triangle -->
+        <polygon points="60,41 275,41 275,170 60,170" fill="#43a047" fill-opacity="0.12"/>
+        <!-- Labels -->
+        <text x="42" y="174" text-anchor="end" fill="#1565c0" font-size="11">P*=41.67</text>
+        <text x="275" y="316" text-anchor="middle" fill="#1565c0" font-size="11">Q*=125</text>
+        <text x="42" y="44" text-anchor="end" fill="#888" font-size="11">83.33</text>
+        <text x="490" y="316" text-anchor="middle" fill="#888" font-size="11">250</text>
+        <!-- Annotations -->
+        <text x="150" y="125" fill="#43a047" font-size="11" font-weight="600">Consumer Surplus</text>
+        <text x="150" y="138" fill="#43a047" font-size="11">₹2,604</text>
+        <text x="130" y="240" fill="#00897b" font-size="11" font-weight="600">Profit / TR</text>
+        <text x="130" y="253" fill="#00897b" font-size="11">₹5,208</text>
+        <text x="200" y="22" fill="#333" font-size="13" font-weight="600">XYZ Widgets — Demand &amp; MR Curves</text>
+      </svg>
+    </div>
+
+    <div class="tips">
+      <strong>Key Insight:</strong> The gap between the Demand curve and MR curve represents the "sacrifice" — to sell one more unit, the firm must lower price on ALL previous units (under uniform pricing). This is why MR falls twice as fast as demand.
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: Price Bundling -->
+<section id="s2">
+  <h2>2. Price Bundling</h2>
+  <div class="card">
+    <h3>Types of Bundling</h3>
+    <table>
+      <tr><th>Type</th><th>Definition</th><th>Example</th></tr>
+      <tr><td><strong>Pure Bundling</strong></td><td>Only the bundle is sold; individual items not available separately</td><td>Microsoft Windows (OS + Explorer bundled)</td></tr>
+      <tr><td><strong>Mixed Bundling</strong></td><td>Both bundle AND individual items are available</td><td>McDonald's Meal Deal vs. à la carte; Airtel Black</td></tr>
+      <tr><td><strong>Complementary Bundling</strong></td><td>Products naturally used together</td><td>Printer + Ink cartridges; Razor + Blades</td></tr>
+      <tr><td><strong>Non-Complementary Bundling</strong></td><td>Unrelated products packaged together</td><td>Software suite (Excel + Word + PowerPoint)</td></tr>
+    </table>
+
+    <h3>Psychological Principles Driving Bundling</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0">
+      <div style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-radius:8px;padding:14px">
+        <strong style="color:#1565c0">1. Cognitive Ease</strong>
+        <p style="font-size:.9em;margin-top:6px">One bundle decision is mentally simpler than evaluating many individual items — reduces decision fatigue.</p>
+      </div>
+      <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:8px;padding:14px">
+        <strong style="color:#2e7d32">2. Perceived Value</strong>
+        <p style="font-size:.9em;margin-top:6px">Bundle often "feels" worth more than the sum of parts — especially when components have different perceived values.</p>
+      </div>
+      <div style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-radius:8px;padding:14px">
+        <strong style="color:#e65100">3. FOMO / Best Value</strong>
+        <p style="font-size:.9em;margin-top:6px">"Best value" framing triggers fear of missing out — customers feel they'd be irrational not to choose the bundle.</p>
+      </div>
+      <div style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-radius:8px;padding:14px">
+        <strong style="color:#6a1b9a">4. Anchoring</strong>
+        <p style="font-size:.9em;margin-top:6px">Listing individual prices first anchors the customer high; the bundle price then seems like a great deal.</p>
+      </div>
+    </div>
+
+    <h3>Airtel Black Bundle — Worked Example</h3>
+    <div class="example">
+      <table>
+        <tr><th>Service</th><th>Standalone Price</th><th>In Airtel Black</th></tr>
+        <tr><td>Mobile (Unlimited)</td><td>₹299/month</td><td rowspan="3" style="vertical-align:middle;text-align:center;font-size:1.2em;font-weight:700;color:#00897b">₹999/month</td></tr>
+        <tr><td>Broadband (100 Mbps)</td><td>₹799/month</td></tr>
+        <tr><td>DTH (HD Pack)</td><td>₹349/month</td></tr>
+        <tr><td><strong>Total Standalone</strong></td><td><strong>₹1,447/month</strong></td><td></td></tr>
+        <tr><td colspan="2"><strong>Savings</strong></td><td><strong>₹448/month (31% discount)</strong></td></tr>
+      </table>
+      <p style="margin-top:10px"><strong>Additional benefits:</strong> Single bill, one customer service number, shared data pool, single installation visit</p>
+    </div>
+
+    <h3>Willingness-to-Pay (WTP) Analysis</h3>
+    <p>Bundling can serve customers who have <em>heterogeneous valuations</em> — some value one component highly, others prefer the other. The bundle can capture both segments.</p>
+    <div class="formula">
+Bundle profitable if: Bundle WTP &ge; Bundle Price (for at least one segment)
+Segment buys if: Individual WTP &ge; Individual Price (for standalone items)
+    </div>
+    <table>
+      <tr><th>Customer</th><th>WTP Mobile</th><th>WTP Internet</th><th>Total WTP</th><th>Bundle Price ₹500?</th><th>Decision</th></tr>
+      <tr><td>A</td><td>₹300</td><td>₹200</td><td>₹480</td><td>480 &lt; 500</td><td style="color:#e53935"><strong>Won't buy bundle</strong></td></tr>
+      <tr><td>B</td><td>₹250</td><td>₹350</td><td>₹600</td><td>600 &ge; 500</td><td style="color:#43a047"><strong>Buys bundle</strong></td></tr>
+      <tr><td>C</td><td>₹400</td><td>₹300</td><td>₹700</td><td>700 &ge; 500</td><td style="color:#43a047"><strong>Buys bundle</strong></td></tr>
+    </table>
+    <p style="margin-top:8px"><em>Without bundling at ₹500 each: only Customer C buys Mobile (WTP ₹400 &lt; ₹500 — doesn't buy!). Bundling increases revenue by capturing Customer B who values services differently.</em></p>
+
+    <!-- SVG: Bundling WTP diagram -->
+    <div style="text-align:center;margin:20px 0">
+      <svg viewBox="0 0 520 200" width="100%" style="max-width:520px;background:var(--card);border-radius:10px;border:1px solid var(--border)" aria-label="WTP bundling diagram">
+        <text x="260" y="20" text-anchor="middle" fill="#333" font-size="13" font-weight="600">Willingness-to-Pay Comparison</text>
+        <!-- Customer A bar -->
+        <rect x="60" y="40" width="240" height="28" fill="#ef9a9a" rx="4"/>
+        <text x="65" y="59" fill="#b71c1c" font-size="12" font-weight="600">Customer A — Bundle WTP: ₹480</text>
+        <rect x="305" y="40" width="5" height="28" fill="#e53935" rx="2"/>
+        <text x="315" y="59" fill="#e53935" font-size="12">Bundle Price ₹500</text>
+        <!-- Customer B bar -->
+        <rect x="60" y="85" width="300" height="28" fill="#a5d6a7" rx="4"/>
+        <text x="65" y="104" fill="#1b5e20" font-size="12" font-weight="600">Customer B — Bundle WTP: ₹600</text>
+        <rect x="250" y="85" width="5" height="28" fill="#e53935" rx="2"/>
+        <!-- Customer C bar -->
+        <rect x="60" y="130" width="350" height="28" fill="#80cbc4" rx="4"/>
+        <text x="65" y="149" fill="#004d40" font-size="12" font-weight="600">Customer C — Bundle WTP: ₹700</text>
+        <rect x="250" y="130" width="5" height="28" fill="#e53935" rx="2"/>
+        <!-- Bundle price line -->
+        <line x1="310" y1="35" x2="310" y2="168" stroke="#e53935" stroke-width="2" stroke-dasharray="4,3"/>
+        <text x="313" y="178" fill="#e53935" font-size="11">₹500 bundle price</text>
+        <text x="60" y="195" fill="#666" font-size="10">Bar length = WTP. Customers B &amp; C cross the price threshold → buy the bundle.</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: Price Skimming vs Penetration -->
+<section id="s3">
+  <h2>3. Price Skimming vs Penetration Pricing</h2>
+  <div class="card">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <h3>Price Skimming</h3>
+        <div style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);border-radius:8px;padding:14px;margin-bottom:12px">
+          <strong style="color:#880e4f">Launch at HIGH price → gradually reduce</strong>
+        </div>
+        <p><strong>Best for:</strong> Innovative products, tech, luxury, early-adopter markets</p>
+        <ul style="margin-top:8px">
+          <li>Recover R&amp;D / launch costs rapidly</li>
+          <li>Signal premium quality to market</li>
+          <li>Maximise revenue from early adopters (high WTP)</li>
+          <li>Create "deal" perception as price drops</li>
+        </ul>
+        <div class="example" style="margin-top:12px">
+          <strong>iPhone 14 Launch:</strong><br>
+          Launch price: ₹79,900 → After 6 months: ₹69,900 → After 12 months: ₹59,900<br><br>
+          <strong>Tesla Model S:</strong> Started at $130k, now offers base from $74k as production scaled
+        </div>
+        <p><strong>Challenges:</strong></p>
+        <ul>
+          <li>Attracts competitors at lower price points</li>
+          <li>Customer resentment (early adopters feel cheated)</li>
+          <li>Limited initial market size (small early adopter segment)</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Penetration Pricing</h3>
+        <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:8px;padding:14px;margin-bottom:12px">
+          <strong style="color:#1b5e20">Launch at LOW price → gain market share fast</strong>
+        </div>
+        <p><strong>Best for:</strong> Price-sensitive markets, commodity products, building user base, network-effect businesses</p>
+        <ul style="margin-top:8px">
+          <li>Rapid mass adoption and market penetration</li>
+          <li>Economies of scale drive down costs</li>
+          <li>Network effects kick in (more users = more value)</li>
+          <li>Lock competitors out of market</li>
+        </ul>
+        <div class="example" style="margin-top:12px">
+          <strong>Jio's 2016 Launch:</strong><br>
+          Free data + calls for 6 months → 100M users in 170 days (fastest ever). Then ₹149/month.<br><br>
+          <strong>Netflix India:</strong> Launched at ₹499/month (vs ₹800 global) → Mobile-only ₹149/month to penetrate price-sensitive segment
+        </div>
+        <p><strong>Challenges:</strong></p>
+        <ul>
+          <li>Price wars — competitors match your low price</li>
+          <li>Perceived as low quality ("cheap = bad")</li>
+          <li>Very hard to raise prices later (customer backlash)</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Comprehensive Pricing Strategy Comparison</h3>
+    <table>
+      <tr><th>Strategy</th><th>Price Level</th><th>Best For</th><th>Risk</th><th>Example</th></tr>
+      <tr><td><strong>Price Skimming</strong></td><td>High → Low</td><td>Innovation, tech, luxury</td><td>Attracts competition</td><td>Apple iPhone, Sony PS5</td></tr>
+      <tr><td><strong>Penetration Pricing</strong></td><td>Low → (maybe higher)</td><td>Price-sensitive mass markets</td><td>Price wars, margin squeeze</td><td>Jio, Netflix India</td></tr>
+      <tr><td><strong>Cost-Plus Pricing</strong></td><td>Cost + fixed margin</td><td>B2B manufacturing, contracts</td><td>Ignores market demand</td><td>Industrial parts, construction</td></tr>
+      <tr><td><strong>Value-Based Pricing</strong></td><td>Based on WTP</td><td>SaaS, premium brands</td><td>Requires deep customer insight</td><td>Salesforce, McKinsey</td></tr>
+      <tr><td><strong>Dynamic Pricing</strong></td><td>Varies by time/demand/user</td><td>E-commerce, airlines, hotels</td><td>Customer perception of fairness</td><td>Amazon, Indigo, Uber Surge</td></tr>
+      <tr><td><strong>Bundle Pricing</strong></td><td>Package discount</td><td>Telecom, software, media</td><td>Cannibalises individual sales</td><td>Airtel Black, MS Office 365</td></tr>
+    </table>
+
+    <!-- SVG: Radar chart for pricing strategies -->
+    <div style="text-align:center;margin:20px 0">
+      <svg viewBox="0 0 500 300" width="100%" style="max-width:500px;background:var(--card);border-radius:10px;border:1px solid var(--border)" aria-label="Price skimming vs penetration lifecycle">
+        <text x="250" y="22" text-anchor="middle" fill="#333" font-size="13" font-weight="600">Price Over Product Lifecycle</text>
+        <!-- Axes -->
+        <line x1="60" y1="260" x2="460" y2="260" stroke="#aaa" stroke-width="1.5"/>
+        <line x1="60" y1="260" x2="60" y2="40" stroke="#aaa" stroke-width="1.5"/>
+        <text x="260" y="280" text-anchor="middle" fill="#666" font-size="12">Time / Product Lifecycle</text>
+        <text x="22" y="160" text-anchor="middle" fill="#666" font-size="12" transform="rotate(-90,22,160)">Price</text>
+        <!-- Skimming curve: starts high, drops -->
+        <path d="M80,60 C120,65 160,100 220,140 C280,175 340,200 440,210" fill="none" stroke="#e53935" stroke-width="2.5"/>
+        <text x="445" y="215" fill="#e53935" font-size="11" font-weight="600">Skimming</text>
+        <!-- Penetration curve: starts low, rises slightly -->
+        <path d="M80,220 C130,215 180,200 240,185 C310,168 370,160 440,155" fill="none" stroke="#43a047" stroke-width="2.5"/>
+        <text x="445" y="160" fill="#43a047" font-size="11" font-weight="600">Penetration</text>
+        <!-- Cost line: flat -->
+        <line x1="80" y1="240" x2="440" y2="235" stroke="#888" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <text x="445" y="239" fill="#888" font-size="10">Cost</text>
+        <!-- Stage labels -->
+        <text x="90" y="275" fill="#999" font-size="10">Launch</text>
+        <text x="230" y="275" fill="#999" font-size="10">Growth</text>
+        <text x="370" y="275" fill="#999" font-size="10">Maturity</text>
+        <!-- Annotation arrows -->
+        <text x="90" y="55" fill="#e53935" font-size="10">High launch price</text>
+        <text x="90" y="230" fill="#43a047" font-size="10">Low launch price</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: Markdown Pricing -->
+<section id="s4">
+  <h2>4. Markdown Pricing</h2>
+  <div class="card">
+    <h3>Markdown Formulas</h3>
+    <div class="formula">
+Markdown Amount  = Original Price − New (Sale) Price<br><br>
+Markdown %       = (Original Price − New Price) / Original Price × 100<br><br>
+New Price        = Original Price × (1 − Markdown%/100)
+    </div>
+
+    <h3>Worked Example — Seasonal Footwear</h3>
+    <div class="example">
+      <strong>Scenario:</strong> High-street shoe brand runs end-of-season clearance<br><br>
+      <table>
+        <tr><th>Item</th><th>Original Price</th><th>Sale Price</th><th>Markdown ₹</th><th>Markdown %</th></tr>
+        <tr><td>Running Shoes</td><td>₹4,000</td><td>₹2,800</td><td>₹1,200</td><td style="color:#e53935"><strong>30%</strong></td></tr>
+        <tr><td>Formal Loafers</td><td>₹6,500</td><td>₹3,900</td><td>₹2,600</td><td style="color:#e53935"><strong>40%</strong></td></tr>
+        <tr><td>Sandals</td><td>₹1,800</td><td>₹900</td><td>₹900</td><td style="color:#e53935"><strong>50%</strong></td></tr>
+      </table>
+      <p style="margin-top:8px"><strong>Running Shoes calculation:</strong> Markdown% = (4000−2800)/4000 × 100 = 1200/4000 × 100 = <strong>30%</strong></p>
+    </div>
+
+    <h3>Types of Markdowns</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0">
+      <div class="card" style="border-left:4px solid #e53935;margin-bottom:0">
+        <strong style="color:#e53935">Permanent Markdowns</strong>
+        <ul style="margin-top:8px;font-size:.9em">
+          <li>Actual cost reduction passed to customer</li>
+          <li>Clearance of discontinued lines</li>
+          <li>Damage or obsolescence pricing</li>
+          <li>New model supersedes old</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left:4px solid #ff7043;margin-bottom:0">
+        <strong style="color:#ff7043">Promotional Markdowns</strong>
+        <ul style="margin-top:8px;font-size:.9em">
+          <li>Temporary sale event pricing</li>
+          <li>Festival / holiday discounts</li>
+          <li>Weekly specials, flash sales</li>
+          <li>Price returns to original after event</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Markdown Calendar Strategy — 3-Week Clearance</h3>
+    <p>Retailers use a staged markdown approach to systematically clear slow-moving inventory while optimising total revenue recovery:</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0">
+      <div style="background:linear-gradient(135deg,#fff8e1,#ffecb3);border-radius:8px;padding:14px;text-align:center">
+        <div style="font-size:2em;font-weight:700;color:#f57f17">20%</div>
+        <strong>Week 1</strong>
+        <p style="font-size:.85em;margin-top:4px">Move slow-moving inventory; price-sensitive early shoppers respond. Target: sell 50% of excess stock.</p>
+      </div>
+      <div style="background:linear-gradient(135deg,#ffe0b2,#ffcc80);border-radius:8px;padding:14px;text-align:center">
+        <div style="font-size:2em;font-weight:700;color:#e65100">40%</div>
+        <strong>Week 2</strong>
+        <p style="font-size:.85em;margin-top:4px">Deeper discount attracts bargain hunters. Target: sell remaining 80% of remaining stock.</p>
+      </div>
+      <div style="background:linear-gradient(135deg,#ffcdd2,#ef9a9a);border-radius:8px;padding:14px;text-align:center">
+        <div style="font-size:2em;font-weight:700;color:#b71c1c">60%</div>
+        <strong>Week 3</strong>
+        <p style="font-size:.85em;margin-top:4px">Final clearance — avoid carrying costs. Better to liquidate than store. Target: 100% clearance.</p>
+      </div>
+    </div>
+    <div class="tips">
+      <strong>Goal of Markdown Strategy:</strong> Avoid inventory carrying costs (storage, insurance, capital tied up) and dead stock. ₹500 recovered at deep discount beats ₹0 from unsold items plus ₹200 carrying cost.
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: Price Optimization -->
+<section id="s5">
+  <h2>5. Price Optimization</h2>
+  <div class="card">
+    <h3>Core Pricing Methodologies</h3>
+    <table>
+      <tr><th>Method</th><th>Formula</th><th>Use Case</th></tr>
+      <tr><td><strong>Cost-Plus</strong></td><td>Price = Total Cost × (1 + Markup%)</td><td>Manufacturing, B2B contracts, retail</td></tr>
+      <tr><td><strong>Value-Based</strong></td><td>Price = Max WTP of target segment</td><td>SaaS, consulting, premium brands</td></tr>
+      <tr><td><strong>Competitive</strong></td><td>Price relative to competitor (±X%)</td><td>Commodity markets, retail</td></tr>
+      <tr><td><strong>Target Return</strong></td><td>Price = (Cost + Target Profit) / Units</td><td>New product launch, cost recovery</td></tr>
+    </table>
+
+    <h3>Price Elasticity of Demand</h3>
+    <div class="formula">
+Price Elasticity (E)  =  % Change in Quantity Demanded / % Change in Price<br><br>
+E  =  (ΔQ/Q) / (ΔP/P)  =  (ΔQ/ΔP) × (P/Q)<br><br>
+Note: E is always negative (price up → demand down) by law of demand
+    </div>
+    <table>
+      <tr><th>Condition</th><th>Value</th><th>Interpretation</th><th>Examples</th></tr>
+      <tr><td>Elastic</td><td>E &lt; −1 (e.g., −2.5)</td><td>% drop in demand exceeds % price rise — price sensitive</td><td>Luxury goods, restaurant meals, holidays</td></tr>
+      <tr><td>Inelastic</td><td>−1 &lt; E &lt; 0 (e.g., −0.3)</td><td>% drop in demand less than % price rise — insensitive</td><td>Insulin, petrol, cigarettes, salt</td></tr>
+      <tr><td>Unit Elastic</td><td>E = −1</td><td>% change in demand exactly equals % price change</td><td>Theoretical midpoint</td></tr>
+    </table>
+    <div class="example">
+      <strong>Worked Example:</strong> Clothing retailer raises price 10%, demand falls 15%<br>
+      E = −15% / 10% = <strong>−1.5</strong> → Elastic demand (customers are price sensitive)<br>
+      <strong>Implication:</strong> Revenue falls when price rises — this price increase was a bad decision.<br><br>
+      <strong>Counter-example:</strong> Petrol station raises price 10%, demand falls 2%<br>
+      E = −2% / 10% = <strong>−0.2</strong> → Inelastic (people still need fuel)<br>
+      <strong>Implication:</strong> Revenue rises when price rises — petrol companies can increase prices profitably.
+    </div>
+
+    <h3>A/B Testing for Pricing Decisions</h3>
+    <div class="formula">
+z = (p₁ − p₂) / √[ p̂(1−p̂)(1/n₁ + 1/n₂) ]<br><br>
+where p̂ = (x₁ + x₂) / (n₁ + n₂)  [pooled proportion]<br>
+If |z| > 1.96 → statistically significant at α = 0.05 (95% confidence)
+    </div>
+    <div class="example">
+      <strong>Pricing A/B Test:</strong><br>
+      Control (Group A): Price = ₹999/month → n₁ = 500, conversions = 40 → p₁ = 8%<br>
+      Treatment (Group B): Price = ₹899/month → n₂ = 500, conversions = 55 → p₂ = 11%<br><br>
+      p̂ = (40+55)/(500+500) = 95/1000 = 0.095<br>
+      z = (0.11−0.08) / √[0.095×0.905×(1/500+1/500)]<br>
+      z = 0.03 / √[0.08598 × 0.004] = 0.03 / √0.000344 = 0.03 / 0.01854 = <strong>1.62</strong><br><br>
+      Since |z| = 1.62 &lt; 1.96 → <strong>Not statistically significant at 95%</strong> — need larger sample or stronger effect.
+    </div>
+
+    <h3>Machine Learning for Price Optimization</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0">
+      <div class="card" style="border-top:3px solid #00897b;margin-bottom:0">
+        <strong>Regression Models</strong>
+        <p style="font-size:.88em;margin-top:6px">Predict revenue/demand as a function of price + contextual features (season, competition, day of week). Use to find optimal price point.</p>
+      </div>
+      <div class="card" style="border-top:3px solid #ff7043;margin-bottom:0">
+        <strong>Decision Trees</strong>
+        <p style="font-size:.88em;margin-top:6px">Segment customers by price sensitivity automatically. Create price rules: "high-income customers in metro cities → premium price".</p>
+      </div>
+      <div class="card" style="border-top:3px solid #8e24aa;margin-bottom:0">
+        <strong>Reinforcement Learning</strong>
+        <p style="font-size:.88em;margin-top:6px">Dynamic pricing agent that learns from market response in real-time. Amazon changes prices ~2.5 million times/day using RL-based systems.</p>
+      </div>
+    </div>
+    <div class="code">
+# Python: Simple price elasticity regression
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+# Historical data: [price, units_sold]
+prices = np.array([100, 120, 140, 160, 180, 200]).reshape(-1,1)
+units  = np.array([500, 430, 370, 310, 260, 210])
+
+# Log-log regression for elasticity
+log_prices = np.log(prices)
+log_units  = np.log(units)
+
+model = LinearRegression().fit(log_prices, log_units)
+elasticity = model.coef_[0]
+print(f"Price Elasticity: {elasticity:.2f}")
+# Output: Price Elasticity: -1.43 → Elastic demand
+
+# Optimal price (maximise revenue P*Q)
+# Revenue = P * Q = P * a * P^e = a * P^(1+e)
+# Max revenue when 1+e = 0, i.e., e = -1 (unit elastic)
+# For elastic goods, lowering price increases revenue
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: Quiz -->
+<section id="s6">
+  <h2>6. Practice Quiz — 14 Questions</h2>
+
+  <div class="quiz-q">
+    <p>Q1. Using the XYZ Widgets demand model Q = 250 − 3P with MC = 0, what is the profit-maximising quantity?</p>
+    <button onclick="qa(this,0)">A. 83 units</button>
+    <button onclick="qa(this,1)">B. 125 units</button>
+    <button onclick="qa(this,0)">C. 250 units</button>
+    <button onclick="qa(this,0)">D. 167 units</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q2. In the XYZ Widgets example, what is the profit-maximising price?</p>
+    <button onclick="qa(this,0)">A. ₹83.33</button>
+    <button onclick="qa(this,0)">B. ₹25.00</button>
+    <button onclick="qa(this,1)">C. ₹41.67</button>
+    <button onclick="qa(this,0)">D. ₹62.50</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q3. Which pricing strategy theoretically captures ALL consumer surplus?</p>
+    <button onclick="qa(this,0)">A. Price skimming</button>
+    <button onclick="qa(this,0)">B. Two-part tariff</button>
+    <button onclick="qa(this,1)">C. Perfect (first-degree) price discrimination</button>
+    <button onclick="qa(this,0)">D. Volume discounts</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q4. Airtel Black (Mobile + Broadband + DTH at a single bundled price) is best classified as:</p>
+    <button onclick="qa(this,0)">A. Pure bundling</button>
+    <button onclick="qa(this,1)">B. Mixed bundling</button>
+    <button onclick="qa(this,0)">C. Non-complementary bundling</button>
+    <button onclick="qa(this,0)">D. Volume discount pricing</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q5. A price elasticity of −0.3 indicates:</p>
+    <button onclick="qa(this,0)">A. Elastic demand — consumers are price sensitive</button>
+    <button onclick="qa(this,1)">B. Inelastic demand — consumers are price insensitive</button>
+    <button onclick="qa(this,0)">C. Unit elastic demand</button>
+    <button onclick="qa(this,0)">D. Perfectly inelastic demand</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q6. A shoe originally priced at ₹500 goes on sale for ₹350. What is the markdown percentage?</p>
+    <button onclick="qa(this,0)">A. 40%</button>
+    <button onclick="qa(this,0)">B. 43%</button>
+    <button onclick="qa(this,1)">C. 30%</button>
+    <button onclick="qa(this,0)">D. 25%</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q7. A two-part tariff pricing structure consists of:</p>
+    <button onclick="qa(this,0)">A. Two different prices for two different products</button>
+    <button onclick="qa(this,1)">B. A fixed access fee plus a per-unit variable charge</button>
+    <button onclick="qa(this,0)">C. A high launch price followed by a lower second price</button>
+    <button onclick="qa(this,0)">D. Charging two different customer segments two different prices</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q8. Penetration pricing is MOST suited for:</p>
+    <button onclick="qa(this,0)">A. Innovative luxury products with premium positioning</button>
+    <button onclick="qa(this,0)">B. Recovering high R&amp;D costs quickly</button>
+    <button onclick="qa(this,1)">C. Price-sensitive mass markets seeking rapid adoption</button>
+    <button onclick="qa(this,0)">D. Products with no competition</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q9. In an A/B pricing test, the z-statistic threshold for 95% confidence is:</p>
+    <button onclick="qa(this,0)">A. 1.65</button>
+    <button onclick="qa(this,1)">B. 1.96</button>
+    <button onclick="qa(this,0)">C. 2.58</button>
+    <button onclick="qa(this,0)">D. 1.28</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q10. Which pricing method sets price based on what the target customer segment is maximally willing to pay?</p>
+    <button onclick="qa(this,0)">A. Cost-plus pricing</button>
+    <button onclick="qa(this,0)">B. Competitive pricing</button>
+    <button onclick="qa(this,0)">C. Target return pricing</button>
+    <button onclick="qa(this,1)">D. Value-based pricing</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q11. In the XYZ Widgets example, what is the Consumer Surplus at the profit-maximising price?</p>
+    <button onclick="qa(this,0)">A. ₹5,208</button>
+    <button onclick="qa(this,0)">B. ₹1,302</button>
+    <button onclick="qa(this,1)">C. ₹2,604</button>
+    <button onclick="qa(this,0)">D. ₹3,906</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q12. A retailer uses 20% → 40% → 60% staged markdowns over three weeks. The PRIMARY goal is:</p>
+    <button onclick="qa(this,0)">A. Signal product quality through aggressive discounting</button>
+    <button onclick="qa(this,1)">B. Clear excess inventory to avoid carrying costs and dead stock</button>
+    <button onclick="qa(this,0)">C. Maximise profit margin per unit sold</button>
+    <button onclick="qa(this,0)">D. Implement penetration pricing</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q13. If price increases by 10% and revenue ALSO increases, the demand is:</p>
+    <button onclick="qa(this,1)">A. Inelastic (|E| &lt; 1)</button>
+    <button onclick="qa(this,0)">B. Elastic (|E| &gt; 1)</button>
+    <button onclick="qa(this,0)">C. Unit elastic (|E| = 1)</button>
+    <button onclick="qa(this,0)">D. Perfectly elastic</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q14. In the XYZ Widgets model, the Marginal Revenue (MR) curve has the equation:</p>
+    <button onclick="qa(this,0)">A. MR = 83.33 − Q/3 (same slope as demand)</button>
+    <button onclick="qa(this,0)">B. MR = 83.33 (constant)</button>
+    <button onclick="qa(this,1)">C. MR = 83.33 − 2Q/3 (twice the slope of demand)</button>
+    <button onclick="qa(this,0)">D. MR = 41.67 − Q/3</button>
+  </div>
+</section>
+
+<!-- SECTION 7: Summary -->
+<section id="s7">
+  <h2>7. Summary &amp; Exam Tips</h2>
+  <div class="card">
+    <h3>Key Formulas — Revision Card</h3>
+    <div class="formula">
+1.  Inverse Demand:    P = a − bQ  (from Q = a/b − P/b)<br>
+2.  Marginal Revenue:  MR = a − 2bQ  (slope twice steeper than demand)<br>
+3.  Profit Max:        MR = MC  →  solve for Q*, then find P*<br>
+4.  Consumer Surplus:  CS = ½ × Q* × (P_max − P*)<br>
+5.  Markdown %:        (Original − Sale) / Original × 100<br>
+6.  Price Elasticity:  E = %ΔQ / %ΔP  [negative by definition]<br>
+7.  A/B Test z-stat:   z = (p₁−p₂) / √[p̂(1−p̂)(1/n₁+1/n₂)]<br>
+8.  Cost-Plus Price:   Price = Cost × (1 + Markup%)
+    </div>
+
+    <h3>Critical Distinctions for Exams</h3>
+    <div class="tips">
+      <ul style="list-style:none;padding:0">
+        <li style="margin-bottom:8px"><strong>Price Skimming ≠ Price Discrimination:</strong> Skimming drops prices over time for everyone; price discrimination charges different segments simultaneously different prices.</li>
+        <li style="margin-bottom:8px"><strong>Pure Bundling vs Mixed Bundling:</strong> Pure = bundle only (no individual sales); Mixed = bundle + individual items both available.</li>
+        <li style="margin-bottom:8px"><strong>Elastic vs Inelastic — Revenue Rule:</strong> Elastic → lower price increases revenue. Inelastic → higher price increases revenue.</li>
+        <li style="margin-bottom:8px"><strong>MR always slopes twice as steeply as linear demand</strong> — if demand is P = a−bQ, then MR = a−2bQ.</li>
+        <li style="margin-bottom:8px"><strong>Two-Part Tariff:</strong> Fixed fee + per-unit. If firm charges per-unit = MC and sets fixed fee = consumer surplus, it extracts maximum profit.</li>
+        <li><strong>A/B Test significance:</strong> z &gt; 1.96 for 95% CI, z &gt; 2.58 for 99% CI. Small samples → use t-test instead.</li>
+      </ul>
+    </div>
+
+    <h3>Pricing Strategy Selection Guide</h3>
+    <table>
+      <tr><th>Situation</th><th>Recommended Strategy</th><th>Why</th></tr>
+      <tr><td>Brand-new, innovative product with early adopters</td><td>Price Skimming</td><td>Capture high WTP early; recoup R&amp;D</td></tr>
+      <tr><td>Entering crowded, price-sensitive mass market</td><td>Penetration Pricing</td><td>Volume over margin to gain share</td></tr>
+      <tr><td>Customers have different valuations for components</td><td>Mixed Bundling</td><td>Capture multiple WTP profiles</td></tr>
+      <tr><td>Demand varies significantly by time/user</td><td>Dynamic Pricing</td><td>Maximise revenue in each micro-segment</td></tr>
+      <tr><td>End-of-season slow-moving stock</td><td>Markdown Calendar</td><td>Recover value before carrying costs exceed proceeds</td></tr>
+    </table>
+  </div>
+
+  <div class="nav-links">
+    <a href="Week_04_MA_NewProduct1.html">&larr; Week 4: New Product Decisions Part 1</a>
+    <a href="Week_06_MA_CustomerAnalytics1.html">Week 6: Customer Analytics Part 1 &rarr;</a>
+  </div>
+</section>
+
+<style>
+#xn-extra .xn-intro{background:rgba(0,137,123,.08);border-left:4px solid var(--primary);border-radius:0 8px 8px 0;padding:12px 16px;margin:6px 0 18px;color:var(--muted);font-size:.92em;}
+.xn-prob{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.xn-q{margin-bottom:10px;font-weight:600;}
+.xn-tag{display:inline-block;background:var(--primary);color:#fff;font-size:.72em;font-weight:700;padding:2px 9px;border-radius:20px;margin-right:7px;vertical-align:middle;}
+.xn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.xn-in{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:.95em;min-width:180px;font-family:monospace;}
+.xn-in:focus{outline:none;border-color:var(--primary);}
+.xn-check,.xn-toggle{border:none;border-radius:8px;padding:8px 18px;cursor:pointer;font-weight:700;font-size:.88em;}
+.xn-check{background:var(--primary);color:#fff;}
+.xn-check:hover{background:var(--primary-dark);}
+.xn-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.xn-toggle:hover{border-color:var(--primary);color:var(--primary);}
+.xn-fb{margin-top:10px;font-weight:700;font-size:.9em;min-height:1em;}
+.xn-fb.xn-ok{color:#1b5e20;}
+body.dark .xn-fb.xn-ok{color:#a5d6a7;}
+.xn-fb.xn-no{color:#b71c1c;}
+body.dark .xn-fb.xn-no{color:#ef9a9a;}
+.xn-fb.xn-warn{color:#e65100;}
+.xn-sol{display:none;margin-top:12px;padding:14px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-left:4px solid var(--success);border-radius:8px;font-size:.92em;}
+body.dark .xn-sol{background:linear-gradient(135deg,#1a3a2e,#2a4a3e);color:#e8e8f0;}
+.xn-sol.open{display:block;animation:xnfade .25s ease;}
+@keyframes xnfade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.xn-sol .xf{background:#2c3e50;color:#ecf0f1;font-family:'Courier New',monospace;padding:10px 14px;border-radius:8px;margin:8px 0;overflow-x:auto;white-space:pre-wrap;font-size:.9em;}
+.xn-sol b{color:#1b5e20;}
+body.dark .xn-sol b{color:#a5d6a7;}
+.xn-opts{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
+.xn-opt{text-align:left;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;cursor:pointer;font-size:.9em;}
+.xn-opt:hover:not(:disabled){background:var(--border);}
+.xn-opt.xn-ok{background:#c8e6c9;border-color:var(--success);color:#1b5e20;font-weight:700;}
+body.dark .xn-opt.xn-ok{background:#1a3a2e;color:#a5d6a7;}
+.xn-opt.xn-no{background:#ffcdd2;border-color:var(--danger);color:#b71c1c;}
+body.dark .xn-opt.xn-no{background:#3a1a1a;color:#ef9a9a;}
+#xn-extra table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9em;}
+#xn-extra th{background:var(--primary);color:#fff;padding:8px 12px;text-align:left;}
+#xn-extra td{padding:7px 12px;border-bottom:1px solid var(--border);}
+</style>
+
+<section id="xn-extra">
+  <h2>🔢 Engineered Numerical Practice</h2>
+  <div class="xn-intro">
+    Fresh exam-style numerical problems built from this week's pricing formulas — markdown %, margin, markup, break-even, price elasticity, bundle discount, linear pricing and revenue optimization. Enter your answer and press
+    <strong>Check</strong> for instant feedback, or reveal the full worked solution. <em>(Press Enter in any answer box to check.)</em>
+  </div>
+
+  <div class="xn-prob" data-ans="25" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP1</span>A jacket originally priced at <strong>₹1,200</strong> is put on sale for <strong>₹900</strong>.
+      What is the markdown percentage?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 25 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Markdown % = (Original − Sale) / Original × 100
+                = (1200 − 900) / 1200 × 100
+                = 300 / 1200 × 100 = <b>25%</b></div>
+      The price was cut by a quarter of its original value.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="35" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP2</span>A product sells for <strong>₹80</strong> and costs <strong>₹52</strong> to produce.
+      What is the profit <strong>margin %</strong> (margin on selling price)?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 35 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Margin % = (Price − Cost) / Price × 100
+              = (80 − 52) / 80 × 100
+              = 28 / 80 × 100 = <b>35%</b></div>
+      Note: markup (on cost) would be 28/52 = 53.8% — margin always uses price as the base.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="6000" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP3</span>Fixed costs are <strong>₹54,000</strong>, the selling price is <strong>₹25</strong>/unit and the
+      variable cost is <strong>₹16</strong>/unit. How many units must be sold to <strong>break even</strong>?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 6000 (units)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Break-even units = Fixed Cost / (Price − Variable Cost)
+                  = 54,000 / (25 − 16)
+                  = 54,000 / 9 = <b>6,000 units</b></div>
+      Each unit contributes ₹9 toward covering the fixed costs.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="-1.5" data-tol="0.01" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP4</span>When the price of a product is cut from <strong>₹50</strong> to <strong>₹45</strong>, weekly quantity
+      sold rises from <strong>4,000</strong> to <strong>4,600</strong> units. Compute the <strong>price elasticity of demand</strong> (signed value, 1 dp).</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. -1.5">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">%ΔQ = (4600 − 4000)/4000 × 100 = +15%
+%ΔP = (45 − 50)/50 × 100 = −10%
+E = %ΔQ / %ΔP = 15 / (−10) = <b>−1.5</b></div>
+      |E| = 1.5 &gt; 1 ⇒ demand is <b>elastic</b>; cutting price raised total revenue here.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="20" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP5</span>Three items priced individually at <strong>₹45</strong>, <strong>₹30</strong> and <strong>₹15</strong> are offered
+      as a bundle for <strong>₹72</strong>. What is the bundle <strong>discount %</strong> versus the sum of parts?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 20 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Sum of parts = 45 + 30 + 15 = ₹90
+Discount % = (90 − 72) / 90 × 100
+           = 18 / 90 × 100 = <b>20%</b></div>
+      Mixed bundling anchors the ₹90 reference price so the ₹72 bundle feels like a deal.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="4250" data-tol="0.01" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP6</span>Under a <strong>linear pricing</strong> model the price is <strong>₹12.50</strong> per unit regardless of quantity.
+      What is the total price for an order of <strong>340</strong> units?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 4250">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Total Price = Price per Unit × Quantity
+            = 12.50 × 340 = <b>₹4,250</b></div>
+      Linear pricing keeps the per-unit price constant — no bulk discount applies.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="5400" data-tol="0.01" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP7</span>A product has the demand function <strong>Q = 300 − 4P</strong>. At a price of <strong>P = ₹30</strong>,
+      what is the <strong>total revenue</strong> (R = P × Q)?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 5400">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Q = 300 − 4P = 300 − 4(30) = 300 − 120 = 180 units
+R = P × Q = 30 × 180 = <b>₹5,400</b></div>
+      Plugging the chosen price into the demand curve gives quantity, then revenue.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="60" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP8</span>An item costs <strong>₹40</strong> and is priced at <strong>₹64</strong>.
+      What is the <strong>markup %</strong> (markup on cost)?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 60 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Markup % = (Price − Cost) / Cost × 100
+             = (64 − 40) / 40 × 100
+             = 24 / 40 × 100 = <b>60%</b></div>
+      Markup uses cost as the base (60%); the same spread expressed as margin on price is 24/64 = 37.5%.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">NP9</span>A start-up launches an innovative gadget at a <strong>high initial price</strong>, targeting early adopters,
+      and plans to lower it gradually as competition arrives. Which pricing strategy is this?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) Price skimming</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Penetration pricing</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Linear pricing</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Markdown pricing</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">High initial price for early adopters, lowered over time = <b>price skimming</b>. Penetration pricing does the opposite — a low launch price to grab market share quickly.</div>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  if(window.__xnInit) return; window.__xnInit=true;
+  function num(s){
+    if(s==null) return NaN;
+    s=(''+s).replace(/−/g,'-').replace(/[^0-9.\-]/g,'');
+    if(s===''||s==='-'||s==='.') return NaN;
+    return parseFloat(s);
+  }
+  window.xnCheck=function(btn){
+    var p=btn.closest('.xn-prob'); if(!p) return;
+    var ans=parseFloat(p.getAttribute('data-ans'));
+    var tol=parseFloat(p.getAttribute('data-tol')||'0.05');
+    var unit=p.getAttribute('data-unit')||'';
+    var inp=p.querySelector('.xn-in'); var fb=p.querySelector('.xn-fb');
+    var v=num(inp.value);
+    if(isNaN(v)){ fb.className='xn-fb xn-warn'; fb.textContent='⚠ Enter a numeric answer first.'; return; }
+    if(Math.abs(v-ans)<=tol){ fb.className='xn-fb xn-ok'; fb.innerHTML='✓ Correct! Answer = '+ans+unit; }
+    else { fb.className='xn-fb xn-no'; fb.innerHTML='✗ Not quite — you entered '+v+'. Try again, or reveal the steps.'; }
+  };
+  window.xnToggle=function(btn){
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol');
+    var open=s.classList.toggle('open'); btn.textContent=open?'Hide steps':'Show steps';
+  };
+  window.xnPick=function(btn,ok){
+    var box=btn.parentElement;
+    box.querySelectorAll('.xn-opt').forEach(function(b){b.disabled=true; b.style.cursor='default';});
+    btn.classList.add(ok?'xn-ok':'xn-no');
+    if(!ok){ box.querySelectorAll('.xn-opt').forEach(function(b){ if(b.getAttribute('data-correct')==='1') b.classList.add('xn-ok'); }); }
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol'); if(s) s.classList.add('open');
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter' && e.target.classList && e.target.classList.contains('xn-in')){
+      var b=e.target.closest('.xn-prob').querySelector('.xn-check'); if(b) b.click();
+    }
+  });
+})();
+</script>
+
+<section id="xn-mcq">
+  <h2>📝 Exam-Style MCQs — 2 Marks Each</h2>
+  <p style="opacity:.85;font-size:.95em;margin-bottom:14px;">Each question is worth 2 marks — a mix of applied numerical and conceptual items. Click an option to check it; the correct answer and explanation appear instantly.</p>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q1 · 2 marks</span> When a product's price is reduced from ₹80 to ₹72, weekly quantity sold rises from 5,000 to 5,900 units. What is the price elasticity of demand (signed, 1 dp)?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) −1.0</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) −0.6</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) −1.8</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) −2.5</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">%ΔQ = (5900 − 5000)/5000 × 100 = +18%
+%ΔP = (72 − 80)/80 × 100 = −10%
+E = %ΔQ / %ΔP = 18 / (−10) = <b>−1.8</b></div>
+      |E| = 1.8 &gt; 1, so demand is <b>elastic</b> — the price cut raised total revenue. (−1.0 mistakes the ratio for unit elasticity; −2.5 swaps numerator and denominator.)
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q2 · 2 marks</span> Fixed costs are ₹90,000, the selling price is ₹45/unit and the variable cost is ₹27/unit. How many units must be sold to break even?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) 5,000 units</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 2,000 units</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 3,333 units</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 1,250 units</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Break-even units = Fixed Cost / (Price − Variable Cost)
+                  = 90,000 / (45 − 27)
+                  = 90,000 / 18 = <b>5,000 units</b></div>
+      Each unit contributes ₹18 toward fixed costs. (3,333 wrongly divides by price; 2,000 divides by price+VC.)
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q3 · 2 marks</span> A product sells for ₹150 and costs ₹90 to produce. What is the profit margin % (margin on selling price)?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 60%</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 66.7%</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 30%</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">D) 40%</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Margin % = (Price − Cost) / Price × 100
+              = (150 − 90) / 150 × 100
+              = 60 / 150 × 100 = <b>40%</b></div>
+      Markup on cost would be 60/90 = 66.7% — margin always uses price as the base, so the two figures differ.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q4 · 2 marks</span> A firm launching a premium smartwatch sets a deliberately high introductory price to capture early adopters, then lowers it over time as competition grows. Which pricing strategy is this, and what is its primary goal?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Penetration pricing — maximise market share quickly</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) Price skimming — recover R&amp;D and maximise margin from low-price-sensitivity segments first</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Cost-plus pricing — add a fixed markup to unit cost</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Loss-leader pricing — sell below cost to drive store traffic</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">High launch price → skim → lower over time = <b>price skimming</b></div>
+      Skimming targets inelastic early adopters to recover development costs and earn high early margins. Penetration does the opposite (low price for fast share). Cost-plus and loss-leader describe unrelated mechanisms.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q5 · 2 marks</span> A retailer's demand for a luxury good is found to be inelastic (|E| &lt; 1). To increase total revenue, what should the firm do, and why?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Cut the price, because lower prices always raise revenue</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) Raise the price, because quantity falls proportionally less than the price rises</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Keep price unchanged, because revenue cannot be affected by price for luxury goods</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Cut the price, because demand is inelastic so volume will surge</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Inelastic (|E| &lt; 1): %ΔQ &lt; %ΔP ⇒ raise price → revenue rises</div>
+      When demand is inelastic, a price increase loses proportionally fewer units than the price gain, so total revenue (P × Q) <b>rises</b>. Cutting price would reduce revenue. The mirror rule: with elastic demand, cut price to raise revenue.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q6 · 2 marks</span> A software company offers its word processor, spreadsheet and presentation apps together as one suite at a single combined price rather than selling each separately. What is the main economic rationale for this bundling?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) It guarantees the firm a higher margin on every individual app</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) It simplifies accounting by removing the need to track per-product costs</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) It captures more consumer surplus by smoothing differing willingness-to-pay across products</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) It eliminates all price competition from rival vendors</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Bundle price &lt; Σ standalone prices, but reservation prices for the apps are negatively correlated → bundle extracts more total surplus</div>
+      Bundling works because customers value the components differently; combining them lets the firm sell to buyers whose willingness-to-pay for any single item would be too low, capturing <b>more aggregate consumer surplus</b>. It does not raise per-item margins, fix accounting, or remove competition.
+    </div>
+  </div>
+</section>
+</main>
+<footer>Marketing Analytics · Week 5 — New Product Decisions Part 2: Pricing Strategies &nbsp;|&nbsp; Use the navigation above to jump between sections</footer>
+<script src="../claude-tutor.js"></script>
+</body></html>

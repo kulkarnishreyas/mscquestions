@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 7 — Advanced ML Techniques</title>
+<style>
+:root{--primary:#1e88e5;--primary-dark:#0d47a1;--accent:#ff9800;--success:#43a047;--danger:#e53935;--bg:#f5f8fb;--card:#fff;--text:#1a2332;--muted:#5a6a7a;--border:#dde5ec}
+body.dark{--bg:#0f1721;--card:#1a2535;--text:#e0e8f0;--muted:#a0b0c0;--border:#2a3545}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;transition:all .3s}
+header{background:linear-gradient(135deg,#1e88e5,#0d47a1);color:white;padding:40px 20px;text-align:center}
+header h1{font-size:2.2em;margin-bottom:6px}header .breadcrumb{font-size:.95em;opacity:.95}header .breadcrumb a{color:#ffd54f;text-decoration:none}
+nav{position:sticky;top:0;background:var(--card);z-index:100;padding:10px;overflow-x:auto;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.08);border-bottom:1px solid var(--border)}
+nav button{background:transparent;color:var(--text);border:2px solid var(--border);padding:6px 14px;margin:2px;border-radius:18px;cursor:pointer;font-size:.82em;font-weight:600}
+nav button:hover{border-color:var(--primary);color:var(--primary)}nav button.active{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-color:transparent}
+.icon-btn{background:var(--bg);width:32px;height:32px;border-radius:50%;padding:0}
+main{max-width:1100px;margin:25px auto;padding:0 18px}
+section{background:var(--card);margin:25px 0;padding:28px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.06);scroll-margin-top:80px}
+section h2{color:var(--primary-dark);border-bottom:3px solid var(--primary);padding-bottom:8px;margin-bottom:18px;font-size:1.7em}
+body.dark section h2{color:#82b1ff}section h3{margin:18px 0 10px;font-size:1.25em}
+section h4{color:var(--primary-dark);margin:12px 0 8px}body.dark section h4{color:#90caf9}
+p{margin-bottom:10px}ul,ol{margin:8px 0 12px 26px}li{margin-bottom:5px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.card{background:linear-gradient(135deg,#f0f6fc,#e8f0f8);border-left:4px solid var(--primary-dark);padding:14px;border-radius:8px}
+body.dark .card{background:linear-gradient(135deg,#1f2a3a,#2a3545)}
+.card h4{color:var(--primary-dark);margin-bottom:6px;font-size:1em}body.dark .card h4{color:#90caf9}
+.card p{font-size:.9em;margin:0;color:var(--muted)}
+table{width:100%;border-collapse:collapse;margin:12px 0}th,td{padding:9px 12px;border:1px solid var(--border);text-align:left}
+th{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white}tr:nth-child(even) td{background:var(--bg)}
+.code-block{background:#1a2535;color:#ecf0f1;padding:12px 14px;border-radius:8px;font-family:'Courier New',monospace;font-size:.9em;overflow-x:auto;margin:10px 0;white-space:pre-wrap;line-height:1.5}
+code{background:var(--bg);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:.92em;border:1px solid var(--border)}
+.quiz{background:linear-gradient(135deg,#e8f5e9,#dcedc8);border-left:4px solid var(--success);padding:16px;border-radius:10px;margin:12px 0}
+body.dark .quiz{background:linear-gradient(135deg,#1a3a2e,#2a4a3e)}
+.quiz-option{display:block;margin:6px 0;padding:10px 12px;background:var(--card);border:2px solid var(--border);border-radius:8px;cursor:pointer}
+.quiz-option:hover{border-color:var(--success);transform:translateX(3px)}
+.quiz-option.correct{background:#c8e6c9!important;border-color:var(--success);color:#1b5e20}
+.quiz-option.wrong{background:#ffcdd2!important;border-color:var(--danger);color:#b71c1c}
+.insight{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-left:4px solid #1976d2;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .insight{background:linear-gradient(135deg,#1a2a4a,#253560)}
+.warning{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-left:4px solid #f57c00;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .warning{background:linear-gradient(135deg,#3a2a1a,#4a3525)}
+.example{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left:4px solid #8e24aa;padding:14px 16px;border-radius:8px;margin:12px 0}
+body.dark .example{background:linear-gradient(135deg,#2a1a3a,#3a253f)}
+.summary{background:linear-gradient(135deg,#fff9c4,#fff59d);border-left:4px solid #fbc02d;padding:16px;border-radius:10px;margin:14px 0}
+body.dark .summary{background:linear-gradient(135deg,#3a3a1a,#4a4a25);color:var(--text)}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.9em;border-top:1px solid var(--border);margin-top:30px}
+.toc{background:var(--bg);padding:16px 20px;border-radius:10px;margin-bottom:20px}
+.toc h3{margin-bottom:8px;color:var(--primary-dark)}body.dark .toc h3{color:#90caf9}.toc ol{columns:2;column-gap:30px}
+.svg-diagram{background:var(--bg);padding:16px;border-radius:10px;margin:14px 0;text-align:center}.svg-diagram svg{max-width:100%;height:auto}
+.formula{background:linear-gradient(135deg,#f0f4ff,#dce7ff);padding:14px 18px;border-radius:8px;font-family:Georgia,serif;font-size:1.05em;text-align:center;margin:12px 0;border-left:4px solid var(--primary)}
+body.dark .formula{background:linear-gradient(135deg,#1f2a3a,#2a3a55)}
+</style>
+</head>
+<body>
+
+<header><div class="breadcrumb"><a href="index.html">📚 FDA Modules</a> › Week 7</div><h1>🧠 Week 7 — Advanced ML Techniques</h1></header>
+
+<nav>
+<button onclick="g('ensemble',this)" class="active">1. Ensemble</button>
+<button onclick="g('svm',this)">2. SVM</button>
+<button onclick="g('nn',this)">3. Neural Networks</button>
+<button onclick="g('dl',this)">4. Deep Learning</button>
+<button onclick="g('nlp',this)">5. NLP</button>
+<button onclick="g('rl',this)">6. Reinforcement</button>
+<button onclick="g('quiz',this)">🎯 Quiz</button>
+<button onclick="g('summary',this)">📝 Summary</button>
+<button class="icon-btn" onclick="dark()">🌓</button>
+</nav>
+
+<main>
+
+<section class="toc"><h3>📑 Contents</h3><ol>
+<li><a href="#ensemble">Ensemble Methods</a></li>
+<li><a href="#svm">Support Vector Machines</a></li>
+<li><a href="#nn">Neural Networks Basics</a></li>
+<li><a href="#dl">Deep Learning (CNN, RNN, LSTM)</a></li>
+<li><a href="#nlp">Natural Language Processing</a></li>
+<li><a href="#rl">Reinforcement Learning &amp; Q-Learning</a></li>
+<li><a href="#quiz">14-Question Quiz</a></li>
+<li><a href="#summary">Summary &amp; Exam Tips</a></li>
+</ol></section>
+
+<section id="ensemble">
+<h2>1️⃣ Ensemble Methods</h2>
+
+<p>Combine multiple models for better, more robust predictions. Key principles: <strong>Diversity, Independence, Aggregation</strong>.</p>
+
+<h3>Bagging vs Boosting</h3>
+<table>
+<tr><th>Feature</th><th>Bagging</th><th>Boosting</th></tr>
+<tr><td>Training</td><td>Parallel</td><td>Sequential</td></tr>
+<tr><td>Focus</td><td>Variance reduction</td><td>Bias reduction</td></tr>
+<tr><td>Overfit Risk</td><td>Low</td><td>Higher if untuned</td></tr>
+<tr><td>Examples</td><td>Random Forest</td><td>AdaBoost, GBM, XGBoost, LightGBM</td></tr>
+</table>
+
+<div class="code-block">from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+rf = RandomForestClassifier(n_estimators=100).fit(X_train, y_train)
+gbm = GradientBoostingClassifier().fit(X_train, y_train)</div>
+
+<h3>Applications in Finance</h3>
+<ul>
+<li><strong>Credit Risk</strong> — Random Forest assesses default likelihood from many attributes</li>
+<li><strong>Stock Forecasting</strong> — GBM uncovers complex patterns</li>
+<li><strong>Fraud Detection</strong> — AdaBoost focuses on misclassified transactions (imbalanced data)</li>
+</ul>
+</section>
+
+<section id="svm">
+<h2>2️⃣ Support Vector Machines</h2>
+
+<p>SVM finds the <strong>hyperplane</strong> that best separates classes with <strong>maximum margin</strong>. Support vectors = points closest to the boundary.</p>
+
+<div class="formula">f(x) = w · x + b &nbsp;&nbsp; (sign &gt; 0 → +1, &lt; 0 → −1)</div>
+
+<h3>Kernel Functions</h3>
+<table>
+<tr><th>Kernel</th><th>Use</th></tr>
+<tr><td>Linear</td><td>Linearly separable data</td></tr>
+<tr><td>Polynomial</td><td>Curved boundaries</td></tr>
+<tr><td>RBF (Gaussian)</td><td>Most non-linear cases — flexible</td></tr>
+</table>
+
+<div class="code-block">from sklearn.svm import SVC
+svm = SVC(kernel='rbf', C=1.0, gamma='scale')
+svm.fit(X_train, y_train)
+y_pred = svm.predict(X_test)</div>
+
+<h3>Tuning Parameters</h3>
+<ul>
+<li><strong>C</strong>: regularisation. Low C = wider margin (more tolerance for errors)</li>
+<li><strong>Gamma (γ)</strong>: kernel reach. High γ = tight fit per point</li>
+</ul>
+
+<h3>Strengths &amp; Limits</h3>
+<table>
+<tr><th>✅ Strengths</th><th>❌ Limits</th></tr>
+<tr><td>High-dimensional data</td><td>Slow on large datasets</td></tr>
+<tr><td>Robust to overfitting (well-tuned)</td><td>"Black box" — less interpretable</td></tr>
+<tr><td>Effective with clear margins</td><td>Sensitive to imbalanced data</td></tr>
+</table>
+
+<h3>Finance Applications</h3>
+<ul>
+<li>Credit scoring (default / no-default)</li>
+<li>Stock direction prediction</li>
+<li>Fraud detection</li>
+</ul>
+</section>
+
+<section id="nn">
+<h2>3️⃣ Neural Networks Basics</h2>
+
+<div class="svg-diagram">
+<svg viewBox="0 0 600 230" xmlns="http://www.w3.org/2000/svg">
+<text x="80" y="20" text-anchor="middle" font-weight="bold" font-size="12">Input Layer</text>
+<text x="300" y="20" text-anchor="middle" font-weight="bold" font-size="12">Hidden Layer</text>
+<text x="520" y="20" text-anchor="middle" font-weight="bold" font-size="12">Output</text>
+<g fill="#1e88e5">
+<circle cx="80" cy="60" r="20"/><circle cx="80" cy="115" r="20"/><circle cx="80" cy="170" r="20"/>
+</g>
+<g fill="#43a047">
+<circle cx="300" cy="50" r="20"/><circle cx="300" cy="105" r="20"/><circle cx="300" cy="160" r="20"/><circle cx="300" cy="210" r="20"/>
+</g>
+<g fill="#ff9800">
+<circle cx="520" cy="115" r="22"/>
+</g>
+<g stroke="#999" stroke-width="1">
+<line x1="100" y1="60" x2="280" y2="50"/><line x1="100" y1="60" x2="280" y2="105"/><line x1="100" y1="60" x2="280" y2="160"/><line x1="100" y1="60" x2="280" y2="210"/>
+<line x1="100" y1="115" x2="280" y2="50"/><line x1="100" y1="115" x2="280" y2="105"/><line x1="100" y1="115" x2="280" y2="160"/><line x1="100" y1="115" x2="280" y2="210"/>
+<line x1="100" y1="170" x2="280" y2="50"/><line x1="100" y1="170" x2="280" y2="105"/><line x1="100" y1="170" x2="280" y2="160"/><line x1="100" y1="170" x2="280" y2="210"/>
+<line x1="320" y1="50" x2="500" y2="115"/><line x1="320" y1="105" x2="500" y2="115"/><line x1="320" y1="160" x2="500" y2="115"/><line x1="320" y1="210" x2="500" y2="115"/>
+</g>
+</svg>
+</div>
+
+<h3>Why in Finance?</h3>
+<ul>
+<li>Handles high-dimensional, non-linear data (market signals, customer profiles)</li>
+<li>Pattern recognition without explicit rules</li>
+<li>Processes unstructured data (text, audio)</li>
+<li>Real-time decision-making (HFT, fraud)</li>
+</ul>
+
+<div class="code-block">from sklearn.neural_network import MLPClassifier
+nn = MLPClassifier(hidden_layer_sizes=(10,), activation='relu', max_iter=500)
+nn.fit(X_train, y_train)</div>
+
+<h3>Strengths &amp; Limits</h3>
+<table>
+<tr><th>✅ Strengths</th><th>❌ Limits</th></tr>
+<tr><td>Models complex relationships</td><td>"Black-box" — hard to explain</td></tr>
+<tr><td>Adaptive learning</td><td>High compute requirement</td></tr>
+<tr><td>Scales to many use cases</td><td>Needs lots of data</td></tr>
+<tr><td>Real-time capable</td><td>Risk of overfitting</td></tr>
+</table>
+</section>
+
+<section id="dl">
+<h2>4️⃣ Deep Learning</h2>
+
+<p>Multi-layer neural networks for very complex tasks.</p>
+
+<h3>Key Architectures</h3>
+<div class="card-grid">
+<div class="card"><h4>🖼️ CNN</h4><p>Spatial data — scanned cheques, chart patterns, document OCR</p></div>
+<div class="card"><h4>🔁 RNN</h4><p>Sequential — credit payment history, transaction sequences</p></div>
+<div class="card"><h4>⏰ LSTM</h4><p>Long-term dependencies — stock price forecasting, multi-step prediction</p></div>
+<div class="card"><h4>🔍 Autoencoder</h4><p>Unsupervised — anomaly/fraud detection, dimensionality reduction</p></div>
+</div>
+
+<h3>LSTM for Stock Prediction</h3>
+<div class="code-block">from keras.models import Sequential
+from keras.layers import LSTM, Dropout, Dense
+
+model = Sequential()
+model.add(LSTM(50, return_sequences=True, input_shape=(60, 1)))
+model.add(Dropout(0.2))
+model.add(LSTM(50))
+model.add(Dropout(0.2))
+model.add(Dense(1))
+
+model.compile(optimizer='adam', loss='mean_squared_error')
+model.fit(x_train, y_train, epochs=50, batch_size=32)</div>
+
+<h3>Challenges</h3>
+<ul>
+<li><strong>Resource-intensive</strong> — GPUs/TPUs required</li>
+<li><strong>Data-hungry</strong> — millions of samples often needed</li>
+<li><strong>Black-box</strong> — regulators want explainability</li>
+<li><strong>Bias risk</strong> — biased data → biased model</li>
+</ul>
+</section>
+
+<section id="nlp">
+<h2>5️⃣ Natural Language Processing</h2>
+
+<p>Extracts insights from unstructured text — news, earnings calls, social media, regulatory filings.</p>
+
+<h3>Applications</h3>
+<div class="card-grid">
+<div class="card"><h4>📰 Sentiment Analysis</h4><p>Positive/negative/neutral tone in news → predict market reaction</p></div>
+<div class="card"><h4>🔍 Info Extraction</h4><p>Named Entity Recognition (NER) — companies, dates, money from filings</p></div>
+<div class="card"><h4>💬 Chatbots</h4><p>HDFC's Eva — customer service automation</p></div>
+<div class="card"><h4>📊 Topic Modelling (LDA)</h4><p>Discover themes across documents (cost-cutting, expansion)</p></div>
+</div>
+
+<h3>Python — Sentiment with VADER</h3>
+<div class="code-block">from nltk.sentiment.vader import SentimentIntensityAnalyzer
+sia = SentimentIntensityAnalyzer()
+text = "Company X reports record profits this quarter"
+print(sia.polarity_scores(text))
+# {'neg':0, 'neu':0.39, 'pos':0.61, 'compound':0.78}</div>
+
+<h3>Python — Named Entity Recognition (spaCy)</h3>
+<div class="code-block">import spacy
+nlp = spacy.load("en_core_web_sm")
+doc = nlp("Company ABC reported a revenue increase of 15% in Q2 2023.")
+for ent in doc.ents:
+    print(ent.text, ent.label_)</div>
+
+<h3>Trend Prediction Pipeline</h3>
+<ol>
+<li>Collect news/tweets</li>
+<li>Preprocess (lowercase, remove stopwords)</li>
+<li>Apply sentiment scoring</li>
+<li>Aggregate over time, plot trend</li>
+<li>Compare sentiment vs price movements</li>
+</ol>
+</section>
+
+<section id="rl">
+<h2>6️⃣ Reinforcement Learning</h2>
+
+<p>Agent learns by <strong>interacting with environment</strong>, receiving rewards/penalties, maximising cumulative reward over time. Perfect for finance where markets change.</p>
+
+<div class="svg-diagram">
+<svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg">
+<rect x="50" y="80" width="120" height="60" rx="10" fill="#1e88e5"/>
+<text x="110" y="115" fill="white" text-anchor="middle" font-weight="bold">Agent</text>
+<rect x="330" y="80" width="120" height="60" rx="10" fill="#43a047"/>
+<text x="390" y="115" fill="white" text-anchor="middle" font-weight="bold">Environment</text>
+<path d="M 170 100 Q 250 50 330 100" fill="none" stroke="#ff9800" stroke-width="2" marker-end="url(#arr)"/>
+<text x="250" y="55" text-anchor="middle" font-size="12">Action</text>
+<path d="M 330 120 Q 250 170 170 120" fill="none" stroke="#1e88e5" stroke-width="2" marker-end="url(#arr)"/>
+<text x="250" y="180" text-anchor="middle" font-size="12">State, Reward</text>
+<defs><marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6"/></marker></defs>
+</svg>
+</div>
+
+<h3>Q-Learning Concepts</h3>
+<ul>
+<li><strong>State</strong> — current market condition</li>
+<li><strong>Action</strong> — Buy / Hold / Sell</li>
+<li><strong>Reward</strong> — profit/loss</li>
+<li><strong>Q-table</strong> — expected reward for state-action pairs</li>
+<li><strong>ε-greedy</strong> — balance exploration vs exploitation</li>
+</ul>
+
+<div class="formula">Q(s,a) ← Q(s,a) + α [r + γ · max Q(s', a') − Q(s,a)]</div>
+
+<h3>RL Applications in Finance</h3>
+<div class="card-grid">
+<div class="card"><h4>📈 Algorithmic Trading</h4><p>Learn buy/sell rules from market data</p></div>
+<div class="card"><h4>💼 Portfolio Mgmt</h4><p>Dynamic rebalancing based on volatility</p></div>
+<div class="card"><h4>🛡️ Fraud Detection</h4><p>PayPal — continuously learn new fraud patterns</p></div>
+<div class="card"><h4>📊 Credit Risk</h4><p>Citigroup — adaptive default prediction</p></div>
+</div>
+
+<h3>Real-World Use Cases</h3>
+<ul>
+<li><strong>JPMorgan Chase</strong> — RL-based dynamic trading strategies</li>
+<li><strong>BlackRock</strong> — automated asset allocation</li>
+<li><strong>PayPal</strong> — real-time fraud detection improving over time</li>
+<li><strong>Citigroup</strong> — credit risk prediction</li>
+<li><strong>Two Sigma</strong> — high-frequency trading</li>
+</ul>
+
+<div class="warning"><strong>⚠️ Limitations:</strong> needs lots of data, computationally heavy, can overfit historical data, less interpretable.</div>
+</section>
+
+<section id="quiz">
+<h2>🎯 14-Question Quiz</h2>
+
+<div class="quiz"><p><strong>Q1.</strong> Bagging primarily reduces:</p>
+<div class="quiz-option" onclick="qa(this,1)">Variance ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Bias</div>
+<div class="quiz-option" onclick="qa(this,0)">Both equally</div>
+</div>
+
+<div class="quiz"><p><strong>Q2.</strong> Boosting reduces:</p>
+<div class="quiz-option" onclick="qa(this,1)">Bias ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Variance</div>
+<div class="quiz-option" onclick="qa(this,0)">Sample size</div>
+</div>
+
+<div class="quiz"><p><strong>Q3.</strong> SVM tries to maximise:</p>
+<div class="quiz-option" onclick="qa(this,1)">The margin between classes ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Number of support vectors</div>
+<div class="quiz-option" onclick="qa(this,0)">Tree depth</div>
+</div>
+
+<div class="quiz"><p><strong>Q4.</strong> RBF kernel suits:</p>
+<div class="quiz-option" onclick="qa(this,1)">Non-linear relationships ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Only linear data</div>
+<div class="quiz-option" onclick="qa(this,0)">Categorical only</div>
+</div>
+
+<div class="quiz"><p><strong>Q5.</strong> Neural networks are:</p>
+<div class="quiz-option" onclick="qa(this,1)">Black-box but flexible ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Highly interpretable</div>
+<div class="quiz-option" onclick="qa(this,0)">Single-layer only</div>
+</div>
+
+<div class="quiz"><p><strong>Q6.</strong> LSTM excels at:</p>
+<div class="quiz-option" onclick="qa(this,1)">Sequential / time series with long dependencies ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Image classification</div>
+<div class="quiz-option" onclick="qa(this,0)">Tabular static data</div>
+</div>
+
+<div class="quiz"><p><strong>Q7.</strong> CNN is mainly for:</p>
+<div class="quiz-option" onclick="qa(this,1)">Spatial / image data ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Long sequences</div>
+<div class="quiz-option" onclick="qa(this,0)">Reinforcement learning</div>
+</div>
+
+<div class="quiz"><p><strong>Q8.</strong> Autoencoders:</p>
+<div class="quiz-option" onclick="qa(this,1)">Reduce dimensions / detect anomalies ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Are supervised classifiers</div>
+<div class="quiz-option" onclick="qa(this,0)">Maximise reward</div>
+</div>
+
+<div class="quiz"><p><strong>Q9.</strong> NER extracts:</p>
+<div class="quiz-option" onclick="qa(this,1)">Names, dates, money, etc. ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Image features</div>
+<div class="quiz-option" onclick="qa(this,0)">Numerical correlations</div>
+</div>
+
+<div class="quiz"><p><strong>Q10.</strong> VADER scores:</p>
+<div class="quiz-option" onclick="qa(this,1)">Sentiment (pos/neg/neutral) ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Topic distribution</div>
+<div class="quiz-option" onclick="qa(this,0)">Translation</div>
+</div>
+
+<div class="quiz"><p><strong>Q11.</strong> LDA models:</p>
+<div class="quiz-option" onclick="qa(this,1)">Topics in documents ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Stock prices</div>
+<div class="quiz-option" onclick="qa(this,0)">Networks</div>
+</div>
+
+<div class="quiz"><p><strong>Q12.</strong> RL learns from:</p>
+<div class="quiz-option" onclick="qa(this,1)">Rewards and actions ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Labels only</div>
+<div class="quiz-option" onclick="qa(this,0)">Unlabelled text</div>
+</div>
+
+<div class="quiz"><p><strong>Q13.</strong> Q-table stores:</p>
+<div class="quiz-option" onclick="qa(this,1)">Expected reward per state-action ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Customer data</div>
+<div class="quiz-option" onclick="qa(this,0)">Prices</div>
+</div>
+
+<div class="quiz"><p><strong>Q14.</strong> ε-greedy strategy balances:</p>
+<div class="quiz-option" onclick="qa(this,1)">Exploration vs exploitation ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Bias vs variance</div>
+<div class="quiz-option" onclick="qa(this,0)">Precision vs recall</div>
+</div>
+</section>
+
+<section id="summary">
+<h2>📝 Summary &amp; Exam Tips</h2>
+
+<div class="summary">
+<h3>🎯 Key Takeaways</h3>
+<ul>
+<li><strong>Bagging</strong> (Random Forest) reduces variance; <strong>Boosting</strong> (XGBoost) reduces bias</li>
+<li><strong>SVM</strong> finds max-margin hyperplane; RBF kernel for non-linear data</li>
+<li>Neural Networks excel at non-linear, high-dim data but are black-boxes</li>
+<li>Deep Learning architectures: <strong>CNN</strong> (spatial), <strong>RNN</strong> (sequential), <strong>LSTM</strong> (long memory), <strong>Autoencoder</strong> (anomaly)</li>
+<li><strong>NLP</strong> in finance: sentiment, NER, chatbots, topic modelling</li>
+<li><strong>RL</strong>: agent-environment interaction with rewards; powers trading, portfolio management, fraud detection</li>
+<li>Real-world: JPMorgan, BlackRock, PayPal, Citigroup, Two Sigma</li>
+</ul>
+</div>
+
+<div class="warning"><strong>📌 Pitfalls:</strong>
+<ul>
+<li>Choosing deep learning when simple models suffice — adds complexity without benefit</li>
+<li>Black-box models may fail regulatory scrutiny — pair with SHAP/LIME</li>
+<li>SVMs on huge datasets are slow — consider RF/GBM instead</li>
+<li>RL agents can overfit historical data — validate forward</li>
+</ul>
+</div>
+
+<p style="text-align:center;margin-top:30px">
+<a href="Week_06_PredictiveML.html" style="color:var(--primary);font-weight:bold">← Week 6</a> |
+<a href="index.html" style="color:var(--primary);font-weight:bold">📚 Index</a> |
+<a href="Week_08_RiskManagement.html" style="color:var(--primary);font-weight:bold">Week 8 → Risk Management</a>
+</p>
+</section>
+
+</main>
+
+<footer><p>🧠 Week 7 of 12 — Financial Data Analytics</p></footer>
+
+<script>
+function g(id,btn){document.getElementById(id).scrollIntoView({behavior:'smooth'});document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function dark(){document.body.classList.toggle('dark');try{localStorage.setItem('fda_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}}
+if(localStorage.getItem('fda_dark')==='1')document.body.classList.add('dark');
+function qa(el,c){el.parentElement.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('correct','wrong'));el.classList.add(c?'correct':'wrong')}
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

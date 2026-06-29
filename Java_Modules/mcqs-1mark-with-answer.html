@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programming in Java — MCQ Question Bank (Weeks 1–12)</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d2e; --accent:#6c63ff; --accent2:#00d4aa; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --code:#2d3748; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+  header { background:linear-gradient(135deg,#6c63ff,#00d4aa); padding:3rem 2rem; text-align:center; }
+  header h1 { font-size:2.4rem; font-weight:800; color:#fff; }
+  header p { font-size:1.05rem; color:rgba(255,255,255,0.9); margin-top:0.5rem; }
+  .tabs { background:#12152a; display:flex; gap:0.5rem; padding:0.6rem 1rem; border-bottom:1px solid var(--border); }
+  .tabs a { color:var(--muted); text-decoration:none; padding:0.5rem 1.2rem; border-radius:8px 8px 0 0; font-size:0.9rem; font-weight:600; border:1px solid transparent; }
+  .tabs a:hover { color:var(--text); }
+  .tabs a.active { color:#fff; background:var(--card); border-color:var(--border); border-bottom-color:var(--card); }
+  .tabs a.home { color:var(--accent2); margin-right:0.75rem; }
+  .tabs a.home:hover { color:#fff; }
+  nav { background:var(--card); border-bottom:2px solid var(--accent); display:flex; flex-wrap:wrap; gap:0.25rem; padding:0.75rem 1rem; position:sticky; top:0; z-index:100; }
+  nav a { color:var(--muted); text-decoration:none; padding:0.4rem 0.9rem; border-radius:6px; font-size:0.85rem; transition:all 0.2s; }
+  nav a:hover, nav a.active { background:var(--accent); color:#fff; }
+  .container { max-width:1000px; margin:0 auto; padding:2rem 1.5rem; }
+  section { margin-bottom:3rem; scroll-margin-top:70px; }
+  h2 { font-size:1.7rem; color:var(--accent); margin-bottom:0.4rem; border-bottom:2px solid var(--border); padding-bottom:0.5rem; }
+  .wk-sub { color:var(--muted); font-size:0.95rem; margin-bottom:1.2rem; }
+  code { background:var(--code); padding:0.1rem 0.4rem; border-radius:4px; font-family:'Cascadia Code','Consolas',monospace; font-size:0.85em; color:#f7c948; }
+  .q { background:var(--card); border:1px solid var(--border); border-left:4px solid var(--accent); border-radius:8px; padding:1.2rem 1.3rem; margin-bottom:1.2rem; }
+  .q-head { font-weight:600; margin-bottom:0.4rem; }
+  .q-tag { display:inline-block; background:var(--accent); color:#fff; font-size:0.7rem; font-weight:700; padding:0.15rem 0.6rem; border-radius:20px; margin-right:0.5rem; vertical-align:middle; }
+  .q-text { display:block; margin-top:0.5rem; }
+  .codeblock { background:#12152a; border:1px solid var(--border); border-radius:6px; padding:0.7rem 1rem; font-family:'Cascadia Code','Consolas',monospace; font-size:0.85rem; color:#e2e8f0; white-space:pre; overflow-x:auto; margin:0.7rem 0; }
+  ol.opts { list-style:none; padding-left:0; margin:0.7rem 0 0; }
+  ol.opts li { background:var(--code); border:1px solid var(--border); border-radius:6px; padding:0.5rem 0.9rem; margin-bottom:0.45rem; font-size:0.95rem; cursor:pointer; transition:background .15s,border-color .15s; user-select:none; }
+  ol.opts li:hover { border-color:var(--accent); background:#363b52; }
+  ol.opts.answered li { cursor:default; }
+  ol.opts.answered li:hover { border-color:var(--border); background:var(--code); }
+  ol.opts li.correct { background:rgba(0,212,170,0.18); border-color:var(--accent2); }
+  ol.opts.answered li.correct:hover { background:rgba(0,212,170,0.18); border-color:var(--accent2); }
+  ol.opts li.wrong { background:rgba(239,68,68,0.18); border-color:#ef4444; }
+  ol.opts.answered li.wrong:hover { background:rgba(239,68,68,0.18); border-color:#ef4444; }
+  ol.opts li.correct::after { content:" ✓"; color:var(--accent2); font-weight:700; }
+  ol.opts li.wrong::after { content:" ✗"; color:#ef4444; font-weight:700; }
+  .label { font-weight:700; color:var(--accent2); margin-right:0.4rem; }
+  .fb { margin-top:0.6rem; font-size:0.9rem; font-weight:600; min-height:1.1rem; }
+  .fb.ok { color:var(--accent2); }
+  .fb.no { color:#ef4444; }
+  .reset-bar { text-align:right; margin-bottom:1rem; }
+  .reset-bar button { background:var(--code); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:0.35rem 0.9rem; font-size:0.8rem; cursor:pointer; }
+  .reset-bar button:hover { border-color:var(--accent); }
+  footer { text-align:center; color:var(--muted); font-size:0.85rem; padding:2rem; border-top:1px solid var(--border); }
+  @media(max-width:700px){ header h1{font-size:1.7rem;} }
+</style>
+</head>
+<body>
+<header>
+  <h1>📝 Programming in Java — MCQ Answer Key</h1>
+  <p>Weeks 1–12 · 25 questions per week · 300 total · 1 mark · Correct answers marked in green</p>
+</header>
+<div class="tabs">
+  <a href="index.html" class="home">← All Modules</a>
+  <a href="mcqs-1mark.html">Practice (1 mark)</a>
+  <a href="mcqs-2mark.html">Exam (2 marks)</a>
+  <a href="mcqs-1mark-with-answer.html" class="active">1-mark Answers</a>
+  <a href="mcqs-2mark-with-answer.html">2-mark Answers</a>
+</div>
+<nav id="nav">
+  <a href="#w1">W1</a><a href="#w2">W2</a><a href="#w3">W3</a><a href="#w4">W4</a>
+  <a href="#w5">W5</a><a href="#w6">W6</a><a href="#w7">W7</a><a href="#w8">W8</a>
+  <a href="#w9">W9</a><a href="#w10">W10</a><a href="#w11">W11</a><a href="#w12">W12</a>
+</nav>
+<div class="container">
+
+<!-- ===================== WEEK 1 ===================== -->
+<section id="w1">
+  <h2>Week 1 — Programming in Java (Basics &amp; OOP Intro)</h2>
+  <p class="wk-sub">History · JDK/JRE/JVM · compilation flow · platform independence · features · Scanner · classes, objects, constructors · four pillars of OOP · packages</p>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q1</span>Which component is responsible for actually executing Java bytecode at runtime?</div>
+    <ol class="opts"><li><span class="label">A</span> JDK</li><li><span class="label">B</span> JVM</li><li><span class="label">C</span> javac</li><li><span class="label">D</span> The source <code>.java</code> file</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q2</span>What is the output file produced by the <code>javac</code> compiler?</div>
+    <ol class="opts"><li><span class="label">A</span> A native <code>.exe</code> executable</li><li><span class="label">B</span> A <code>.class</code> file containing bytecode</li><li><span class="label">C</span> A <code>.jar</code> archive</li><li><span class="label">D</span> A <code>.obj</code> object file</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q3</span>Java's "Write Once, Run Anywhere" (WORA) capability is primarily made possible by:</div>
+    <ol class="opts"><li><span class="label">A</span> Recompiling source on every machine</li><li><span class="label">B</span> Platform-independent bytecode interpreted by a platform-specific JVM</li><li><span class="label">C</span> Java being a purely interpreted language</li><li><span class="label">D</span> Generating native machine code at compile time</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q4</span>The JDK is best described as:</div>
+    <ol class="opts"><li><span class="label">A</span> Only the runtime needed to run programs</li><li><span class="label">B</span> A development kit containing the JRE plus tools like <code>javac</code></li><li><span class="label">C</span> Just the JVM</li><li><span class="label">D</span> A text editor for Java</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q5</span>Which <code>Scanner</code> method reads an entire line of text including spaces?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>next()</code></li><li><span class="label">B</span> <code>nextInt()</code></li><li><span class="label">C</span> <code>nextLine()</code></li><li><span class="label">D</span> <code>nextWord()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q6</span>Which import statement is required to use <code>Scanner</code>?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>import java.io.Scanner;</code></li><li><span class="label">B</span> <code>import java.util.Scanner;</code></li><li><span class="label">C</span> <code>import java.lang.Scanner;</code></li><li><span class="label">D</span> No import is needed</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q7</span>Hiding internal implementation details and exposing only essential features describes which OOP pillar?</div>
+    <ol class="opts"><li><span class="label">A</span> Inheritance</li><li><span class="label">B</span> Polymorphism</li><li><span class="label">C</span> Abstraction</li><li><span class="label">D</span> Aggregation</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q8</span>Wrapping data and the methods that operate on it together, and restricting direct access, is called:</div>
+    <ol class="opts"><li><span class="label">A</span> Encapsulation</li><li><span class="label">B</span> Inheritance</li><li><span class="label">C</span> Polymorphism</li><li><span class="label">D</span> Overloading</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q9</span>What is the relationship between a class and an object?</div>
+    <ol class="opts"><li><span class="label">A</span> A class is an instance of an object</li><li><span class="label">B</span> An object is a blueprint; a class is a runtime copy</li><li><span class="label">C</span> A class is a blueprint; an object is an instance of that class</li><li><span class="label">D</span> They are identical terms</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q10</span>Which statement about constructors in Java is TRUE?</div>
+    <ol class="opts"><li><span class="label">A</span> A constructor must have the same name as the class and no return type</li><li><span class="label">B</span> A constructor must declare <code>void</code> as its return type</li><li><span class="label">C</span> A class can have only one constructor</li><li><span class="label">D</span> Constructors cannot accept parameters</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q11</span>If a class does not explicitly define any constructor, what happens?</div>
+    <ol class="opts"><li><span class="label">A</span> The class fails to compile</li><li><span class="label">B</span> The compiler provides a default no-argument constructor</li><li><span class="label">C</span> Objects of the class cannot be created</li><li><span class="label">D</span> The JVM throws a runtime exception</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q12</span>A constructor that takes another object of the same class to copy its state is called a:</div>
+    <ol class="opts"><li><span class="label">A</span> Default constructor</li><li><span class="label">B</span> Parameterized constructor</li><li><span class="label">C</span> Copy constructor</li><li><span class="label">D</span> Static constructor</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q13</span>What is the value of <code>x</code>?
+    <div class="codeblock">int x = 10 + 20 / 5 * 2 - 3;</div></div>
+    <ol class="opts"><li><span class="label">A</span> 15</li><li><span class="label">B</span> 9</li><li><span class="label">C</span> 17</li><li><span class="label">D</span> 11</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q14</span>What is the main purpose of a <em>package</em> in Java?</div>
+    <ol class="opts"><li><span class="label">A</span> To speed up bytecode execution</li><li><span class="label">B</span> To group related classes and avoid naming conflicts</li><li><span class="label">C</span> To compress <code>.class</code> files</li><li><span class="label">D</span> To replace the need for the JVM</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q15</span>Which package is automatically imported into every Java program?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>java.util</code></li><li><span class="label">B</span> <code>java.io</code></li><li><span class="label">C</span> <code>java.lang</code></li><li><span class="label">D</span> <code>java.net</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q16</span>The recommended naming convention for a package uses:</div>
+    <ol class="opts"><li><span class="label">A</span> The reversed company domain (e.g. <code>com.example.app</code>)</li><li><span class="label">B</span> All uppercase letters</li><li><span class="label">C</span> The programmer's first name</li><li><span class="label">D</span> A random number</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q17</span>Which command compiles a Java source file named <code>Hello.java</code>?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>java Hello.java</code></li><li><span class="label">B</span> <code>javac Hello.java</code></li><li><span class="label">C</span> <code>run Hello</code></li><li><span class="label">D</span> <code>compile Hello</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q18</span>The correct signature of the entry-point method in a Java application is:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>public void main(String args)</code></li><li><span class="label">B</span> <code>public static void main(String[] args)</code></li><li><span class="label">C</span> <code>static int main()</code></li><li><span class="label">D</span> <code>public main(String[] args)</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q19</span>Which is NOT one of the four pillars of OOP?</div>
+    <ol class="opts"><li><span class="label">A</span> Abstraction</li><li><span class="label">B</span> Encapsulation</li><li><span class="label">C</span> Compilation</li><li><span class="label">D</span> Inheritance</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q20</span>Which feature is a stated benefit of Java (a core "feature")?</div>
+    <ol class="opts"><li><span class="label">A</span> Manual memory deallocation by the programmer</li><li><span class="label">B</span> Automatic garbage collection</li><li><span class="label">C</span> Platform-dependent executables</li><li><span class="label">D</span> No support for networking</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q21</span>What does <code>System.out.println()</code> do compared with <code>System.out.print()</code>?</div>
+    <ol class="opts"><li><span class="label">A</span> They are identical</li><li><span class="label">B</span> <code>println</code> adds a newline at the end; <code>print</code> does not</li><li><span class="label">C</span> <code>print</code> adds a newline; <code>println</code> does not</li><li><span class="label">D</span> <code>println</code> only prints numbers</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q22</span>What is printed?
+    <div class="codeblock">int a = 7, b = 2;
+System.out.println(a % b);</div></div>
+    <ol class="opts"><li><span class="label">A</span> 3</li><li><span class="label">B</span> 3.5</li><li><span class="label">C</span> 1</li><li><span class="label">D</span> 0</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q23</span>Procedural programming differs from object-oriented programming mainly because it organises code around:</div>
+    <ol class="opts"><li><span class="label">A</span> Objects and their interactions</li><li><span class="label">B</span> Functions/procedures acting on data</li><li><span class="label">C</span> Inheritance hierarchies</li><li><span class="label">D</span> Database tables</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q24</span>Which keyword is used to create a new object instance?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>create</code></li><li><span class="label">B</span> <code>new</code></li><li><span class="label">C</span> <code>object</code></li><li><span class="label">D</span> <code>instance</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q25</span>Java was originally developed at which company in the early-to-mid 1990s?</div>
+    <ol class="opts"><li><span class="label">A</span> Microsoft</li><li><span class="label">B</span> Sun Microsystems</li><li><span class="label">C</span> IBM</li><li><span class="label">D</span> Oracle (as its first owner)</li></ol></div>
+</section>
+
+<!-- ===================== WEEK 2 ===================== -->
+<section id="w2">
+  <h2>Week 2 — OOP Deep Dive</h2>
+  <p class="wk-sub">Polymorphism · overloading vs overriding · inheritance · dynamic dispatch/upcasting · access modifiers · abstract classes · interfaces · final</p>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q1</span>Method <em>overloading</em> in Java is an example of:</div>
+    <ol class="opts"><li><span class="label">A</span> Runtime polymorphism</li><li><span class="label">B</span> Compile-time polymorphism</li><li><span class="label">C</span> Encapsulation</li><li><span class="label">D</span> Abstraction</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q2</span>For two methods to be valid overloads, they must differ in:</div>
+    <ol class="opts"><li><span class="label">A</span> Return type only</li><li><span class="label">B</span> Parameter list (number, type, or order)</li><li><span class="label">C</span> Access modifier only</li><li><span class="label">D</span> The exceptions they throw</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q3</span>Method <em>overriding</em> is an example of:</div>
+    <ol class="opts"><li><span class="label">A</span> Compile-time polymorphism</li><li><span class="label">B</span> Runtime polymorphism</li><li><span class="label">C</span> Static binding</li><li><span class="label">D</span> Encapsulation</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q4</span>Which annotation is recommended when overriding a superclass method?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>@Overload</code></li><li><span class="label">B</span> <code>@Inherited</code></li><li><span class="label">C</span> <code>@Override</code></li><li><span class="label">D</span> <code>@Polymorphic</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q5</span>In <code>Animal a = new Dog();</code>, calling <code>a.sound()</code> (overridden in <code>Dog</code>) executes the <code>Dog</code> version. This is known as:</div>
+    <ol class="opts"><li><span class="label">A</span> Static binding</li><li><span class="label">B</span> Dynamic method dispatch</li><li><span class="label">C</span> Method hiding</li><li><span class="label">D</span> Downcasting</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q6</span>Treating a subclass object through a superclass reference (e.g. <code>Animal a = new Dog();</code>) is called:</div>
+    <ol class="opts"><li><span class="label">A</span> Downcasting</li><li><span class="label">B</span> Upcasting</li><li><span class="label">C</span> Overloading</li><li><span class="label">D</span> Casting away</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q7</span>Which keyword is used to invoke a superclass constructor or method from a subclass?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>this</code></li><li><span class="label">B</span> <code>super</code></li><li><span class="label">C</span> <code>parent</code></li><li><span class="label">D</span> <code>base</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q8</span>Which access modifier makes a member visible only within its own class?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>public</code></li><li><span class="label">B</span> <code>protected</code></li><li><span class="label">C</span> <code>private</code></li><li><span class="label">D</span> default (package-private)</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q9</span>Which access modifier allows access within the same package AND by subclasses in other packages?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>private</code></li><li><span class="label">B</span> <code>protected</code></li><li><span class="label">C</span> default (no modifier)</li><li><span class="label">D</span> <code>final</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q10</span>Which statement about an <code>abstract</code> class is correct?</div>
+    <ol class="opts"><li><span class="label">A</span> It can be instantiated directly with <code>new</code></li><li><span class="label">B</span> It may contain both abstract and concrete methods</li><li><span class="label">C</span> It cannot have a constructor</li><li><span class="label">D</span> All its methods must be abstract</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q11</span>An <code>abstract</code> method:</div>
+    <ol class="opts"><li><span class="label">A</span> Has a body but cannot be called</li><li><span class="label">B</span> Has no body and must be implemented by a concrete subclass</li><li><span class="label">C</span> Is automatically <code>static</code></li><li><span class="label">D</span> Can only return <code>void</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q12</span>Before Java 8, variables declared in an interface are implicitly:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>private</code> and non-final</li><li><span class="label">B</span> <code>public static final</code></li><li><span class="label">C</span> <code>protected</code></li><li><span class="label">D</span> <code>transient</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q13</span>Which feature was added to interfaces in Java 8?</div>
+    <ol class="opts"><li><span class="label">A</span> Constructors</li><li><span class="label">B</span> <code>default</code> and <code>static</code> methods</li><li><span class="label">C</span> Instance fields</li><li><span class="label">D</span> Private constructors</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q14</span>A class implements an interface using which keyword?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>extends</code></li><li><span class="label">B</span> <code>implements</code></li><li><span class="label">C</span> <code>inherits</code></li><li><span class="label">D</span> <code>uses</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q15</span>A Java class can extend (inherit from) how many classes directly?</div>
+    <ol class="opts"><li><span class="label">A</span> Exactly one</li><li><span class="label">B</span> Up to two</li><li><span class="label">C</span> Unlimited</li><li><span class="label">D</span> Zero</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q16</span>How does Java allow a class to inherit behaviour from multiple sources despite single class inheritance?</div>
+    <ol class="opts"><li><span class="label">A</span> By extending multiple classes</li><li><span class="label">B</span> By implementing multiple interfaces</li><li><span class="label">C</span> It does not allow it at all</li><li><span class="label">D</span> By using <code>static</code> blocks</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q17</span>Why is the <code>String</code> class declared <code>final</code>?</div>
+    <ol class="opts"><li><span class="label">A</span> So it runs faster</li><li><span class="label">B</span> To prevent subclassing, preserving immutability and security</li><li><span class="label">C</span> Because it has no methods</li><li><span class="label">D</span> To allow it to be modified in place</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q18</span>Applying <code>final</code> to a method means it:</div>
+    <ol class="opts"><li><span class="label">A</span> Cannot be overridden by a subclass</li><li><span class="label">B</span> Cannot be called more than once</li><li><span class="label">C</span> Must be abstract</li><li><span class="label">D</span> Becomes static</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q19</span>An overriding method in a subclass must NOT:</div>
+    <ol class="opts"><li><span class="label">A</span> Have the same name as the superclass method</li><li><span class="label">B</span> Have the same parameter list</li><li><span class="label">C</span> Reduce the visibility (access level) of the method</li><li><span class="label">D</span> Return a covariant type</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q20</span>When a subclass adds methods inherited from one parent class only, the inheritance type is:</div>
+    <ol class="opts"><li><span class="label">A</span> Single inheritance</li><li><span class="label">B</span> Multiple inheritance</li><li><span class="label">C</span> Hierarchical inheritance</li><li><span class="label">D</span> Hybrid inheritance</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q21</span>When several subclasses inherit from a single common superclass, the inheritance type is:</div>
+    <ol class="opts"><li><span class="label">A</span> Multilevel</li><li><span class="label">B</span> Hierarchical</li><li><span class="label">C</span> Single</li><li><span class="label">D</span> Multiple</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q22</span>How does the compiler decide which overloaded method to call?</div>
+    <ol class="opts"><li><span class="label">A</span> At runtime based on the object type</li><li><span class="label">B</span> At compile time based on the argument types</li><li><span class="label">C</span> Randomly</li><li><span class="label">D</span> Based on the return type only</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q23</span>A <code>Cylinder</code> that <code>extends Circle</code> demonstrates which kind of relationship?</div>
+    <ol class="opts"><li><span class="label">A</span> "has-a" relationship</li><li><span class="label">B</span> "is-a" relationship</li><li><span class="label">C</span> "uses-a" relationship</li><li><span class="label">D</span> No relationship</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q24</span>Which is a key difference between an abstract class and an interface (pre-Java 8)?</div>
+    <ol class="opts"><li><span class="label">A</span> An abstract class can have constructors and instance fields; an interface cannot</li><li><span class="label">B</span> An interface can be instantiated directly</li><li><span class="label">C</span> An abstract class cannot have any concrete methods</li><li><span class="label">D</span> There is no difference</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q25</span>What does the <code>this</code> keyword refer to inside an instance method?</div>
+    <ol class="opts"><li><span class="label">A</span> The superclass object</li><li><span class="label">B</span> The current object on which the method was invoked</li><li><span class="label">C</span> A static copy of the class</li><li><span class="label">D</span> The main method</li></ol></div>
+</section>
+
+<!-- ===================== WEEK 3 ===================== -->
+<section id="w3">
+  <h2>Week 3 — Exception Handling</h2>
+  <p class="wk-sub">errors vs exceptions · Throwable hierarchy · try-catch-finally · multiple catch · throw/throws · rethrowing · user-defined exceptions</p>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q1</span>Which class sits at the top of the Java exception hierarchy?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>Exception</code></li><li><span class="label">B</span> <code>Error</code></li><li><span class="label">C</span> <code>Throwable</code></li><li><span class="label">D</span> <code>RuntimeException</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q2</span>Which of the following is a <em>checked</em> exception?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>NullPointerException</code></li><li><span class="label">B</span> <code>ArrayIndexOutOfBoundsException</code></li><li><span class="label">C</span> <code>IOException</code></li><li><span class="label">D</span> <code>ArithmeticException</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q3</span>Which of the following is an <em>unchecked</em> (runtime) exception?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>IOException</code></li><li><span class="label">B</span> <code>SQLException</code></li><li><span class="label">C</span> <code>NullPointerException</code></li><li><span class="label">D</span> <code>ClassNotFoundException</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q4</span>When does the <code>finally</code> block execute?</div>
+    <ol class="opts"><li><span class="label">A</span> Only when an exception is thrown</li><li><span class="label">B</span> Only when no exception is thrown</li><li><span class="label">C</span> Almost always — whether or not an exception occurs</li><li><span class="label">D</span> Only if a <code>catch</code> block is absent</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q5</span>A compile-time error in Java is also known as a:</div>
+    <ol class="opts"><li><span class="label">A</span> Runtime error</li><li><span class="label">B</span> Syntax/semantic error caught by the compiler</li><li><span class="label">C</span> Logical error only</li><li><span class="label">D</span> Hardware fault</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q6</span>What is printed?
+    <div class="codeblock">int[] a = new int[3];
+System.out.println(a[5]);</div></div>
+    <ol class="opts"><li><span class="label">A</span> 0</li><li><span class="label">B</span> <code>null</code></li><li><span class="label">C</span> An <code>ArrayIndexOutOfBoundsException</code> is thrown</li><li><span class="label">D</span> A compile-time error</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q7</span>When using multiple <code>catch</code> blocks, they must be ordered so that:</div>
+    <ol class="opts"><li><span class="label">A</span> Superclass exceptions come before subclass exceptions</li><li><span class="label">B</span> Subclass (more specific) exceptions come before superclass exceptions</li><li><span class="label">C</span> The order does not matter</li><li><span class="label">D</span> Only one catch block is ever allowed</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q8</span>The <code>throws</code> keyword is used to:</div>
+    <ol class="opts"><li><span class="label">A</span> Actually raise an exception object</li><li><span class="label">B</span> Declare that a method may pass on a particular exception to its caller</li><li><span class="label">C</span> Catch an exception</li><li><span class="label">D</span> Suppress an exception</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q9</span>Which keyword is used to explicitly raise an exception in code?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>throws</code></li><li><span class="label">B</span> <code>throw</code></li><li><span class="label">C</span> <code>raise</code></li><li><span class="label">D</span> <code>catch</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q10</span>To define a custom checked exception, your class should extend:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>Error</code></li><li><span class="label">B</span> <code>RuntimeException</code></li><li><span class="label">C</span> <code>Exception</code></li><li><span class="label">D</span> <code>Object</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q11</span>Dividing an integer by zero in Java results in:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>Infinity</code></li><li><span class="label">B</span> <code>0</code></li><li><span class="label">C</span> An <code>ArithmeticException</code></li><li><span class="label">D</span> A compile-time error</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q12</span>Which is an <code>Error</code> (not an <code>Exception</code>) an application typically should NOT try to recover from?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>FileNotFoundException</code></li><li><span class="label">B</span> <code>StackOverflowError</code></li><li><span class="label">C</span> <code>NumberFormatException</code></li><li><span class="label">D</span> <code>SQLException</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q13</span>Parsing the string <code>"12a"</code> with <code>Integer.parseInt("12a")</code> throws:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>NullPointerException</code></li><li><span class="label">B</span> <code>NumberFormatException</code></li><li><span class="label">C</span> <code>ArithmeticException</code></li><li><span class="label">D</span> Nothing; it returns 12</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q14</span>How many <code>try</code> blocks can be associated with a single <code>catch</code> block?</div>
+    <ol class="opts"><li><span class="label">A</span> Many</li><li><span class="label">B</span> Exactly one</li><li><span class="label">C</span> Two</li><li><span class="label">D</span> Zero</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q15</span>A single <code>catch</code> block can catch multiple exception types using which syntax (Java 7+)?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>catch (A, B e)</code></li><li><span class="label">B</span> <code>catch (A | B e)</code></li><li><span class="label">C</span> <code>catch (A &amp;&amp; B e)</code></li><li><span class="label">D</span> Multi-catch is not allowed</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q16</span>Accessing a method on a <code>null</code> reference throws:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>NullPointerException</code></li><li><span class="label">B</span> <code>ClassCastException</code></li><li><span class="label">C</span> <code>IllegalStateException</code></li><li><span class="label">D</span> Nothing</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q17</span>A primary benefit of user-defined exceptions is that they:</div>
+    <ol class="opts"><li><span class="label">A</span> Run faster than built-in ones</li><li><span class="label">B</span> Convey domain-specific, meaningful error information</li><li><span class="label">C</span> Cannot be caught</li><li><span class="label">D</span> Avoid the need for try-catch</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q18</span>"Rethrowing" an exception means a catch block:</div>
+    <ol class="opts"><li><span class="label">A</span> Silently ignores the exception</li><li><span class="label">B</span> Catches and then throws it again (possibly as a different type) for an outer handler</li><li><span class="label">C</span> Restarts the program</li><li><span class="label">D</span> Converts it into a return value</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q19</span>If a <code>catch</code> block for a superclass exception is placed before a subclass one, the result is:</div>
+    <ol class="opts"><li><span class="label">A</span> The subclass catch becomes unreachable — a compile-time error</li><li><span class="label">B</span> Both run</li><li><span class="label">C</span> A runtime crash</li><li><span class="label">D</span> The order is silently corrected</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q20</span>Which statement is TRUE about checked exceptions?</div>
+    <ol class="opts"><li><span class="label">A</span> They must be either caught or declared with <code>throws</code></li><li><span class="label">B</span> The compiler ignores them</li><li><span class="label">C</span> They always extend <code>RuntimeException</code></li><li><span class="label">D</span> They can never be caught</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q21</span>What happens to an exception that is never caught anywhere?</div>
+    <ol class="opts"><li><span class="label">A</span> It is ignored</li><li><span class="label">B</span> It propagates up and the thread terminates with a stack trace</li><li><span class="label">C</span> The program restarts</li><li><span class="label">D</span> It becomes a return value</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q22</span>Inside a single <code>try</code> statement, the order of blocks must be:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>try</code> → <code>finally</code> → <code>catch</code></li><li><span class="label">B</span> <code>try</code> → <code>catch</code> → <code>finally</code></li><li><span class="label">C</span> <code>catch</code> → <code>try</code> → <code>finally</code></li><li><span class="label">D</span> Any order</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q23</span>A logical error (e.g. wrong formula) is:</div>
+    <ol class="opts"><li><span class="label">A</span> Always caught at compile time</li><li><span class="label">B</span> Not flagged by the compiler or JVM; the program runs but gives wrong results</li><li><span class="label">C</span> Always thrown as an exception</li><li><span class="label">D</span> Impossible in Java</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q24</span>Which method prints the full stack trace of an exception object <code>e</code>?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>e.getStack()</code></li><li><span class="label">B</span> <code>e.printStackTrace()</code></li><li><span class="label">C</span> <code>e.trace()</code></li><li><span class="label">D</span> <code>e.dump()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q25</span>What is output?
+    <div class="codeblock">try { System.out.print("A");
+      throw new RuntimeException(); }
+catch (Exception e) { System.out.print("B"); }
+finally { System.out.print("C"); }</div></div>
+    <ol class="opts"><li><span class="label">A</span> AB</li><li><span class="label">B</span> ABC</li><li><span class="label">C</span> AC</li><li><span class="label">D</span> A</li></ol></div>
+</section>
+
+<!-- ===================== WEEK 4 ===================== -->
+<section id="w4">
+  <h2>Week 4 — Multithreading &amp; I/O Streams</h2>
+  <p class="wk-sub">process vs thread · lifecycle · Thread vs Runnable · synchronization · inter-thread communication · File · byte/char streams · buffering</p>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q1</span>Which two ways can a thread be created in Java?</div>
+    <ol class="opts"><li><span class="label">A</span> Extending <code>Thread</code> or implementing <code>Runnable</code></li><li><span class="label">B</span> Extending <code>Process</code> or implementing <code>Callable</code> only</li><li><span class="label">C</span> Using <code>new Thread()</code> only</li><li><span class="label">D</span> Implementing <code>Serializable</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q2</span>Which method must be overridden to define a thread's task?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>start()</code></li><li><span class="label">B</span> <code>run()</code></li><li><span class="label">C</span> <code>main()</code></li><li><span class="label">D</span> <code>execute()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q3</span>What is the difference between calling <code>start()</code> and calling <code>run()</code> directly on a thread?</div>
+    <ol class="opts"><li><span class="label">A</span> No difference at all</li><li><span class="label">B</span> <code>start()</code> creates a new thread of execution; <code>run()</code> just runs in the current thread</li><li><span class="label">C</span> <code>run()</code> creates a new thread; <code>start()</code> does not</li><li><span class="label">D</span> Both throw an exception</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q4</span>A key difference between a process and a thread is that threads:</div>
+    <ol class="opts"><li><span class="label">A</span> Each have a fully separate memory space</li><li><span class="label">B</span> Share the same memory/address space within a process</li><li><span class="label">C</span> Cannot run concurrently</li><li><span class="label">D</span> Are heavier than processes</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q5</span>The <code>synchronized</code> keyword is primarily used to:</div>
+    <ol class="opts"><li><span class="label">A</span> Speed up thread execution</li><li><span class="label">B</span> Prevent race conditions by allowing only one thread into a critical section at a time</li><li><span class="label">C</span> Create new threads</li><li><span class="label">D</span> Stop a thread permanently</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q6</span>Which trio of methods is used for inter-thread communication?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>sleep()</code>, <code>yield()</code>, <code>join()</code></li><li><span class="label">B</span> <code>wait()</code>, <code>notify()</code>, <code>notifyAll()</code></li><li><span class="label">C</span> <code>start()</code>, <code>run()</code>, <code>stop()</code></li><li><span class="label">D</span> <code>lock()</code>, <code>unlock()</code>, <code>signal()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q7</span>The <code>wait()</code>, <code>notify()</code>, and <code>notifyAll()</code> methods must be called from:</div>
+    <ol class="opts"><li><span class="label">A</span> Anywhere in the code</li><li><span class="label">B</span> Inside a <code>synchronized</code> block/method (holding the object's monitor)</li><li><span class="label">C</span> Only the <code>main</code> method</li><li><span class="label">D</span> A static initializer</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q8</span>Which set of states best describes a Java thread's lifecycle?</div>
+    <ol class="opts"><li><span class="label">A</span> New, Runnable, Running, Blocked/Waiting, Terminated</li><li><span class="label">B</span> Created, Compiled, Loaded, Linked, Done</li><li><span class="label">C</span> Open, Read, Write, Close</li><li><span class="label">D</span> Init, Service, Destroy</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q9</span><code>Thread.sleep(1000)</code> causes the current thread to:</div>
+    <ol class="opts"><li><span class="label">A</span> Stop permanently</li><li><span class="label">B</span> Pause for approximately 1000 milliseconds</li><li><span class="label">C</span> Pause for 1000 seconds</li><li><span class="label">D</span> Restart from the beginning</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q10</span>The <code>join()</code> method makes the calling thread:</div>
+    <ol class="opts"><li><span class="label">A</span> Wait until the thread it is called on finishes</li><li><span class="label">B</span> Merge two threads into one</li><li><span class="label">C</span> Start a new thread</li><li><span class="label">D</span> Kill the target thread immediately</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q11</span>A classic inter-thread communication scenario taught with <code>wait()</code>/<code>notify()</code> is the:</div>
+    <ol class="opts"><li><span class="label">A</span> Singleton pattern</li><li><span class="label">B</span> Producer–Consumer problem</li><li><span class="label">C</span> Observer pattern</li><li><span class="label">D</span> Factory pattern</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q12</span>To copy a plain text file character by character, which stream class is most appropriate?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>FileInputStream</code></li><li><span class="label">B</span> <code>FileReader</code></li><li><span class="label">C</span> <code>DataOutputStream</code></li><li><span class="label">D</span> <code>ObjectInputStream</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q13</span>Byte streams (e.g. <code>InputStream</code>/<code>OutputStream</code>) are best suited for:</div>
+    <ol class="opts"><li><span class="label">A</span> Text-only data</li><li><span class="label">B</span> Binary data such as images and audio</li><li><span class="label">C</span> Only XML files</li><li><span class="label">D</span> Network sockets exclusively</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q14</span>Which class wraps another reader to read text efficiently line-by-line via <code>readLine()</code>?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>FileReader</code></li><li><span class="label">B</span> <code>BufferedReader</code></li><li><span class="label">C</span> <code>PrintWriter</code></li><li><span class="label">D</span> <code>Scanner</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q15</span>What is the main advantage of the <em>try-with-resources</em> statement?</div>
+    <ol class="opts"><li><span class="label">A</span> It runs code on multiple threads</li><li><span class="label">B</span> It automatically closes resources that implement <code>AutoCloseable</code></li><li><span class="label">C</span> It catches all exceptions silently</li><li><span class="label">D</span> It speeds up file I/O</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q16</span>Which <code>java.io.File</code> method checks whether a file actually exists on disk?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>isFile()</code></li><li><span class="label">B</span> <code>exists()</code></li><li><span class="label">C</span> <code>length()</code></li><li><span class="label">D</span> <code>getName()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q17</span>Running multiple programs simultaneously on a system with several CPUs is termed:</div>
+    <ol class="opts"><li><span class="label">A</span> Multiprocessing</li><li><span class="label">B</span> Multithreading only</li><li><span class="label">C</span> Serialization</li><li><span class="label">D</span> Synchronization</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q18</span>A "race condition" occurs when:</div>
+    <ol class="opts"><li><span class="label">A</span> Threads finish too quickly</li><li><span class="label">B</span> Multiple threads access shared data concurrently and the result depends on timing</li><li><span class="label">C</span> Only one thread runs</li><li><span class="label">D</span> The CPU overheats</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q19</span>Implementing <code>Runnable</code> instead of extending <code>Thread</code> is often preferred because:</div>
+    <ol class="opts"><li><span class="label">A</span> It runs faster</li><li><span class="label">B</span> The class is then free to extend another class (single inheritance not used up)</li><li><span class="label">C</span> It avoids needing the <code>run()</code> method</li><li><span class="label">D</span> Runnable threads never block</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q20</span>Which class is used to write formatted text output and is commonly paired with file copying line by line?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>BufferedReader</code></li><li><span class="label">B</span> <code>PrintWriter</code></li><li><span class="label">C</span> <code>FileInputStream</code></li><li><span class="label">D</span> <code>DataInputStream</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q21</span><code>Thread.currentThread().getName()</code> returns:</div>
+    <ol class="opts"><li><span class="label">A</span> The name of the currently executing thread</li><li><span class="label">B</span> The total number of threads</li><li><span class="label">C</span> The thread's priority</li><li><span class="label">D</span> The thread's stack size</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q22</span>Which is at the top of the byte-input stream hierarchy?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>Reader</code></li><li><span class="label">B</span> <code>InputStream</code></li><li><span class="label">C</span> <code>Writer</code></li><li><span class="label">D</span> <code>File</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q23</span>Why use a buffered stream rather than reading one byte/char at a time?</div>
+    <ol class="opts"><li><span class="label">A</span> It uses less code</li><li><span class="label">B</span> It reduces the number of physical I/O operations, improving performance</li><li><span class="label">C</span> It encrypts the data</li><li><span class="label">D</span> It is required by the compiler</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q24</span>Thread-based multitasking (within one program) differs from process-based multitasking in that threads:</div>
+    <ol class="opts"><li><span class="label">A</span> Are independent programs</li><li><span class="label">B</span> Are subdivisions of a single program sharing resources</li><li><span class="label">C</span> Cannot communicate</li><li><span class="label">D</span> Require separate JVMs</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q25</span>What happens if you call <code>start()</code> twice on the same <code>Thread</code> object?</div>
+    <ol class="opts"><li><span class="label">A</span> The thread runs twice safely</li><li><span class="label">B</span> An <code>IllegalThreadStateException</code> is thrown</li><li><span class="label">C</span> Nothing happens</li><li><span class="label">D</span> It restarts the JVM</li></ol></div>
+</section>
+
+<!-- ===================== WEEK 5 ===================== -->
+<section id="w5">
+  <h2>Week 5 — AWT GUI Programming</h2>
+  <p class="wk-sub">AWT vs Swing vs JavaFX · component hierarchy · components · Frame · delegation event model · listeners · layout managers · KeyListener · WindowAdapter</p>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q1</span>AWT components are often called "heavyweight" because they:</div>
+    <ol class="opts"><li><span class="label">A</span> Use large amounts of memory</li><li><span class="label">B</span> Rely on the native operating system's GUI components (peers)</li><li><span class="label">C</span> Are drawn entirely in pure Java</li><li><span class="label">D</span> Require a database connection</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q2</span>Which class represents the main top-level window in AWT?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>Panel</code></li><li><span class="label">B</span> <code>Window</code></li><li><span class="label">C</span> <code>Frame</code></li><li><span class="label">D</span> <code>Canvas</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q3</span>Which package contains the core AWT classes?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>javax.swing</code></li><li><span class="label">B</span> <code>java.awt</code></li><li><span class="label">C</span> <code>java.gui</code></li><li><span class="label">D</span> <code>javafx.scene</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q4</span>In the delegation event model, what is the correct sequence?</div>
+    <ol class="opts"><li><span class="label">A</span> Implement a listener → register it on a component → handle the event</li><li><span class="label">B</span> Register a listener → compile → run the event</li><li><span class="label">C</span> Handle the event → implement a listener → register it</li><li><span class="label">D</span> Events are handled automatically without listeners</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q5</span>Which interface handles button-click (action) events?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>MouseListener</code></li><li><span class="label">B</span> <code>ActionListener</code></li><li><span class="label">C</span> <code>WindowListener</code></li><li><span class="label">D</span> <code>ItemListener</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q6</span>Which method is defined by the <code>ActionListener</code> interface?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>actionPerformed(ActionEvent e)</code></li><li><span class="label">B</span> <code>onClick(Event e)</code></li><li><span class="label">C</span> <code>handle(ActionEvent e)</code></li><li><span class="label">D</span> <code>mouseClicked(MouseEvent e)</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q7</span>To register an action listener on a button <code>b</code>, you call:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>b.setListener(...)</code></li><li><span class="label">B</span> <code>b.addActionListener(...)</code></li><li><span class="label">C</span> <code>b.listen(...)</code></li><li><span class="label">D</span> <code>b.onAction(...)</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q8</span>Which layout manager arranges components in a grid of equally sized cells?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>FlowLayout</code></li><li><span class="label">B</span> <code>BorderLayout</code></li><li><span class="label">C</span> <code>GridLayout</code></li><li><span class="label">D</span> <code>CardLayout</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q9</span><code>BorderLayout</code> divides a container into how many regions?</div>
+    <ol class="opts"><li><span class="label">A</span> 3 (top, middle, bottom)</li><li><span class="label">B</span> 5 (North, South, East, West, Center)</li><li><span class="label">C</span> 4 (corners only)</li><li><span class="label">D</span> Unlimited</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q10</span>Which is the default layout manager for a <code>Frame</code>?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>FlowLayout</code></li><li><span class="label">B</span> <code>GridLayout</code></li><li><span class="label">C</span> <code>BorderLayout</code></li><li><span class="label">D</span> No layout (null)</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q11</span><code>FlowLayout</code> arranges components:</div>
+    <ol class="opts"><li><span class="label">A</span> In a grid</li><li><span class="label">B</span> Left to right in the order added, wrapping to the next row as needed</li><li><span class="label">C</span> Only in the center</li><li><span class="label">D</span> Stacked on top of each other</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q12</span>Why is the <code>WindowAdapter</code> class often used instead of implementing <code>WindowListener</code>?</div>
+    <ol class="opts"><li><span class="label">A</span> It runs faster</li><li><span class="label">B</span> It provides empty implementations so you override only the methods you need</li><li><span class="label">C</span> It is the only way to close a window</li><li><span class="label">D</span> It automatically saves the window state</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q13</span>The <code>KeyListener</code> interface declares which set of methods?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>keyPressed</code>, <code>keyReleased</code>, <code>keyTyped</code></li><li><span class="label">B</span> <code>keyDown</code>, <code>keyUp</code>, <code>keyHold</code></li><li><span class="label">C</span> <code>onKey</code>, <code>offKey</code></li><li><span class="label">D</span> <code>press</code>, <code>release</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q14</span>Which AWT component is a single-line text input field?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>Label</code></li><li><span class="label">B</span> <code>TextField</code></li><li><span class="label">C</span> <code>TextArea</code></li><li><span class="label">D</span> <code>Canvas</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q15</span>Which AWT component displays non-editable, descriptive text?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>TextField</code></li><li><span class="label">B</span> <code>Label</code></li><li><span class="label">C</span> <code>Button</code></li><li><span class="label">D</span> <code>Scrollbar</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q16</span>Which AWT component provides a drop-down list of mutually exclusive choices?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>List</code></li><li><span class="label">B</span> <code>Choice</code></li><li><span class="label">C</span> <code>Checkbox</code></li><li><span class="label">D</span> <code>Canvas</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q17</span>Which method makes a <code>Frame</code> visible on screen?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>show(true)</code> only</li><li><span class="label">B</span> <code>setVisible(true)</code></li><li><span class="label">C</span> <code>display()</code></li><li><span class="label">D</span> <code>open()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q18</span>The object passed to an event handler (e.g. <code>ActionEvent</code>) primarily provides:</div>
+    <ol class="opts"><li><span class="label">A</span> Information about the event and its source</li><li><span class="label">B</span> The whole program's memory</li><li><span class="label">C</span> A database connection</li><li><span class="label">D</span> The JVM version</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q19</span>A <code>Canvas</code> in AWT is mainly used for:</div>
+    <ol class="opts"><li><span class="label">A</span> Holding buttons</li><li><span class="label">B</span> A rectangular area for custom drawing/graphics</li><li><span class="label">C</span> Reading files</li><li><span class="label">D</span> Managing threads</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q20</span>Which is TRUE about AWT compared to Swing?</div>
+    <ol class="opts"><li><span class="label">A</span> AWT components are lightweight; Swing is heavyweight</li><li><span class="label">B</span> AWT uses native peers (heavyweight); Swing is lightweight pure Java</li><li><span class="label">C</span> Both are identical</li><li><span class="label">D</span> AWT is newer than Swing</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q21</span>To set a layout manager on a frame to <code>GridLayout</code> with 2 rows and 3 columns:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>setLayout(new GridLayout(2,3))</code></li><li><span class="label">B</span> <code>setGrid(2,3)</code></li><li><span class="label">C</span> <code>layout(2,3)</code></li><li><span class="label">D</span> <code>new Grid(2,3)</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q22</span>In <code>BorderLayout</code>, a component added without specifying a region goes to:</div>
+    <ol class="opts"><li><span class="label">A</span> NORTH</li><li><span class="label">B</span> CENTER</li><li><span class="label">C</span> SOUTH</li><li><span class="label">D</span> It is not added</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q23</span>Which component is best for a multi-line editable text area?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>Label</code></li><li><span class="label">B</span> <code>TextField</code></li><li><span class="label">C</span> <code>TextArea</code></li><li><span class="label">D</span> <code>Button</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q24</span>A <code>Checkbox</code> component represents:</div>
+    <ol class="opts"><li><span class="label">A</span> A push button</li><li><span class="label">B</span> A two-state (on/off) toggle option</li><li><span class="label">C</span> A drawing surface</li><li><span class="label">D</span> A scrollbar</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q25</span>To handle a window's close button so the application exits, you typically override:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>windowClosing()</code> (e.g. via <code>WindowAdapter</code>)</li><li><span class="label">B</span> <code>actionPerformed()</code></li><li><span class="label">C</span> <code>keyTyped()</code></li><li><span class="label">D</span> <code>mouseExited()</code></li></ol></div>
+</section>
+
+<!-- ===================== WEEK 6 ===================== -->
+<section id="w6">
+  <h2>Week 6 — Swing &amp; JavaFX</h2>
+  <p class="wk-sub">Swing advantages · component hierarchy · JOptionPane · JFileChooser · JavaFX Stage/Scene/Node · layouts · lifecycle · EventHandler · GridPane</p>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q1</span>A key advantage of Swing components over AWT is that they are:</div>
+    <ol class="opts"><li><span class="label">A</span> Heavyweight and OS-dependent</li><li><span class="label">B</span> Lightweight and written purely in Java, with a pluggable look-and-feel</li><li><span class="label">C</span> Faster because they bypass the JVM</li><li><span class="label">D</span> Only usable on Windows</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q2</span>Most Swing component class names begin with the letter:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>A</code></li><li><span class="label">B</span> <code>S</code></li><li><span class="label">C</span> <code>J</code></li><li><span class="label">D</span> <code>X</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q3</span>Which package contains the Swing classes?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>java.awt</code></li><li><span class="label">B</span> <code>javax.swing</code></li><li><span class="label">C</span> <code>javafx.scene</code></li><li><span class="label">D</span> <code>java.gui</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q4</span>Which class displays a simple pop-up dialog box (message, input, or confirm)?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>JFileChooser</code></li><li><span class="label">B</span> <code>JOptionPane</code></li><li><span class="label">C</span> <code>JFrame</code></li><li><span class="label">D</span> <code>JPanel</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q5</span>Which Swing class is used to let the user browse and select files?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>JOptionPane</code></li><li><span class="label">B</span> <code>JFileChooser</code></li><li><span class="label">C</span> <code>JList</code></li><li><span class="label">D</span> <code>JTable</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q6</span>Which Swing class is the top-level window equivalent of AWT's <code>Frame</code>?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>JPanel</code></li><li><span class="label">B</span> <code>JFrame</code></li><li><span class="label">C</span> <code>JButton</code></li><li><span class="label">D</span> <code>JDialog</code> only</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q7</span>In JavaFX, which object represents the top-level window (the "stage")?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>Scene</code></li><li><span class="label">B</span> <code>Node</code></li><li><span class="label">C</span> <code>Stage</code></li><li><span class="label">D</span> <code>Pane</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q8</span>What is the correct containment order in JavaFX?</div>
+    <ol class="opts"><li><span class="label">A</span> Scene contains a Stage which contains Nodes</li><li><span class="label">B</span> Stage contains a Scene which contains Nodes</li><li><span class="label">C</span> Node contains a Scene which contains a Stage</li><li><span class="label">D</span> They have no containment relationship</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q9</span>Which method must be overridden in a JavaFX <code>Application</code> subclass?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>main()</code></li><li><span class="label">B</span> <code>start(Stage primaryStage)</code></li><li><span class="label">C</span> <code>run()</code></li><li><span class="label">D</span> <code>init(Scene s)</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q10</span>The JavaFX application lifecycle methods are called in which order?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>start()</code> → <code>init()</code> → <code>stop()</code></li><li><span class="label">B</span> <code>init()</code> → <code>start()</code> → <code>stop()</code></li><li><span class="label">C</span> <code>stop()</code> → <code>start()</code> → <code>init()</code></li><li><span class="label">D</span> <code>run()</code> → <code>main()</code> → <code>stop()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q11</span>Which method is used to display the primary stage?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>stage.show()</code></li><li><span class="label">B</span> <code>stage.setVisible(true)</code></li><li><span class="label">C</span> <code>stage.display()</code></li><li><span class="label">D</span> <code>stage.open()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q12</span>Which JavaFX layout container arranges its children in a grid of rows and columns?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>VBox</code></li><li><span class="label">B</span> <code>HBox</code></li><li><span class="label">C</span> <code>GridPane</code></li><li><span class="label">D</span> <code>StackPane</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q13</span>Which JavaFX container stacks its children vertically?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>HBox</code></li><li><span class="label">B</span> <code>VBox</code></li><li><span class="label">C</span> <code>GridPane</code></li><li><span class="label">D</span> <code>BorderPane</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q14</span>In JavaFX, a button's click is handled by setting which functional interface?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>ActionListener</code></li><li><span class="label">B</span> <code>EventHandler&lt;ActionEvent&gt;</code></li><li><span class="label">C</span> <code>Runnable</code></li><li><span class="label">D</span> <code>MouseAdapter</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q15</span>The method used to register a click handler on a JavaFX button is:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>setOnAction(...)</code></li><li><span class="label">B</span> <code>addActionListener(...)</code></li><li><span class="label">C</span> <code>onClick(...)</code></li><li><span class="label">D</span> <code>handle(...)</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q16</span>Which technology is the most modern and recommended for rich Java GUIs?</div>
+    <ol class="opts"><li><span class="label">A</span> AWT</li><li><span class="label">B</span> Swing</li><li><span class="label">C</span> JavaFX</li><li><span class="label">D</span> CGI</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q17</span>A "node" in JavaFX refers to:</div>
+    <ol class="opts"><li><span class="label">A</span> A network host</li><li><span class="label">B</span> Any visual element in the scene graph (e.g. a button, label, shape)</li><li><span class="label">C</span> A thread</li><li><span class="label">D</span> A database row</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q18</span>Which <code>JOptionPane</code> call shows a simple informational message dialog?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>showMessageDialog(...)</code></li><li><span class="label">B</span> <code>showFileDialog(...)</code></li><li><span class="label">C</span> <code>print(...)</code></li><li><span class="label">D</span> <code>alert(...)</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q19</span>Swing follows which architectural pattern internally for components like <code>JTable</code>?</div>
+    <ol class="opts"><li><span class="label">A</span> Singleton</li><li><span class="label">B</span> Model-View-Controller (MVC)</li><li><span class="label">C</span> Producer-Consumer</li><li><span class="label">D</span> Observer only</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q20</span>The <code>stop()</code> lifecycle method in a JavaFX application is called:</div>
+    <ol class="opts"><li><span class="label">A</span> Before the UI appears</li><li><span class="label">B</span> When the application is shutting down</li><li><span class="label">C</span> On every button click</li><li><span class="label">D</span> It does not exist</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q21</span>Which is TRUE about Swing's threading?</div>
+    <ol class="opts"><li><span class="label">A</span> UI updates should occur on the Event Dispatch Thread (EDT)</li><li><span class="label">B</span> Swing is fully thread-safe from any thread</li><li><span class="label">C</span> Swing has no threading concerns</li><li><span class="label">D</span> UI must be updated only from the main thread's static block</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q22</span>To attach a scene to a stage you call:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>stage.setScene(scene)</code></li><li><span class="label">B</span> <code>scene.setStage(stage)</code></li><li><span class="label">C</span> <code>stage.addScene(scene)</code></li><li><span class="label">D</span> <code>scene.attach(stage)</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q23</span>A login screen laid out with labels and fields in aligned rows/columns is best built in JavaFX with:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>StackPane</code></li><li><span class="label">B</span> <code>GridPane</code></li><li><span class="label">C</span> <code>FlowPane</code></li><li><span class="label">D</span> <code>Group</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q24</span>Which container in Swing typically holds other components and is added to a <code>JFrame</code>?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>JButton</code></li><li><span class="label">B</span> <code>JPanel</code></li><li><span class="label">C</span> <code>JLabel</code></li><li><span class="label">D</span> <code>JTextField</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q25</span>In JavaFX, the entry point that launches the application is typically:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>launch(args)</code> called from <code>main</code></li><li><span class="label">B</span> <code>start()</code> called by the programmer directly</li><li><span class="label">C</span> <code>run()</code></li><li><span class="label">D</span> The constructor only</li></ol></div>
+</section>
+
+<!-- ===================== WEEK 7 ===================== -->
+<section id="w7">
+  <h2>Week 7 — JDBC (Java Database Connectivity)</h2>
+  <p class="wk-sub">JDBC steps · 2-tier vs 3-tier · API components · DDL/DML/DQL · PreparedStatement · ResultSet · CRUD · SQL injection prevention</p>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q1</span>What is the primary purpose of JDBC?</div>
+    <ol class="opts"><li><span class="label">A</span> To design GUI windows</li><li><span class="label">B</span> To connect Java applications to relational databases and execute SQL</li><li><span class="label">C</span> To create threads</li><li><span class="label">D</span> To serve HTML pages</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q2</span>Which interface is used to execute a parameterized, precompiled SQL statement?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>Statement</code></li><li><span class="label">B</span> <code>PreparedStatement</code></li><li><span class="label">C</span> <code>ResultSet</code></li><li><span class="label">D</span> <code>Connection</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q3</span>The main security benefit of <code>PreparedStatement</code> is that it:</div>
+    <ol class="opts"><li><span class="label">A</span> Encrypts the entire database</li><li><span class="label">B</span> Prevents SQL injection by separating SQL code from data parameters</li><li><span class="label">C</span> Compresses the query</li><li><span class="label">D</span> Caches all results in memory</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q4</span>Which JDBC method is used to run a <code>SELECT</code> query that returns rows?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>executeUpdate()</code></li><li><span class="label">B</span> <code>executeQuery()</code></li><li><span class="label">C</span> <code>execute()</code> only</li><li><span class="label">D</span> <code>commit()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q5</span>Which method is used for <code>INSERT</code>, <code>UPDATE</code>, and <code>DELETE</code> statements?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>executeQuery()</code></li><li><span class="label">B</span> <code>executeUpdate()</code></li><li><span class="label">C</span> <code>getResultSet()</code></li><li><span class="label">D</span> <code>next()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q6</span>To advance a <code>ResultSet</code> cursor to the next row, you call:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>hasNext()</code></li><li><span class="label">B</span> <code>next()</code></li><li><span class="label">C</span> <code>move()</code></li><li><span class="label">D</span> <code>fetch()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q7</span><code>CREATE TABLE</code> is an example of which category of SQL?</div>
+    <ol class="opts"><li><span class="label">A</span> DML</li><li><span class="label">B</span> DQL</li><li><span class="label">C</span> DDL</li><li><span class="label">D</span> TCL</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q8</span><code>INSERT</code>, <code>UPDATE</code>, and <code>DELETE</code> belong to which SQL category?</div>
+    <ol class="opts"><li><span class="label">A</span> DDL</li><li><span class="label">B</span> DML</li><li><span class="label">C</span> DQL</li><li><span class="label">D</span> DCL</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q9</span>Which method registers/loads the JDBC driver class (older style)?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>DriverManager.getConnection()</code></li><li><span class="label">B</span> <code>Class.forName("...")</code></li><li><span class="label">C</span> <code>Connection.open()</code></li><li><span class="label">D</span> <code>Statement.load()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q10</span>Which method establishes a connection to the database?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>DriverManager.getConnection(url, user, pass)</code></li><li><span class="label">B</span> <code>Connection.connect()</code></li><li><span class="label">C</span> <code>Statement.execute()</code></li><li><span class="label">D</span> <code>ResultSet.open()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q11</span>In a <code>PreparedStatement</code>, the placeholder for a parameter value is the:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>%s</code> token</li><li><span class="label">B</span> <code>?</code> (question mark)</li><li><span class="label">C</span> <code>:name</code> token</li><li><span class="label">D</span> <code>{0}</code> token</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q12</span>To set the first parameter of a <code>PreparedStatement</code> to a string value, you call:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>setString(0, value)</code></li><li><span class="label">B</span> <code>setString(1, value)</code></li><li><span class="label">C</span> <code>setParam(1, value)</code></li><li><span class="label">D</span> <code>bind(1, value)</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q13</span>In a 3-tier architecture, the middle tier typically contains the:</div>
+    <ol class="opts"><li><span class="label">A</span> Database storage engine</li><li><span class="label">B</span> Business logic / application server</li><li><span class="label">C</span> Raw SQL files only</li><li><span class="label">D</span> The end-user's browser</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q14</span>In a 2-tier architecture, the client communicates:</div>
+    <ol class="opts"><li><span class="label">A</span> Directly with the database</li><li><span class="label">B</span> Only through three middle servers</li><li><span class="label">C</span> Never with the database</li><li><span class="label">D</span> Only via email</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q15</span>The six standard steps of JDBC begin with:</div>
+    <ol class="opts"><li><span class="label">A</span> Closing the connection</li><li><span class="label">B</span> Loading/registering the driver</li><li><span class="label">C</span> Executing the query</li><li><span class="label">D</span> Processing the result set</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q16</span>To read an integer column named <code>age</code> from a <code>ResultSet rs</code>:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>rs.getInt("age")</code></li><li><span class="label">B</span> <code>rs.readInt("age")</code></li><li><span class="label">C</span> <code>rs.get("age")</code></li><li><span class="label">D</span> <code>rs.column("age")</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q17</span>The classic SQL-injection vulnerability arises from:</div>
+    <ol class="opts"><li><span class="label">A</span> Using <code>PreparedStatement</code></li><li><span class="label">B</span> Building SQL by concatenating untrusted user input into the query string</li><li><span class="label">C</span> Closing connections</li><li><span class="label">D</span> Using parameter setters</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q18</span>Which input is a classic SQL injection payload that makes a WHERE clause always true?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>' OR '1'='1</code></li><li><span class="label">B</span> <code>SELECT *</code></li><li><span class="label">C</span> <code>NULL</code></li><li><span class="label">D</span> <code>0</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q19</span>Which JDBC object lets you query column names and types of a result set?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>ResultSetMetaData</code></li><li><span class="label">B</span> <code>DriverManager</code></li><li><span class="label">C</span> <code>Connection</code></li><li><span class="label">D</span> <code>SQLWarning</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q20</span>The <code>AUTO_INCREMENT</code> column attribute is used to:</div>
+    <ol class="opts"><li><span class="label">A</span> Encrypt a column</li><li><span class="label">B</span> Automatically generate a unique increasing value (e.g. for a primary key)</li><li><span class="label">C</span> Delete old rows</li><li><span class="label">D</span> Index the table</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q21</span>Why should JDBC resources (Connection, Statement, ResultSet) be closed?</div>
+    <ol class="opts"><li><span class="label">A</span> They never need closing</li><li><span class="label">B</span> To release database and memory resources and avoid leaks</li><li><span class="label">C</span> To encrypt them</li><li><span class="label">D</span> To speed up compilation</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q22</span>A JDBC URL for a database typically looks like:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>jdbc:mysql://localhost:3306/mydb</code></li><li><span class="label">B</span> <code>http://localhost/mydb</code></li><li><span class="label">C</span> <code>db://mydb</code></li><li><span class="label">D</span> <code>sql:mydb@localhost</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q23</span>The "C" and "R" in CRUD correspond to which SQL operations?</div>
+    <ol class="opts"><li><span class="label">A</span> CREATE/RENAME</li><li><span class="label">B</span> INSERT (Create) and SELECT (Read)</li><li><span class="label">C</span> COMMIT/ROLLBACK</li><li><span class="label">D</span> CONNECT/RELEASE</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q24</span>A <code>SELECT</code> statement belongs to which category?</div>
+    <ol class="opts"><li><span class="label">A</span> DDL</li><li><span class="label">B</span> DQL (Data Query Language)</li><li><span class="label">C</span> DCL</li><li><span class="label">D</span> TCL</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q25</span>An additional benefit of <code>PreparedStatement</code> over <code>Statement</code> (besides security) is:</div>
+    <ol class="opts"><li><span class="label">A</span> It cannot be reused</li><li><span class="label">B</span> Better performance when the same query runs repeatedly (precompiled)</li><li><span class="label">C</span> It requires no connection</li><li><span class="label">D</span> It only works for SELECT</li></ol></div>
+</section>
+
+<!-- ===================== WEEK 8 ===================== -->
+<section id="w8">
+  <h2>Week 8 — MVC Web Applications with Servlets</h2>
+  <p class="wk-sub">client-server · GET vs POST · static vs dynamic · CGI vs Servlets · MVC · servlet lifecycle · form data · RequestDispatcher · session tracking</p>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q1</span>A key advantage of Servlets over traditional CGI is that Servlets:</div>
+    <ol class="opts"><li><span class="label">A</span> Spawn a new OS process per request</li><li><span class="label">B</span> Run as threads within a single JVM, making them more scalable</li><li><span class="label">C</span> Cannot handle HTML forms</li><li><span class="label">D</span> Require no web server</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q2</span>In the MVC pattern, which component holds the application data and business logic?</div>
+    <ol class="opts"><li><span class="label">A</span> View</li><li><span class="label">B</span> Controller</li><li><span class="label">C</span> Model</li><li><span class="label">D</span> Dispatcher</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q3</span>In MVC, which component is responsible for the presentation (what the user sees)?</div>
+    <ol class="opts"><li><span class="label">A</span> Model</li><li><span class="label">B</span> View</li><li><span class="label">C</span> Controller</li><li><span class="label">D</span> Servlet container</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q4</span>In MVC, which component handles user input and coordinates Model and View?</div>
+    <ol class="opts"><li><span class="label">A</span> Model</li><li><span class="label">B</span> View</li><li><span class="label">C</span> Controller</li><li><span class="label">D</span> Database</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q5</span>Which HTTP method appends form data to the URL and should not be used for sensitive data?</div>
+    <ol class="opts"><li><span class="label">A</span> POST</li><li><span class="label">B</span> GET</li><li><span class="label">C</span> PUT</li><li><span class="label">D</span> DELETE</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q6</span>Which HTTP method sends form data in the request body and is preferred for sensitive/large data?</div>
+    <ol class="opts"><li><span class="label">A</span> GET</li><li><span class="label">B</span> POST</li><li><span class="label">C</span> HEAD</li><li><span class="label">D</span> TRACE</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q7</span>What is the correct order of the servlet lifecycle methods?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>service()</code> → <code>init()</code> → <code>destroy()</code></li><li><span class="label">B</span> <code>init()</code> → <code>service()</code> → <code>destroy()</code></li><li><span class="label">C</span> <code>destroy()</code> → <code>service()</code> → <code>init()</code></li><li><span class="label">D</span> <code>start()</code> → <code>run()</code> → <code>stop()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q8</span>The <code>init()</code> method of a servlet is called:</div>
+    <ol class="opts"><li><span class="label">A</span> Once per request</li><li><span class="label">B</span> Once, when the servlet is first loaded</li><li><span class="label">C</span> Every time the page is refreshed</li><li><span class="label">D</span> Only when the server shuts down</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q9</span>The <code>service()</code> method of a servlet is called:</div>
+    <ol class="opts"><li><span class="label">A</span> Once at startup</li><li><span class="label">B</span> Once per client request</li><li><span class="label">C</span> Only when the servlet is destroyed</li><li><span class="label">D</span> Never</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q10</span>Which method reads a single form parameter value in a servlet?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>getParameter("name")</code></li><li><span class="label">B</span> <code>readForm("name")</code></li><li><span class="label">C</span> <code>getAttribute("name")</code></li><li><span class="label">D</span> <code>getValue("name")</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q11</span>Which <code>RequestDispatcher</code> method transfers control to another resource without the client knowing?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>redirect()</code></li><li><span class="label">B</span> <code>forward()</code></li><li><span class="label">C</span> <code>send()</code></li><li><span class="label">D</span> <code>route()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q12</span>The difference between <code>forward()</code> and <code>include()</code> is that <code>include()</code>:</div>
+    <ol class="opts"><li><span class="label">A</span> Completely replaces the response with the new resource</li><li><span class="label">B</span> Inserts the included resource's output into the current response</li><li><span class="label">C</span> Sends a redirect to the browser</li><li><span class="label">D</span> Closes the connection</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q13</span>Which is NOT one of the four common session-tracking techniques?</div>
+    <ol class="opts"><li><span class="label">A</span> Cookies</li><li><span class="label">B</span> Hidden form fields</li><li><span class="label">C</span> URL rewriting</li><li><span class="label">D</span> Thread pooling</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q14</span>Which object is used to maintain state for a single user across multiple requests?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>ServletContext</code></li><li><span class="label">B</span> <code>HttpSession</code></li><li><span class="label">C</span> <code>PrintWriter</code></li><li><span class="label">D</span> <code>RequestDispatcher</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q15</span>A small piece of data stored on the client's browser to track sessions is called a:</div>
+    <ol class="opts"><li><span class="label">A</span> Servlet</li><li><span class="label">B</span> Cookie</li><li><span class="label">C</span> Bean</li><li><span class="label">D</span> Token field</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q16</span>A static web page differs from a dynamic one because a static page:</div>
+    <ol class="opts"><li><span class="label">A</span> Changes its content per request based on logic/data</li><li><span class="label">B</span> Returns the same fixed content to every user</li><li><span class="label">C</span> Requires a database</li><li><span class="label">D</span> Cannot be served by a web server</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q17</span>The main drawback of CGI compared to servlets is that CGI:</div>
+    <ol class="opts"><li><span class="label">A</span> Cannot generate HTML</li><li><span class="label">B</span> Starts a new heavyweight process for each request, hurting scalability</li><li><span class="label">C</span> Is written in Java only</li><li><span class="label">D</span> Has no access to form data</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q18</span>Which file is traditionally used to map URL patterns to servlets (deployment descriptor)?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>index.html</code></li><li><span class="label">B</span> <code>web.xml</code></li><li><span class="label">C</span> <code>pom.xml</code></li><li><span class="label">D</span> <code>servlet.cfg</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q19</span>Which class is most commonly extended to write an HTTP servlet?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>GenericServlet</code></li><li><span class="label">B</span> <code>HttpServlet</code></li><li><span class="label">C</span> <code>Servlet</code></li><li><span class="label">D</span> <code>HttpSession</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q20</span>When extending <code>HttpServlet</code>, a GET request is handled by overriding:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>doGet(...)</code></li><li><span class="label">B</span> <code>service()</code> only</li><li><span class="label">C</span> <code>handleGet()</code></li><li><span class="label">D</span> <code>get()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q21</span>To send HTML output back to the client from a servlet, you obtain a:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>PrintWriter</code> from the response object</li><li><span class="label">B</span> <code>BufferedReader</code> from the request</li><li><span class="label">C</span> <code>Connection</code></li><li><span class="label">D</span> <code>Socket</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q22</span>In the client-server model, the server typically:</div>
+    <ol class="opts"><li><span class="label">A</span> Requests services</li><li><span class="label">B</span> Listens for and responds to client requests</li><li><span class="label">C</span> Is the user's browser</li><li><span class="label">D</span> Has no network role</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q23</span>URL rewriting tracks sessions by:</div>
+    <ol class="opts"><li><span class="label">A</span> Storing data on the server's disk only</li><li><span class="label">B</span> Appending a session id to URLs (e.g. <code>;jsessionid=...</code>)</li><li><span class="label">C</span> Using cookies exclusively</li><li><span class="label">D</span> Encrypting the page</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q24</span>The <code>destroy()</code> servlet method is invoked:</div>
+    <ol class="opts"><li><span class="label">A</span> Before every request</li><li><span class="label">B</span> Once, when the servlet is being removed from service</li><li><span class="label">C</span> After every request</li><li><span class="label">D</span> Never</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q25</span>Why are servlets considered efficient for handling many simultaneous users?</div>
+    <ol class="opts"><li><span class="label">A</span> Each user gets a separate JVM</li><li><span class="label">B</span> A single servlet instance is shared and serviced by multiple threads</li><li><span class="label">C</span> They never use memory</li><li><span class="label">D</span> They cache the whole database</li></ol></div>
+</section>
+
+<!-- ===================== WEEK 9 ===================== -->
+<section id="w9">
+  <h2>Week 9 — JavaServer Pages (JSP)</h2>
+  <p class="wk-sub">JSP lifecycle · JSP vs Servlet · scripting elements · directives · implicit objects · action tags · EL · JSTL · error handling · sessions</p>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q1</span>A JSP page is ultimately:</div>
+    <ol class="opts"><li><span class="label">A</span> Run as a static HTML file</li><li><span class="label">B</span> Translated into a servlet, compiled, and executed</li><li><span class="label">C</span> Interpreted line-by-line every request without compilation</li><li><span class="label">D</span> Converted to an applet</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q2</span>Which scripting element writes an expression's result directly to the output?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>&lt;% ... %&gt;</code> (scriptlet)</li><li><span class="label">B</span> <code>&lt;%= ... %&gt;</code> (expression)</li><li><span class="label">C</span> <code>&lt;%! ... %&gt;</code> (declaration)</li><li><span class="label">D</span> <code>&lt;%-- ... --%&gt;</code> (comment)</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q3</span>Which JSP element contains arbitrary Java statements?</div>
+    <ol class="opts"><li><span class="label">A</span> Scriptlet <code>&lt;% %&gt;</code></li><li><span class="label">B</span> Expression <code>&lt;%= %&gt;</code></li><li><span class="label">C</span> Directive <code>&lt;%@ %&gt;</code></li><li><span class="label">D</span> Comment <code>&lt;%-- --%&gt;</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q4</span>Which JSP element is used to declare methods or instance variables?</div>
+    <ol class="opts"><li><span class="label">A</span> Scriptlet <code>&lt;% %&gt;</code></li><li><span class="label">B</span> Expression <code>&lt;%= %&gt;</code></li><li><span class="label">C</span> Declaration <code>&lt;%! %&gt;</code></li><li><span class="label">D</span> Directive <code>&lt;%@ %&gt;</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q5</span>Which directive is used to import a Java class into a JSP page?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>&lt;%@ include %&gt;</code></li><li><span class="label">B</span> <code>&lt;%@ taglib %&gt;</code></li><li><span class="label">C</span> <code>&lt;%@ page import="..." %&gt;</code></li><li><span class="label">D</span> <code>&lt;jsp:useBean&gt;</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q6</span>Which directive statically includes another file at translation time?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>&lt;%@ page %&gt;</code></li><li><span class="label">B</span> <code>&lt;%@ include %&gt;</code></li><li><span class="label">C</span> <code>&lt;%@ taglib %&gt;</code></li><li><span class="label">D</span> <code>&lt;jsp:forward&gt;</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q7</span>Which directive declares a custom or standard tag library (e.g. JSTL)?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>&lt;%@ page %&gt;</code></li><li><span class="label">B</span> <code>&lt;%@ include %&gt;</code></li><li><span class="label">C</span> <code>&lt;%@ taglib %&gt;</code></li><li><span class="label">D</span> <code>&lt;%! %&gt;</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q8</span>Which is a valid JSP implicit object?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>request</code></li><li><span class="label">B</span> <code>connection</code></li><li><span class="label">C</span> <code>servletmain</code></li><li><span class="label">D</span> <code>jvm</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q9</span>Which implicit object is used to write content to the response in a scriptlet?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>out</code></li><li><span class="label">B</span> <code>in</code></li><li><span class="label">C</span> <code>writer</code></li><li><span class="label">D</span> <code>print</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q10</span>The Expression Language (EL) syntax <code>${user.name}</code> is used to:</div>
+    <ol class="opts"><li><span class="label">A</span> Declare a variable</li><li><span class="label">B</span> Access data (bean properties/attributes) cleanly without scriptlets</li><li><span class="label">C</span> Import a tag library</li><li><span class="label">D</span> Comment out code</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q11</span>What does JSTL stand for?</div>
+    <ol class="opts"><li><span class="label">A</span> Java Standard Type Library</li><li><span class="label">B</span> JSP Standard Tag Library</li><li><span class="label">C</span> Java Servlet Template Layer</li><li><span class="label">D</span> JSP Scripting Template Language</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q12</span>Which <code>page</code> directive attribute designates a page to handle uncaught exceptions?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>isErrorPage</code></li><li><span class="label">B</span> <code>errorPage</code></li><li><span class="label">C</span> <code>import</code></li><li><span class="label">D</span> <code>session</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q13</span>The attribute set to <code>true</code> on the page that actually displays the error is:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>errorPage="true"</code></li><li><span class="label">B</span> <code>isErrorPage="true"</code></li><li><span class="label">C</span> <code>handleError="true"</code></li><li><span class="label">D</span> <code>catchAll="true"</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q14</span>Compared to a Servlet, JSP is generally better suited for:</div>
+    <ol class="opts"><li><span class="label">A</span> Heavy business/control logic</li><li><span class="label">B</span> Presentation (generating the view/HTML)</li><li><span class="label">C</span> Database connection pooling</li><li><span class="label">D</span> Thread management</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q15</span>Which action tag is used to include another resource at request time?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>&lt;jsp:include&gt;</code></li><li><span class="label">B</span> <code>&lt;%@ include %&gt;</code></li><li><span class="label">C</span> <code>&lt;c:out&gt;</code></li><li><span class="label">D</span> <code>&lt;%= %&gt;</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q16</span>Which action tag forwards the request to another resource?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>&lt;jsp:forward&gt;</code></li><li><span class="label">B</span> <code>&lt;jsp:include&gt;</code></li><li><span class="label">C</span> <code>&lt;jsp:useBean&gt;</code></li><li><span class="label">D</span> <code>&lt;c:if&gt;</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q17</span>The <code>&lt;jsp:useBean&gt;</code> action is used to:</div>
+    <ol class="opts"><li><span class="label">A</span> Locate or instantiate a JavaBean for use in the page</li><li><span class="label">B</span> Close the database</li><li><span class="label">C</span> Forward a request</li><li><span class="label">D</span> Import a tag library</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q18</span>How many steps are commonly listed in the JSP lifecycle?</div>
+    <ol class="opts"><li><span class="label">A</span> 3</li><li><span class="label">B</span> 5</li><li><span class="label">C</span> 7</li><li><span class="label">D</span> 10</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q19</span>During the JSP lifecycle, which JSP-specific method is invoked to service each request (auto-generated)?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>_jspService()</code></li><li><span class="label">B</span> <code>service()</code> written by hand</li><li><span class="label">C</span> <code>run()</code></li><li><span class="label">D</span> <code>main()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q20</span>EL has its own implicit objects; which accesses request parameters?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>param</code></li><li><span class="label">B</span> <code>request</code></li><li><span class="label">C</span> <code>out</code></li><li><span class="label">D</span> <code>page</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q21</span>A main reason to prefer EL/JSTL over scriptlets is to:</div>
+    <ol class="opts"><li><span class="label">A</span> Make pages slower</li><li><span class="label">B</span> Keep Java code out of the view for cleaner, more maintainable pages</li><li><span class="label">C</span> Avoid using the server</li><li><span class="label">D</span> Remove the need for HTML</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q22</span>Which JSTL core tag conditionally renders content?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>&lt;c:if&gt;</code></li><li><span class="label">B</span> <code>&lt;c:loop&gt;</code></li><li><span class="label">C</span> <code>&lt;c:print&gt;</code></li><li><span class="label">D</span> <code>&lt;c:bean&gt;</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q23</span>Which JSTL core tag iterates over a collection?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>&lt;c:forEach&gt;</code></li><li><span class="label">B</span> <code>&lt;c:while&gt;</code></li><li><span class="label">C</span> <code>&lt;c:repeat&gt;</code></li><li><span class="label">D</span> <code>&lt;c:loop&gt;</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q24</span>To disable the default session creation for a JSP, you set in the page directive:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>session="false"</code></li><li><span class="label">B</span> <code>nosession="true"</code></li><li><span class="label">C</span> <code>isSession="off"</code></li><li><span class="label">D</span> Sessions cannot be disabled</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q25</span>In a clean MVC design using JSP, the JSP page should ideally act as the:</div>
+    <ol class="opts"><li><span class="label">A</span> Controller</li><li><span class="label">B</span> View</li><li><span class="label">C</span> Model</li><li><span class="label">D</span> Database driver</li></ol></div>
+</section>
+
+<!-- ===================== WEEK 10 ===================== -->
+<section id="w10">
+  <h2>Week 10 — Java Frameworks: Spring &amp; Spring MVC</h2>
+  <p class="wk-sub">frameworks · Spring overview &amp; architecture · coupling · beans · @Primary/@Qualifier · autowiring · Spring MVC request flow · DispatcherServlet</p>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q1</span>The core design principle behind Spring that injects dependencies rather than having objects create them is:</div>
+    <ol class="opts"><li><span class="label">A</span> Inheritance</li><li><span class="label">B</span> Inversion of Control / Dependency Injection</li><li><span class="label">C</span> Serialization</li><li><span class="label">D</span> Multithreading</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q2</span>In Spring, an object managed by the Spring IoC container is called a:</div>
+    <ol class="opts"><li><span class="label">A</span> Servlet</li><li><span class="label">B</span> Bean</li><li><span class="label">C</span> Pod</li><li><span class="label">D</span> Module</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q3</span>Loose coupling between classes is best achieved by programming to:</div>
+    <ol class="opts"><li><span class="label">A</span> Concrete classes directly</li><li><span class="label">B</span> Interfaces (abstractions)</li><li><span class="label">C</span> Static methods only</li><li><span class="label">D</span> Global variables</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q4</span>Tight coupling is problematic mainly because it:</div>
+    <ol class="opts"><li><span class="label">A</span> Makes code easier to change</li><li><span class="label">B</span> Makes classes hard to modify, test, and reuse independently</li><li><span class="label">C</span> Improves performance</li><li><span class="label">D</span> Removes the need for interfaces</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q5</span>Which annotation tells Spring to automatically inject a dependency?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>@Inject</code> only</li><li><span class="label">B</span> <code>@Autowired</code></li><li><span class="label">C</span> <code>@Component</code></li><li><span class="label">D</span> <code>@Bean</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q6</span>Which annotation marks a class as a Spring-managed component to be auto-detected?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>@Component</code></li><li><span class="label">B</span> <code>@Autowired</code></li><li><span class="label">C</span> <code>@Qualifier</code></li><li><span class="label">D</span> <code>@Override</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q7</span>When two beans of the same type exist, which annotation specifies exactly which one to inject?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>@Primary</code></li><li><span class="label">B</span> <code>@Qualifier</code></li><li><span class="label">C</span> <code>@Scope</code></li><li><span class="label">D</span> <code>@Lazy</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q8</span>When two candidate beans match, marking one with <code>@Primary</code> means it is:</div>
+    <ol class="opts"><li><span class="label">A</span> Never injected</li><li><span class="label">B</span> The default choice when no qualifier is specified</li><li><span class="label">C</span> Loaded last</li><li><span class="label">D</span> Made immutable</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q9</span>Which is a valid way to perform <code>@Autowired</code> injection?</div>
+    <ol class="opts"><li><span class="label">A</span> Field, setter, or constructor injection</li><li><span class="label">B</span> Only via the <code>main</code> method</li><li><span class="label">C</span> Only via static blocks</li><li><span class="label">D</span> Only through XML, never annotations</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q10</span>In Spring MVC, which component receives all incoming requests first and routes them?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>HandlerMapping</code></li><li><span class="label">B</span> <code>DispatcherServlet</code> (front controller)</li><li><span class="label">C</span> <code>ViewResolver</code></li><li><span class="label">D</span> <code>ModelAndView</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q11</span>In Spring MVC, the component that maps a logical view name to an actual view (e.g. a JSP) is the:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>Controller</code></li><li><span class="label">B</span> <code>ViewResolver</code></li><li><span class="label">C</span> <code>Model</code></li><li><span class="label">D</span> <code>DispatcherServlet</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q12</span>Which annotation marks a class as a Spring MVC controller?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>@Controller</code></li><li><span class="label">B</span> <code>@Service</code></li><li><span class="label">C</span> <code>@Repository</code></li><li><span class="label">D</span> <code>@Entity</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q13</span>Which annotation maps a web request URL to a controller method?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>@RequestMapping</code></li><li><span class="label">B</span> <code>@Autowired</code></li><li><span class="label">C</span> <code>@Bean</code></li><li><span class="label">D</span> <code>@Qualifier</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q14</span>Which is a stated benefit of using a framework like Spring?</div>
+    <ol class="opts"><li><span class="label">A</span> Eliminates the need for the JVM</li><li><span class="label">B</span> Reduces boilerplate code and promotes reusable, maintainable structure</li><li><span class="label">C</span> Guarantees zero bugs</li><li><span class="label">D</span> Makes Java statically typed</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q15</span>Which is a drawback of using frameworks?</div>
+    <ol class="opts"><li><span class="label">A</span> They make code impossible to test</li><li><span class="label">B</span> A learning curve and added abstraction/complexity</li><li><span class="label">C</span> They remove all configuration</li><li><span class="label">D</span> They prevent the use of databases</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q16</span>The tool commonly used to bootstrap a new Spring Boot project is:</div>
+    <ol class="opts"><li><span class="label">A</span> spring.initializr (start.spring.io)</li><li><span class="label">B</span> javac</li><li><span class="label">C</span> NetBeans wizard only</li><li><span class="label">D</span> jdbc:init</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q17</span>The build/dependency configuration file in a typical Maven-based Spring project is:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>web.xml</code></li><li><span class="label">B</span> <code>pom.xml</code></li><li><span class="label">C</span> <code>build.gradle</code> only</li><li><span class="label">D</span> <code>spring.cfg</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q18</span>The Spring container's main job is to:</div>
+    <ol class="opts"><li><span class="label">A</span> Compile Java source</li><li><span class="label">B</span> Create, configure, and manage the lifecycle of beans and their dependencies</li><li><span class="label">C</span> Serve as a web browser</li><li><span class="label">D</span> Replace the operating system</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q19</span>Which annotation explicitly declares a bean produced by a method in a configuration class?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>@Bean</code></li><li><span class="label">B</span> <code>@Component</code></li><li><span class="label">C</span> <code>@Autowired</code></li><li><span class="label">D</span> <code>@Override</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q20</span>Constructor injection is often preferred over field injection because it:</div>
+    <ol class="opts"><li><span class="label">A</span> Allows dependencies to be final and makes them mandatory/testable</li><li><span class="label">B</span> Is slower</li><li><span class="label">C</span> Avoids the need for the container</li><li><span class="label">D</span> Only works with primitives</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q21</span>A core capability Spring provides "without raw APIs" includes:</div>
+    <ol class="opts"><li><span class="label">A</span> Transaction management, data access, and DI support</li><li><span class="label">B</span> Drawing GUIs only</li><li><span class="label">C</span> Compiling bytecode</li><li><span class="label">D</span> Managing the CPU cache</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q22</span>In the Spring MVC flow, after the controller executes, it returns a:</div>
+    <ol class="opts"><li><span class="label">A</span> Compiled servlet</li><li><span class="label">B</span> Model and a logical view name (e.g. ModelAndView)</li><li><span class="label">C</span> Raw SQL string</li><li><span class="label">D</span> A new DispatcherServlet</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q23</span>Spring is described as a lightweight framework primarily because:</div>
+    <ol class="opts"><li><span class="label">A</span> It is non-invasive and does not require components to extend framework classes</li><li><span class="label">B</span> It has very few features</li><li><span class="label">C</span> It runs without the JVM</li><li><span class="label">D</span> It uses no memory</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q24</span>Which Spring module/project is specifically aimed at simplifying database access with repositories?</div>
+    <ol class="opts"><li><span class="label">A</span> Spring Data</li><li><span class="label">B</span> Spring AWT</li><li><span class="label">C</span> Spring Threads</li><li><span class="label">D</span> Spring Socket</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q25</span>Autowiring "by type" means Spring resolves a dependency by matching:</div>
+    <ol class="opts"><li><span class="label">A</span> The bean's name only</li><li><span class="label">B</span> A bean whose class/type is compatible with the required type</li><li><span class="label">C</span> A random bean</li><li><span class="label">D</span> The order of declaration</li></ol></div>
+</section>
+
+<!-- ===================== WEEK 11 ===================== -->
+<section id="w11">
+  <h2>Week 11 — Networking in Java</h2>
+  <p class="wk-sub">TCP/IP model · IP versions · TCP vs UDP · ports · URL class · Sockets · ServerSocket · UDP datagrams · use cases</p>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q1</span>Which transport protocol is connection-oriented and guarantees reliable, ordered delivery?</div>
+    <ol class="opts"><li><span class="label">A</span> UDP</li><li><span class="label">B</span> TCP</li><li><span class="label">C</span> IP</li><li><span class="label">D</span> HTTP</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q2</span>UDP is preferred over TCP when the application needs:</div>
+    <ol class="opts"><li><span class="label">A</span> Guaranteed delivery of every packet</li><li><span class="label">B</span> Low latency and can tolerate some packet loss (e.g. live video/gaming)</li><li><span class="label">C</span> Ordered byte streams</li><li><span class="label">D</span> A persistent handshake connection</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q3</span>Which statement about UDP is TRUE?</div>
+    <ol class="opts"><li><span class="label">A</span> It is connection-oriented and reliable</li><li><span class="label">B</span> It is connectionless and does not guarantee delivery or order</li><li><span class="label">C</span> It performs a three-way handshake</li><li><span class="label">D</span> It retransmits lost packets automatically</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q4</span>On the server side, which class listens for and accepts incoming TCP connections?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>Socket</code></li><li><span class="label">B</span> <code>ServerSocket</code></li><li><span class="label">C</span> <code>DatagramSocket</code></li><li><span class="label">D</span> <code>URLConnection</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q5</span>Which <code>ServerSocket</code> method blocks until a client connects and returns a <code>Socket</code>?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>listen()</code></li><li><span class="label">B</span> <code>accept()</code></li><li><span class="label">C</span> <code>connect()</code></li><li><span class="label">D</span> <code>bind()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q6</span>On the client side, which class is used to open a TCP connection to a server?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>ServerSocket</code></li><li><span class="label">B</span> <code>Socket</code></li><li><span class="label">C</span> <code>DatagramPacket</code></li><li><span class="label">D</span> <code>URL</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q7</span>Which two classes are used for connectionless UDP communication?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>Socket</code> and <code>ServerSocket</code></li><li><span class="label">B</span> <code>DatagramSocket</code> and <code>DatagramPacket</code></li><li><span class="label">C</span> <code>URL</code> and <code>URLConnection</code></li><li><span class="label">D</span> <code>InputStream</code> and <code>OutputStream</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q8</span>What is the well-known port number for HTTP?</div>
+    <ol class="opts"><li><span class="label">A</span> 21</li><li><span class="label">B</span> 25</li><li><span class="label">C</span> 80</li><li><span class="label">D</span> 443</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q9</span>What is the well-known port number for HTTPS?</div>
+    <ol class="opts"><li><span class="label">A</span> 80</li><li><span class="label">B</span> 443</li><li><span class="label">C</span> 22</li><li><span class="label">D</span> 8080</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q10</span>An IPv4 address is how many bits long?</div>
+    <ol class="opts"><li><span class="label">A</span> 16 bits</li><li><span class="label">B</span> 32 bits</li><li><span class="label">C</span> 64 bits</li><li><span class="label">D</span> 128 bits</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q11</span>An IPv6 address is how many bits long?</div>
+    <ol class="opts"><li><span class="label">A</span> 32 bits</li><li><span class="label">B</span> 64 bits</li><li><span class="label">C</span> 128 bits</li><li><span class="label">D</span> 256 bits</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q12</span>Which <code>URL</code> class method returns the protocol part (e.g. <code>http</code>) of a URL?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>getHost()</code></li><li><span class="label">B</span> <code>getProtocol()</code></li><li><span class="label">C</span> <code>getPort()</code></li><li><span class="label">D</span> <code>getFile()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q13</span>Which <code>URL</code> method returns the host/domain portion?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>getProtocol()</code></li><li><span class="label">B</span> <code>getHost()</code></li><li><span class="label">C</span> <code>getPath()</code></li><li><span class="label">D</span> <code>getRef()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q14</span>A port number serves to:</div>
+    <ol class="opts"><li><span class="label">A</span> Identify the physical network card</li><li><span class="label">B</span> Identify a specific application/service on a host</li><li><span class="label">C</span> Encrypt the connection</li><li><span class="label">D</span> Replace the IP address</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q15</span>Which layer model is the basis for the Internet, with layers Application, Transport, Internet, and Link?</div>
+    <ol class="opts"><li><span class="label">A</span> The 7-layer OSI model</li><li><span class="label">B</span> The 4-layer TCP/IP model</li><li><span class="label">C</span> The MVC model</li><li><span class="label">D</span> The client-server model</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q16</span>TCP establishes a connection using a:</div>
+    <ol class="opts"><li><span class="label">A</span> Two-way handshake</li><li><span class="label">B</span> Three-way handshake (SYN, SYN-ACK, ACK)</li><li><span class="label">C</span> Four-way handshake only</li><li><span class="label">D</span> No handshake</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q17</span>Well-known port numbers fall in which range?</div>
+    <ol class="opts"><li><span class="label">A</span> 0–1023</li><li><span class="label">B</span> 1024–49151</li><li><span class="label">C</span> 49152–65535</li><li><span class="label">D</span> 0–255</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q18</span>To read data sent by the other end of a TCP <code>Socket</code>, you obtain its:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>getInputStream()</code></li><li><span class="label">B</span> <code>getReader()</code> only</li><li><span class="label">C</span> <code>accept()</code></li><li><span class="label">D</span> <code>getPort()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q19</span>Which use case is best served by TCP?</div>
+    <ol class="opts"><li><span class="label">A</span> Live voice/video streaming where speed matters most</li><li><span class="label">B</span> File transfer or web pages where every byte must arrive correctly</li><li><span class="label">C</span> Simple broadcast pings</li><li><span class="label">D</span> Fire-and-forget telemetry</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q20</span>In UDP, the unit of data sent is encapsulated in a:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>Socket</code></li><li><span class="label">B</span> <code>DatagramPacket</code></li><li><span class="label">C</span> <code>ServerSocket</code></li><li><span class="label">D</span> <code>Stream</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q21</span>The default well-known port for FTP is:</div>
+    <ol class="opts"><li><span class="label">A</span> 21</li><li><span class="label">B</span> 80</li><li><span class="label">C</span> 25</li><li><span class="label">D</span> 53</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q22</span>Which protocol sits at the Internet layer and provides addressing/routing of packets?</div>
+    <ol class="opts"><li><span class="label">A</span> TCP</li><li><span class="label">B</span> UDP</li><li><span class="label">C</span> IP</li><li><span class="label">D</span> HTTP</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q23</span>In an echo server, the server typically:</div>
+    <ol class="opts"><li><span class="label">A</span> Sends back to the client the data it received</li><li><span class="label">B</span> Deletes the client's data</li><li><span class="label">C</span> Never replies</li><li><span class="label">D</span> Forwards data to a database</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q24</span>Which is an advantage of UDP over TCP?</div>
+    <ol class="opts"><li><span class="label">A</span> Guaranteed delivery</li><li><span class="label">B</span> Lower overhead and faster, since there is no connection setup or acknowledgements</li><li><span class="label">C</span> Ordered delivery</li><li><span class="label">D</span> Built-in retransmission</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q25</span>A "socket" is best described as:</div>
+    <ol class="opts"><li><span class="label">A</span> A combination of an IP address and a port number forming a communication endpoint</li><li><span class="label">B</span> A physical cable</li><li><span class="label">C</span> A type of thread</li><li><span class="label">D</span> A database table</li></ol></div>
+</section>
+
+<!-- ===================== WEEK 12 ===================== -->
+<section id="w12">
+  <h2>Week 12 — Java RMI (Remote Method Invocation)</h2>
+  <p class="wk-sub">RMI concept &amp; architecture · stub/skeleton · RMI registry · Naming class · marshalling · required programs · RMI vs sockets · exceptions</p>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q1</span>What is the core idea of Java RMI?</div>
+    <ol class="opts"><li><span class="label">A</span> Sending raw bytes over a socket manually</li><li><span class="label">B</span> Invoking methods on an object in another JVM (possibly another machine) as if it were local</li><li><span class="label">C</span> Compiling Java to native code</li><li><span class="label">D</span> Rendering remote GUIs</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q2</span>On the client side, the proxy that forwards method calls to the remote object is the:</div>
+    <ol class="opts"><li><span class="label">A</span> Skeleton</li><li><span class="label">B</span> Stub</li><li><span class="label">C</span> Registry</li><li><span class="label">D</span> Naming object</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q3</span>The server-side component (historically) that receives the call and dispatches it to the actual object is the:</div>
+    <ol class="opts"><li><span class="label">A</span> Stub</li><li><span class="label">B</span> Skeleton</li><li><span class="label">C</span> Registry</li><li><span class="label">D</span> Socket</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q4</span>The process of converting method parameters into a byte stream for transmission is called:</div>
+    <ol class="opts"><li><span class="label">A</span> Compilation</li><li><span class="label">B</span> Marshalling</li><li><span class="label">C</span> Garbage collection</li><li><span class="label">D</span> Reflection</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q5</span>The reverse process — reconstructing the parameters from the byte stream on the other side — is called:</div>
+    <ol class="opts"><li><span class="label">A</span> Unmarshalling</li><li><span class="label">B</span> Encryption</li><li><span class="label">C</span> Binding</li><li><span class="label">D</span> Casting</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q6</span>A remote interface in RMI must extend which interface?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>java.io.Serializable</code></li><li><span class="label">B</span> <code>java.rmi.Remote</code></li><li><span class="label">C</span> <code>java.lang.Runnable</code></li><li><span class="label">D</span> <code>java.rmi.Registry</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q7</span>Each method in a remote interface must declare that it throws:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>IOException</code></li><li><span class="label">B</span> <code>RemoteException</code></li><li><span class="label">C</span> <code>SQLException</code></li><li><span class="label">D</span> <code>ClassNotFoundException</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q8</span>What is the role of the RMI registry?</div>
+    <ol class="opts"><li><span class="label">A</span> It compiles stub classes</li><li><span class="label">B</span> It is a naming service where remote objects are bound and looked up by name</li><li><span class="label">C</span> It encrypts network traffic</li><li><span class="label">D</span> It stores the database</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q9</span>Which <code>Naming</code> method is used by a client to retrieve a remote object reference?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>bind()</code></li><li><span class="label">B</span> <code>lookup()</code></li><li><span class="label">C</span> <code>unbind()</code></li><li><span class="label">D</span> <code>rebind()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q10</span>Which <code>Naming</code> method registers a remote object, replacing any existing binding with that name?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>lookup()</code></li><li><span class="label">B</span> <code>rebind()</code></li><li><span class="label">C</span> <code>list()</code></li><li><span class="label">D</span> <code>unbind()</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q11</span>By default, the RMI registry listens on which port?</div>
+    <ol class="opts"><li><span class="label">A</span> 80</li><li><span class="label">B</span> 1099</li><li><span class="label">C</span> 3306</li><li><span class="label">D</span> 8080</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q12</span>An object passed as an argument in an RMI call (by value) must be:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>final</code></li><li><span class="label">B</span> <code>Serializable</code></li><li><span class="label">C</span> <code>static</code></li><li><span class="label">D</span> <code>abstract</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q13</span>Compared with raw socket programming, a key advantage of RMI is that it:</div>
+    <ol class="opts"><li><span class="label">A</span> Requires manual byte-stream parsing</li><li><span class="label">B</span> Provides a higher-level, object-oriented abstraction (call methods, not parse bytes)</li><li><span class="label">C</span> Only works within a single JVM</li><li><span class="label">D</span> Cannot pass objects between machines</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q14</span>The URL format used by the RMI <code>Naming</code> class typically looks like:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>rmi://host:port/serviceName</code></li><li><span class="label">B</span> <code>http://host/service</code></li><li><span class="label">C</span> <code>jdbc:rmi:service</code></li><li><span class="label">D</span> <code>tcp://service</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q15</span>A typical RMI application consists of how many key programs/parts (interface, implementation, server, client)?</div>
+    <ol class="opts"><li><span class="label">A</span> Two</li><li><span class="label">B</span> Four</li><li><span class="label">C</span> Six</li><li><span class="label">D</span> One</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q16</span>The remote implementation class commonly extends which class to export the object?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>UnicastRemoteObject</code></li><li><span class="label">B</span> <code>Thread</code></li><li><span class="label">C</span> <code>ServerSocket</code></li><li><span class="label">D</span> <code>Object</code> only</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q17</span>Which exception commonly indicates the registry could not find the requested name?</div>
+    <ol class="opts"><li><span class="label">A</span> <code>NotBoundException</code></li><li><span class="label">B</span> <code>NullPointerException</code></li><li><span class="label">C</span> <code>ArithmeticException</code></li><li><span class="label">D</span> <code>IOException</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q18</span>From the client's perspective, calling a remote method through the stub appears:</div>
+    <ol class="opts"><li><span class="label">A</span> Exactly like a normal local method call</li><li><span class="label">B</span> Like writing raw socket code</li><li><span class="label">C</span> Like a database query</li><li><span class="label">D</span> Like a GUI event</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q19</span>The command-line tool to start the RMI registry is:</div>
+    <ol class="opts"><li><span class="label">A</span> <code>rmiregistry</code></li><li><span class="label">B</span> <code>javac</code></li><li><span class="label">C</span> <code>rmic</code> only</li><li><span class="label">D</span> <code>java -registry</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q20</span>What must happen before a client can successfully look up a remote object?</div>
+    <ol class="opts"><li><span class="label">A</span> The server must bind/register the object in the registry</li><li><span class="label">B</span> The client must compile the server</li><li><span class="label">C</span> The registry must be deleted</li><li><span class="label">D</span> The object must be made <code>static</code></li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q21</span>The stub and the actual remote object communicate across the network through the:</div>
+    <ol class="opts"><li><span class="label">A</span> Transport layer of the RMI architecture</li><li><span class="label">B</span> GUI layer</li><li><span class="label">C</span> Compilation layer</li><li><span class="label">D</span> Database layer</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q22</span>RMI is specific to which kind of environment?</div>
+    <ol class="opts"><li><span class="label">A</span> Java-to-Java distributed applications</li><li><span class="label">B</span> Any two programming languages</li><li><span class="label">C</span> Only C++ programs</li><li><span class="label">D</span> Only single-machine programs</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q23</span>In modern Java, explicit skeleton classes are:</div>
+    <ol class="opts"><li><span class="label">A</span> Still mandatory and hand-written</li><li><span class="label">B</span> No longer required (handled generically by the runtime)</li><li><span class="label">C</span> Written in C</li><li><span class="label">D</span> Created by the client</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q24</span>Which is a genuine advantage of RMI over plain sockets for distributed apps?</div>
+    <ol class="opts"><li><span class="label">A</span> It works with non-Java systems easily</li><li><span class="label">B</span> It hides networking details and supports passing complex objects automatically</li><li><span class="label">C</span> It requires manual protocol design</li><li><span class="label">D</span> It is always faster than UDP</li></ol></div>
+
+  <div class="q"><div class="q-head"><span class="q-tag">Q25</span>In the classic "Hello" RMI example, the client obtains the remote object and then:</div>
+    <ol class="opts"><li><span class="label">A</span> Calls its remote method (e.g. <code>sayHello()</code>) and receives the result</li><li><span class="label">B</span> Compiles the server</li><li><span class="label">C</span> Starts the registry</li><li><span class="label">D</span> Opens a UDP datagram</li></ol></div>
+</section>
+
+</div>
+<footer>
+  Programming in Java — MCQ Question Bank · 12 weeks · 25 questions each · 300 total · Answers intentionally not marked for self-assessment.
+</footer>
+<script>
+  /* ---- Answer key: one letter per question, in document order (W1 Q1..25, W2 Q1..25, ...) ---- */
+  const ANSWERS = [
+    // Week 1
+    'B','B','B','B','C','B','C','A','C','A','B','C','A','B','C','A','B','B','C','B','B','C','B','B','B',
+    // Week 2
+    'B','B','B','C','B','B','B','C','B','B','B','B','B','B','A','B','B','A','C','A','B','B','B','A','B',
+    // Week 3
+    'C','C','C','C','B','C','B','B','B','C','C','B','B','B','B','A','B','B','A','A','B','B','B','B','B',
+    // Week 4
+    'A','B','B','B','B','B','B','A','B','A','B','B','B','B','B','B','A','B','B','B','A','B','B','B','B',
+    // Week 5
+    'B','C','B','A','B','A','B','C','B','C','B','B','A','B','B','B','B','A','B','B','A','B','C','B','A',
+    // Week 6
+    'B','C','B','B','B','B','C','B','B','B','A','C','B','B','A','C','B','A','B','B','A','A','B','B','A',
+    // Week 7
+    'B','B','B','B','B','B','C','B','B','A','B','B','B','A','B','A','B','A','A','B','B','A','B','B','B',
+    // Week 8
+    'B','C','B','C','B','B','B','B','B','A','B','B','D','B','B','B','B','B','B','A','A','B','B','B','B',
+    // Week 9
+    'B','B','A','C','C','B','C','A','A','B','B','B','B','B','A','A','A','C','A','A','B','A','A','A','B',
+    // Week 10
+    'B','B','B','B','B','A','B','B','A','B','B','A','A','B','B','A','B','B','A','A','A','B','A','A','B',
+    // Week 11
+    'B','B','B','B','B','B','B','C','B','B','C','B','B','B','B','B','A','A','B','B','A','C','A','B','A',
+    // Week 12
+    'B','B','B','B','A','B','B','B','B','B','B','B','B','A','B','A','A','A','A','A','A','A','B','B','A'
+  ];
+  const LETTERS = ['A','B','C','D'];
+
+  /* ---- Answer-key mode: mark the correct option upfront ---- */
+  const questions = document.querySelectorAll('.q');
+  questions.forEach((q, qi) => {
+    const correctLetter = ANSWERS[qi];
+    const ol = q.querySelector('ol.opts');
+    if (!ol) return;
+    ol.classList.add('answered');
+    const items = [...ol.querySelectorAll('li')];
+    const correctIdx = LETTERS.indexOf(correctLetter);
+    if (items[correctIdx]) items[correctIdx].classList.add('correct');
+    const fb = document.createElement('div');
+    fb.className = 'fb ok';
+    fb.textContent = 'Answer: ' + correctLetter;
+    q.appendChild(fb);
+  });
+
+  /* ---- Active nav highlight on scroll ---- */
+  const links = document.querySelectorAll('#nav a');
+  const sections = [...links].map(a => document.querySelector(a.getAttribute('href')));
+  function onScroll(){
+    let idx = 0;
+    sections.forEach((s,i)=>{ if(s && s.getBoundingClientRect().top <= 80) idx = i; });
+    links.forEach(l=>l.classList.remove('active'));
+    if(links[idx]) links[idx].classList.add('active');
+  }
+  window.addEventListener('scroll', onScroll); onScroll();
+</script>
+</body>
+</html>

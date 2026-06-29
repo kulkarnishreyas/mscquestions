@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 11 — Big Data & Machine Learning | Big Data Analytics</title>
+<style>
+  :root { --primary:#667eea; --primary-dark:#764ba2; --accent:#f39c12; --success:#27ae60; --danger:#e74c3c; --bg:#f5f7fa; --card:#fff; --text:#2c3e50; --muted:#6c7a89; --border:#e1e8ed; }
+  body.dark { --bg:#1a1a2e; --card:#252541; --text:#e8e8f0; --muted:#a0a0b8; --border:#3a3a5c; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; transition: all 0.3s; }
+  header { background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:40px 20px; text-align:center; }
+  header h1 { font-size:2.2em; margin-bottom:6px; }
+  header .breadcrumb { font-size:0.95em; opacity:0.9; }
+  header .breadcrumb a { color:#ffd700; text-decoration:none; }
+  nav { position:sticky; top:0; background:var(--card); z-index:100; padding:10px; overflow-x:auto; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,0.08); border-bottom:1px solid var(--border); }
+  nav button { background:transparent; color:var(--text); border:2px solid var(--border); padding:6px 14px; margin:2px; border-radius:18px; cursor:pointer; font-size:0.82em; font-weight:600; transition:all 0.2s; }
+  nav button:hover { border-color:var(--primary); color:var(--primary); }
+  nav button.active { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; border-color:transparent; }
+  .icon-btn { background:var(--bg); width:32px; height:32px; border-radius:50%; padding:0; }
+  main { max-width:1100px; margin:25px auto; padding:0 18px; }
+  section { background:var(--card); margin:25px 0; padding:28px; border-radius:14px; box-shadow:0 4px 16px rgba(0,0,0,0.06); scroll-margin-top:80px; }
+  section h2 { color:var(--primary-dark); border-bottom:3px solid var(--primary); padding-bottom:8px; margin-bottom:18px; font-size:1.7em; }
+  body.dark section h2 { color:#b8a8ff; }
+  section h3 { margin:18px 0 10px; font-size:1.25em; }
+  section h4 { color:var(--primary-dark); margin:12px 0 8px; }
+  body.dark section h4 { color:#c4b5ff; }
+  p { margin-bottom:10px; }
+  ul, ol { margin:8px 0 12px 26px; }
+  li { margin-bottom:5px; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:14px 0; }
+  .card { background:linear-gradient(135deg,#f6f9fc,#eef2f7); border-left:4px solid var(--primary-dark); padding:14px; border-radius:8px; }
+  body.dark .card { background:linear-gradient(135deg,#2a2a4a,#353560); }
+  .card h4 { color:var(--primary-dark); margin-bottom:6px; font-size:1em; }
+  body.dark .card h4 { color:#c4b5ff; }
+  .card p { font-size:0.9em; margin:0; color:var(--muted); }
+  .flow { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px; margin:20px 0; }
+  .flow-box { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; padding:12px 18px; border-radius:10px; font-weight:600; text-align:center; min-width:120px; }
+  .arrow { color:var(--primary-dark); font-size:1.6em; font-weight:bold; }
+  table { width:100%; border-collapse:collapse; margin:12px 0; }
+  th, td { padding:9px 12px; border:1px solid var(--border); text-align:left; }
+  th { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; }
+  tr:nth-child(even) td { background:var(--bg); }
+  .code-block, .formula { background:#2c3e50; color:#ecf0f1; padding:12px 14px; border-radius:8px; font-family:'Courier New',monospace; font-size:0.92em; overflow-x:auto; margin:10px 0; white-space:pre-wrap; line-height:1.5; }
+  code { background:var(--bg); padding:2px 6px; border-radius:4px; font-family:'Courier New',monospace; font-size:0.92em; border:1px solid var(--border); }
+  .quiz { background:linear-gradient(135deg,#e8f5e9,#dcedc8); border-left:4px solid var(--success); padding:16px; border-radius:10px; margin:12px 0; }
+  body.dark .quiz { background:linear-gradient(135deg,#1a3a2e,#2a4a3e); }
+  .quiz-option { display:block; margin:6px 0; padding:10px 12px; background:var(--card); border:2px solid var(--border); border-radius:8px; cursor:pointer; transition:all 0.2s; }
+  .quiz-option:hover { border-color:var(--success); transform:translateX(3px); }
+  .quiz-option.correct { background:#c8e6c9!important; border-color:var(--success); color:#1b5e20; }
+  .quiz-option.wrong { background:#ffcdd2!important; border-color:var(--danger); color:#b71c1c; }
+  .insight { background:linear-gradient(135deg,#e3f2fd,#bbdefb); border-left:4px solid #1976d2; padding:12px 16px; border-radius:8px; margin:12px 0; }
+  body.dark .insight { background:linear-gradient(135deg,#1a2a4a,#253560); }
+  .warning { background:linear-gradient(135deg,#fff3e0,#ffe0b2); border-left:4px solid #f57c00; padding:12px 16px; border-radius:8px; margin:12px 0; }
+  body.dark .warning { background:linear-gradient(135deg,#3a2a1a,#4a3525); }
+  .summary { background:linear-gradient(135deg,#fff9c4,#fff59d); border-left:4px solid #fbc02d; padding:16px; border-radius:10px; margin:14px 0; }
+  body.dark .summary { background:linear-gradient(135deg,#3a3a1a,#4a4a25); color:var(--text); }
+  footer { text-align:center; padding:24px; color:var(--muted); font-size:0.9em; border-top:1px solid var(--border); margin-top:30px; }
+  .toc { background:var(--bg); padding:16px 20px; border-radius:10px; margin-bottom:20px; }
+  .toc h3 { margin-bottom:8px; color:var(--primary-dark); }
+  body.dark .toc h3 { color:#c4b5ff; }
+  .toc ol { columns:2; column-gap:30px; }
+  @media (max-width:700px) { .toc ol { columns:1; } }
+  .steps { counter-reset:step; margin:14px 0; }
+  .step { counter-increment:step; padding:14px 14px 14px 60px; margin:8px 0; background:var(--bg); border-radius:10px; position:relative; }
+  .step::before { content:counter(step); position:absolute; left:14px; top:14px; width:32px; height:32px; background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../BigDataAnalytics_Complete_Course.html">📚 Full Course</a> › <a href="index.html">Weekly Modules</a> › Week 11</div>
+  <h1>🤖 Week 11 — Big Data and Machine Learning</h1>
+</header>
+
+<nav>
+  <button onclick="g('intro',this)" class="active">1. ML Intro</button>
+  <button onclick="g('algos',this)">2. ML Algorithms</button>
+  <button onclick="g('bigdata-ml',this)">3. ML for Big Data</button>
+  <button onclick="g('ml-vs-da',this)">4. ML vs DA</button>
+  <button onclick="g('mr-cluster',this)">5. MR Clustering</button>
+  <button onclick="g('quiz',this)">🎯 Quiz</button>
+  <button onclick="g('summary',this)">📝 Summary</button>
+  <button class="icon-btn" onclick="dark()">🌓</button>
+</nav>
+
+<main>
+
+<section class="toc">
+  <h3>📑 Table of Contents</h3>
+  <ol>
+    <li><a href="#intro">Introduction to Machine Learning</a></li>
+    <li><a href="#algos">Machine Learning Algorithms</a></li>
+    <li><a href="#bigdata-ml">ML Algorithms for Big Data Analytics</a></li>
+    <li><a href="#ml-vs-da">Difference Between ML and DA</a></li>
+    <li><a href="#mr-cluster">Algorithms Using MR in Clustering</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+    <li><a href="#summary">Summary &amp; Exam Tips</a></li>
+  </ol>
+</section>
+
+<!-- ============ 1. INTRO ============ -->
+<section id="intro">
+  <h2>1️⃣ Introduction to Machine Learning</h2>
+
+  <h3>What is Machine Learning?</h3>
+  <ul>
+    <li><strong>Definition:</strong> Machine Learning (ML) is a type of artificial intelligence that enables systems to <strong>learn from data</strong> rather than through explicit programming.</li>
+    <li><strong>Core idea:</strong> Algorithms that allow computers to identify <strong>patterns</strong> in data and make decisions or predictions based on those patterns.</li>
+    <li><strong>Relevance to Big Data:</strong> ML is crucial for analysing the vast amounts of data generated in the big-data era.</li>
+  </ul>
+
+  <h3>The Learning Process</h3>
+  <div class="steps">
+    <div class="step"><strong>Data Input:</strong> ML algorithms require large datasets to learn effectively.</div>
+    <div class="step"><strong>Model Training:</strong> The algorithm processes the data, identifies patterns, and builds a model.</div>
+    <div class="step"><strong>Prediction / Decision:</strong> The trained model is then used to make predictions or decisions on new, unseen data.</div>
+    <div class="step"><strong>Evaluation &amp; Iteration:</strong> The model's performance is evaluated and can be iteratively improved with more data or refined algorithms.</div>
+  </div>
+
+  <h3>Why Machine Learning with Big Data?</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📦 Volume</h4><p>ML algorithms can process and find insights in datasets too large for manual analysis.</p></div>
+    <div class="card"><h4>⚡ Velocity</h4><p>ML can adapt to rapidly changing data streams, providing real-time insights.</p></div>
+    <div class="card"><h4>🎭 Variety</h4><p>ML techniques can handle diverse data types — structured, unstructured, and semi-structured data.</p></div>
+    <div class="card"><h4>💎 Value</h4><p>Unlocking hidden patterns and correlations in big data can lead to significant business value and innovation.</p></div>
+  </div>
+</section>
+
+<!-- ============ 2. ALGORITHMS ============ -->
+<section id="algos">
+  <h2>2️⃣ Machine Learning Algorithms</h2>
+
+  <h3>Overview of ML Algorithm Types</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🎯 Supervised Learning</h4><p>Learns from <strong>labeled</strong> data (input-output pairs). Goal: predict an output for new inputs. Examples: <strong>Regression, Classification</strong>.</p></div>
+    <div class="card"><h4>🔍 Unsupervised Learning</h4><p>Learns from <strong>unlabeled</strong> data. Goal: find hidden patterns or intrinsic structures. Examples: <strong>Clustering, Association Rule Mining</strong>.</p></div>
+    <div class="card"><h4>🕹️ Reinforcement Learning</h4><p>Learns by <strong>interacting with an environment</strong>. Goal: learn a sequence of decisions to <strong>maximise a reward</strong>.</p></div>
+  </div>
+</section>
+
+<!-- ============ 3. ML FOR BIG DATA ============ -->
+<section id="bigdata-ml">
+  <h2>3️⃣ Machine Learning Algorithms for Big Data Analytics</h2>
+
+  <h3>Focus on Algorithms for Big Data</h3>
+  <ul>
+    <li>Clustering Algorithms</li>
+    <li>Association Rule Mining Algorithms</li>
+  </ul>
+
+  <h3>Clustering Algorithms</h3>
+  <ul>
+    <li>Group similar data points together</li>
+    <li>Useful for <strong>customer segmentation, anomaly detection</strong></li>
+    <li>ML algorithms using <strong>MapReduce (MR)</strong> are employed in clustering</li>
+  </ul>
+
+  <h3>Association Rule Mining Algorithms</h3>
+  <ul>
+    <li>Discover relationships or associations between items in large datasets</li>
+    <li>Example: <strong>Market basket analysis</strong> (e.g., "customers who bought X also bought Y")</li>
+    <li>ML algorithms using MR are also used in association rule mining</li>
+  </ul>
+
+  <h3>Key Considerations for Algorithm Selection</h3>
+  <table>
+    <tr><th>Consideration</th><th>Question</th></tr>
+    <tr><td><strong>Data Type</strong></td><td>Is the data labeled or unlabeled?</td></tr>
+    <tr><td><strong>Problem Type</strong></td><td>Are you predicting a value, classifying an item, or finding patterns?</td></tr>
+    <tr><td><strong>Scalability</strong></td><td>Can the algorithm handle the volume of big data? (e.g., algorithms designed for MapReduce)</td></tr>
+    <tr><td><strong>Interpretability</strong></td><td>How easy is it to understand the results of the algorithm?</td></tr>
+    <tr><td><strong>Computational Resources</strong></td><td>How much processing power and memory does the algorithm require?</td></tr>
+  </table>
+
+  <h3>Deeper Dive: Clustering with MapReduce</h3>
+  <ul>
+    <li><strong>Concept:</strong> Partitioning a dataset into groups (clusters) such that data points in the same cluster are more similar to each other than to those in other clusters.</li>
+    <li><strong>Map Phase:</strong> Can be used to assign data points to the nearest cluster centroid or to compute partial sums for centroid updates.</li>
+    <li><strong>Reduce Phase:</strong> Aggregates results from mappers to update cluster centroids or finalise cluster assignments.</li>
+    <li><strong>Scalability:</strong> MapReduce enables clustering algorithms to scale to massive datasets by distributing the computation.</li>
+  </ul>
+
+  <h3>Deeper Dive: Association Rule Mining with MapReduce</h3>
+  <ul>
+    <li><strong>Concept:</strong> Identifying frequent itemsets and generating rules (e.g., <em>If {A, B} then {C}</em>) that satisfy predefined <strong>support and confidence</strong> thresholds.</li>
+    <li><strong>Map Phase:</strong> Can generate candidate itemsets or count frequencies of itemsets in data subsets.</li>
+    <li><strong>Reduce Phase:</strong> Aggregates counts, filters infrequent itemsets, and generates rules.</li>
+    <li><strong>Efficiency:</strong> Distributing the computationally intensive task of finding frequent patterns across a cluster.</li>
+  </ul>
+
+  <h3>Other Relevant Algorithms (brief mention)</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📊 Classification</h4><p>Assigning items to predefined categories (e.g., spam vs. not spam). Examples: <strong>Decision Trees, Naive Bayes, Support Vector Machines</strong>.</p></div>
+    <div class="card"><h4>📈 Regression</h4><p>Predicting a continuous value (e.g., house price, stock value). Examples: <strong>Linear Regression, Logistic Regression</strong>.</p></div>
+  </div>
+</section>
+
+<!-- ============ 4. ML vs DA ============ -->
+<section id="ml-vs-da">
+  <h2>4️⃣ Difference Between ML and DA</h2>
+
+  <h3>Defining Data Analytics (DA)</h3>
+  <ul>
+    <li><strong>Data Analytics (DA):</strong> The process of examining raw data to draw conclusions about that information.</li>
+    <li><strong>Focus:</strong> Often involves descriptive statistics, data visualization, and reporting to understand past events and current trends.</li>
+    <li><strong>Objective:</strong> To uncover insights, identify patterns, and answer specific business questions using historical data.</li>
+  </ul>
+
+  <h3>Defining Machine Learning (ML)</h3>
+  <ul>
+    <li><strong>Machine Learning (ML):</strong> A subset of artificial intelligence where systems learn from data to make predictions or decisions without explicit programming.</li>
+    <li><strong>Focus:</strong> Building models that can learn from data and generalise to new, unseen data.</li>
+    <li><strong>Objective:</strong> To automate prediction, classification, or decision-making processes.</li>
+  </ul>
+
+  <h3>Key Differences Summarised</h3>
+  <table>
+    <tr><th>Aspect</th><th>Data Analytics (DA)</th><th>Machine Learning (ML)</th></tr>
+    <tr><td><strong>Goal</strong></td><td>Gain insights from data (often descriptive or diagnostic)</td><td>Make predictions or automate decisions (often predictive or prescriptive)</td></tr>
+    <tr><td><strong>Process</strong></td><td>More human-driven exploration, hypothesis testing, and interpretation</td><td>More automated model building, training, and validation</td></tr>
+    <tr><td><strong>Outcome</strong></td><td>Reports, dashboards, understanding of past performance</td><td>Functioning models that can operate autonomously</td></tr>
+  </table>
+
+  <div class="insight"><strong>💡 Interrelation:</strong> DA can inform ML by helping to select features or define problems, and ML models can be a component of an analytics solution.</div>
+</section>
+
+<!-- ============ 5. MR CLUSTERING ============ -->
+<section id="mr-cluster">
+  <h2>5️⃣ Algorithms Using MR in Clustering</h2>
+
+  <h3>Recap: Why MapReduce for Clustering?</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📈 Scalability</h4><p>Handles massive datasets that don't fit on a single machine.</p></div>
+    <div class="card"><h4>⚡ Parallel Processing</h4><p>Divides the clustering task into smaller, independent sub-tasks that can be processed in parallel across a cluster.</p></div>
+    <div class="card"><h4>🛡️ Fault Tolerance</h4><p>Hadoop's framework provides inherent fault tolerance for long-running clustering jobs.</p></div>
+    <div class="card"><h4>🧩 Suitability</h4><p>Many clustering algorithms can be adapted to the MapReduce paradigm.</p></div>
+  </div>
+
+  <h3>Example: K-Means Clustering with MapReduce</h3>
+  <p><strong>K-Means Overview:</strong> An iterative algorithm that partitions a dataset into <strong>K pre-defined distinct non-overlapping subgroups (clusters)</strong> where each data point belongs to only one group.</p>
+
+  <h4>MapReduce Implementation</h4>
+  <div class="steps">
+    <div class="step"><strong>Initialization:</strong> Select K initial centroids.</div>
+    <div class="step"><strong>Map Phase (Iteration):</strong> Each mapper receives a subset of data points. For each point, it calculates the distance to all K centroids and assigns the point to the nearest centroid. Outputs <code>(centroid.id, data.point)</code>.</div>
+    <div class="step"><strong>Combine Phase (Optional):</strong> Partially aggregates points belonging to the same centroid within each mapper.</div>
+    <div class="step"><strong>Reduce Phase (Iteration):</strong> Each reducer receives all data points assigned to a particular centroid. It recalculates the new centroid for that cluster (e.g., by averaging the points). Outputs <code>(centroid.id, new.centroid.coordinates)</code>.</div>
+    <div class="step"><strong>Iteration:</strong> Repeat Map and Reduce phases until centroids converge or a maximum number of iterations is reached.</div>
+  </div>
+
+  <h3>Considerations and Challenges</h3>
+  <table>
+    <tr><th>Challenge</th><th>Description</th></tr>
+    <tr><td><strong>Choosing K</strong></td><td>The number of clusters (K) often needs to be determined beforehand or through experimentation.</td></tr>
+    <tr><td><strong>Initial Centroid Selection</strong></td><td>Poor initial centroids can lead to suboptimal clustering or slow convergence.</td></tr>
+    <tr><td><strong>Distance Metric</strong></td><td>The choice of distance metric (e.g., <strong>Euclidean, Manhattan</strong>) depends on the data.</td></tr>
+    <tr><td><strong>Convergence Criteria</strong></td><td>Defining when the algorithm has found stable clusters.</td></tr>
+    <tr><td><strong>Scalability of Iterations</strong></td><td>While MapReduce helps, iterative algorithms still require multiple passes over the data, which can be time-consuming for very large datasets.</td></tr>
+  </table>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section id="quiz">
+  <h2>🎯 12-Question Quiz</h2>
+
+  <div class="quiz">
+    <p><strong>Q1.</strong> Machine Learning is best defined as:</p>
+    <div class="quiz-option" onclick="qa(this,1)">A type of AI that enables systems to learn from data rather than explicit programming ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">A method for manually labelling data</div>
+    <div class="quiz-option" onclick="qa(this,0)">A statistical reporting framework</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q2.</strong> Which type of ML learns from labeled (input-output) data?</p>
+    <div class="quiz-option" onclick="qa(this,1)">Supervised Learning ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Unsupervised Learning</div>
+    <div class="quiz-option" onclick="qa(this,0)">Reinforcement Learning</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q3.</strong> Clustering and Association Rule Mining are examples of:</p>
+    <div class="quiz-option" onclick="qa(this,0)">Supervised Learning</div>
+    <div class="quiz-option" onclick="qa(this,1)">Unsupervised Learning ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Reinforcement Learning</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q4.</strong> Reinforcement Learning aims to:</p>
+    <div class="quiz-option" onclick="qa(this,0)">Find clusters in unlabelled data</div>
+    <div class="quiz-option" onclick="qa(this,1)">Learn a sequence of decisions to maximise a reward ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Generate reports from raw data</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q5.</strong> Market basket analysis ("customers who bought X also bought Y") is an example of:</p>
+    <div class="quiz-option" onclick="qa(this,0)">Clustering</div>
+    <div class="quiz-option" onclick="qa(this,1)">Association Rule Mining ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Reinforcement Learning</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q6.</strong> In K-Means with MapReduce, the Map phase:</p>
+    <div class="quiz-option" onclick="qa(this,1)">Assigns each data point to the nearest centroid ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Recalculates the new centroid for each cluster</div>
+    <div class="quiz-option" onclick="qa(this,0)">Selects K initial centroids</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q7.</strong> In K-Means with MapReduce, the Reduce phase:</p>
+    <div class="quiz-option" onclick="qa(this,0)">Assigns points to the nearest centroid</div>
+    <div class="quiz-option" onclick="qa(this,1)">Recalculates the new centroid for each cluster ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Initialises the cluster IDs</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q8.</strong> Which is NOT an algorithm-selection consideration listed in the course?</p>
+    <div class="quiz-option" onclick="qa(this,0)">Data type (labeled vs unlabeled)</div>
+    <div class="quiz-option" onclick="qa(this,0)">Scalability</div>
+    <div class="quiz-option" onclick="qa(this,1)">Author popularity ✓</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q9.</strong> Goal of Data Analytics (DA) is typically:</p>
+    <div class="quiz-option" onclick="qa(this,1)">Gain insights (descriptive / diagnostic) ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Make autonomous predictions</div>
+    <div class="quiz-option" onclick="qa(this,0)">Generate centroids</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q10.</strong> Goal of ML is typically:</p>
+    <div class="quiz-option" onclick="qa(this,0)">Reporting past performance</div>
+    <div class="quiz-option" onclick="qa(this,1)">Make predictions or automate decisions ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Manual visual exploration</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q11.</strong> Which is an example of a Classification algorithm?</p>
+    <div class="quiz-option" onclick="qa(this,1)">Naive Bayes ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">K-Means</div>
+    <div class="quiz-option" onclick="qa(this,0)">Apriori</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q12.</strong> A challenge of iterative algorithms (like K-Means) on MapReduce:</p>
+    <div class="quiz-option" onclick="qa(this,1)">Multiple passes over data can be time-consuming ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">They cannot be parallelised at all</div>
+    <div class="quiz-option" onclick="qa(this,0)">They require labelled data</div>
+  </div>
+</section>
+
+<!-- ============ SUMMARY ============ -->
+<section id="summary">
+  <h2>📝 Summary & Exam Tips</h2>
+
+  <div class="summary">
+    <h3>🎯 Key Takeaways</h3>
+    <ul>
+      <li><strong>ML</strong> = AI that learns from data rather than being explicitly programmed; identifies patterns to predict/decide.</li>
+      <li><strong>Learning process:</strong> Data Input → Model Training → Prediction → Evaluation &amp; Iteration.</li>
+      <li><strong>Why ML for Big Data:</strong> handles Volume, Velocity, Variety, and unlocks Value.</li>
+      <li><strong>Three algorithm types:</strong> Supervised (labeled — regression, classification), Unsupervised (unlabeled — clustering, association rule mining), Reinforcement (maximise reward).</li>
+      <li><strong>Big-data ML focus:</strong> Clustering &amp; Association Rule Mining — both adaptable to MapReduce.</li>
+      <li><strong>K-Means with MR:</strong> Init K centroids → Map assigns points to nearest centroid → Reduce averages points to update centroids → iterate to convergence.</li>
+      <li><strong>ML vs DA:</strong> DA gains insights from past data; ML builds autonomous predictive models. They interrelate — DA can inform feature selection for ML.</li>
+      <li><strong>Algorithm selection</strong> depends on: data type, problem type, scalability, interpretability, computational resources.</li>
+    </ul>
+  </div>
+
+  <div class="warning">
+    <strong>📌 Common Exam Pitfalls:</strong>
+    <ul>
+      <li>Confusing Supervised (labelled) vs Unsupervised (unlabelled)</li>
+      <li>Forgetting K-Means is <em>iterative</em> — needs multiple MR passes until convergence</li>
+      <li>Mixing up Clustering (group similar) vs Classification (assign to predefined category)</li>
+      <li>Treating ML and DA as the same thing — they share data but differ in goal &amp; outcome</li>
+    </ul>
+  </div>
+
+  <p style="text-align:center; margin-top:30px;"><a href="Week_10_Streaming_Ops.html" style="color:var(--primary); font-weight:bold;">← Previous: Week 10</a> &nbsp;|&nbsp; <a href="index.html" style="color:var(--primary); font-weight:bold;">Index</a> &nbsp;|&nbsp; <a href="Week_12_ML_Trends.html" style="color:var(--primary); font-weight:bold;">Next: Week 12 → ML &amp; Big Data Trends</a></p>
+</section>
+
+</main>
+
+<footer>
+  <p>📚 Week 11 of 12 — Big Data Analytics • Detailed Study Module</p>
+</footer>
+
+<script>
+function g(id, btn) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); }
+function dark() { document.body.classList.toggle('dark'); try { localStorage.setItem('bda_dark', document.body.classList.contains('dark')?'1':'0'); } catch(e){} }
+if (localStorage.getItem('bda_dark')==='1') document.body.classList.add('dark');
+function qa(el, c) { el.parentElement.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('correct','wrong')); el.classList.add(c?'correct':'wrong'); }
+</script>
+
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

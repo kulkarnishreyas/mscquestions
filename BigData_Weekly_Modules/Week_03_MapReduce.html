@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 3 — MapReduce Programming | Big Data Analytics</title>
+<style>
+  :root{--primary:#667eea;--primary-dark:#764ba2;--accent:#f39c12;--success:#27ae60;--danger:#e74c3c;--bg:#f5f7fa;--card:#fff;--text:#2c3e50;--muted:#6c7a89;--border:#e1e8ed}
+  body.dark{--bg:#1a1a2e;--card:#252541;--text:#e8e8f0;--muted:#a0a0b8;--border:#3a3a5c}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;transition:all 0.3s}
+  header{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:40px 20px;text-align:center}
+  header h1{font-size:2.2em;margin-bottom:6px}
+  header .breadcrumb{font-size:0.95em;opacity:0.9}
+  header .breadcrumb a{color:#ffd700;text-decoration:none}
+  nav{position:sticky;top:0;background:var(--card);z-index:100;padding:10px;overflow-x:auto;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-bottom:1px solid var(--border)}
+  nav button{background:transparent;color:var(--text);border:2px solid var(--border);padding:6px 14px;margin:2px;border-radius:18px;cursor:pointer;font-size:0.82em;font-weight:600}
+  nav button:hover{border-color:var(--primary);color:var(--primary)}
+  nav button.active{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-color:transparent}
+  .icon-btn{background:var(--bg);width:32px;height:32px;border-radius:50%;padding:0}
+  main{max-width:1100px;margin:25px auto;padding:0 18px}
+  section{background:var(--card);margin:25px 0;padding:28px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,0.06);scroll-margin-top:80px}
+  section h2{color:var(--primary-dark);border-bottom:3px solid var(--primary);padding-bottom:8px;margin-bottom:18px;font-size:1.7em}
+  body.dark section h2{color:#b8a8ff}
+  section h3{margin:18px 0 10px;font-size:1.25em}
+  section h4{color:var(--primary-dark);margin:12px 0 8px}
+  body.dark section h4{color:#c4b5ff}
+  p{margin-bottom:10px}
+  ul,ol{margin:8px 0 12px 26px}
+  li{margin-bottom:5px}
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+  .card{background:linear-gradient(135deg,#f6f9fc,#eef2f7);border-left:4px solid var(--primary-dark);padding:14px;border-radius:8px}
+  body.dark .card{background:linear-gradient(135deg,#2a2a4a,#353560)}
+  .card h4{color:var(--primary-dark);margin-bottom:6px;font-size:1em}
+  body.dark .card h4{color:#c4b5ff}
+  .card p{font-size:0.9em;margin:0;color:var(--muted)}
+  .flow{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:20px 0}
+  .flow-box{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;padding:12px 18px;border-radius:10px;font-weight:600;text-align:center;min-width:120px}
+  .flow-box small{display:block;font-size:0.75em;opacity:0.85;margin-top:3px}
+  .arrow{color:var(--primary-dark);font-size:1.6em;font-weight:bold}
+  table{width:100%;border-collapse:collapse;margin:12px 0}
+  th,td{padding:9px 12px;border:1px solid var(--border);text-align:left}
+  th{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white}
+  tr:nth-child(even) td{background:var(--bg)}
+  .code-block,.formula{background:#2c3e50;color:#ecf0f1;padding:12px 14px;border-radius:8px;font-family:'Courier New',monospace;font-size:0.92em;overflow-x:auto;margin:10px 0;white-space:pre-wrap;line-height:1.5}
+  code{background:var(--bg);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:0.92em;border:1px solid var(--border)}
+  .quiz{background:linear-gradient(135deg,#e8f5e9,#dcedc8);border-left:4px solid var(--success);padding:16px;border-radius:10px;margin:12px 0}
+  body.dark .quiz{background:linear-gradient(135deg,#1a3a2e,#2a4a3e)}
+  .quiz-option{display:block;margin:6px 0;padding:10px 12px;background:var(--card);border:2px solid var(--border);border-radius:8px;cursor:pointer}
+  .quiz-option:hover{border-color:var(--success);transform:translateX(3px)}
+  .quiz-option.correct{background:#c8e6c9!important;border-color:var(--success);color:#1b5e20}
+  .quiz-option.wrong{background:#ffcdd2!important;border-color:var(--danger);color:#b71c1c}
+  .insight{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-left:4px solid #1976d2;padding:12px 16px;border-radius:8px;margin:12px 0}
+  body.dark .insight{background:linear-gradient(135deg,#1a2a4a,#253560)}
+  .warning{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-left:4px solid #f57c00;padding:12px 16px;border-radius:8px;margin:12px 0}
+  body.dark .warning{background:linear-gradient(135deg,#3a2a1a,#4a3525)}
+  .example{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left:4px solid #8e24aa;padding:14px 16px;border-radius:8px;margin:12px 0}
+  body.dark .example{background:linear-gradient(135deg,#2a1a3a,#3a253f)}
+  .summary{background:linear-gradient(135deg,#fff9c4,#fff59d);border-left:4px solid #fbc02d;padding:16px;border-radius:10px;margin:14px 0}
+  body.dark .summary{background:linear-gradient(135deg,#3a3a1a,#4a4a25);color:var(--text)}
+  footer{text-align:center;padding:24px;color:var(--muted);font-size:0.9em;border-top:1px solid var(--border);margin-top:30px}
+  .toc{background:var(--bg);padding:16px 20px;border-radius:10px;margin-bottom:20px}
+  .toc h3{margin-bottom:8px;color:var(--primary-dark)}
+  body.dark .toc h3{color:#c4b5ff}
+  .toc ol{columns:2;column-gap:30px}
+  @media (max-width:700px){.toc ol{columns:1}}
+  .steps{counter-reset:step;margin:14px 0}
+  .step{counter-increment:step;padding:14px 14px 14px 60px;margin:8px 0;background:var(--bg);border-radius:10px;position:relative}
+  .step::before{content:counter(step);position:absolute;left:14px;top:14px;width:32px;height:32px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold}
+  .tabs{display:flex;flex-wrap:wrap;gap:4px;margin:12px 0 0}
+  .tab-btn{padding:9px 16px;background:var(--bg);border:none;border-radius:8px 8px 0 0;cursor:pointer;font-weight:600;color:var(--text)}
+  .tab-btn.active{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white}
+  .tab-content{display:none;padding:18px;background:var(--bg);border-radius:0 10px 10px 10px}
+  .tab-content.active{display:block}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../BigDataAnalytics_Complete_Course.html">📚 Full Course</a> › <a href="index.html">Weekly Modules</a> › Week 3</div>
+  <h1>🔀 Week 3 — MapReduce Programming</h1>
+</header>
+
+<nav>
+  <button onclick="g('overview',this)" class="active">1. Overview</button>
+  <button onclick="g('stages',this)">2. 3 Stages</button>
+  <button onclick="g('reducer',this)">3. Reducer</button>
+  <button onclick="g('combiner',this)">4. Combiner</button>
+  <button onclick="g('partitioner',this)">5. Partitioner</button>
+  <button onclick="g('classic',this)">6. Classic MR</button>
+  <button onclick="g('yarn',this)">7. YARN</button>
+  <button onclick="g('daemons',this)">8. Daemons</button>
+  <button onclick="g('examples',this)">9. Examples</button>
+  <button onclick="g('quiz',this)">🎯 Quiz</button>
+  <button onclick="g('summary',this)">📝 Summary</button>
+  <button class="icon-btn" onclick="dark()">🌓</button>
+</nav>
+
+<main>
+
+<section class="toc">
+  <h3>📑 Table of Contents</h3>
+  <ol>
+    <li><a href="#overview">MapReduce Overview</a></li>
+    <li><a href="#stages">Three Stages of MapReduce</a></li>
+    <li><a href="#reducer">Reducer in Detail</a></li>
+    <li><a href="#combiner">Combiner</a></li>
+    <li><a href="#partitioner">Partitioner</a></li>
+    <li><a href="#classic">Classic MR Framework</a></li>
+    <li><a href="#yarn">YARN — Modern Resource Manager</a></li>
+    <li><a href="#daemons">MR Daemons (1.x vs 2.x)</a></li>
+    <li><a href="#examples">Programming Examples</a></li>
+    <li><a href="#quiz">12-Question Quiz</a></li>
+    <li><a href="#summary">Summary & Exam Tips</a></li>
+  </ol>
+</section>
+
+<!-- 1. OVERVIEW -->
+<section id="overview">
+  <h2>1️⃣ MapReduce Overview</h2>
+
+  <p><strong>MapReduce</strong> is a programming model + associated implementation for processing <strong>large datasets in parallel</strong> across a distributed system.</p>
+
+  <h3>The Core Idea</h3>
+  <div class="flow">
+    <div class="flow-box">📦 Big Dataset</div>
+    <span class="arrow">split into</span>
+    <div class="flow-box">🧩 Chunks</div>
+    <span class="arrow">processed</span>
+    <div class="flow-box">⚡ in parallel</div>
+    <span class="arrow">combined</span>
+    <div class="flow-box">📊 Final Result</div>
+  </div>
+
+  <h3>Why MapReduce?</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🚀 Parallelism</h4><p>Hundreds/thousands of machines work simultaneously</p></div>
+    <div class="card"><h4>🛡️ Fault Tolerance</h4><p>Failed tasks automatically re-run on other nodes</p></div>
+    <div class="card"><h4>📍 Data Locality</h4><p>Computation moves to where data lives (in HDFS)</p></div>
+    <div class="card"><h4>📈 Scalability</h4><p>Linear scaling with cluster size</p></div>
+  </div>
+
+  <div class="insight">
+    <strong>💡 Origin:</strong> MapReduce was published by Google in 2004. Inspired by functional programming concepts (map and reduce functions in Lisp).
+  </div>
+</section>
+
+<!-- 2. STAGES -->
+<section id="stages">
+  <h2>2️⃣ The Three Stages of MapReduce</h2>
+
+  <div class="flow">
+    <div class="flow-box" style="background:linear-gradient(135deg,#3498db,#2980b9)">① Map<br><small>transform</small></div>
+    <span class="arrow">→</span>
+    <div class="flow-box" style="background:linear-gradient(135deg,#9b59b6,#8e44ad)">② Shuffle &amp; Sort<br><small>group by key</small></div>
+    <span class="arrow">→</span>
+    <div class="flow-box" style="background:linear-gradient(135deg,#27ae60,#16a085)">③ Reduce<br><small>aggregate</small></div>
+  </div>
+
+  <h3>① Map Stage</h3>
+  <ul>
+    <li>Input data is split into <strong>independent chunks</strong></li>
+    <li>Each chunk is processed by a <strong>Mapper</strong></li>
+    <li>Mapper takes input <code>(key, value)</code> pairs and emits intermediate <code>(key, value)</code> pairs</li>
+    <li>Mappers run <strong>in parallel</strong> across many nodes</li>
+  </ul>
+
+  <h3>② Shuffle &amp; Sort Stage</h3>
+  <ul>
+    <li>Intermediate pairs from all Mappers are <strong>shuffled</strong> (transferred across the network) to Reducer nodes</li>
+    <li>Pairs with the <strong>same key</strong> are grouped together</li>
+    <li>Keys are <strong>sorted</strong></li>
+    <li>This stage happens <strong>automatically</strong> — you don't write code for it</li>
+  </ul>
+
+  <h3>③ Reduce Stage</h3>
+  <ul>
+    <li>Each Reducer receives a key and the <strong>list of all values</strong> for that key</li>
+    <li>Reducer aggregates/processes these values</li>
+    <li>Produces the <strong>final output</strong></li>
+  </ul>
+
+  <div class="example">
+    <strong>Visual Example — Word Count:</strong>
+    <div class="code-block">Input: "Deer Bear River | Car Car River | Deer Car Bear"
+
+Map:    "Deer Bear River" → (Deer,1)(Bear,1)(River,1)
+        "Car Car River"   → (Car,1)(Car,1)(River,1)
+        "Deer Car Bear"   → (Deer,1)(Car,1)(Bear,1)
+
+Shuffle/Sort groups same keys:
+        Bear  → [1,1]
+        Car   → [1,1,1]
+        Deer  → [1,1]
+        River → [1,1]
+
+Reduce: sum values per key
+        Bear=2, Car=3, Deer=2, River=2</div>
+  </div>
+</section>
+
+<!-- 3. REDUCER -->
+<section id="reducer">
+  <h2>3️⃣ Reducer in Detail</h2>
+
+  <p>The <strong>Reducer's primary role</strong> is to process the intermediate data generated by the Mappers.</p>
+
+  <h3>What the Reducer Does</h3>
+  <ul>
+    <li>Takes <strong>shuffled and sorted</strong> data as input</li>
+    <li>Processes each <strong>key + list of values</strong></li>
+    <li>Produces the <strong>final output</strong></li>
+  </ul>
+
+  <h3>Important: Number of Reducers</h3>
+  <ul>
+    <li><strong>Configurable</strong> — set by the developer</li>
+    <li>Impacts <strong>performance and scalability</strong></li>
+    <li>Too few → bottleneck; too many → overhead</li>
+    <li>Rule of thumb: <code>0.95 × (nodes × max reducers per node)</code></li>
+  </ul>
+
+  <div class="example">
+    <strong>Reducer Logic (Pseudocode):</strong>
+    <div class="code-block">reduce(key, [value1, value2, ...]):
+    aggregated = combine_function(value1, value2, ...)
+    emit (key, aggregated)</div>
+  </div>
+</section>
+
+<!-- 4. COMBINER -->
+<section id="combiner">
+  <h2>4️⃣ Combiner — The Mini-Reducer</h2>
+
+  <p>A <strong>Combiner</strong> is an <em>optional</em> optimization that performs <strong>local reduction</strong> on the Mapper's output BEFORE shuffle.</p>
+
+  <h3>Purpose</h3>
+  <ul>
+    <li>Reduces the volume of data shuffled across the network</li>
+    <li>Improves MapReduce job efficiency</li>
+    <li>Effectively a "mini-Reducer" run on each Mapper's local output</li>
+  </ul>
+
+  <div class="example">
+    <strong>Without Combiner:</strong>
+    <div class="code-block">Mapper 1: (Deer,1)(Deer,1)(Bear,1) → shuffle 3 pairs</div>
+    <strong>With Combiner:</strong>
+    <div class="code-block">Mapper 1: (Deer,1)(Deer,1)(Bear,1)
+Combiner: (Deer,2)(Bear,1)  ← already locally aggregated
+Shuffle:  only 2 pairs to send</div>
+  </div>
+
+  <div class="warning">
+    <strong>⚠️ Combiner Caveats:</strong>
+    <ul>
+      <li>Combiner output must have <strong>same types</strong> as Reducer input</li>
+      <li>Function must be <strong>associative and commutative</strong> (e.g., sum, min, max — NOT average)</li>
+      <li>Combiner may run zero, one, or many times — your code can't depend on it running</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 5. PARTITIONER -->
+<section id="partitioner">
+  <h2>5️⃣ Partitioner — Routing Keys to Reducers</h2>
+
+  <p>The <strong>Partitioner</strong> determines <strong>which Reducer</strong> a given intermediate (key, value) pair should be sent to.</p>
+
+  <h3>How It Works</h3>
+  <ul>
+    <li>Divides the key space among Reducers</li>
+    <li>All values with the same key MUST go to the same Reducer</li>
+    <li>Default: <strong>HashPartitioner</strong> uses <code>hash(key) % numReducers</code></li>
+  </ul>
+
+  <div class="code-block">// Default HashPartitioner
+partition = key.hashCode() % numReducers</div>
+
+  <h3>Custom Partitioner</h3>
+  <p>You can write a custom partitioner to:</p>
+  <ul>
+    <li>Group related keys to the same Reducer (e.g., all keys starting with same letter)</li>
+    <li>Distribute keys evenly across Reducers (avoid skew)</li>
+    <li>Implement custom business logic</li>
+  </ul>
+
+  <div class="example">
+    <strong>Example — Custom Partitioner for sales by region:</strong>
+    <div class="code-block">if key starts with "US"  → Reducer 0
+if key starts with "EU"  → Reducer 1
+if key starts with "APAC" → Reducer 2</div>
+  </div>
+</section>
+
+<!-- 6. CLASSIC -->
+<section id="classic">
+  <h2>6️⃣ Classic MapReduce Framework (Hadoop 1.x)</h2>
+
+  <h3>Key Components</h3>
+  <ol>
+    <li><strong>Client Node</strong> — submits the job</li>
+    <li><strong>JobTracker</strong> (master) — schedules + manages all jobs</li>
+    <li><strong>TaskTrackers</strong> (workers) — execute Map/Reduce tasks</li>
+    <li><strong>HDFS</strong> — provides input/output storage</li>
+  </ol>
+
+  <h3>Workflow (6 Phases)</h3>
+  <div class="steps">
+    <div class="step"><strong>Job Submission</strong> — Client uploads code + config to HDFS, submits to JobTracker</div>
+    <div class="step"><strong>Job Scheduling</strong> — JobTracker assigns tasks to TaskTrackers based on data locality</div>
+    <div class="step"><strong>Map Phase</strong> — TaskTrackers run Map tasks on their assigned chunks</div>
+    <div class="step"><strong>Shuffle &amp; Sort Phase</strong> — Intermediate data redistributed by key</div>
+    <div class="step"><strong>Reduce Phase</strong> — Reducers aggregate values per key</div>
+    <div class="step"><strong>Job Completion</strong> — Results written to HDFS; client notified</div>
+  </div>
+
+  <h3>Limitations of Classic Framework</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🔗 Tight Coupling</h4><p>JobTracker handles BOTH job scheduling AND resource management → bottleneck.</p></div>
+    <div class="card"><h4>🚫 Limited Models</h4><p>Designed only for batch processing. No streaming or interactive support.</p></div>
+    <div class="card"><h4>📦 Resource Inefficiency</h4><p>Tasks run in fixed "slots" — wastes resources if tasks have varying needs.</p></div>
+    <div class="card"><h4>⚠️ Single Point of Failure</h4><p>JobTracker failure halts entire cluster.</p></div>
+  </div>
+</section>
+
+<!-- 7. YARN -->
+<section id="yarn">
+  <h2>7️⃣ YARN (Yet Another Resource Negotiator)</h2>
+
+  <p>Introduced in <strong>Hadoop 2.0</strong> to fix Classic MR's limitations. <strong>Decouples resource management from processing.</strong></p>
+
+  <h3>YARN Architecture</h3>
+  <div class="card-grid">
+    <div class="card"><h4>👑 ResourceManager (RM)</h4><p>Master daemon. Manages cluster resources, schedules applications across NodeManagers.</p></div>
+    <div class="card"><h4>🔧 NodeManager (NM)</h4><p>Per-node daemon. Manages local resources, launches containers, reports to RM.</p></div>
+    <div class="card"><h4>🎯 ApplicationMaster (AM)</h4><p>Per-application process. Negotiates resources from RM, works with NMs to execute tasks.</p></div>
+    <div class="card"><h4>📦 Container</h4><p>Unit of resource allocation (CPU + memory bundle) on a NodeManager.</p></div>
+  </div>
+
+  <h3>How YARN Works (MapReduce on YARN)</h3>
+  <div class="steps">
+    <div class="step">Client submits MR job to ResourceManager</div>
+    <div class="step">RM allocates a container for the ApplicationMaster on some NodeManager</div>
+    <div class="step">ApplicationMaster starts; requests more containers from RM for Map/Reduce tasks</div>
+    <div class="step">NodeManagers launch containers running Map/Reduce code</div>
+    <div class="step">AM monitors progress, requests retries on failures</div>
+    <div class="step">When job is complete, AM tells RM, RM releases resources</div>
+  </div>
+
+  <h3>YARN's Benefits</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🎭 Multi-Framework</h4><p>MapReduce, Spark, Tez, Storm all share the same cluster</p></div>
+    <div class="card"><h4>📈 Better Scalability</h4><p>Up to ~10,000 nodes vs ~4,000 with classic</p></div>
+    <div class="card"><h4>💪 High Availability</h4><p>Standby ResourceManager (no SPOF)</p></div>
+    <div class="card"><h4>📦 Flexible Resources</h4><p>Container model adapts to task needs</p></div>
+  </div>
+</section>
+
+<!-- 8. DAEMONS -->
+<section id="daemons">
+  <h2>8️⃣ MapReduce Daemons — 1.x vs 2.x</h2>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="tab(event,'d1')">Hadoop 1.x</button>
+    <button class="tab-btn" onclick="tab(event,'d2')">Hadoop 2.x (YARN)</button>
+  </div>
+
+  <div id="d1" class="tab-content active">
+    <h4>Hadoop 1.x — Classic MapReduce</h4>
+    <ul>
+      <li><strong>JobTracker</strong> (master) — coordinates & manages MR jobs, assigns tasks to TaskTrackers, monitors progress</li>
+      <li><strong>TaskTracker</strong> (worker, per node) — executes Map/Reduce tasks assigned by JobTracker</li>
+    </ul>
+    <p><strong>Drawback:</strong> JobTracker handles both job scheduling AND resource management — single point of failure & bottleneck.</p>
+  </div>
+
+  <div id="d2" class="tab-content">
+    <h4>Hadoop 2.x — YARN Era</h4>
+    <ul>
+      <li><strong>NodeManager</strong> (worker, per node) — manages local resources, launches & monitors containers</li>
+      <li><strong>ResourceManager</strong> (master) — allocates cluster resources to applications</li>
+      <li><strong>ApplicationMaster</strong> (per app) — manages individual app lifecycle, negotiates containers with RM</li>
+    </ul>
+    <p><strong>Benefit:</strong> Decoupled architecture, multi-framework support, better scaling.</p>
+  </div>
+
+  <h3>Quick Comparison Table</h3>
+  <table>
+    <tr><th>Aspect</th><th>Hadoop 1.x (Classic)</th><th>Hadoop 2.x (YARN)</th></tr>
+    <tr><td>Master daemon</td><td>JobTracker</td><td>ResourceManager</td></tr>
+    <tr><td>Worker daemon</td><td>TaskTracker</td><td>NodeManager</td></tr>
+    <tr><td>Per-app coordinator</td><td>(JobTracker)</td><td>ApplicationMaster</td></tr>
+    <tr><td>Resource unit</td><td>Slot (fixed)</td><td>Container (flexible)</td></tr>
+    <tr><td>Frameworks supported</td><td>Only MapReduce</td><td>MR, Spark, Tez, Storm, ...</td></tr>
+    <tr><td>Scalability</td><td>~4,000 nodes</td><td>~10,000+ nodes</td></tr>
+  </table>
+</section>
+
+<!-- 9. EXAMPLES -->
+<section id="examples">
+  <h2>9️⃣ MapReduce Programming Examples</h2>
+
+  <h3>Example 1: Word Count</h3>
+  <p><strong>Problem:</strong> Count frequency of each word in a text corpus.</p>
+
+  <h4>Map Function</h4>
+  <div class="code-block">map(line_number, line_text):
+    for each word in line_text.split():
+        emit(word, 1)</div>
+
+  <h4>Reduce Function</h4>
+  <div class="code-block">reduce(word, list_of_counts):
+    total = sum(list_of_counts)
+    emit(word, total)</div>
+
+  <h4>Walkthrough</h4>
+  <div class="code-block">Input:
+"The cat sat on the mat"
+"The cat is fat"
+
+Map:
+(The,1)(cat,1)(sat,1)(on,1)(the,1)(mat,1)
+(The,1)(cat,1)(is,1)(fat,1)
+
+Shuffle/Sort:
+The → [1,1]
+cat → [1,1]
+sat → [1]
+on  → [1]
+the → [1]
+mat → [1]
+is  → [1]
+fat → [1]
+
+Reduce:
+(The,2)(cat,2)(sat,1)(on,1)(the,1)(mat,1)(is,1)(fat,1)</div>
+
+  <h3>Example 2: Matrix Multiplication</h3>
+  <p><strong>Problem:</strong> Compute C = A × B where C[i][j] = Σₖ A[i][k] × B[k][j]</p>
+
+  <h4>Map Function</h4>
+  <div class="code-block">For each element of A[i][k]:
+    emit each j: ((i,j), ("A", k, value))
+
+For each element of B[k][j]:
+    emit each i: ((i,j), ("B", k, value))</div>
+
+  <h4>Reduce Function</h4>
+  <div class="code-block">reduce((i,j), values):
+    # Separate A's and B's
+    A_values = { k: v for ("A", k, v) in values }
+    B_values = { k: v for ("B", k, v) in values }
+
+    # Multiply pairs with same k, sum
+    result = sum(A_values[k] * B_values[k] for k in A_values)
+    emit((i,j), result)</div>
+
+  <h3>Example 3: SQL Join via MapReduce</h3>
+  <p><strong>Problem:</strong> Join Customers (id, name) with Orders (cust_id, amount) on customer ID.</p>
+
+  <h4>Map Function</h4>
+  <div class="code-block">For each row in Customers:
+    emit(cust_id, ("C", name))
+
+For each row in Orders:
+    emit(cust_id, ("O", amount))</div>
+
+  <h4>Reduce Function</h4>
+  <div class="code-block">reduce(cust_id, values):
+    customers = [v for ("C", v) in values]
+    orders    = [v for ("O", v) in values]
+
+    # Cross-product
+    for customer in customers:
+        for order in orders:
+            emit(cust_id, (customer, order))</div>
+
+  <div class="insight">
+    <strong>💡 Key Pattern:</strong> Tag records with source ("A", "B" or "C", "O") so Reducer can distinguish them.
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <h2>🎯 12-Question Quiz</h2>
+
+  <div class="quiz">
+    <p><strong>Q1.</strong> What are the three stages of MapReduce?</p>
+    <div class="quiz-option" onclick="qa(this,1)">Map → Shuffle/Sort → Reduce ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Input → Process → Output</div>
+    <div class="quiz-option" onclick="qa(this,0)">Read → Compute → Write</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q2.</strong> The Mapper emits:</p>
+    <div class="quiz-option" onclick="qa(this,0)">Aggregated final result</div>
+    <div class="quiz-option" onclick="qa(this,1)">Intermediate (key, value) pairs ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Only counts</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q3.</strong> Combiner runs:</p>
+    <div class="quiz-option" onclick="qa(this,1)">Locally on each Mapper, before shuffle ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">After Reduce</div>
+    <div class="quiz-option" onclick="qa(this,0)">Replaces Reduce stage</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q4.</strong> Combiner must be:</p>
+    <div class="quiz-option" onclick="qa(this,1)">Associative and commutative ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Always linear time</div>
+    <div class="quiz-option" onclick="qa(this,0)">Identical to Mapper</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q5.</strong> Partitioner decides:</p>
+    <div class="quiz-option" onclick="qa(this,1)">Which Reducer gets which key ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">How to split input data</div>
+    <div class="quiz-option" onclick="qa(this,0)">When to start the Reduce phase</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q6.</strong> Default Partitioner uses:</p>
+    <div class="quiz-option" onclick="qa(this,1)">Hash function on key ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Round-robin allocation</div>
+    <div class="quiz-option" onclick="qa(this,0)">Key length</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q7.</strong> In Hadoop 1.x, the master daemon is:</p>
+    <div class="quiz-option" onclick="qa(this,1)">JobTracker ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">ResourceManager</div>
+    <div class="quiz-option" onclick="qa(this,0)">NameNode</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q8.</strong> In YARN, the per-application coordinator is:</p>
+    <div class="quiz-option" onclick="qa(this,0)">NodeManager</div>
+    <div class="quiz-option" onclick="qa(this,0)">ResourceManager</div>
+    <div class="quiz-option" onclick="qa(this,1)">ApplicationMaster ✓</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q9.</strong> What is a "container" in YARN?</p>
+    <div class="quiz-option" onclick="qa(this,0)">A Docker container</div>
+    <div class="quiz-option" onclick="qa(this,1)">A bundle of CPU + memory allocation ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">A file storage unit</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q10.</strong> Main reason YARN was introduced?</p>
+    <div class="quiz-option" onclick="qa(this,1)">JobTracker had scalability + flexibility issues ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">To replace HDFS</div>
+    <div class="quiz-option" onclick="qa(this,0)">To improve security</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q11.</strong> In word count, what does the Reducer compute per key?</p>
+    <div class="quiz-option" onclick="qa(this,0)">Average</div>
+    <div class="quiz-option" onclick="qa(this,1)">Sum ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Max</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q12.</strong> In matrix multiplication via MR, the output key (i,j) corresponds to:</p>
+    <div class="quiz-option" onclick="qa(this,0)">Element in matrix A</div>
+    <div class="quiz-option" onclick="qa(this,0)">Element in matrix B</div>
+    <div class="quiz-option" onclick="qa(this,1)">Position in result matrix C ✓</div>
+  </div>
+</section>
+
+<!-- REFERENCES -->
+<section id="refs">
+  <h2>🔗 References & Further Reading</h2>
+  <p>Links provided in the course PDF:</p>
+  <ul>
+    <li><strong>Fundamentals of MapReduce (Edureka):</strong> <a href="https://medium.com/edureka/mapreduce-tutorial-3d9535ddbe7c" target="_blank">https://medium.com/edureka/mapreduce-tutorial-3d9535ddbe7c</a></li>
+    <li><strong>Hadoop MapReduce Demo (GitHub):</strong> <a href="https://github.com/primayoriko/hadoop-mapreduce-demo" target="_blank">https://github.com/primayoriko/hadoop-mapreduce-demo</a></li>
+  </ul>
+</section>
+
+<!-- SUMMARY -->
+<section id="summary">
+  <h2>📝 Summary & Exam Tips</h2>
+
+  <div class="summary">
+    <h3>🎯 Key Takeaways</h3>
+    <ul>
+      <li><strong>MapReduce</strong> = programming model for parallel processing of large data</li>
+      <li><strong>3 stages</strong>: Map → Shuffle/Sort → Reduce</li>
+      <li><strong>Mapper</strong> emits (key, value); <strong>Reducer</strong> aggregates values per key</li>
+      <li><strong>Combiner</strong>: optional mini-reducer running locally on Mapper output (must be associative + commutative)</li>
+      <li><strong>Partitioner</strong>: routes keys to Reducers (default = hash partition)</li>
+      <li><strong>Classic MR (1.x)</strong>: JobTracker + TaskTrackers (limited, SPOF)</li>
+      <li><strong>YARN (2.x)</strong>: ResourceManager + NodeManager + ApplicationMaster + Container</li>
+      <li><strong>YARN benefits</strong>: multi-framework support, scalability, HA</li>
+    </ul>
+  </div>
+
+  <div class="warning">
+    <strong>📌 Common Exam Pitfalls:</strong>
+    <ul>
+      <li>Forgetting that Shuffle/Sort happens between Map and Reduce</li>
+      <li>Saying Combiner replaces Reducer (it's optional optimization)</li>
+      <li>Using Combiner for non-associative operations (like average)</li>
+      <li>Mixing up JobTracker (1.x) vs ResourceManager (2.x)</li>
+    </ul>
+  </div>
+
+  <p style="text-align:center;margin-top:30px"><a href="Week_02_Hadoop_HDFS.html" style="color:var(--primary);font-weight:bold">← Week 2</a> | <a href="index.html" style="color:var(--primary);font-weight:bold">Index</a> | <a href="Week_04_MR_Examples.html" style="color:var(--primary);font-weight:bold">Week 4 → MR Examples</a></p>
+</section>
+
+</main>
+
+<footer><p>📚 Week 3 of 10 — Big Data Analytics</p></footer>
+
+<script>
+function g(id,btn){document.getElementById(id).scrollIntoView({behavior:'smooth'});document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function dark(){document.body.classList.toggle('dark');try{localStorage.setItem('bda_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}}
+if(localStorage.getItem('bda_dark')==='1')document.body.classList.add('dark');
+function qa(el,c){el.parentElement.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('correct','wrong'));el.classList.add(c?'correct':'wrong')}
+function tab(e,id){const p=e.target.parentElement.parentElement;p.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));p.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));e.target.classList.add('active');document.getElementById(id).classList.add('active')}
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

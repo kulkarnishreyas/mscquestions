@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 3 – Marketing Research Tools Part 2 | MA</title>
+<style>
+:root{--primary:#00897b;--primary-dark:#00695c;--accent:#ff7043;--success:#43a047;--danger:#e53935;--bg:#f5f8fb;--card:#fff;--text:#1a2332;--muted:#5a6a7a;--border:#dde5ec}
+body.dark{--bg:#0f1721;--card:#1a2535;--text:#e0e8f0;--muted:#a0b0c0;--border:#2a3545}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;padding:40px 20px 30px;position:relative}
+header h1{font-size:2em;margin-bottom:6px}
+header p{opacity:.85;font-size:1.05em}
+.dark-toggle{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.2);border:none;color:white;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:1.1em}
+nav{background:var(--card);border-bottom:2px solid var(--border);padding:10px 20px;position:sticky;top:0;z-index:100;display:flex;flex-wrap:wrap;gap:6px}
+nav button{background:none;border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:20px;cursor:pointer;font-size:.85em;transition:all .2s}
+nav button:hover,nav button.active{background:var(--primary);color:white;border-color:var(--primary)}
+main{max-width:1100px;margin:30px auto;padding:0 20px}
+section{margin-bottom:40px}
+h2{color:var(--primary-dark);margin-bottom:16px;font-size:1.6em;padding-bottom:8px;border-bottom:2px solid var(--border)}
+body.dark h2{color:#80cbc4}
+h3{color:var(--primary);margin:18px 0 10px;font-size:1.2em}
+body.dark h3{color:#4db6ac}
+p{margin-bottom:10px}
+ul,ol{margin:8px 0 12px 22px}
+li{margin-bottom:4px}
+.card{background:var(--card);padding:24px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:20px}
+.formula{background:linear-gradient(135deg,#e0f7fa,#b2ebf2);border-left:4px solid var(--primary);padding:14px 18px;border-radius:8px;font-family:monospace;font-size:1em;margin:12px 0}
+body.dark .formula{background:linear-gradient(135deg,#1a3a3a,#0d2626);color:#a8d8ea}
+.example{background:linear-gradient(135deg,#fff8e1,#fff3cd);border-left:4px solid #fbc02d;padding:16px;border-radius:8px;margin:12px 0}
+body.dark .example{background:linear-gradient(135deg,#3a3010,#2a2008);color:#ffe082}
+.example strong{color:#5d4037}
+body.dark .example strong{color:#ffcc80}
+.code{background:#1e2a3a;color:#a8d8ea;padding:16px;border-radius:8px;font-family:monospace;font-size:.88em;overflow-x:auto;margin:12px 0;white-space:pre}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9em}
+th{background:var(--primary);color:white;padding:10px 12px;text-align:left}
+td{padding:9px 12px;border-bottom:1px solid var(--border)}
+tr:nth-child(even) td{background:var(--bg)}
+.quiz-q{background:var(--card);border-radius:10px;padding:18px;margin-bottom:16px;border-left:4px solid var(--primary);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.quiz-q p{font-weight:600;margin-bottom:10px}
+.quiz-q button{display:block;width:100%;text-align:left;padding:8px 12px;margin:4px 0;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);cursor:pointer;font-size:.9em;transition:background .15s}
+.quiz-q button:hover:not(:disabled){background:var(--border)}
+.tips{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-left:4px solid var(--success);padding:20px;border-radius:10px;margin:16px 0}
+body.dark .tips{background:linear-gradient(135deg,#0d2a10,#0a1f0c);color:#a5d6a7}
+.badge{display:inline-block;background:var(--primary);color:white;border-radius:12px;padding:2px 10px;font-size:.78em;margin-left:8px;vertical-align:middle}
+.badge.warn{background:var(--accent)}
+.badge.success{background:var(--success)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.nav-links{display:flex;justify-content:space-between;margin-top:30px;padding-top:20px;border-top:2px solid var(--border)}
+.nav-links a{background:var(--primary);color:white;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:600;transition:background .2s}
+.nav-links a:hover{background:var(--primary-dark)}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.88em;margin-top:20px;border-top:1px solid var(--border)}
+svg text{font-family:'Segoe UI',system-ui,sans-serif}
+.highlight{background:rgba(0,137,123,.12);border-radius:4px;padding:1px 5px}
+.warn-box{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-left:4px solid var(--accent);padding:14px 18px;border-radius:8px;margin:12px 0}
+body.dark .warn-box{background:linear-gradient(135deg,#3a2010,#2a1808);color:#ffcc80}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="dark-toggle" onclick="dark()" title="Toggle dark mode">&#9790;</button>
+  <div style="max-width:1100px;margin:0 auto">
+    <div style="font-size:.9em;opacity:.7;margin-bottom:4px">Marketing Analytics &mdash; Week 3</div>
+    <h1>Marketing Research Tools &mdash; Part 2</h1>
+    <p>Discriminant Analysis &bull; Regression Methods &bull; Logistic Regression &bull; Statistical Tests</p>
+  </div>
+</header>
+
+<nav>
+  <button onclick="nav('da',this)" class="active">Discriminant Analysis</button>
+  <button onclick="nav('slr',this)">Simple Regression</button>
+  <button onclick="nav('mlr',this)">Multiple Regression</button>
+  <button onclick="nav('logit',this)">Logistic Regression</button>
+  <button onclick="nav('tests',this)">Parametric vs Non-Parametric</button>
+  <button onclick="nav('quiz',this)">Quiz</button>
+  <button onclick="nav('summary',this)">Summary &amp; Tips</button>
+  <button onclick="nav('xn-extra',this)">🔢 Numericals</button>
+  <button onclick="nav('xn-mcq',this)">📝 MCQs</button>
+</nav>
+
+<main>
+
+<!-- ==================== SECTION 1: DISCRIMINANT ANALYSIS ==================== -->
+<section id="da">
+  <h2>1. Discriminant Analysis</h2>
+
+  <div class="card">
+    <h3>Purpose &amp; Overview</h3>
+    <p>Discriminant Analysis (DA) classifies observations into <strong>predefined groups</strong> and identifies which combination of predictor variables best separates those groups. Unlike clustering (which forms groups), DA assumes groups already exist and asks: what distinguishes members of each group?</p>
+    <ul>
+      <li><strong>Goal:</strong> Find a linear combination of variables (discriminant function) that maximally separates groups</li>
+      <li><strong>Input:</strong> Continuous predictors + known group membership</li>
+      <li><strong>Output:</strong> Discriminant scores, classification accuracy, variable importance</li>
+      <li><strong>Common uses:</strong> Churn prediction, credit scoring, market segmentation validation</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>The Discriminant Function</h3>
+    <div class="formula">D = b&#8320; + b&#8321;X&#8321; + b&#8322;X&#8322; + ... + b&#8337;X&#8337;</div>
+    <p>Where:</p>
+    <ul>
+      <li><strong>D</strong> = discriminant score for each observation</li>
+      <li><strong>b&#8320;</strong> = constant (intercept)</li>
+      <li><strong>b&#8321;...b&#8337;</strong> = discriminant coefficients (weights for each variable)</li>
+      <li><strong>X&#8321;...X&#8337;</strong> = predictor variables</li>
+    </ul>
+    <p>Observations are assigned to the group whose <strong>centroid</strong> their discriminant score is closest to.</p>
+  </div>
+
+  <div class="card">
+    <h3>Key Statistics</h3>
+    <div class="two-col">
+      <div>
+        <h3>Wilks' Lambda (&Lambda;)</h3>
+        <div class="formula">&Lambda; = SS&#7457;ithin / SS&#7457;ithin+between</div>
+        <ul>
+          <li>Range: 0 to 1</li>
+          <li><strong>Lower = better discrimination</strong></li>
+          <li>&Lambda; close to 0: groups are well separated</li>
+          <li>&Lambda; close to 1: groups overlap heavily</li>
+          <li>Converted to F-statistic for significance testing</li>
+        </ul>
+        <table>
+          <tr><th>&Lambda; Value</th><th>Interpretation</th></tr>
+          <tr><td>0.0 &ndash; 0.2</td><td>Excellent separation</td></tr>
+          <tr><td>0.2 &ndash; 0.4</td><td>Good separation</td></tr>
+          <tr><td>0.4 &ndash; 0.6</td><td>Moderate separation</td></tr>
+          <tr><td>0.6 &ndash; 1.0</td><td>Poor separation</td></tr>
+        </table>
+      </div>
+      <div>
+        <h3>Eigenvalue &amp; Hit Ratio</h3>
+        <p><strong>Eigenvalue:</strong></p>
+        <div class="formula">Eigenvalue = SS&#7463;etween / SS&#7457;ithin</div>
+        <ul>
+          <li>Higher eigenvalue = better group separation</li>
+          <li>Eigenvalue &gt; 1 = substantial discrimination</li>
+          <li>Eigenvalue &lt; 0.4 = poor discrimination</li>
+        </ul>
+        <p style="margin-top:12px"><strong>Hit Ratio (Classification Accuracy):</strong></p>
+        <div class="formula">Hit Ratio = Correctly Classified / Total &times; 100%</div>
+        <ul>
+          <li>Compare against <strong>proportional chance criterion</strong></li>
+          <li>Proportional chance = &Sigma;p&#7522;&#178; (sum of squared group proportions)</li>
+          <li>Hit ratio should exceed chance by &ge;25% to be useful</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Worked Example: Customer Churn Prediction</h3>
+    <div class="example">
+      <strong>Scenario:</strong> A telecom company wants to predict which customers will churn (cancel service) vs. stay retained. They have data on 500 customers with known outcomes.
+      <br><br>
+      <strong>Predictor Variables:</strong>
+      <ul>
+        <li>X&#8321; = call_frequency (calls per month)</li>
+        <li>X&#8322; = complaint_count (complaints in last 6 months)</li>
+        <li>X&#8323; = months_subscribed (tenure)</li>
+      </ul>
+      <strong>Groups:</strong> Churned (Group 1) vs. Retained (Group 0)
+      <br><br>
+      <strong>Resulting Discriminant Function:</strong>
+      <div class="formula" style="margin:8px 0">D = 0.42(X&#8321;) + 0.68(X&#8322;) &minus; 0.31(X&#8323;)</div>
+      <strong>Interpretation:</strong>
+      <ul>
+        <li>Higher complaint count strongly predicts churn (+0.68)</li>
+        <li>Higher call frequency moderately predicts churn (+0.42)</li>
+        <li>Longer tenure slightly protects against churn (&minus;0.31)</li>
+        <li>If D &gt; 0.5, customer classified as likely to churn</li>
+      </ul>
+      <strong>Model Performance:</strong>
+      <ul>
+        <li>Wilks' &Lambda; = 0.32 (good separation between groups)</li>
+        <li>Eigenvalue = 1.87 (substantial discrimination)</li>
+        <li>Hit Ratio = 84.2% (vs. proportional chance of 51% &rarr; well above threshold)</li>
+      </ul>
+      <strong>Decision Rule Example:</strong> Customer A has call_freq=5, complaints=3, months=8<br>
+      D = 0.42(5) + 0.68(3) &minus; 0.31(8) = 2.10 + 2.04 &minus; 2.48 = <span class="highlight">1.66 &rarr; Churn predicted</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Steps in Discriminant Analysis</h3>
+    <ol>
+      <li><strong>Check assumptions:</strong> Normality of predictors within groups; equal covariance matrices across groups (Box's M test); no multicollinearity</li>
+      <li><strong>Calculate group centroids:</strong> Mean discriminant score for each group</li>
+      <li><strong>Compute within-group covariance matrix</strong></li>
+      <li><strong>Find discriminant function coefficients</strong> by maximizing between-group to within-group variance ratio</li>
+      <li><strong>Validate:</strong> Check hit ratio, Wilks' &Lambda;, holdout sample performance</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Python Implementation</h3>
+    <div class="code">from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+import pandas as pd
+
+# Load data
+df = pd.read_csv('churn_data.csv')
+X = df[['call_frequency', 'complaint_count', 'months_subscribed']]
+y = df['churned']
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Fit LDA model
+lda = LinearDiscriminantAnalysis()
+lda.fit(X_train, y_train)
+
+# Predictions
+predictions = lda.predict(X_test)
+accuracy = (predictions == y_test).mean()
+
+print(f"Accuracy: {accuracy:.2%}")
+print(f"Discriminant Coefficients: {lda.coef_}")
+print(f"Group Means (Centroids):\n{lda.means_}")
+print(classification_report(y_test, predictions))</div>
+  </div>
+
+  <!-- SVG: Scatter plot with discriminant boundary -->
+  <div class="card">
+    <h3>Visual: Discriminant Analysis &mdash; Group Separation</h3>
+    <svg viewBox="0 0 600 340" style="width:100%;max-width:600px;display:block;margin:0 auto" aria-label="Discriminant Analysis scatter plot">
+      <!-- Background -->
+      <rect width="600" height="340" fill="none"/>
+      <!-- Axes -->
+      <line x1="60" y1="290" x2="560" y2="290" stroke="#aaa" stroke-width="2"/>
+      <line x1="60" y1="290" x2="60" y2="30" stroke="#aaa" stroke-width="2"/>
+      <!-- Axis labels -->
+      <text x="310" y="320" text-anchor="middle" font-size="13" fill="#5a6a7a">Call Frequency (X&#8321;)</text>
+      <text x="18" y="165" text-anchor="middle" font-size="13" fill="#5a6a7a" transform="rotate(-90,18,165)">Complaint Count (X&#8322;)</text>
+      <!-- Title -->
+      <text x="310" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#00695c">Discriminant Analysis: Churned vs Retained</text>
+      <!-- Retained group (blue/teal dots) -->
+      <circle cx="120" cy="240" r="7" fill="#26a69a" opacity=".8"/>
+      <circle cx="145" cy="255" r="7" fill="#26a69a" opacity=".8"/>
+      <circle cx="105" cy="225" r="7" fill="#26a69a" opacity=".8"/>
+      <circle cx="160" cy="245" r="7" fill="#26a69a" opacity=".8"/>
+      <circle cx="130" cy="260" r="7" fill="#26a69a" opacity=".8"/>
+      <circle cx="175" cy="235" r="7" fill="#26a69a" opacity=".8"/>
+      <circle cx="115" cy="210" r="7" fill="#26a69a" opacity=".8"/>
+      <circle cx="190" cy="250" r="7" fill="#26a69a" opacity=".8"/>
+      <circle cx="155" cy="270" r="7" fill="#26a69a" opacity=".8"/>
+      <circle cx="140" cy="220" r="7" fill="#26a69a" opacity=".8"/>
+      <circle cx="100" cy="265" r="7" fill="#26a69a" opacity=".8"/>
+      <circle cx="200" cy="240" r="7" fill="#26a69a" opacity=".8"/>
+      <!-- Centroid retained -->
+      <circle cx="145" cy="243" r="11" fill="none" stroke="#00695c" stroke-width="3"/>
+      <text x="145" y="200" text-anchor="middle" font-size="11" fill="#00695c" font-weight="bold">Retained</text>
+      <text x="145" y="212" text-anchor="middle" font-size="11" fill="#00695c">Centroid</text>
+      <!-- Churned group (orange/red dots) -->
+      <circle cx="380" cy="110" r="7" fill="#ef5350" opacity=".8"/>
+      <circle cx="400" cy="95" r="7" fill="#ef5350" opacity=".8"/>
+      <circle cx="365" cy="125" r="7" fill="#ef5350" opacity=".8"/>
+      <circle cx="420" cy="105" r="7" fill="#ef5350" opacity=".8"/>
+      <circle cx="440" cy="90" r="7" fill="#ef5350" opacity=".8"/>
+      <circle cx="395" cy="130" r="7" fill="#ef5350" opacity=".8"/>
+      <circle cx="415" cy="115" r="7" fill="#ef5350" opacity=".8"/>
+      <circle cx="455" cy="100" r="7" fill="#ef5350" opacity=".8"/>
+      <circle cx="375" cy="90" r="7" fill="#ef5350" opacity=".8"/>
+      <circle cx="430" cy="135" r="7" fill="#ef5350" opacity=".8"/>
+      <circle cx="460" cy="115" r="7" fill="#ef5350" opacity=".8"/>
+      <circle cx="350" cy="108" r="7" fill="#ef5350" opacity=".8"/>
+      <!-- Centroid churned -->
+      <circle cx="412" cy="110" r="11" fill="none" stroke="#c62828" stroke-width="3"/>
+      <text x="412" y="68" text-anchor="middle" font-size="11" fill="#c62828" font-weight="bold">Churned</text>
+      <text x="412" y="80" text-anchor="middle" font-size="11" fill="#c62828">Centroid</text>
+      <!-- Discriminant boundary line -->
+      <line x1="200" y1="50" x2="320" y2="290" stroke="#ff7043" stroke-width="2.5" stroke-dasharray="8,5"/>
+      <text x="275" y="155" text-anchor="middle" font-size="12" fill="#ff7043" font-weight="bold" transform="rotate(65,275,155)">Discriminant Boundary</text>
+      <!-- Legend -->
+      <circle cx="80" cy="305" r="6" fill="#26a69a"/>
+      <text x="92" y="309" font-size="11" fill="#5a6a7a">Retained (Group 0)</text>
+      <circle cx="220" cy="305" r="6" fill="#ef5350"/>
+      <text x="232" y="309" font-size="11" fill="#5a6a7a">Churned (Group 1)</text>
+      <line x1="380" y1="305" x2="410" y2="305" stroke="#ff7043" stroke-width="2" stroke-dasharray="5,3"/>
+      <text x="416" y="309" font-size="11" fill="#5a6a7a">Decision Boundary</text>
+    </svg>
+    <p style="color:var(--muted);font-size:.88em;text-align:center;margin-top:8px">Orange dashed line = discriminant boundary. Points right-above = classified as Churned; left-below = Retained.</p>
+  </div>
+
+  <div class="card">
+    <h3>DA vs. Logistic Regression: When to Use Which?</h3>
+    <table>
+      <tr><th>Feature</th><th>Discriminant Analysis</th><th>Logistic Regression</th></tr>
+      <tr><td>Assumptions</td><td>Normality of predictors; equal covariance matrices</td><td>No strict distributional assumption</td></tr>
+      <tr><td>Output</td><td>Score on discriminant function</td><td>Probability of class membership</td></tr>
+      <tr><td>Sensitivity to outliers</td><td>High &mdash; assumes normal distribution</td><td>Moderate</td></tr>
+      <tr><td>Interpretation</td><td>Standardized function coefficients</td><td>Odds ratios / log-odds</td></tr>
+      <tr><td>Multiple groups</td><td>Naturally handles 3+ groups (MDA)</td><td>Requires one-vs-rest for 3+ groups</td></tr>
+      <tr><td>Small samples</td><td>Better with small samples if assumptions met</td><td>Needs larger samples for stability</td></tr>
+      <tr><td>Best when</td><td>Predictors are continuous &amp; normally distributed</td><td>Mix of predictor types; no normality</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ==================== SECTION 2: SIMPLE LINEAR REGRESSION ==================== -->
+<section id="slr">
+  <h2>2. Simple Linear Regression</h2>
+
+  <div class="card">
+    <h3>The Model</h3>
+    <div class="formula">Y = &#946;&#8320; + &#946;&#8321;X + &#949;</div>
+    <p>Where: <strong>Y</strong> = dependent/response variable | <strong>X</strong> = independent/predictor variable | <strong>&#946;&#8320;</strong> = intercept | <strong>&#946;&#8321;</strong> = slope | <strong>&#949;</strong> = random error term</p>
+    <p>Goal: Find estimates <strong>b&#8320;</strong> and <strong>b&#8321;</strong> that minimise the sum of squared residuals (Ordinary Least Squares &mdash; OLS).</p>
+  </div>
+
+  <div class="card">
+    <h3>OLS Estimation Formulas</h3>
+    <div class="two-col">
+      <div>
+        <div class="formula">b&#8321; = &#8721;(x&#7522; &minus; x&#772;)(y&#7522; &minus; &#563;) / &#8721;(x&#7522; &minus; x&#772;)&#178;</div>
+        <p><em>The slope: covariance of X and Y divided by variance of X</em></p>
+      </div>
+      <div>
+        <div class="formula">b&#8320; = &#563; &minus; b&#8321;x&#772;</div>
+        <p><em>The intercept: ensures regression line passes through the mean point (x&#772;, &#563;)</em></p>
+      </div>
+    </div>
+    <h3>Model Fit &amp; Significance Metrics</h3>
+    <table>
+      <tr><th>Metric</th><th>Formula</th><th>Meaning</th></tr>
+      <tr><td><strong>R&sup2;</strong> (R-squared)</td><td>1 &minus; SS&#7523;es / SS&#7457;otal</td><td>% of variance in Y explained by X; 0 to 1</td></tr>
+      <tr><td><strong>SEE</strong></td><td>&radic;(SS&#7523;es/(n&minus;2))</td><td>Standard error of estimate; average prediction error</td></tr>
+      <tr><td><strong>t-statistic</strong></td><td>b&#8321; / SE(b&#8321;)</td><td>Tests if slope is significantly different from 0</td></tr>
+      <tr><td><strong>p-value</strong></td><td>From t-distribution</td><td>Significant if p &lt; 0.05 (reject H&#8320;: &#946;&#8321;=0)</td></tr>
+      <tr><td><strong>F-statistic</strong></td><td>MS&#7523;egression / MS&#7523;esidual</td><td>Overall model significance</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Worked Example: Advertising Spend vs. Sales</h3>
+    <div class="example">
+      <strong>Data: Advertising Spend ($000) and resulting Sales ($000)</strong>
+      <table style="margin:10px 0">
+        <tr><th>Ad Spend (X)</th><th>Sales (Y)</th><th>X &minus; x&#772;</th><th>Y &minus; &#563;</th><th>(X&minus;x&#772;)(Y&minus;&#563;)</th><th>(X&minus;x&#772;)&#178;</th></tr>
+        <tr><td>10</td><td>220</td><td>&minus;10</td><td>&minus;281</td><td>2810</td><td>100</td></tr>
+        <tr><td>15</td><td>335</td><td>&minus;5</td><td>&minus;166</td><td>830</td><td>25</td></tr>
+        <tr><td>20</td><td>520</td><td>0</td><td>19</td><td>0</td><td>0</td></tr>
+        <tr><td>25</td><td>680</td><td>5</td><td>179</td><td>895</td><td>25</td></tr>
+        <tr><td>30</td><td>850</td><td>10</td><td>349</td><td>3490</td><td>100</td></tr>
+        <tr><td><strong>x&#772; = 20</strong></td><td><strong>&#563; = 521</strong></td><td></td><td></td><td><strong>&Sigma; = 8025</strong></td><td><strong>&Sigma; = 250</strong></td></tr>
+      </table>
+      <strong>Step-by-Step Calculations:</strong>
+      <div class="formula">b&#8321; = 8025 / 250 = 32.1</div>
+      <p><em>For every $1,000 increase in ad spend, sales increase by $32,100</em></p>
+      <div class="formula">b&#8320; = 521 &minus; 32.1 &times; 20 = 521 &minus; 642 = &minus;121</div>
+      <p><em>Theoretical sales at zero ad spend = &minus;$121,000 (extrapolation, not meaningful)</em></p>
+      <div class="formula">Regression Equation: Sales = &minus;121 + 32.1 &times; AdSpend</div>
+      <strong>Prediction: If Ad Spend = $25,000:</strong>
+      <div class="formula">Sales = &minus;121 + 32.1 &times; 25 = &minus;121 + 802.5 = <strong>$681,500</strong></div>
+      <strong>R&sup2; Calculation:</strong>
+      <ul>
+        <li>SS&#7457;otal = (220&minus;521)&sup2; + (335&minus;521)&sup2; + (520&minus;521)&sup2; + (680&minus;521)&sup2; + (850&minus;521)&sup2; = 90,601+34,596+1+25,281+108,241 = 258,720</li>
+        <li>SS&#7523;esidual (after fitting) &asymp; 2,580</li>
+        <li>R&sup2; = 1 &minus; 2,580/258,720 = <strong>0.990 (99% variance explained)</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SVG: Regression scatter plot -->
+  <div class="card">
+    <h3>Visual: Scatter Plot with Regression Line &amp; Residuals</h3>
+    <svg viewBox="0 0 600 360" style="width:100%;max-width:600px;display:block;margin:0 auto" aria-label="Simple linear regression scatter plot">
+      <rect width="600" height="360" fill="none"/>
+      <!-- Grid lines -->
+      <line x1="80" y1="50" x2="80" y2="300" stroke="#dde5ec" stroke-width="1"/>
+      <line x1="180" y1="50" x2="180" y2="300" stroke="#dde5ec" stroke-width="1"/>
+      <line x1="280" y1="50" x2="280" y2="300" stroke="#dde5ec" stroke-width="1"/>
+      <line x1="380" y1="50" x2="380" y2="300" stroke="#dde5ec" stroke-width="1"/>
+      <line x1="480" y1="50" x2="480" y2="300" stroke="#dde5ec" stroke-width="1"/>
+      <!-- Axes -->
+      <line x1="60" y1="300" x2="540" y2="300" stroke="#555" stroke-width="2"/>
+      <line x1="60" y1="300" x2="60" y2="40" stroke="#555" stroke-width="2"/>
+      <!-- Axis ticks & labels -->
+      <text x="80" y="316" text-anchor="middle" font-size="11" fill="#5a6a7a">10</text>
+      <text x="180" y="316" text-anchor="middle" font-size="11" fill="#5a6a7a">15</text>
+      <text x="280" y="316" text-anchor="middle" font-size="11" fill="#5a6a7a">20</text>
+      <text x="380" y="316" text-anchor="middle" font-size="11" fill="#5a6a7a">25</text>
+      <text x="480" y="316" text-anchor="middle" font-size="11" fill="#5a6a7a">30</text>
+      <text x="310" y="340" text-anchor="middle" font-size="12" fill="#5a6a7a">Ad Spend ($000)</text>
+      <!-- Y-axis labels: map sales 0-900 to y 300-50 -->
+      <!-- y_px = 300 - (sales/900)*250 -->
+      <text x="50" y="303" text-anchor="end" font-size="11" fill="#5a6a7a">0</text>
+      <text x="50" y="234" text-anchor="end" font-size="11" fill="#5a6a7a">250</text>
+      <text x="50" y="164" text-anchor="end" font-size="11" fill="#5a6a7a">500</text>
+      <text x="50" y="95" text-anchor="end" font-size="11" fill="#5a6a7a">750</text>
+      <text x="17" y="180" text-anchor="middle" font-size="12" fill="#5a6a7a" transform="rotate(-90,17,180)">Sales ($000)</text>
+      <!-- Title -->
+      <text x="300" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#00695c">Advertising Spend vs. Sales with Regression Line</text>
+      <!-- Regression line: Sales = -121 + 32.1*X; at X=10 -> 200; at X=30 -> 842 -->
+      <!-- x_px = 60 + (X-10)/20 * 420; y_px = 300 - Sales/900*250 -->
+      <!-- X=10,Y=200: x=60+0=60+20=80, y=300-55.6=244 -->
+      <!-- X=30,Y=842: x=60+420=480, y=300-233.9=66 -->
+      <line x1="80" y1="244" x2="480" y2="66" stroke="#00897b" stroke-width="2.5"/>
+      <!-- Data points with residuals -->
+      <!-- X=10, actual=220 -> y=300-61.1=239; predicted=200->y=244; residual line -->
+      <line x1="80" y1="239" x2="80" y2="244" stroke="#ff7043" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <circle cx="80" cy="239" r="7" fill="#e53935" stroke="white" stroke-width="2"/>
+      <!-- X=15, actual=335; pred=-121+32.1*15=360.5; y_pred=300-100.1=200; y_actual=300-93.1=207 -->
+      <line x1="180" y1="207" x2="180" y2="200" stroke="#ff7043" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <circle cx="180" cy="207" r="7" fill="#e53935" stroke="white" stroke-width="2"/>
+      <!-- X=20, actual=520; pred=-121+32.1*20=521; y_pred=300-144.7=155; y_actual=300-144.4=156 -->
+      <circle cx="280" cy="156" r="7" fill="#e53935" stroke="white" stroke-width="2"/>
+      <!-- X=25, actual=680; pred=-121+32.1*25=681.5; y_pred=300-189.3=111; y_actual=300-188.9=111 -->
+      <circle cx="380" cy="111" r="7" fill="#e53935" stroke="white" stroke-width="2"/>
+      <!-- X=30, actual=850; pred=-121+32.1*30=842; y_pred=300-233.9=66; y_actual=300-236.1=64 -->
+      <line x1="480" y1="64" x2="480" y2="66" stroke="#ff7043" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <circle cx="480" cy="64" r="7" fill="#e53935" stroke="white" stroke-width="2"/>
+      <!-- Labels -->
+      <text x="500" y="135" font-size="11" fill="#00897b" font-weight="bold">Y = &minus;121</text>
+      <text x="500" y="148" font-size="11" fill="#00897b" font-weight="bold">+ 32.1X</text>
+      <text x="500" y="161" font-size="11" fill="#00897b">R&sup2; = 0.99</text>
+      <!-- Legend -->
+      <circle cx="90" cy="330" r="6" fill="#e53935"/>
+      <text x="102" y="334" font-size="11" fill="#5a6a7a">Actual Data Points</text>
+      <line x1="220" y1="330" x2="250" y2="330" stroke="#00897b" stroke-width="2.5"/>
+      <text x="256" y="334" font-size="11" fill="#5a6a7a">Regression Line</text>
+      <line x1="370" y1="330" x2="400" y2="330" stroke="#ff7043" stroke-width="2" stroke-dasharray="4,2"/>
+      <text x="406" y="334" font-size="11" fill="#5a6a7a">Residuals</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ==================== SECTION 3: MULTIPLE LINEAR REGRESSION ==================== -->
+<section id="mlr">
+  <h2>3. Multiple Linear Regression</h2>
+
+  <div class="card">
+    <h3>The Model</h3>
+    <div class="formula">Y = &#946;&#8320; + &#946;&#8321;X&#8321; + &#946;&#8322;X&#8322; + ... + &#946;&#8337;X&#8337; + &#949;</div>
+    <p>Extends simple regression to multiple predictors simultaneously. Each coefficient <strong>&#946;&#7522;</strong> represents the change in Y for a one-unit increase in X&#7522;, <em>holding all other predictors constant</em> (partial effect).</p>
+  </div>
+
+  <div class="card">
+    <h3>Model Evaluation Metrics</h3>
+    <div class="two-col">
+      <div>
+        <h3>Goodness of Fit</h3>
+        <div class="formula">R&sup2; = 1 &minus; SS&#7523;esidual / SS&#7457;otal</div>
+        <div class="formula">R&sup2;<sub>adj</sub> = 1 &minus; [(1&minus;R&sup2;)(n&minus;1) / (n&minus;k&minus;1)]</div>
+        <p>Where <strong>k</strong> = number of predictors, <strong>n</strong> = sample size</p>
+        <div class="warn-box"><strong>Key:</strong> R&sup2; always increases when you add a variable (even irrelevant ones). Always use Adjusted R&sup2; to compare models with different numbers of predictors &mdash; it penalises complexity.</div>
+      </div>
+      <div>
+        <h3>Error Metrics</h3>
+        <div class="formula">MAE = &#8721;|y&#7522; &minus; &#375;&#7522;| / n</div>
+        <div class="formula">MSE = &#8721;(y&#7522; &minus; &#375;&#7522;)&sup2; / n</div>
+        <div class="formula">RMSE = &radic;MSE</div>
+        <p>RMSE is in the same units as Y &mdash; most interpretable. MAE is less sensitive to outliers. MSE penalises large errors heavily.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Dummy Variables for Categorical Predictors</h3>
+    <p>Categorical variables must be converted to numerical form. For a variable with <strong>k categories</strong>, create <strong>k&minus;1 dummy variables</strong> (one becomes the reference category).</p>
+    <div class="example">
+      <strong>Example: Region (4 categories)</strong>
+      <table style="margin:10px 0">
+        <tr><th>Observation</th><th>Region</th><th>D_North</th><th>D_East</th><th>D_South</th></tr>
+        <tr><td>1</td><td>North</td><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td>2</td><td>East</td><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>3</td><td>South</td><td>0</td><td>0</td><td>1</td></tr>
+        <tr><td>4</td><td><strong>West (Reference)</strong></td><td>0</td><td>0</td><td>0</td></tr>
+      </table>
+      Coefficients for D_North, D_East, D_South show the difference from West (reference category).
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Worked Example: Healthcare Spend Prediction</h3>
+    <div class="example">
+      <strong>Dataset:</strong> Predicting annual healthcare spend ($) from patient characteristics<br><br>
+      <strong>Model:</strong>
+      <div class="formula">Spend = 120 + 8.2(Age) + 0.03(Income) + 450(Smoker) + 12.5(BMI)</div>
+      <table style="margin:10px 0">
+        <tr><th>Predictor</th><th>Coefficient</th><th>p-value</th><th>Interpretation</th></tr>
+        <tr><td>Intercept</td><td>120</td><td>&lt;0.001</td><td>Base spend at zero values</td></tr>
+        <tr><td>Age (years)</td><td>+8.2</td><td>&lt;0.001</td><td>Each extra year of age &rarr; $8.20 more spend</td></tr>
+        <tr><td>Income ($)</td><td>+0.03</td><td>0.024</td><td>Each $1 more income &rarr; $0.03 more spend</td></tr>
+        <tr><td>Smoker (1=yes)</td><td>+450</td><td>&lt;0.001</td><td>Smokers spend $450 more than non-smokers</td></tr>
+        <tr><td>BMI</td><td>+12.5</td><td>&lt;0.001</td><td>Each BMI unit &rarr; $12.50 more spend</td></tr>
+      </table>
+      <strong>Model Performance:</strong>
+      <ul>
+        <li>R&sup2; = 0.89 (89% of variance explained)</li>
+        <li>Adjusted R&sup2; = 0.888 (very close to R&sup2; &rarr; no redundant predictors)</li>
+        <li>RMSE = $2,340 (average prediction error)</li>
+        <li>F-statistic = 312.4, p &lt; 0.001 (overall model is highly significant)</li>
+      </ul>
+      <strong>Prediction Example:</strong> 45-year-old smoker, income=$60,000, BMI=28<br>
+      Spend = 120 + 8.2(45) + 0.03(60,000) + 450(1) + 12.5(28) = 120 + 369 + 1,800 + 450 + 350 = <strong>$3,089</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>MLR Assumptions (LINE)</h3>
+    <ul>
+      <li><strong>L</strong>inearity: Relationship between X and Y is linear</li>
+      <li><strong>I</strong>ndependence: Observations are independent (no autocorrelation) &mdash; check Durbin-Watson</li>
+      <li><strong>N</strong>ormality: Residuals are normally distributed &mdash; check Q-Q plot</li>
+      <li><strong>E</strong>qual variance (Homoscedasticity): Residuals have constant variance &mdash; check residual vs. fitted plot</li>
+      <li>Also: No severe <strong>multicollinearity</strong> (check VIF; VIF &gt; 10 = problematic)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Python Implementation</h3>
+    <div class="code">import statsmodels.api as sm
+import pandas as pd
+
+df = pd.read_csv('healthcare.csv')
+X = df[['Age', 'Income', 'Smoker', 'BMI']]
+y = df['Spend']
+
+# Add constant for intercept
+X = sm.add_constant(X)
+
+# Fit model
+model = sm.OLS(y, X).fit()
+
+# Full summary: coefficients, p-values, R², F-stat
+print(model.summary())
+
+# Check for multicollinearity
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+vif_data = pd.DataFrame()
+vif_data["feature"] = X.columns
+vif_data["VIF"] = [variance_inflation_factor(X.values, i) for i in range(len(X.columns))]
+print(vif_data)</div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 4: LOGISTIC REGRESSION ==================== -->
+<section id="logit">
+  <h2>4. Logistic Regression</h2>
+
+  <div class="card">
+    <h3>Purpose &amp; The Sigmoid Function</h3>
+    <p>Logistic regression classifies binary outcomes (buy/not buy, churn/retain, default/no default). Unlike linear regression, the output is constrained to [0, 1] representing a <strong>probability</strong>.</p>
+    <div class="formula">P(Y=1) = 1 / (1 + e<sup>&minus;z</sup>)</div>
+    <p>Where <strong>z</strong> (the linear combination) = &#946;&#8320; + &#946;&#8321;X&#8321; + &#946;&#8322;X&#8322; + ...</p>
+
+    <!-- SVG: Sigmoid curve -->
+    <svg viewBox="0 0 500 220" style="width:100%;max-width:500px;display:block;margin:16px auto" aria-label="Sigmoid function curve">
+      <rect width="500" height="220" fill="none"/>
+      <line x1="40" y1="110" x2="470" y2="110" stroke="#ccc" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="40" y1="30" x2="470" y2="30" stroke="#ccc" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="40" y1="190" x2="470" y2="190" stroke="#ccc" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="40" y1="190" x2="40" y2="20" stroke="#555" stroke-width="2"/>
+      <line x1="40" y1="190" x2="470" y2="190" stroke="#555" stroke-width="2"/>
+      <!-- Sigmoid curve points approx -->
+      <polyline points="40,188 80,186 120,180 160,168 200,148 240,110 280,72 320,52 360,40 400,34 440,31 470,30"
+        fill="none" stroke="#00897b" stroke-width="3"/>
+      <!-- Labels -->
+      <text x="28" y="113" text-anchor="end" font-size="11" fill="#5a6a7a">0.5</text>
+      <text x="28" y="33" text-anchor="end" font-size="11" fill="#5a6a7a">1.0</text>
+      <text x="28" y="193" text-anchor="end" font-size="11" fill="#5a6a7a">0.0</text>
+      <text x="255" y="210" text-anchor="middle" font-size="12" fill="#5a6a7a">z = &#946;&#8320; + &#946;&#8321;X&#8321; + ...</text>
+      <text x="255" y="18" text-anchor="middle" font-size="12" fill="#5a6a7a" font-weight="bold">P(Y=1) = 1/(1+e&#8315;&#7992;) &mdash; Sigmoid Function</text>
+      <!-- Decision boundary -->
+      <line x1="240" y1="110" x2="240" y2="190" stroke="#ff7043" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="244" y="158" font-size="11" fill="#ff7043">z=0</text>
+      <text x="244" y="170" font-size="11" fill="#ff7043">P=0.5</text>
+    </svg>
+  </div>
+
+  <div class="card">
+    <h3>Odds, Log-Odds &amp; Interpretation</h3>
+    <div class="two-col">
+      <div>
+        <div class="formula">Odds = P(event) / P(no event) = P / (1&minus;P)</div>
+        <div class="formula">Log-odds (logit) = ln[P/(1&minus;P)] = &#946;&#8320; + &#946;&#8321;X&#8321;</div>
+        <p><strong>Interpreting coefficients:</strong></p>
+        <ul>
+          <li>e<sup>&#946;&#7522;</sup> = odds ratio for predictor X&#7522;</li>
+          <li>Odds ratio &gt; 1: X increases probability of event</li>
+          <li>Odds ratio &lt; 1: X decreases probability of event</li>
+          <li>Odds ratio = 1: No effect</li>
+        </ul>
+      </div>
+      <div>
+        <div class="example">
+          <strong>Example: Credit Risk</strong><br>
+          Variables: Credit score, Income, DTI ratio, Employment years<br><br>
+          Logistic model for a customer with:<br>
+          &bull; Credit score = 550<br>
+          &bull; Income = $35,000<br>
+          &bull; Debt-to-income = 0.45<br><br>
+          Sigmoid output: <strong>P(default) = 0.78</strong><br>
+          Decision: P &gt; 0.5 &rarr; <span style="color:#e53935;font-weight:bold">Classify as Default</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>The Confusion Matrix</h3>
+    <div style="overflow-x:auto">
+      <table>
+        <tr><th style="background:#555"></th><th>Predicted Positive</th><th>Predicted Negative</th></tr>
+        <tr><td><strong>Actual Positive</strong></td><td style="background:#c8e6c9;color:#1b5e20;font-weight:bold">TP (True Positive)</td><td style="background:#ffcdd2;color:#b71c1c;font-weight:bold">FN (False Negative) &mdash; Type II Error</td></tr>
+        <tr><td><strong>Actual Negative</strong></td><td style="background:#ffcdd2;color:#b71c1c;font-weight:bold">FP (False Positive) &mdash; Type I Error</td><td style="background:#c8e6c9;color:#1b5e20;font-weight:bold">TN (True Negative)</td></tr>
+      </table>
+    </div>
+    <h3 style="margin-top:16px">Performance Metrics from Confusion Matrix</h3>
+    <div class="two-col">
+      <div>
+        <div class="formula">Accuracy = (TP + TN) / (TP + TN + FP + FN)</div>
+        <div class="formula">Precision = TP / (TP + FP)</div>
+        <div class="formula">Recall (Sensitivity) = TP / (TP + FN)</div>
+      </div>
+      <div>
+        <div class="formula">F1-Score = 2 &times; (Precision &times; Recall) / (Precision + Recall)</div>
+        <div class="formula">Specificity = TN / (TN + FP)</div>
+        <div class="formula">AUC = Area Under ROC Curve</div>
+      </div>
+    </div>
+    <div class="warn-box"><strong>Warning:</strong> Accuracy is misleading with imbalanced datasets. If 95% of customers never default, a model that always predicts "no default" achieves 95% accuracy but is useless. Use <strong>F1-score or AUC-ROC</strong> instead.</div>
+    <h3>ROC-AUC Interpretation</h3>
+    <table>
+      <tr><th>AUC Value</th><th>Interpretation</th></tr>
+      <tr><td>1.0</td><td>Perfect classifier</td></tr>
+      <tr><td>0.9 &ndash; 1.0</td><td>Excellent</td></tr>
+      <tr><td>0.8 &ndash; 0.9</td><td>Good &mdash; suitable for most business applications</td></tr>
+      <tr><td>0.7 &ndash; 0.8</td><td>Fair</td></tr>
+      <tr><td>0.5 &ndash; 0.7</td><td>Poor</td></tr>
+      <tr><td>0.5</td><td>Random classifier &mdash; no predictive value</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Handling Class Imbalance: SMOTE</h3>
+    <p>Many real-world datasets are imbalanced (e.g., 5% churn, 95% retained). This causes models to be biased toward the majority class.</p>
+    <p><strong>SMOTE (Synthetic Minority Oversampling Technique):</strong> Creates synthetic examples of the minority class by interpolating between existing minority samples, rather than simply duplicating them.</p>
+    <ul>
+      <li>Select a minority class sample and its k nearest neighbors</li>
+      <li>Create a new synthetic sample along the line connecting them</li>
+      <li>Repeat until desired balance is achieved</li>
+    </ul>
+    <div class="tips"><strong>Alternatives to SMOTE:</strong> Class weights (penalise misclassification of minority class more heavily); undersampling the majority class; threshold adjustment (lower decision threshold below 0.5).</div>
+  </div>
+
+  <div class="card">
+    <h3>Python Implementation</h3>
+    <div class="code">from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, roc_auc_score, confusion_matrix
+from imblearn.over_sampling import SMOTE
+import numpy as np
+
+# Handle class imbalance with SMOTE
+smote = SMOTE(random_state=42)
+X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
+
+# Fit logistic regression
+model = LogisticRegression(max_iter=1000, random_state=42)
+model.fit(X_resampled, y_resampled)
+
+# Predictions
+y_pred = model.predict(X_test)
+y_prob = model.predict_proba(X_test)[:, 1]
+
+# Evaluation
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+print(f"\nAUC-ROC Score: {roc_auc_score(y_test, y_prob):.3f}")
+
+# Odds ratios
+odds_ratios = np.exp(model.coef_[0])
+print(f"\nOdds Ratios: {dict(zip(feature_names, odds_ratios))}")</div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 5: PARAMETRIC VS NON-PARAMETRIC ==================== -->
+<section id="tests">
+  <h2>5. Parametric vs. Non-Parametric Tests</h2>
+
+  <div class="card">
+    <h3>Key Distinction</h3>
+    <p><strong>Parametric tests</strong> assume data follows a known distribution (usually normal) and work with population parameters (mean, variance). They are more powerful when assumptions are met.</p>
+    <p><strong>Non-parametric tests</strong> make no assumptions about the underlying distribution. They work with ranks or frequencies and are appropriate for small samples, ordinal data, or non-normal distributions.</p>
+  </div>
+
+  <div class="card">
+    <h3>When to Use Non-Parametric Tests</h3>
+    <ul>
+      <li>Sample size is small (&lt; 30) and normality cannot be assumed</li>
+      <li>Data is measured on an ordinal scale (e.g., Likert scales: "strongly agree" to "strongly disagree")</li>
+      <li>Distribution is heavily skewed or has significant outliers</li>
+      <li>Variances are very unequal across groups</li>
+      <li>Data contains extreme outliers that cannot be removed</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Comprehensive Comparison Table</h3>
+    <table>
+      <tr><th>Research Question</th><th>Parametric Test</th><th>Non-Parametric Equivalent</th><th>When to Prefer Non-Parametric</th></tr>
+      <tr><td>Compare 2 independent groups</td><td>Independent samples t-test</td><td>Mann-Whitney U test</td><td>Non-normal data, small n, ordinal DV</td></tr>
+      <tr><td>Compare 3+ independent groups</td><td>One-way ANOVA</td><td>Kruskal-Wallis test</td><td>Violation of normality or homoscedasticity</td></tr>
+      <tr><td>Compare 2 paired/related groups</td><td>Paired samples t-test</td><td>Wilcoxon Signed-Rank test</td><td>Small n, non-normal differences</td></tr>
+      <tr><td>Compare 3+ paired measurements</td><td>Repeated measures ANOVA</td><td>Friedman test</td><td>Non-normal, ordinal repeated measures</td></tr>
+      <tr><td>Association between 2 variables</td><td>Pearson correlation (r)</td><td>Spearman rank correlation (&rho;)</td><td>Monotonic but non-linear, outliers present</td></tr>
+      <tr><td>Association between categorical vars</td><td>&mdash;</td><td>Chi-square test (&chi;&sup2;)</td><td>Always for categorical data</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Worked Example: Mann-Whitney U vs. t-test</h3>
+    <div class="example">
+      <strong>Scenario:</strong> Compare customer satisfaction scores (1&ndash;10) between two store formats (Online vs. In-store). n=12 per group, scores are not normally distributed.
+      <br><br>
+      <strong>Decision:</strong> Use Mann-Whitney U (non-parametric) because:
+      <ul>
+        <li>Satisfaction is measured on an ordinal scale (ranks matter, not absolute differences)</li>
+        <li>Small sample size (n=12)</li>
+        <li>Shapiro-Wilk test rejects normality (p=0.03)</li>
+      </ul>
+      <strong>Process:</strong> Combine all 24 scores, rank them 1&ndash;24, sum ranks for each group<br>
+      <strong>Interpretation:</strong> If p &lt; 0.05 from Mann-Whitney U, there is a statistically significant difference in satisfaction between store formats.
+    </div>
+  </div>
+
+  <!-- SVG: Test selection flowchart -->
+  <div class="card">
+    <h3>Statistical Test Selection Flowchart</h3>
+    <svg viewBox="0 0 620 400" style="width:100%;max-width:620px;display:block;margin:0 auto" aria-label="Test selection flowchart">
+      <rect width="620" height="400" fill="none"/>
+      <!-- Start -->
+      <rect x="220" y="10" width="180" height="38" rx="19" fill="#00897b"/>
+      <text x="310" y="34" text-anchor="middle" font-size="12" fill="white" font-weight="bold">What type of data?</text>
+      <!-- Categorical branch -->
+      <rect x="20" y="100" width="140" height="38" rx="8" fill="#5c6bc0"/>
+      <text x="90" y="124" text-anchor="middle" font-size="11" fill="white">Categorical</text>
+      <!-- Numerical branch -->
+      <rect x="460" y="100" width="140" height="38" rx="8" fill="#5c6bc0"/>
+      <text x="530" y="124" text-anchor="middle" font-size="11" fill="white">Numerical</text>
+      <!-- Ordinal branch -->
+      <rect x="240" y="100" width="140" height="38" rx="8" fill="#5c6bc0"/>
+      <text x="310" y="124" text-anchor="middle" font-size="11" fill="white">Ordinal / Non-normal</text>
+      <!-- Arrows from start -->
+      <line x1="250" y1="48" x2="90" y2="100" stroke="#aaa" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="310" y1="48" x2="310" y2="100" stroke="#aaa" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="370" y1="48" x2="530" y2="100" stroke="#aaa" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Chi-square -->
+      <rect x="20" y="195" width="140" height="38" rx="8" fill="#26a69a"/>
+      <text x="90" y="219" text-anchor="middle" font-size="11" fill="white">Chi-Square Test</text>
+      <line x1="90" y1="138" x2="90" y2="195" stroke="#aaa" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Non-param options -->
+      <rect x="195" y="195" width="140" height="38" rx="8" fill="#26a69a"/>
+      <text x="265" y="213" text-anchor="middle" font-size="11" fill="white">2 groups:</text>
+      <text x="265" y="226" text-anchor="middle" font-size="11" fill="white">Mann-Whitney U</text>
+      <rect x="355" y="195" width="140" height="38" rx="8" fill="#26a69a"/>
+      <text x="425" y="213" text-anchor="middle" font-size="11" fill="white">3+ groups:</text>
+      <text x="425" y="226" text-anchor="middle" font-size="11" fill="white">Kruskal-Wallis</text>
+      <line x1="285" y1="138" x2="265" y2="195" stroke="#aaa" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="335" y1="138" x2="425" y2="195" stroke="#aaa" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Normal? -->
+      <rect x="460" y="180" width="140" height="38" rx="19" fill="#ff7043"/>
+      <text x="530" y="204" text-anchor="middle" font-size="11" fill="white">Normal distribution?</text>
+      <line x1="530" y1="138" x2="530" y2="180" stroke="#aaa" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Yes/No -->
+      <rect x="410" y="280" width="120" height="38" rx="8" fill="#43a047"/>
+      <text x="470" y="298" text-anchor="middle" font-size="11" fill="white">Yes: t-test or</text>
+      <text x="470" y="311" text-anchor="middle" font-size="11" fill="white">ANOVA</text>
+      <rect x="555" y="280" width="55" height="38" rx="8" fill="#e53935"/>
+      <text x="582" y="298" text-anchor="middle" font-size="11" fill="white">No: use</text>
+      <text x="582" y="311" text-anchor="middle" font-size="11" fill="white">non-param</text>
+      <line x1="510" y1="218" x2="470" y2="280" stroke="#43a047" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="550" y1="218" x2="582" y2="280" stroke="#e53935" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="488" y="255" font-size="10" fill="#43a047">Yes</text>
+      <text x="556" y="255" font-size="10" fill="#e53935">No</text>
+      <!-- Correlation note -->
+      <rect x="130" y="300" width="200" height="50" rx="8" fill="#fff3e0" stroke="#fbc02d" stroke-width="1.5"/>
+      <text x="230" y="320" text-anchor="middle" font-size="11" fill="#5d4037">Correlation:</text>
+      <text x="230" y="334" text-anchor="middle" font-size="11" fill="#5d4037">Pearson (normal)</text>
+      <text x="230" y="347" text-anchor="middle" font-size="11" fill="#5d4037">Spearman (ordinal/non-normal)</text>
+      <!-- Arrow def -->
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#aaa"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+</section>
+
+<!-- ==================== QUIZ ==================== -->
+<section id="quiz">
+  <h2>Knowledge Check &mdash; 14 Questions</h2>
+
+  <div class="quiz-q">
+    <p>Q1. A Wilks' Lambda value of 0.08 in a discriminant analysis indicates:</p>
+    <button onclick="qa(this,true)">A) Excellent group separation</button>
+    <button onclick="qa(this,false)">B) Poor group separation</button>
+    <button onclick="qa(this,false)">C) Random classification</button>
+    <button onclick="qa(this,false)">D) Moderate group overlap</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q2. In logistic regression, a sigmoid output of 0.73 for a customer means:</p>
+    <button onclick="qa(this,false)">A) The customer will definitely buy</button>
+    <button onclick="qa(this,true)">B) There is a 73% probability the customer is in the positive class</button>
+    <button onclick="qa(this,false)">C) The discriminant score is 0.73</button>
+    <button onclick="qa(this,false)">D) The model is 73% accurate</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q3. Which metric penalises model complexity by adjusting for number of predictors?</p>
+    <button onclick="qa(this,false)">A) R-squared</button>
+    <button onclick="qa(this,true)">B) Adjusted R-squared</button>
+    <button onclick="qa(this,false)">C) RMSE</button>
+    <button onclick="qa(this,false)">D) MAE</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q4. SMOTE is a technique used to address:</p>
+    <button onclick="qa(this,false)">A) Multicollinearity among predictors</button>
+    <button onclick="qa(this,false)">B) Non-normality of residuals</button>
+    <button onclick="qa(this,true)">C) Class imbalance in binary classification</button>
+    <button onclick="qa(this,false)">D) Heteroscedasticity in regression models</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q5. An AUC-ROC value of 0.5 indicates that the classifier is:</p>
+    <button onclick="qa(this,false)">A) Perfect &mdash; correctly classifies all cases</button>
+    <button onclick="qa(this,false)">B) Good with some errors</button>
+    <button onclick="qa(this,true)">C) No better than random guessing</button>
+    <button onclick="qa(this,false)">D) Highly overfitted to training data</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q6. The correct formula for F1-Score is:</p>
+    <button onclick="qa(this,false)">A) (Precision + Recall) / 2</button>
+    <button onclick="qa(this,true)">B) 2 &times; (Precision &times; Recall) / (Precision + Recall)</button>
+    <button onclick="qa(this,false)">C) TP / (TP + FP + FN)</button>
+    <button onclick="qa(this,false)">D) (TP + TN) / Total</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q7. In simple linear regression, if the slope b&#8321; = 45.6, this means:</p>
+    <button onclick="qa(this,false)">A) Y starts at 45.6 when X = 0</button>
+    <button onclick="qa(this,true)">B) Y increases by 45.6 units for every 1-unit increase in X</button>
+    <button onclick="qa(this,false)">C) 45.6% of variance in Y is explained by X</button>
+    <button onclick="qa(this,false)">D) The correlation between X and Y is 0.456</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q8. A researcher has a small sample (n=15) with non-normal satisfaction scores. To compare two groups, the appropriate test is:</p>
+    <button onclick="qa(this,false)">A) Independent samples t-test</button>
+    <button onclick="qa(this,false)">B) One-way ANOVA</button>
+    <button onclick="qa(this,true)">C) Mann-Whitney U test</button>
+    <button onclick="qa(this,false)">D) Pearson correlation</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q9. A high eigenvalue in discriminant analysis (e.g., eigenvalue = 3.2) indicates:</p>
+    <button onclick="qa(this,true)">A) Strong separation between groups</button>
+    <button onclick="qa(this,false)">B) Poor model fit</button>
+    <button onclick="qa(this,false)">C) High multicollinearity</button>
+    <button onclick="qa(this,false)">D) The model has too many predictors</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q10. In multiple regression, VIF (Variance Inflation Factor) is used to detect:</p>
+    <button onclick="qa(this,false)">A) Heteroscedasticity</button>
+    <button onclick="qa(this,false)">B) Non-normality of residuals</button>
+    <button onclick="qa(this,true)">C) Multicollinearity among predictors</button>
+    <button onclick="qa(this,false)">D) Outliers in the dataset</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q11. Recall (Sensitivity) measures:</p>
+    <button onclick="qa(this,false)">A) Of all predicted positives, how many are actually positive</button>
+    <button onclick="qa(this,true)">B) Of all actual positives, how many were correctly predicted as positive</button>
+    <button onclick="qa(this,false)">C) Of all actual negatives, how many were correctly predicted as negative</button>
+    <button onclick="qa(this,false)">D) Overall proportion of correct predictions</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q12. To compare satisfaction scores (ordinal, 1&ndash;5 scale) across three different stores, you should use:</p>
+    <button onclick="qa(this,false)">A) One-way ANOVA</button>
+    <button onclick="qa(this,false)">B) Paired t-test</button>
+    <button onclick="qa(this,true)">C) Kruskal-Wallis test</button>
+    <button onclick="qa(this,false)">D) Chi-square test</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q13. In logistic regression, an odds ratio of 2.5 for the variable "is_member" means:</p>
+    <button onclick="qa(this,false)">A) Members are 2.5 times more likely to have a higher income</button>
+    <button onclick="qa(this,true)">B) The odds of the outcome event are 2.5 times higher for members vs. non-members</button>
+    <button onclick="qa(this,false)">C) The probability of the event is 2.5% for members</button>
+    <button onclick="qa(this,false)">D) Members spend 2.5 times more than non-members</button>
+  </div>
+
+  <div class="quiz-q">
+    <p>Q14. An R&sup2; = 0.85 but Adjusted R&sup2; = 0.61 in a multiple regression suggests:</p>
+    <button onclick="qa(this,false)">A) The model has very high predictive accuracy</button>
+    <button onclick="qa(this,false)">B) All predictors are highly significant</button>
+    <button onclick="qa(this,true)">C) Many predictors in the model are irrelevant/redundant</button>
+    <button onclick="qa(this,false)">D) The model violates the linearity assumption</button>
+  </div>
+</section>
+
+<!-- ==================== SUMMARY ==================== -->
+<section id="summary">
+  <h2>Summary &amp; Exam Tips</h2>
+
+  <div class="card">
+    <h3>Key Formulas to Memorise</h3>
+    <div class="two-col">
+      <div>
+        <div class="formula">Discriminant: D = b&#8320; + b&#8321;X&#8321; + ... + b&#8337;X&#8337;</div>
+        <div class="formula">Sigmoid: P(Y=1) = 1/(1+e&#8315;&#7992;)</div>
+        <div class="formula">Simple Regression: Y = b&#8320; + b&#8321;X</div>
+        <div class="formula">F1 = 2PR/(P+R)</div>
+      </div>
+      <div>
+        <div class="formula">b&#8321; = &#8721;(x&minus;x&#772;)(y&minus;&#563;) / &#8721;(x&minus;x&#772;)&#178;</div>
+        <div class="formula">Adj R&sup2; = 1 &minus; [(1&minus;R&sup2;)(n&minus;1)/(n&minus;k&minus;1)]</div>
+        <div class="formula">RMSE = &radic;[&#8721;(y&minus;&#375;)&#178;/n]</div>
+        <div class="formula">Wilks' &Lambda;: 0 &rarr; perfect; 1 &rarr; no separation</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tips">
+    <h3>Exam Tips</h3>
+    <ul>
+      <li><strong>Discriminant Analysis:</strong> Lower Wilks' &Lambda; = better group separation. Hit ratio must beat proportional chance by &ge;25%.</li>
+      <li><strong>Logistic Regression:</strong> Sigmoid squashes any value to [0,1]. Output is a probability, not a class &mdash; you choose the cutoff (default 0.5).</li>
+      <li><strong>R&sup2; vs. Adjusted R&sup2;:</strong> Always use Adjusted R&sup2; when comparing models with different numbers of predictors. R&sup2; can only increase; Adj R&sup2; can decrease.</li>
+      <li><strong>Confusion Matrix:</strong> Know all four cells (TP, FP, TN, FN) and what they mean. False Negatives and False Positives have different costs in different contexts.</li>
+      <li><strong>Imbalanced Data:</strong> Never rely on accuracy alone. Use F1-score, AUC, Precision, and Recall.</li>
+      <li><strong>Non-Parametric Tests:</strong> Use when: small sample + non-normal + ordinal data + outliers. The key non-parametric alternatives: Mann-Whitney U, Kruskal-Wallis, Wilcoxon, Spearman, Chi-square.</li>
+      <li><strong>Common Trap:</strong> Adding more variables always increases R&sup2;. The question is whether Adjusted R&sup2; improves &mdash; that tells you if the new variable adds real explanatory power.</li>
+    </ul>
+  </div>
+
+  <div class="nav-links">
+    <a href="Week_02_MA_ResearchTools1.html">&larr; Week 2: Research Tools Part 1</a>
+    <a href="Week_04_MA_NewProduct1.html">Week 4: New Product Decisions Part 1 &rarr;</a>
+  </div>
+</section>
+
+
+<style>
+#xn-extra .xn-intro{background:rgba(0,137,123,.08);border-left:4px solid var(--primary);border-radius:0 8px 8px 0;padding:12px 16px;margin:6px 0 18px;color:var(--muted);font-size:.92em;}
+.xn-prob{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.xn-q{margin-bottom:10px;font-weight:600;}
+.xn-tag{display:inline-block;background:var(--primary);color:#fff;font-size:.72em;font-weight:700;padding:2px 9px;border-radius:20px;margin-right:7px;vertical-align:middle;}
+.xn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.xn-in{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:.95em;min-width:180px;font-family:monospace;}
+.xn-in:focus{outline:none;border-color:var(--primary);}
+.xn-check,.xn-toggle{border:none;border-radius:8px;padding:8px 18px;cursor:pointer;font-weight:700;font-size:.88em;}
+.xn-check{background:var(--primary);color:#fff;}
+.xn-check:hover{background:var(--primary-dark);}
+.xn-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.xn-toggle:hover{border-color:var(--primary);color:var(--primary);}
+.xn-fb{margin-top:10px;font-weight:700;font-size:.9em;min-height:1em;}
+.xn-fb.xn-ok{color:#1b5e20;}
+body.dark .xn-fb.xn-ok{color:#a5d6a7;}
+.xn-fb.xn-no{color:#b71c1c;}
+body.dark .xn-fb.xn-no{color:#ef9a9a;}
+.xn-fb.xn-warn{color:#e65100;}
+.xn-sol{display:none;margin-top:12px;padding:14px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-left:4px solid var(--success);border-radius:8px;font-size:.92em;}
+body.dark .xn-sol{background:linear-gradient(135deg,#1a3a2e,#2a4a3e);color:#e8e8f0;}
+.xn-sol.open{display:block;animation:xnfade .25s ease;}
+@keyframes xnfade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.xn-sol .xf{background:#2c3e50;color:#ecf0f1;font-family:'Courier New',monospace;padding:10px 14px;border-radius:8px;margin:8px 0;overflow-x:auto;white-space:pre-wrap;font-size:.9em;}
+.xn-sol b{color:#1b5e20;}
+body.dark .xn-sol b{color:#a5d6a7;}
+.xn-opts{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
+.xn-opt{text-align:left;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;cursor:pointer;font-size:.9em;}
+.xn-opt:hover:not(:disabled){background:var(--border);}
+.xn-opt.xn-ok{background:#c8e6c9;border-color:var(--success);color:#1b5e20;font-weight:700;}
+body.dark .xn-opt.xn-ok{background:#1a3a2e;color:#a5d6a7;}
+.xn-opt.xn-no{background:#ffcdd2;border-color:var(--danger);color:#b71c1c;}
+body.dark .xn-opt.xn-no{background:#3a1a1a;color:#ef9a9a;}
+#xn-extra table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9em;}
+#xn-extra th{background:var(--primary);color:#fff;padding:8px 12px;text-align:left;}
+#xn-extra td{padding:7px 12px;border-bottom:1px solid var(--border);}
+</style>
+
+<section id="xn-extra">
+  <h2>🔢 Engineered Numerical Practice</h2>
+  <div class="xn-intro">
+    Fresh exam-style numerical problems built from this week's formulas and frameworks. Enter your answer and press
+    <strong>Check</strong> for instant feedback, or reveal the full worked solution. <em>(Press Enter in any answer box to check.)</em>
+  </div>
+
+  <div class="xn-prob" data-ans="480" data-tol="0.5" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP1</span>A simple linear regression of monthly sales on ad spend gives ŷ = <strong>120 + 4.5·x</strong>, where x is ad spend (in &#8377;'000). Predict sales when ad spend is <strong>x = 80</strong>.</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 480">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">ŷ = b&#8320; + b&#8321;·x
+  = 120 + 4.5 × 80
+  = 120 + 360
+  = <b>480</b></div>
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="118.4" data-tol="0.05" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP2</span>A multiple regression predicts demand as ŷ = <strong>50 + 3.2·x&#8321; + 1.5·x&#8322;</strong>. For a product with x&#8321; = <strong>12</strong> and x&#8322; = <strong>20</strong>, what is the predicted demand?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 118.4">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">ŷ = b&#8320; + b&#8321;·x&#8321; + b&#8322;·x&#8322;
+  = 50 + 3.2×12 + 1.5×20
+  = 50 + 38.4 + 30
+  = <b>118.4</b></div>
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="18" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP3</span>For one observation the actual sales value is <strong>530</strong> and the model predicts <strong>512</strong>. Compute the <strong>residual</strong> (y &minus; ŷ).</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 18">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">residual = y &minus; ŷ
+         = 530 &minus; 512
+         = <b>18</b></div>
+      A positive residual means the model under-predicted this point.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="84" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP4</span>A regression model reports <strong>R&sup2; = 0.84</strong>. What percentage of the variation in the dependent variable is explained by the predictors?</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 84 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">% variance explained = R&sup2; × 100
+                = 0.84 × 100
+                = <b>84%</b></div>
+      The remaining 16% is unexplained (residual / error) variation.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="2" data-tol="0.02" data-unit=" (ratio)">
+    <div class="xn-q"><span class="xn-tag">NP5</span>In a logistic regression, a predictor has a coefficient <strong>&beta; = 0.6931</strong>. The odds ratio is e<sup>&beta;</sup>. Compute the odds ratio (2 dp). &nbsp;<em>(e &asymp; 2.718)</em></div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 2">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Odds Ratio = e^&beta;
+           = e^0.6931
+           = <b>2.00</b></div>
+      An odds ratio of 2 means a one-unit increase in the predictor <em>doubles</em> the odds of the positive outcome.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="0.75" data-tol="0.01" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP6</span>A customer's odds of converting are <strong>3</strong> (i.e. 3 to 1). Convert this to a probability. &nbsp;<em>(p = odds / (1 + odds))</em></div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 0.75">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">p = odds / (1 + odds)
+  = 3 / (1 + 3)
+  = 3 / 4
+  = <b>0.75</b></div>
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="0.731" data-tol="0.005" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP7</span>A logistic model has logit z = <strong>&minus;2 + 0.05·x</strong>. For a customer with x = <strong>60</strong>, compute the predicted probability P(y=1) = 1 / (1 + e<sup>&minus;z</sup>) (3 dp).</div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 0.731">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">z = &minus;2 + 0.05 × 60 = &minus;2 + 3 = 1.0
+P = 1 / (1 + e^&minus;z)
+  = 1 / (1 + e^&minus;1.0)
+  = 1 / (1 + 0.3679)
+  = <b>0.731</b></div>
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="81.5" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP8</span>A two-group discriminant model classifies <strong>200</strong> cases. The classification (confusion) matrix has <strong>85</strong> and <strong>78</strong> correctly classified on the diagonal. Compute the <strong>hit ratio</strong> (%). &nbsp;<em>(Hit ratio = diagonal / total)</em></div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 81.5 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Hit ratio = (sum of diagonal) / total × 100
+          = (85 + 78) / 200 × 100
+          = 163 / 200 × 100
+          = <b>81.5%</b></div>
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="80" data-tol="0.1" data-unit="%">
+    <div class="xn-q"><span class="xn-tag">NP9</span>A logistic classifier's confusion matrix on 200 cases is below. Compute the <strong>accuracy</strong> (%). &nbsp;<em>(Accuracy = (TP + TN) / total)</em>
+      <table>
+        <tr><th></th><th>Predicted +</th><th>Predicted &minus;</th></tr>
+        <tr><td><strong>Actual +</strong></td><td>TP = 90</td><td>FN = 20</td></tr>
+        <tr><td><strong>Actual &minus;</strong></td><td>FP = 20</td><td>TN = 70</td></tr>
+      </table>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="e.g. 80 (in %)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">Accuracy = (TP + TN) / total × 100
+         = (90 + 70) / 200 × 100
+         = 160 / 200 × 100
+         = <b>80%</b></div>
+      (Precision here = TP/(TP+FP) = 90/110 &asymp; 0.82; recall = TP/(TP+FN) = 90/110 &asymp; 0.82.)
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">NP10</span>Two discriminant models give Wilks' &Lambda; values of <strong>0.18</strong> (Model A) and <strong>0.74</strong> (Model B). Which model shows <strong>better group separation</strong>?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) Model A &mdash; lower Wilks' &Lambda; means better discrimination</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Model B &mdash; higher Wilks' &Lambda; means better discrimination</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Both are identical; Wilks' &Lambda; says nothing about separation</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Neither; Wilks' &Lambda; must exceed 1 for valid separation</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Wilks' &Lambda; = within-group SS / total SS, ranging 0&ndash;1. <b>Lower &Lambda; = better discrimination</b> (group means differ more). &Lambda; = 0.18 (Model A) indicates far better separation than 0.74.</div>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  if(window.__xnInit) return; window.__xnInit=true;
+  function num(s){
+    if(s==null) return NaN;
+    s=(''+s).replace(/−/g,'-').replace(/[^0-9.\-]/g,'');
+    if(s===''||s==='-'||s==='.') return NaN;
+    return parseFloat(s);
+  }
+  window.xnCheck=function(btn){
+    var p=btn.closest('.xn-prob'); if(!p) return;
+    var ans=parseFloat(p.getAttribute('data-ans'));
+    var tol=parseFloat(p.getAttribute('data-tol')||'0.05');
+    var unit=p.getAttribute('data-unit')||'';
+    var inp=p.querySelector('.xn-in'); var fb=p.querySelector('.xn-fb');
+    var v=num(inp.value);
+    if(isNaN(v)){ fb.className='xn-fb xn-warn'; fb.textContent='⚠ Enter a numeric answer first.'; return; }
+    if(Math.abs(v-ans)<=tol){ fb.className='xn-fb xn-ok'; fb.innerHTML='✓ Correct! Answer = '+ans+unit; }
+    else { fb.className='xn-fb xn-no'; fb.innerHTML='✗ Not quite — you entered '+v+'. Try again, or reveal the steps.'; }
+  };
+  window.xnToggle=function(btn){
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol');
+    var open=s.classList.toggle('open'); btn.textContent=open?'Hide steps':'Show steps';
+  };
+  window.xnPick=function(btn,ok){
+    var box=btn.parentElement;
+    box.querySelectorAll('.xn-opt').forEach(function(b){b.disabled=true; b.style.cursor='default';});
+    btn.classList.add(ok?'xn-ok':'xn-no');
+    if(!ok){ box.querySelectorAll('.xn-opt').forEach(function(b){ if(b.getAttribute('data-correct')==='1') b.classList.add('xn-ok'); }); }
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol'); if(s) s.classList.add('open');
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter' && e.target.classList && e.target.classList.contains('xn-in')){
+      var b=e.target.closest('.xn-prob').querySelector('.xn-check'); if(b) b.click();
+    }
+  });
+})();
+</script>
+
+<section id="xn-mcq">
+  <h2>📝 Exam-Style MCQs — 2 Marks Each</h2>
+  <p style="opacity:.85;font-size:.95em;margin-bottom:14px;">Each question is worth 2 marks — a mix of applied numerical and conceptual items. Click an option to check it; the correct answer and explanation appear instantly.</p>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q1 · 2 marks</span> A simple linear regression of monthly revenue on ad spend is ŷ = 200 + 6.5·x, where x is ad spend in &#8377;'000. What revenue does the model predict when ad spend is x = 40?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) 460</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 260</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 246.5</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 240</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Substitute x into the fitted line.<div class="xf">ŷ = b&#8320; + b&#8321;·x = 200 + 6.5 × 40 = 200 + 260 = <b>460</b></div>260 forgets the intercept; 246.5 wrongly adds (200 + 6.5 + 40).</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q2 · 2 marks</span> A regression decomposes total variation as SST = 500 with residual (error) sum of squares SSE = 75. What is R&sup2;, expressed as a percentage?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 15%</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 75%</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 85%</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 6.7%</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">R&sup2; is the share of total variation the model explains.<div class="xf">R² = (SST &minus; SSE) / SST = (500 &minus; 75) / 500 = 425 / 500 = 0.85 = <b>85%</b></div>15% is the unexplained share (SSE/SST); 75% mistakes SSE for the explained portion.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q3 · 2 marks</span> In a logistic model, a customer's probability of converting is estimated at p = 0.80. What are the corresponding <strong>odds</strong> of converting?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 0.8</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 0.2</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 4</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 1.25</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Odds convert a probability to a ratio of success to failure.<div class="xf">odds = p / (1 &minus; p) = 0.80 / 0.20 = <b>4</b> (i.e. 4 to 1)</div>1.25 inverts the ratio ((1&minus;p)/p giving failure odds); 0.8 is just p itself.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q4 · 2 marks</span> A bank wants to predict whether a loan applicant will <strong>default (yes/no)</strong> from their income, age and credit score. Which modelling technique is appropriate, and why?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Simple linear regression — the outcome is continuous</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) Logistic regression — the outcome is a binary category, so we model the probability of default</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Multiple linear regression — to forecast the default amount</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) None — regression cannot use categorical predictors</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">The target (default vs no default) is a <b>binary category</b>, so we use <b>logistic regression</b>, which models the probability of the positive class and keeps predictions in [0, 1]. Linear regression is for a continuous outcome and can predict impossible values below 0 or above 1.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q5 · 2 marks</span> In a logistic churn model, the predictor "number of support complaints" has an <strong>odds ratio of 1.8</strong>. What is the correct interpretation?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Each extra complaint raises the probability of churn by exactly 80 percentage points</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) Each additional complaint multiplies the odds of churn by 1.8 (an 80% increase in odds)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 1.8% of customers with complaints will churn</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Complaints reduce the odds of churn, since 1.8 &gt; 1</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">An odds ratio acts <b>multiplicatively on the odds</b>: an OR of 1.8 means each one-unit rise in the predictor multiplies the odds of the positive outcome by 1.8, i.e. an 80% increase in odds (not in probability, and not a percentage-point change). An OR above 1 increases — not decreases — the odds.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q6 · 2 marks</span> Two analysts compare techniques. Analyst X predicts next month's sales <em>revenue in &#8377;</em>; Analyst Y predicts which of three loyalty <em>tiers</em> a customer belongs to. How are these tasks classified?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Both are classification tasks</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) X is classification; Y is regression</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) X is regression; Y is classification</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Both are regression tasks</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Predicting a <b>continuous numeric value</b> (revenue) is <b>regression</b>; predicting a <b>discrete category/label</b> (loyalty tier) is <b>classification</b>. Logistic and discriminant analysis are classification methods; linear regression handles the continuous case.</div>
+  </div>
+</section>
+</main>
+
+<footer>
+  Marketing Analytics &mdash; Week 3: Research Tools Part 2 &bull; Discriminant Analysis, Regression, Logistic Regression &bull; Study Module
+</footer>
+
+<script>
+function qa(el,c){
+  el.style.background=c?'#c8e6c9':'#ffcdd2';
+  el.style.color=c?'#1b5e20':'#b71c1c';
+  el.style.borderColor=c?'#43a047':'#e53935';
+  el.disabled=true;
+  el.parentElement.querySelectorAll('button').forEach(b=>{if(b!==el)b.disabled=true});
+}
+function dark(){
+  document.body.classList.toggle('dark');
+  try{localStorage.setItem('ma_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}
+}
+try{if(localStorage.getItem('ma_dark')==='1')document.body.classList.add('dark');}catch(e){}
+function nav(id,btn){
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+}
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

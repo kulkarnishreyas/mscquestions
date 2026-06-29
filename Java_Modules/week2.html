@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 2 – Programming in Java: OOP Deep Dive</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d2e; --accent:#6c63ff; --accent2:#00d4aa; --yellow:#f7c948; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --code:#2d3748; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+  header { background:linear-gradient(135deg,#6c63ff,#00d4aa); padding:3rem 2rem; text-align:center; }
+  header h1 { font-size:2.5rem; font-weight:800; color:#fff; }
+  header p { font-size:1.1rem; color:rgba(255,255,255,0.85); margin-top:0.5rem; }
+  nav { background:var(--card); border-bottom:2px solid var(--accent); display:flex; flex-wrap:wrap; gap:0.25rem; padding:0.75rem 1rem; position:sticky; top:0; z-index:100; }
+  nav a { color:var(--muted); text-decoration:none; padding:0.4rem 1rem; border-radius:6px; font-size:0.85rem; transition:all 0.2s; white-space:nowrap; }
+  nav a:hover, nav a.active { background:var(--accent); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:2rem 1.5rem; }
+  section { margin-bottom:3rem; scroll-margin-top:70px; }
+  h2 { font-size:1.8rem; color:var(--accent); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  h3 { font-size:1.2rem; color:var(--accent2); margin:1.2rem 0 0.6rem; }
+  h4 { font-size:1rem; color:var(--yellow); margin:0.8rem 0 0.3rem; }
+  p { margin-bottom:0.8rem; color:var(--text); }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .highlight { border-left:4px solid var(--accent); background:rgba(108,99,255,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight2 { border-left:4px solid var(--accent2); background:rgba(0,212,170,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight3 { border-left:4px solid var(--yellow); background:rgba(247,201,72,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+  th { background:var(--accent); color:#fff; padding:0.7rem 1rem; text-align:left; }
+  td { padding:0.6rem 1rem; border-bottom:1px solid var(--border); }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.03); }
+  ul,ol { padding-left:1.5rem; margin-bottom:0.8rem; }
+  li { margin-bottom:0.3rem; }
+  .tag { background:var(--accent); color:#fff; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag2 { background:var(--accent2); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag3 { background:var(--yellow); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  svg text { font-family:'Segoe UI',sans-serif; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  .three-col { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+  @media(max-width:700px) { .two-col,.three-col { grid-template-columns:1fr; } header h1 { font-size:1.8rem; } }
+  .interactive-box { background:var(--card); border:2px solid var(--accent); border-radius:12px; padding:1.5rem; margin:1.5rem 0; }
+  input[type=number],input[type=text],select { background:var(--code); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:0.4rem 0.8rem; font-size:0.95rem; width:100%; margin-bottom:0.5rem; }
+  button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:0.6rem 1.5rem; cursor:pointer; font-size:0.95rem; font-weight:600; transition:opacity 0.2s; }
+  button:hover { opacity:0.85; }
+  .result-box { background:rgba(0,212,170,0.1); border:1px solid var(--accent2); border-radius:8px; padding:1rem; margin-top:1rem; font-weight:600; color:var(--accent2); min-height:2rem; }
+  .step { display:flex; gap:1rem; align-items:flex-start; margin-bottom:0.8rem; }
+  .step-num { background:var(--accent); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+
+  /* ── Code Cell ── */
+  .code-cell { background:#12152a; border:1px solid var(--border); border-radius:10px; margin:1.2rem 0; overflow:hidden; }
+  .code-cell-header { background:#1e2235; display:flex; align-items:center; justify-content:space-between; padding:0.55rem 1rem; border-bottom:1px solid var(--border); }
+  .code-cell-header span { font-size:0.78rem; color:var(--muted); font-family:monospace; }
+  .run-btn { background:var(--accent); color:#fff; border:none; border-radius:6px; padding:0.3rem 0.9rem; font-size:0.82rem; font-weight:700; cursor:pointer; transition:opacity 0.2s; }
+  .run-btn:hover { opacity:0.82; }
+  pre.code-body { padding:1.1rem 1.3rem; font-family:'Cascadia Code','Fira Code','Consolas',monospace; font-size:0.88rem; line-height:1.7; overflow-x:auto; margin:0; }
+  .terminal { display:none; background:#0a0c14; border-top:1px solid var(--border); padding:0.9rem 1.3rem; font-family:'Cascadia Code','Fira Code','Consolas',monospace; font-size:0.86rem; color:#00d4aa; white-space:pre; }
+  .terminal.show { display:block; }
+  .terminal::before { content:"$ java "; color:#6c63ff; }
+
+  /* ── Java syntax highlighting ── */
+  .kw { color:#c084fc; font-weight:600; }       /* keywords – purple */
+  .str { color:#86efac; }                        /* strings – green */
+  .cm { color:#64748b; font-style:italic; }      /* comments – gray */
+  .cls { color:#7dd3fc; }                        /* class names – blue */
+  .num { color:#fdba74; }                        /* numbers – orange */
+  .ann { color:#f7c948; }                        /* annotations – yellow */
+
+  /* ── Access modifier table colours ── */
+  .check { color:#00d4aa; font-weight:700; text-align:center; }
+  .cross { color:#f87171; font-weight:700; text-align:center; }
+
+  /* ── abstract/interface comparison table ── */
+  .yes { background:rgba(0,212,170,0.15); color:var(--accent2); font-weight:600; }
+  .no  { background:rgba(248,113,113,0.1); color:#f87171; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Week 2: Programming in Java</h1>
+  <p>Polymorphism &middot; Inheritance &middot; Interfaces &middot; Abstract Classes &middot; Final &middot; Packages</p>
+</header>
+
+<nav id="topnav">
+  <a href="#poly"       class="active">Polymorphism</a>
+  <a href="#overload">Overloading</a>
+  <a href="#override">Overriding</a>
+  <a href="#circlecyl">Circle &amp; Cylinder</a>
+  <a href="#bank">BankAccount</a>
+  <a href="#dispatch">Dynamic Dispatch</a>
+  <a href="#access">Access Modifiers</a>
+  <a href="#super">Super</a>
+  <a href="#abstract">Abstract Class</a>
+  <a href="#iface">Interface</a>
+  <a href="#compare">Abstract vs Interface</a>
+  <a href="#final">Final</a>
+  <a href="#xn-extra">🔢 Numericals</a>
+  <a href="#xn-mcq">📝 MCQs</a>
+</nav>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 1 – Polymorphism Overview
+     ═══════════════════════════════════════════════════════ -->
+<section id="poly">
+  <h2>1. Polymorphism Overview</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>Etymology:</strong> Greek <em>poly</em> (many) + <em>morphe</em> (shape/form).
+      In Java: <em>the same method name behaves differently depending on context.</em>
+    </div>
+    <p>Polymorphism is one of the four pillars of OOP (alongside Encapsulation, Abstraction, and Inheritance). It lets you write flexible, extensible code by programming to a general interface rather than a specific implementation.</p>
+
+    <h3>Two Types of Polymorphism in Java</h3>
+    <div class="two-col">
+      <div class="card" style="border-top:4px solid var(--accent);">
+        <h4>Compile-time Polymorphism</h4>
+        <p>Also called <strong>static binding</strong> or <strong>early binding</strong>. The compiler resolves the method call <em>at compile time</em>.</p>
+        <p>Achieved through <strong>Method Overloading</strong> — same name, different parameter lists.</p>
+        <span class="tag">Static Binding</span>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent2);">
+        <h4>Runtime Polymorphism</h4>
+        <p>Also called <strong>dynamic binding</strong> or <strong>late binding</strong>. The JVM resolves the method call <em>at runtime</em> based on the actual object type.</p>
+        <p>Achieved through <strong>Method Overriding</strong> — subclass redefines a superclass method.</p>
+        <span class="tag2">Dynamic Binding</span>
+      </div>
+    </div>
+
+    <svg viewBox="0 0 700 160" width="100%" height="160" style="background:#12152a;border-radius:10px;margin-top:1rem;">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+        </marker>
+      </defs>
+      <rect x="20" y="30" width="300" height="100" rx="10" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2"/>
+      <text x="170" y="58" fill="#6c63ff" font-size="13" font-weight="bold" text-anchor="middle">Compile-time Polymorphism</text>
+      <text x="170" y="82" fill="#e2e8f0" font-size="11" text-anchor="middle">Method Overloading</text>
+      <text x="170" y="100" fill="#94a3b8" font-size="10" text-anchor="middle">Resolved by compiler via parameter types</text>
+      <text x="170" y="118" fill="#c084fc" font-size="10" text-anchor="middle">demo(int)  demo(double)  demo(int,int)</text>
+
+      <rect x="380" y="30" width="300" height="100" rx="10" fill="#1a1d2e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="530" y="58" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">Runtime Polymorphism</text>
+      <text x="530" y="82" fill="#e2e8f0" font-size="11" text-anchor="middle">Method Overriding</text>
+      <text x="530" y="100" fill="#94a3b8" font-size="10" text-anchor="middle">Resolved by JVM via actual object type</text>
+      <text x="530" y="118" fill="#86efac" font-size="10" text-anchor="middle">Animal.makeSound()  ←  Dog.makeSound()</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 2 – Compile-time / Method Overloading
+     ═══════════════════════════════════════════════════════ -->
+<section id="overload">
+  <h2>2. Compile-time Polymorphism — Method Overloading</h2>
+  <div class="card">
+    <p>Method overloading means defining multiple methods in the <strong>same class</strong> with the <strong>same name</strong> but different <em>parameter lists</em> (number, type, or order of parameters).</p>
+
+    <div class="highlight">
+      <strong>Rules:</strong> Overloaded methods must differ in parameter list. Return type alone is <em>not</em> sufficient to overload. The compiler selects the best match based on argument types.
+    </div>
+
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>Example.java</span>
+        <button class="run-btn" onclick="runCode(this)">&#9654; Run</button>
+      </div>
+      <pre class="code-body"><span class="kw">class</span> <span class="cls">Example</span> {
+    <span class="cm">// Overload 1: single int</span>
+    <span class="kw">void</span> demo(<span class="kw">int</span> a) {
+        System.out.println(<span class="str">"int: "</span> + a);
+    }
+
+    <span class="cm">// Overload 2: two ints</span>
+    <span class="kw">void</span> demo(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+        System.out.println(<span class="str">"ints: "</span> + a + <span class="str">","</span> + b);
+    }
+
+    <span class="cm">// Overload 3: double — also returns the value</span>
+    <span class="kw">double</span> demo(<span class="kw">double</span> a) {
+        System.out.println(<span class="str">"double: "</span> + a);
+        <span class="kw">return</span> a;
+    }
+}
+
+<span class="kw">public class</span> <span class="cls">OverloadTest</span> {
+    <span class="kw">public static void</span> main(<span class="cls">String</span>[] args) {
+        <span class="cls">Example</span> ex = <span class="kw">new</span> <span class="cls">Example</span>();
+        ex.demo(<span class="num">5</span>);           <span class="cm">// calls Overload 1</span>
+        ex.demo(<span class="num">3</span>, <span class="num">7</span>);        <span class="cm">// calls Overload 2</span>
+        ex.demo(<span class="num">9.5</span>);         <span class="cm">// calls Overload 3</span>
+    }
+}</pre>
+      <div class="terminal">int: 5
+ints: 3,7
+double: 9.5</div>
+    </div>
+
+    <h3>How the Compiler Picks the Right Overload</h3>
+    <div class="interactive-box">
+      <h4>Overload Resolver — Which method gets called?</h4>
+      <p style="font-size:0.9rem;margin-bottom:0.8rem;">Select the argument type(s) you pass to <code style="color:var(--accent2)">demo()</code>:</p>
+      <select id="overloadSel">
+        <option value="int">demo(5) — single int</option>
+        <option value="twoInt">demo(3, 7) — two ints</option>
+        <option value="double">demo(9.5) — single double</option>
+        <option value="long">demo(100L) — single long (widening)</option>
+      </select>
+      <button onclick="resolveOverload()">Resolve</button>
+      <div class="result-box" id="overloadResult"></div>
+    </div>
+
+    <h3>Key Points</h3>
+    <ul>
+      <li>Overloading is a form of <strong>static polymorphism</strong> — resolved at compile time.</li>
+      <li>Java performs <strong>automatic widening</strong>: <code>int</code> → <code>long</code> → <code>float</code> → <code>double</code> if no exact match exists.</li>
+      <li>Varargs (<code>int... nums</code>) can also create overloads but are matched last.</li>
+      <li>Constructors can also be overloaded — this is very common in Java.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 3 – Runtime / Method Overriding
+     ═══════════════════════════════════════════════════════ -->
+<section id="override">
+  <h2>3. Runtime Polymorphism — Method Overriding</h2>
+  <div class="card">
+    <p>Method overriding occurs when a <strong>subclass</strong> provides its own implementation of a method already defined in its <strong>superclass</strong>. The method signature (name + parameters) must be identical.</p>
+
+    <div class="highlight2">
+      <strong>@Override annotation:</strong> Always add <code>@Override</code>. The compiler verifies you are actually overriding — it will error if you accidentally mistype the method name.
+    </div>
+
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>AnimalDemo.java</span>
+        <button class="run-btn" onclick="runCode(this)">&#9654; Run</button>
+      </div>
+      <pre class="code-body"><span class="kw">class</span> <span class="cls">Animal</span> {
+    <span class="kw">void</span> makeSound() {
+        System.out.println(<span class="str">"Some generic sound"</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="cls">Dog</span> <span class="kw">extends</span> <span class="cls">Animal</span> {
+    <span class="ann">@Override</span>
+    <span class="kw">void</span> makeSound() {
+        System.out.println(<span class="str">"Bark"</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="cls">Cat</span> <span class="kw">extends</span> <span class="cls">Animal</span> {
+    <span class="ann">@Override</span>
+    <span class="kw">void</span> makeSound() {
+        System.out.println(<span class="str">"Meow"</span>);
+    }
+}
+
+<span class="kw">public class</span> <span class="cls">AnimalDemo</span> {
+    <span class="kw">public static void</span> main(<span class="cls">String</span>[] args) {
+        <span class="cls">Animal</span> a = <span class="kw">new</span> <span class="cls">Animal</span>();
+        <span class="cls">Animal</span> d = <span class="kw">new</span> <span class="cls">Dog</span>();   <span class="cm">// superclass ref, subclass object</span>
+        <span class="cls">Animal</span> c = <span class="kw">new</span> <span class="cls">Cat</span>();
+
+        a.makeSound();  <span class="cm">// Animal's method</span>
+        d.makeSound();  <span class="cm">// Dog's method — resolved at runtime!</span>
+        c.makeSound();  <span class="cm">// Cat's method — resolved at runtime!</span>
+    }
+}</pre>
+      <div class="terminal">Some generic sound
+Bark
+Meow</div>
+    </div>
+
+    <h3>Overloading vs Overriding — Side by Side</h3>
+    <table>
+      <tr><th>Aspect</th><th>Overloading</th><th>Overriding</th></tr>
+      <tr><td>Location</td><td>Same class</td><td>Subclass redefines superclass method</td></tr>
+      <tr><td>Binding</td><td>Compile-time (static)</td><td>Runtime (dynamic)</td></tr>
+      <tr><td>Signature</td><td>Must differ</td><td>Must be identical</td></tr>
+      <tr><td>Return type</td><td>Can differ</td><td>Must be same (or covariant)</td></tr>
+      <tr><td>Access modifier</td><td>Can differ freely</td><td>Cannot be more restrictive</td></tr>
+      <tr><td>static/private methods</td><td>Can be overloaded</td><td>Cannot be overridden</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 4 – Circle and Cylinder Inheritance
+     ═══════════════════════════════════════════════════════ -->
+<section id="circlecyl">
+  <h2>4. Circle and Cylinder Inheritance</h2>
+  <div class="card">
+    <p>A classic textbook example: <code>Cylinder</code> <em>extends</em> <code>Circle</code>. The cylinder <em>is a</em> circle with an added height dimension. This demonstrates how inheritance allows code reuse.</p>
+
+    <h3>UML Inheritance Diagram</h3>
+    <svg viewBox="0 0 460 220" width="100%" height="220" style="background:#12152a;border-radius:10px;margin-bottom:1rem;">
+      <!-- Circle box -->
+      <rect x="130" y="20" width="200" height="80" rx="8" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2"/>
+      <text x="230" y="42" fill="#6c63ff" font-size="13" font-weight="bold" text-anchor="middle">Circle</text>
+      <line x1="130" y1="50" x2="330" y2="50" stroke="#2d3748"/>
+      <text x="145" y="67" fill="#94a3b8" font-size="10">- radius: double</text>
+      <line x1="130" y1="75" x2="330" y2="75" stroke="#2d3748"/>
+      <text x="145" y="90" fill="#e2e8f0" font-size="10">+ getArea(): double</text>
+
+      <!-- Arrow (inheritance: open triangle pointing up to superclass) -->
+      <line x1="230" y1="160" x2="230" y2="102" stroke="#00d4aa" stroke-width="2"/>
+      <polygon points="222,102 238,102 230,88" fill="none" stroke="#00d4aa" stroke-width="2"/>
+      <text x="245" y="138" fill="#94a3b8" font-size="10">extends</text>
+
+      <!-- Cylinder box -->
+      <rect x="130" y="160" width="200" height="50" rx="8" fill="#1a1d2e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="230" y="180" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">Cylinder</text>
+      <line x1="130" y1="186" x2="330" y2="186" stroke="#2d3748"/>
+      <text x="145" y="200" fill="#94a3b8" font-size="10">- height: double</text>
+    </svg>
+
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>Circle.java + Cylinder.java</span>
+        <button class="run-btn" onclick="runCode(this)">&#9654; Run</button>
+      </div>
+      <pre class="code-body"><span class="kw">class</span> <span class="cls">Circle</span> {
+    <span class="kw">private double</span> radius;
+
+    <span class="kw">public</span> <span class="cls">Circle</span>(<span class="kw">double</span> radius) {
+        <span class="kw">this</span>.radius = radius;
+    }
+
+    <span class="kw">public double</span> getRadius() { <span class="kw">return</span> radius; }
+
+    <span class="kw">public double</span> getArea() {
+        <span class="kw">return</span> Math.PI * radius * radius;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="cls">String</span> toString() {
+        <span class="kw">return</span> <span class="str">"Circle[radius="</span> + radius + <span class="str">"]"</span>;
+    }
+}
+
+<span class="kw">class</span> <span class="cls">Cylinder</span> <span class="kw">extends</span> <span class="cls">Circle</span> {
+    <span class="kw">private double</span> height;
+
+    <span class="kw">public</span> <span class="cls">Cylinder</span>(<span class="kw">double</span> radius, <span class="kw">double</span> height) {
+        <span class="kw">super</span>(radius);      <span class="cm">// call Circle's constructor</span>
+        <span class="kw">this</span>.height = height;
+    }
+
+    <span class="kw">public double</span> getVolume() {
+        <span class="kw">return</span> getArea() * height;   <span class="cm">// reuses Circle.getArea()</span>
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="cls">String</span> toString() {
+        <span class="kw">return</span> <span class="str">"Cylinder[radius="</span> + getRadius() + <span class="str">" Height="</span> + height + <span class="str">"]"</span>;
+    }
+}
+
+<span class="kw">public class</span> <span class="cls">TestCircleCylinder</span> {
+    <span class="kw">public static void</span> main(<span class="cls">String</span>[] args) {
+        <span class="cls">Circle</span>   c  = <span class="kw">new</span> <span class="cls">Circle</span>(<span class="num">12.0</span>);
+        <span class="cls">Cylinder</span> cy = <span class="kw">new</span> <span class="cls">Cylinder</span>(<span class="num">2.0</span>, <span class="num">5.0</span>);
+
+        System.out.println(c);
+        System.out.printf(<span class="str">"Area is %.2f%n"</span>, c.getArea());
+
+        System.out.println(cy);
+        System.out.printf(<span class="str">"Base area is %.2f, Volume is %.2f%n"</span>,
+                          cy.getArea(), cy.getVolume());
+    }
+}</pre>
+      <div class="terminal">Circle[radius=12.0]
+Area is 452.39
+Cylinder[radius=2.0 Height=5.0]
+Base area is 12.57, Volume is 62.83</div>
+    </div>
+
+    <h3>What Cylinder Inherits from Circle</h3>
+    <ul>
+      <li><code>radius</code> field (private — accessed via <code>getRadius()</code>)</li>
+      <li><code>getArea()</code> method — fully reused in <code>getVolume()</code></li>
+      <li><code>toString()</code> — overridden to add cylinder-specific output</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 5 – Hierarchical Inheritance: BankAccount
+     ═══════════════════════════════════════════════════════ -->
+<section id="bank">
+  <h2>5. Hierarchical Inheritance — BankAccount</h2>
+  <div class="card">
+    <p><strong>Hierarchical inheritance</strong>: multiple subclasses share one common superclass. Here, <code>SavingsAccount</code> and <code>CheckingAccount</code> both extend <code>BankAccount</code>.</p>
+
+    <h3>Inheritance Tree</h3>
+    <svg viewBox="0 0 560 200" width="100%" height="200" style="background:#12152a;border-radius:10px;margin-bottom:1rem;">
+      <!-- BankAccount -->
+      <rect x="180" y="10" width="200" height="50" rx="8" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2"/>
+      <text x="280" y="32" fill="#6c63ff" font-size="13" font-weight="bold" text-anchor="middle">BankAccount</text>
+      <text x="280" y="50" fill="#94a3b8" font-size="10" text-anchor="middle">name, balance, deposit, withdraw</text>
+      <!-- lines down -->
+      <line x1="280" y1="60" x2="280" y2="85" stroke="#94a3b8" stroke-width="1.5"/>
+      <line x1="130" y1="85" x2="430" y2="85" stroke="#94a3b8" stroke-width="1.5"/>
+      <line x1="130" y1="85" x2="130" y2="110" stroke="#94a3b8" stroke-width="1.5"/>
+      <line x1="430" y1="85" x2="430" y2="110" stroke="#94a3b8" stroke-width="1.5"/>
+      <!-- SavingsAccount -->
+      <rect x="20" y="110" width="220" height="60" rx="8" fill="#1a1d2e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="130" y="133" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">SavingsAccount</text>
+      <text x="130" y="152" fill="#94a3b8" font-size="10" text-anchor="middle">interestRate, addInterest()</text>
+      <!-- CheckingAccount -->
+      <rect x="320" y="110" width="220" height="60" rx="8" fill="#1a1d2e" stroke="#f7c948" stroke-width="2"/>
+      <text x="430" y="133" fill="#f7c948" font-size="13" font-weight="bold" text-anchor="middle">CheckingAccount</text>
+      <text x="430" y="152" fill="#94a3b8" font-size="10" text-anchor="middle">overdraftLimit, transfer()</text>
+      <!-- arrows (open triangles pointing at BankAccount) -->
+      <polygon points="124,85 136,85 130,73" fill="none" stroke="#00d4aa" stroke-width="2"/>
+      <polygon points="424,85 436,85 430,73" fill="none" stroke="#f7c948" stroke-width="2"/>
+    </svg>
+
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>BankAccount.java / SavingsAccount.java / CheckingAccount.java / AccountTest.java</span>
+        <button class="run-btn" onclick="runCode(this)">&#9654; Run</button>
+      </div>
+      <pre class="code-body"><span class="kw">class</span> <span class="cls">BankAccount</span> {
+    <span class="kw">protected</span> <span class="cls">String</span> name;
+    <span class="kw">protected double</span> balance;
+
+    <span class="kw">public</span> <span class="cls">BankAccount</span>(<span class="cls">String</span> name, <span class="kw">double</span> balance) {
+        <span class="kw">this</span>.name    = name;
+        <span class="kw">this</span>.balance = balance;
+    }
+    <span class="kw">public void</span> deposit(<span class="kw">double</span> amount)  { balance += amount; }
+    <span class="kw">public void</span> withdraw(<span class="kw">double</span> amount) { balance -= amount; }
+    <span class="kw">public double</span> getBalance()           { <span class="kw">return</span> balance; }
+    <span class="kw">public</span> <span class="cls">String</span> getName()              { <span class="kw">return</span> name; }
+}
+
+<span class="kw">class</span> <span class="cls">SavingsAccount</span> <span class="kw">extends</span> <span class="cls">BankAccount</span> {
+    <span class="kw">private double</span> interestRate;   <span class="cm">// e.g. 0.03 for 3 %</span>
+
+    <span class="kw">public</span> <span class="cls">SavingsAccount</span>(<span class="cls">String</span> name, <span class="kw">double</span> balance, <span class="kw">double</span> rate) {
+        <span class="kw">super</span>(name, balance);
+        <span class="kw">this</span>.interestRate = rate;
+    }
+    <span class="kw">public void</span> addInterest() {
+        balance += balance * interestRate;
+    }
+}
+
+<span class="kw">class</span> <span class="cls">CheckingAccount</span> <span class="kw">extends</span> <span class="cls">BankAccount</span> {
+    <span class="kw">private double</span> overdraftLimit;
+
+    <span class="kw">public</span> <span class="cls">CheckingAccount</span>(<span class="cls">String</span> name, <span class="kw">double</span> balance, <span class="kw">double</span> limit) {
+        <span class="kw">super</span>(name, balance);
+        <span class="kw">this</span>.overdraftLimit = limit;
+    }
+    <span class="kw">public void</span> transfer(<span class="cls">BankAccount</span> target, <span class="kw">double</span> amount) {
+        <span class="kw">if</span> (balance - amount >= -overdraftLimit) {
+            withdraw(amount);
+            target.deposit(amount);
+        } <span class="kw">else</span> {
+            System.out.println(<span class="str">"Transfer denied: overdraft limit exceeded"</span>);
+        }
+    }
+}
+
+<span class="kw">public class</span> <span class="cls">AccountTest</span> {
+    <span class="kw">public static void</span> main(<span class="cls">String</span>[] args) {
+        <span class="cls">SavingsAccount</span>  mum   = <span class="kw">new</span> <span class="cls">SavingsAccount</span>(<span class="str">"Mummy"</span>, <span class="num">8000.0</span>, <span class="num">0.05</span>);
+        <span class="cls">CheckingAccount</span> harry = <span class="kw">new</span> <span class="cls">CheckingAccount</span>(<span class="str">"Harry"</span>,  <span class="num">500.0</span>, <span class="num">200.0</span>);
+
+        harry.deposit(<span class="num">50.0</span>);  <span class="cm">// Harry deposits £50</span>
+        mum.addInterest();     <span class="cm">// 5 % interest on Mummy's account</span>
+
+        System.out.println(mum.getName()   + <span class="str">"'s Account balance: "</span> + mum.getBalance());
+        System.out.println(harry.getName() + <span class="str">"'s Account balance: "</span> + harry.getBalance());
+
+        harry.transfer(mum, <span class="num">30.0</span>);  <span class="cm">// Harry sends £30 to Mummy</span>
+        System.out.println(<span class="str">"After transfer — Harry: "</span> + harry.getBalance()
+                         + <span class="str">"  Mummy: "</span> + mum.getBalance());
+    }
+}</pre>
+      <div class="terminal">Mummy's Account balance: 8400.0
+Harry's Account balance: 550.0
+After transfer — Harry: 520.0  Mummy: 8430.0</div>
+    </div>
+
+    <h3>Interactive Bank Simulator</h3>
+    <div class="interactive-box">
+      <h4>Simulate Account Operations</h4>
+      <div class="two-col" style="margin-bottom:0.8rem;">
+        <div>
+          <label style="color:var(--muted);font-size:0.85rem;">Mummy's balance (£)</label>
+          <input type="number" id="mumBal" value="8000">
+          <label style="color:var(--muted);font-size:0.85rem;">Interest rate (%)</label>
+          <input type="number" id="mumRate" value="5">
+        </div>
+        <div>
+          <label style="color:var(--muted);font-size:0.85rem;">Harry's balance (£)</label>
+          <input type="number" id="harryBal" value="500">
+          <label style="color:var(--muted);font-size:0.85rem;">Harry deposits (£)</label>
+          <input type="number" id="harryDeposit" value="50">
+        </div>
+      </div>
+      <label style="color:var(--muted);font-size:0.85rem;">Harry transfers to Mummy (£)</label>
+      <input type="number" id="transferAmt" value="30" style="max-width:200px;">
+      <button onclick="bankSim()">Run Simulation</button>
+      <div class="result-box" id="bankResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 6 – Dynamic Method Dispatch / Upcasting
+     ═══════════════════════════════════════════════════════ -->
+<section id="dispatch">
+  <h2>6. Dynamic Method Dispatch / Upcasting</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>Upcasting:</strong> Storing a subclass object in a superclass reference variable.
+      <code style="color:var(--accent2)">Animal a = new Dog();</code> — legal because a Dog <em>is-an</em> Animal.
+    </div>
+    <p>When you call an overridden method through a superclass reference, Java's JVM looks at the <em>actual runtime type</em> of the object — not the reference type — and calls the correct version. This is called <strong>Dynamic Method Dispatch</strong>.</p>
+
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>DispatchDemo.java</span>
+        <button class="run-btn" onclick="runCode(this)">&#9654; Run</button>
+      </div>
+      <pre class="code-body"><span class="kw">class</span> <span class="cls">A</span> {
+    <span class="kw">void</span> display() { System.out.println(<span class="str">"Inside A"</span>); }
+}
+<span class="kw">class</span> <span class="cls">B</span> <span class="kw">extends</span> <span class="cls">A</span> {
+    <span class="ann">@Override</span>
+    <span class="kw">void</span> display() { System.out.println(<span class="str">"Inside B"</span>); }
+}
+<span class="kw">class</span> <span class="cls">C</span> <span class="kw">extends</span> <span class="cls">A</span> {
+    <span class="ann">@Override</span>
+    <span class="kw">void</span> display() { System.out.println(<span class="str">"Inside C"</span>); }
+}
+
+<span class="kw">public class</span> <span class="cls">DispatchDemo</span> {
+    <span class="kw">public static void</span> main(<span class="cls">String</span>[] args) {
+        <span class="cls">A</span> ref;                   <span class="cm">// superclass reference</span>
+
+        ref = <span class="kw">new</span> <span class="cls">A</span>();           <span class="cm">// ref points to A object</span>
+        ref.display();
+
+        ref = <span class="kw">new</span> <span class="cls">B</span>();           <span class="cm">// ref now points to B object</span>
+        ref.display();            <span class="cm">// JVM dispatches to B.display()</span>
+
+        ref = <span class="kw">new</span> <span class="cls">C</span>();           <span class="cm">// ref now points to C object</span>
+        ref.display();            <span class="cm">// JVM dispatches to C.display()</span>
+    }
+}</pre>
+      <div class="terminal">Inside A
+Inside B
+Inside C</div>
+    </div>
+
+    <h3>Reference Type vs Actual Type</h3>
+    <svg viewBox="0 0 660 180" width="100%" height="180" style="background:#12152a;border-radius:10px;margin:1rem 0;">
+      <defs>
+        <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#f7c948"/>
+        </marker>
+      </defs>
+      <!-- Stack -->
+      <rect x="20" y="20" width="160" height="140" rx="8" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2"/>
+      <text x="100" y="42" fill="#6c63ff" font-size="12" font-weight="bold" text-anchor="middle">Stack (compile time)</text>
+      <rect x="35" y="55" width="130" height="35" rx="5" fill="#2d3748"/>
+      <text x="100" y="69" fill="#c084fc" font-size="11" text-anchor="middle">A ref</text>
+      <text x="100" y="82" fill="#94a3b8" font-size="9" text-anchor="middle">reference variable (type A)</text>
+
+      <!-- Heap -->
+      <rect x="380" y="20" width="260" height="140" rx="8" fill="#1a1d2e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="510" y="42" fill="#00d4aa" font-size="12" font-weight="bold" text-anchor="middle">Heap (runtime)</text>
+      <rect x="395" y="55" width="110" height="40" rx="5" fill="#0d2b1e"/>
+      <text x="450" y="73" fill="#00d4aa" font-size="11" text-anchor="middle">B object</text>
+      <text x="450" y="87" fill="#94a3b8" font-size="9" text-anchor="middle">actual type = B</text>
+      <rect x="515" y="55" width="110" height="40" rx="5" fill="#1e1b3a"/>
+      <text x="570" y="73" fill="#6c63ff" font-size="11" text-anchor="middle">C object</text>
+      <text x="570" y="87" fill="#94a3b8" font-size="9" text-anchor="middle">actual type = C</text>
+
+      <!-- Arrow ref → B obj -->
+      <line x1="165" y1="72" x2="393" y2="72" stroke="#f7c948" stroke-width="2" marker-end="url(#arr2)"/>
+      <text x="280" y="65" fill="#f7c948" font-size="10" text-anchor="middle">ref = new B()</text>
+
+      <!-- Label -->
+      <text x="100" y="148" fill="#94a3b8" font-size="9" text-anchor="middle">Type A (compile)</text>
+      <text x="450" y="128" fill="#94a3b8" font-size="9" text-anchor="middle">B.display() called</text>
+      <text x="570" y="128" fill="#94a3b8" font-size="9" text-anchor="middle">C.display() called</text>
+    </svg>
+
+    <div class="highlight3">
+      <strong>Key rule:</strong> The <em>reference type</em> (left-hand side) determines which members are <em>accessible</em> at compile time. The <em>actual object type</em> (right-hand side, what was <code>new</code>'d) determines which <em>overridden method</em> runs at runtime.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 7 – Access Modifiers
+     ═══════════════════════════════════════════════════════ -->
+<section id="access">
+  <h2>7. Access Modifiers</h2>
+  <div class="card">
+    <p>Java has four access levels that control visibility of classes, fields, methods, and constructors.</p>
+
+    <table>
+      <tr>
+        <th>Modifier</th>
+        <th>Within Class</th>
+        <th>Same Package</th>
+        <th>Subclass (any pkg)</th>
+        <th>Outside Package</th>
+      </tr>
+      <tr>
+        <td><span class="tag">public</span></td>
+        <td class="check">&#10003;</td>
+        <td class="check">&#10003;</td>
+        <td class="check">&#10003;</td>
+        <td class="check">&#10003;</td>
+      </tr>
+      <tr>
+        <td><span class="tag" style="background:var(--accent2);color:#000;">protected</span></td>
+        <td class="check">&#10003;</td>
+        <td class="check">&#10003;</td>
+        <td class="check">&#10003;</td>
+        <td class="cross">&#10007;</td>
+      </tr>
+      <tr>
+        <td><span class="tag" style="background:#475569;">default (no modifier)</span></td>
+        <td class="check">&#10003;</td>
+        <td class="check">&#10003;</td>
+        <td class="cross">&#10007;</td>
+        <td class="cross">&#10007;</td>
+      </tr>
+      <tr>
+        <td><span class="tag" style="background:#7f1d1d;">private</span></td>
+        <td class="check">&#10003;</td>
+        <td class="cross">&#10007;</td>
+        <td class="cross">&#10007;</td>
+        <td class="cross">&#10007;</td>
+      </tr>
+    </table>
+
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>AccessDemo.java</span>
+        <button class="run-btn" onclick="runCode(this)">&#9654; Run</button>
+      </div>
+      <pre class="code-body"><span class="kw">class</span> <span class="cls">Parent</span> {
+    <span class="kw">public</span>    <span class="kw">int</span> pub  = <span class="num">1</span>;   <span class="cm">// visible everywhere</span>
+    <span class="kw">protected</span> <span class="kw">int</span> prot = <span class="num">2</span>;   <span class="cm">// class + package + subclasses</span>
+              <span class="kw">int</span> def  = <span class="num">3</span>;   <span class="cm">// class + same package only</span>
+    <span class="kw">private</span>   <span class="kw">int</span> priv = <span class="num">4</span>;   <span class="cm">// class only</span>
+}
+
+<span class="kw">class</span> <span class="cls">Child</span> <span class="kw">extends</span> <span class="cls">Parent</span> {
+    <span class="kw">void</span> show() {
+        System.out.println(<span class="str">"pub="</span>  + pub);    <span class="cm">// OK</span>
+        System.out.println(<span class="str">"prot="</span> + prot);   <span class="cm">// OK (inherited)</span>
+        <span class="cm">// def is accessible here because same package</span>
+        System.out.println(<span class="str">"def="</span>  + def);    <span class="cm">// OK (same package)</span>
+        <span class="cm">// System.out.println(priv); // COMPILE ERROR</span>
+    }
+}
+
+<span class="kw">public class</span> <span class="cls">AccessDemo</span> {
+    <span class="kw">public static void</span> main(<span class="cls">String</span>[] args) {
+        <span class="kw">new</span> <span class="cls">Child</span>().show();
+    }
+}</pre>
+      <div class="terminal">pub=1
+prot=2
+def=3</div>
+    </div>
+
+    <h3>Best Practices</h3>
+    <ul>
+      <li>Prefer <strong>private</strong> for fields — expose only via getters/setters (encapsulation).</li>
+      <li>Use <strong>protected</strong> when subclasses need direct access (e.g., <code>balance</code> in BankAccount).</li>
+      <li>Make methods <strong>public</strong> only if they form part of the class's API contract.</li>
+      <li>Avoid <strong>default</strong> (package-private) for long-lived code — package structure can change.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 8 – Super Keyword
+     ═══════════════════════════════════════════════════════ -->
+<section id="super">
+  <h2>8. The <code>super</code> Keyword</h2>
+  <div class="card">
+    <p>The <code>super</code> keyword refers to the <strong>immediate parent class</strong>. It has three distinct uses:</p>
+
+    <div class="three-col">
+      <div class="card" style="border-top:4px solid var(--accent);">
+        <h4>1. Access Parent Variable</h4>
+        <p>When a child field shadows a parent field, use <code>super.fieldName</code> to reach the parent's version.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent2);">
+        <h4>2. Call Parent Constructor</h4>
+        <p>Use <code>super(args)</code> to invoke the parent constructor. Must be the <em>first statement</em> in the child constructor.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--yellow);">
+        <h4>3. Call Parent Method</h4>
+        <p>Use <code>super.methodName()</code> to call the overridden version from the parent class.</p>
+      </div>
+    </div>
+
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>SuperDemo.java</span>
+        <button class="run-btn" onclick="runCode(this)">&#9654; Run</button>
+      </div>
+      <pre class="code-body"><span class="kw">class</span> <span class="cls">Vehicle</span> {
+    <span class="cls">String</span> name = <span class="str">"Vehicle"</span>;   <span class="cm">// parent field</span>
+
+    <span class="kw">public</span> <span class="cls">Vehicle</span>(<span class="cls">String</span> name) {
+        <span class="kw">this</span>.name = name;
+        System.out.println(<span class="str">"Vehicle constructor: "</span> + name);
+    }
+
+    <span class="kw">void</span> display() {
+        System.out.println(<span class="str">"I am a vehicle: "</span> + name);
+    }
+}
+
+<span class="kw">class</span> <span class="cls">Car</span> <span class="kw">extends</span> <span class="cls">Vehicle</span> {
+    <span class="cls">String</span> name = <span class="str">"Car"</span>;       <span class="cm">// shadows parent field</span>
+
+    <span class="kw">public</span> <span class="cls">Car</span>(<span class="cls">String</span> model) {
+        <span class="kw">super</span>(model);            <span class="cm">// USE 2: call parent constructor</span>
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">void</span> display() {
+        <span class="kw">super</span>.display();         <span class="cm">// USE 3: call parent method</span>
+        System.out.println(<span class="str">"Parent name field: "</span> + <span class="kw">super</span>.name);  <span class="cm">// USE 1</span>
+        System.out.println(<span class="str">"Child  name field: "</span> + name);
+    }
+}
+
+<span class="kw">public class</span> <span class="cls">SuperDemo</span> {
+    <span class="kw">public static void</span> main(<span class="cls">String</span>[] args) {
+        <span class="cls">Car</span> c = <span class="kw">new</span> <span class="cls">Car</span>(<span class="str">"Tesla"</span>);
+        c.display();
+    }
+}</pre>
+      <div class="terminal">Vehicle constructor: Tesla
+I am a vehicle: Tesla
+Parent name field: Tesla
+Child  name field: Car</div>
+    </div>
+
+    <div class="highlight">
+      <strong>Important:</strong> <code>super()</code> must always be the <em>first statement</em> in a constructor. Java automatically inserts a no-arg <code>super()</code> if you do not write one explicitly, but if the parent has no no-arg constructor you must call the correct one yourself.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 9 – Abstract Class
+     ═══════════════════════════════════════════════════════ -->
+<section id="abstract">
+  <h2>9. Abstract Class</h2>
+  <div class="card">
+    <p>An <strong>abstract class</strong> is a class that <em>cannot be instantiated</em> directly. It may contain abstract methods (declared but not implemented) alongside concrete methods. Subclasses <em>must</em> implement all abstract methods.</p>
+
+    <div class="highlight">
+      <strong>Key Rules:</strong>
+      <ul style="margin-top:0.5rem;">
+        <li>Declared with the <code>abstract</code> keyword.</li>
+        <li>Can have both abstract and non-abstract methods.</li>
+        <li>Can have constructors, fields, and static methods.</li>
+        <li>A class with even <em>one</em> abstract method must itself be abstract.</li>
+        <li>You cannot create objects of an abstract class with <code>new</code>.</li>
+      </ul>
+    </div>
+
+    <h3>Shape Hierarchy</h3>
+    <svg viewBox="0 0 560 220" width="100%" height="220" style="background:#12152a;border-radius:10px;margin-bottom:1rem;">
+      <!-- Shape (abstract) -->
+      <rect x="175" y="10" width="210" height="65" rx="8" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2" stroke-dasharray="6,3"/>
+      <text x="280" y="32" fill="#6c63ff" font-size="12" font-weight="bold" text-anchor="middle">&laquo;abstract&raquo; Shape</text>
+      <line x1="175" y1="40" x2="385" y2="40" stroke="#2d3748"/>
+      <text x="195" y="56" fill="#94a3b8" font-size="10">- color: String</text>
+      <text x="195" y="68" fill="#c084fc" font-size="10">+ getArea(): double  {abstract}</text>
+
+      <!-- lines down -->
+      <line x1="280" y1="75" x2="280" y2="105" stroke="#94a3b8" stroke-width="1.5"/>
+      <line x1="115" y1="105" x2="445" y2="105" stroke="#94a3b8" stroke-width="1.5"/>
+      <line x1="115" y1="105" x2="115" y2="130" stroke="#94a3b8" stroke-width="1.5"/>
+      <line x1="280" y1="105" x2="280" y2="130" stroke="#94a3b8" stroke-width="1.5"/>
+      <line x1="445" y1="105" x2="445" y2="130" stroke="#94a3b8" stroke-width="1.5"/>
+
+      <!-- Rectangle -->
+      <rect x="20"  y="130" width="190" height="60" rx="8" fill="#1a1d2e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="115" y="152" fill="#00d4aa" font-size="12" font-weight="bold" text-anchor="middle">Rectangle</text>
+      <text x="115" y="170" fill="#94a3b8" font-size="10" text-anchor="middle">length, width</text>
+      <text x="115" y="184" fill="#e2e8f0" font-size="10" text-anchor="middle">getArea() = length * width</text>
+
+      <!-- Triangle -->
+      <rect x="185" y="130" width="190" height="60" rx="8" fill="#1a1d2e" stroke="#f7c948" stroke-width="2"/>
+      <text x="280" y="152" fill="#f7c948" font-size="12" font-weight="bold" text-anchor="middle">Triangle</text>
+      <text x="280" y="170" fill="#94a3b8" font-size="10" text-anchor="middle">base, height</text>
+      <text x="280" y="184" fill="#e2e8f0" font-size="10" text-anchor="middle">getArea() = 0.5 * b * h</text>
+
+      <!-- Circle -->
+      <rect x="350" y="130" width="190" height="60" rx="8" fill="#1a1d2e" stroke="#7dd3fc" stroke-width="2"/>
+      <text x="445" y="152" fill="#7dd3fc" font-size="12" font-weight="bold" text-anchor="middle">Circle</text>
+      <text x="445" y="170" fill="#94a3b8" font-size="10" text-anchor="middle">radius</text>
+      <text x="445" y="184" fill="#e2e8f0" font-size="10" text-anchor="middle">getArea() = PI * r * r</text>
+
+      <!-- open triangles pointing up -->
+      <polygon points="109,105 121,105 115,93" fill="none" stroke="#00d4aa" stroke-width="2"/>
+      <polygon points="274,105 286,105 280,93" fill="none" stroke="#f7c948" stroke-width="2"/>
+      <polygon points="439,105 451,105 445,93" fill="none" stroke="#7dd3fc" stroke-width="2"/>
+    </svg>
+
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>ShapeDemo.java</span>
+        <button class="run-btn" onclick="runCode(this)">&#9654; Run</button>
+      </div>
+      <pre class="code-body"><span class="kw">abstract public class</span> <span class="cls">Shape</span> {
+    <span class="kw">private</span> <span class="cls">String</span> color;
+
+    <span class="kw">public</span> <span class="cls">Shape</span>(<span class="cls">String</span> color) { <span class="kw">this</span>.color = color; }
+
+    <span class="cm">// abstract method — no body, subclass MUST implement</span>
+    <span class="kw">abstract public double</span> getArea();
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="cls">String</span> toString() {
+        <span class="kw">return</span> <span class="str">"Shape[color="</span> + color + <span class="str">"]"</span>;
+    }
+}
+
+<span class="kw">class</span> <span class="cls">Rectangle</span> <span class="kw">extends</span> <span class="cls">Shape</span> {
+    <span class="kw">private int</span> length, width;
+
+    <span class="kw">public</span> <span class="cls">Rectangle</span>(<span class="cls">String</span> color, <span class="kw">int</span> l, <span class="kw">int</span> w) {
+        <span class="kw">super</span>(color);
+        length = l; width = w;
+    }
+    <span class="ann">@Override</span>
+    <span class="kw">public double</span> getArea() { <span class="kw">return</span> length * width; }
+}
+
+<span class="kw">class</span> <span class="cls">Triangle</span> <span class="kw">extends</span> <span class="cls">Shape</span> {
+    <span class="kw">private int</span> base, height;
+
+    <span class="kw">public</span> <span class="cls">Triangle</span>(<span class="cls">String</span> color, <span class="kw">int</span> b, <span class="kw">int</span> h) {
+        <span class="kw">super</span>(color);
+        base = b; height = h;
+    }
+    <span class="ann">@Override</span>
+    <span class="kw">public double</span> getArea() { <span class="kw">return</span> <span class="num">0.5</span> * base * height; }
+}
+
+<span class="kw">public class</span> <span class="cls">ShapeDemo</span> {
+    <span class="kw">public static void</span> main(<span class="cls">String</span>[] args) {
+        <span class="cls">Shape</span>[] shapes = {
+            <span class="kw">new</span> <span class="cls">Rectangle</span>(<span class="str">"red"</span>,    <span class="num">4</span>, <span class="num">5</span>),
+            <span class="kw">new</span> <span class="cls">Triangle</span>(<span class="str">"blue"</span>,   <span class="num">4</span>, <span class="num">5</span>)
+        };
+
+        <span class="kw">for</span> (<span class="cls">Shape</span> s : shapes) {
+            System.out.println(s + <span class="str">" area = "</span> + s.getArea());
+        }
+    }
+}</pre>
+      <div class="terminal">Shape[color=red] area = 20.0
+Shape[color=blue] area = 10.0</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 10 – Interface
+     ═══════════════════════════════════════════════════════ -->
+<section id="iface">
+  <h2>10. Interface</h2>
+  <div class="card">
+    <p>An <strong>interface</strong> defines a <em>contract</em> — a set of methods that implementing classes must provide. Before Java 8 all methods were implicitly abstract; Java 8+ allows <code>default</code> and <code>static</code> methods in interfaces.</p>
+
+    <h3>Key Characteristics</h3>
+    <div class="three-col">
+      <div class="card" style="border-top:4px solid var(--accent);">
+        <h4>All methods abstract</h4>
+        <p>Unless declared <code>default</code> or <code>static</code>. Implementing class must provide a body for every abstract method.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent2);">
+        <h4>Multiple Inheritance</h4>
+        <p>A class can <code>implement</code> many interfaces. A class can only <code>extend</code> one superclass. Interfaces solve Java's single-inheritance limitation.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--yellow);">
+        <h4>Constants only</h4>
+        <p>All fields in an interface are implicitly <code>public static final</code>. No instance variables are allowed.</p>
+      </div>
+    </div>
+
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>TaxableDemo.java</span>
+        <button class="run-btn" onclick="runCode(this)">&#9654; Run</button>
+      </div>
+      <pre class="code-body"><span class="kw">interface</span> <span class="cls">Taxable</span> {
+    <span class="kw">double</span> taxRate = <span class="num">0.06</span>;           <span class="cm">// implicitly public static final</span>
+    <span class="kw">double</span> calculateTax();           <span class="cm">// implicitly public abstract</span>
+
+    <span class="cm">// Java 8+ default method (shared implementation)</span>
+    <span class="kw">default</span> <span class="cls">String</span> taxSummary(<span class="cls">String</span> item) {
+        <span class="kw">return</span> item + <span class="str">" tax: $"</span> + calculateTax();
+    }
+}
+
+<span class="kw">class</span> <span class="cls">Toy</span> <span class="kw">implements</span> <span class="cls">Taxable</span> {
+    <span class="kw">double</span> cost;
+    <span class="kw">public</span> <span class="cls">Toy</span>(<span class="kw">double</span> cost) { <span class="kw">this</span>.cost = cost; }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public double</span> calculateTax() { <span class="kw">return</span> cost * taxRate; }
+}
+
+<span class="kw">class</span> <span class="cls">Book</span> <span class="kw">implements</span> <span class="cls">Taxable</span> {
+    <span class="kw">double</span> price;
+    <span class="kw">public</span> <span class="cls">Book</span>(<span class="kw">double</span> price) { <span class="kw">this</span>.price = price; }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public double</span> calculateTax() { <span class="kw">return</span> price * taxRate; }
+}
+
+<span class="kw">public class</span> <span class="cls">Store</span> {
+    <span class="kw">public static void</span> main(<span class="cls">String</span>[] args) {
+        <span class="cls">Taxable</span>[] items = {
+            <span class="kw">new</span> <span class="cls">Toy</span>(<span class="num">25.00</span>),
+            <span class="kw">new</span> <span class="cls">Book</span>(<span class="num">12.50</span>)
+        };
+
+        <span class="kw">for</span> (<span class="cls">Taxable</span> t : items) {
+            System.out.printf(<span class="str">"Tax = $%.2f  |  %s%n"</span>,
+                t.calculateTax(),
+                t.taxSummary(t.getClass().getSimpleName()));
+        }
+        System.out.printf(<span class="str">"Tax rate in use: %.0f%%%n"</span>, <span class="cls">Taxable</span>.taxRate * <span class="num">100</span>);
+    }
+}</pre>
+      <div class="terminal">Tax = $1.50  |  Toy tax: $1.5
+Tax = $0.75  |  Book tax: $0.75
+Tax rate in use: 6%</div>
+    </div>
+
+    <h3>Interactive Tax Calculator</h3>
+    <div class="interactive-box">
+      <h4>Calculate tax for a Toy or Book</h4>
+      <select id="itemType">
+        <option value="toy">Toy</option>
+        <option value="book">Book</option>
+      </select>
+      <input type="number" id="itemCost" placeholder="Enter price ($)" step="0.01" min="0">
+      <button onclick="calcTax()">Calculate Tax</button>
+      <div class="result-box" id="taxResult"></div>
+    </div>
+
+    <h3>Interface: default and static Methods (Java 8+)</h3>
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>ModernInterface.java</span>
+        <button class="run-btn" onclick="runCode(this)">&#9654; Run</button>
+      </div>
+      <pre class="code-body"><span class="kw">interface</span> <span class="cls">Printable</span> {
+    <span class="kw">void</span> print();                       <span class="cm">// abstract</span>
+
+    <span class="kw">default void</span> printTwice() {         <span class="cm">// default — has a body</span>
+        print(); print();
+    }
+
+    <span class="kw">static void</span> info() {               <span class="cm">// static — belongs to interface</span>
+        System.out.println(<span class="str">"Printable interface v1.0"</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="cls">Document</span> <span class="kw">implements</span> <span class="cls">Printable</span> {
+    <span class="kw">private</span> <span class="cls">String</span> content;
+    <span class="kw">public</span> <span class="cls">Document</span>(<span class="cls">String</span> s) { content = s; }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public void</span> print() { System.out.println(<span class="str">"[DOC] "</span> + content); }
+}
+
+<span class="kw">public class</span> <span class="cls">ModernInterface</span> {
+    <span class="kw">public static void</span> main(<span class="cls">String</span>[] args) {
+        <span class="cls">Printable</span>.info();                    <span class="cm">// static method on interface</span>
+        <span class="cls">Document</span> d = <span class="kw">new</span> <span class="cls">Document</span>(<span class="str">"Hello World"</span>);
+        d.printTwice();                      <span class="cm">// uses default method</span>
+    }
+}</pre>
+      <div class="terminal">Printable interface v1.0
+[DOC] Hello World
+[DOC] Hello World</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 11 – Abstract Class vs Interface Comparison
+     ═══════════════════════════════════════════════════════ -->
+<section id="compare">
+  <h2>11. Abstract Class vs Interface — Comparison Table</h2>
+  <div class="card">
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>Abstract Class</th>
+        <th>Interface</th>
+      </tr>
+      <tr>
+        <td>Keyword</td>
+        <td><code>abstract class</code></td>
+        <td><code>interface</code></td>
+      </tr>
+      <tr>
+        <td>Instantiation</td>
+        <td class="no">Cannot be instantiated</td>
+        <td class="no">Cannot be instantiated</td>
+      </tr>
+      <tr>
+        <td>Inheritance keyword</td>
+        <td><code>extends</code> (one only)</td>
+        <td><code>implements</code> (many)</td>
+      </tr>
+      <tr>
+        <td>Multiple inheritance</td>
+        <td class="no">No — single extends only</td>
+        <td class="yes">Yes — implement many interfaces</td>
+      </tr>
+      <tr>
+        <td>Instance variables</td>
+        <td class="yes">Yes — any access modifier</td>
+        <td class="no">No — only <code>public static final</code> constants</td>
+      </tr>
+      <tr>
+        <td>Constructors</td>
+        <td class="yes">Yes</td>
+        <td class="no">No</td>
+      </tr>
+      <tr>
+        <td>Concrete methods</td>
+        <td class="yes">Yes</td>
+        <td class="yes">Yes — via <code>default</code> (Java 8+)</td>
+      </tr>
+      <tr>
+        <td>Static methods</td>
+        <td class="yes">Yes</td>
+        <td class="yes">Yes (Java 8+)</td>
+      </tr>
+      <tr>
+        <td>Abstract methods</td>
+        <td class="yes">Yes (optional)</td>
+        <td class="yes">Yes (all methods abstract by default)</td>
+      </tr>
+      <tr>
+        <td>Access modifiers on methods</td>
+        <td class="yes">Any</td>
+        <td class="no">Only public (implicitly)</td>
+      </tr>
+      <tr>
+        <td>Best use</td>
+        <td>Shared base behaviour + state among related classes</td>
+        <td>Define a capability contract for unrelated classes</td>
+      </tr>
+    </table>
+
+    <div class="two-col" style="margin-top:1rem;">
+      <div class="highlight">
+        <strong>Use Abstract Class when:</strong>
+        <ul style="margin-top:0.4rem;">
+          <li>Classes share common state (fields)</li>
+          <li>Some methods have a shared default implementation</li>
+          <li>You want to define a template (Template Method pattern)</li>
+        </ul>
+      </div>
+      <div class="highlight2">
+        <strong>Use Interface when:</strong>
+        <ul style="margin-top:0.4rem;">
+          <li>Unrelated classes need the same capability (e.g., <code>Comparable</code>)</li>
+          <li>You need multiple inheritance of type</li>
+          <li>You want to define a pure API contract with no state</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 12 – Final Keyword
+     ═══════════════════════════════════════════════════════ -->
+<section id="final">
+  <h2>12. The <code>final</code> Keyword</h2>
+  <div class="card">
+    <p>The <code>final</code> keyword can be applied to <strong>variables</strong>, <strong>methods</strong>, and <strong>classes</strong>, each with a different meaning:</p>
+
+    <div class="three-col">
+      <div class="card" style="border-top:4px solid var(--accent);">
+        <h4>final variable</h4>
+        <p>Creates a <strong>constant</strong>. Value can only be assigned once. Must be initialised at declaration or in the constructor.</p>
+        <p style="font-family:monospace;color:var(--accent2);font-size:0.88rem;"><span class="kw">final</span> <span class="kw">double</span> PI = <span class="num">3.14159</span>;</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent2);">
+        <h4>final method</h4>
+        <p>Cannot be <strong>overridden</strong> by a subclass. Useful when you need to guarantee a specific behaviour in the inheritance hierarchy.</p>
+        <p style="font-family:monospace;color:var(--accent2);font-size:0.88rem;"><span class="kw">final void</span> lock() { ... }</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--yellow);">
+        <h4>final class</h4>
+        <p>Cannot be <strong>subclassed</strong>. <code>String</code>, <code>Integer</code>, and all other Java wrapper classes are final. Ensures immutability and security.</p>
+        <p style="font-family:monospace;color:var(--yellow);font-size:0.88rem;"><span class="kw">final class</span> <span class="cls">Immutable</span> { ... }</p>
+      </div>
+    </div>
+
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>FinalDemo.java</span>
+        <button class="run-btn" onclick="runCode(this)">&#9654; Run</button>
+      </div>
+      <pre class="code-body"><span class="cm">// final CLASS — cannot be subclassed</span>
+<span class="kw">final class</span> <span class="cls">MathConstants</span> {
+    <span class="kw">public static final double</span> PI  = <span class="num">3.14159265358979</span>;
+    <span class="kw">public static final double</span> E   = <span class="num">2.71828182845904</span>;
+}
+
+<span class="kw">class</span> <span class="cls">Parent</span> {
+    <span class="kw">final void</span> show() {   <span class="cm">// final METHOD — cannot be overridden</span>
+        System.out.println(<span class="str">"Parent.show() — cannot be overridden"</span>);
+    }
+    <span class="kw">void</span> info() {
+        System.out.println(<span class="str">"Parent.info() — can be overridden"</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="cls">Child</span> <span class="kw">extends</span> <span class="cls">Parent</span> {
+    <span class="cm">// @Override void show() { }  ← COMPILE ERROR: cannot override final</span>
+    <span class="ann">@Override</span>
+    <span class="kw">void</span> info() {
+        System.out.println(<span class="str">"Child.info() — overriding is fine"</span>);
+    }
+}
+
+<span class="kw">public class</span> <span class="cls">FinalDemo</span> {
+    <span class="kw">public static void</span> main(<span class="cls">String</span>[] args) {
+        <span class="cm">// final VARIABLE</span>
+        <span class="kw">final int</span> MAX_SCORE = <span class="num">100</span>;
+        <span class="cm">// MAX_SCORE = 200;  ← COMPILE ERROR</span>
+
+        System.out.println(<span class="str">"PI = "</span>    + <span class="cls">MathConstants</span>.PI);
+        System.out.println(<span class="str">"MAX   = "</span> + MAX_SCORE);
+
+        <span class="cls">Child</span> ch = <span class="kw">new</span> <span class="cls">Child</span>();
+        ch.show();   <span class="cm">// calls Parent's final method</span>
+        ch.info();   <span class="cm">// calls Child's overridden method</span>
+    }
+}</pre>
+      <div class="terminal">PI = 3.14159265358979
+MAX   = 100
+Parent.show() — cannot be overridden
+Child.info() — overriding is fine</div>
+    </div>
+
+    <h3>String is a final Class</h3>
+    <div class="highlight3">
+      <p><code>java.lang.String</code> is declared <code>final</code>. This guarantees:</p>
+      <ul>
+        <li><strong>Immutability</strong> — no subclass can introduce mutable state or change string behaviour.</li>
+        <li><strong>Security</strong> — class loaders rely on String; a malicious subclass could compromise the JVM.</li>
+        <li><strong>Caching</strong> — the JVM can safely cache and reuse String objects (String pool).</li>
+        <li><strong>Thread safety</strong> — immutable objects are inherently thread-safe.</li>
+      </ul>
+    </div>
+
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>StringFinal.java</span>
+        <button class="run-btn" onclick="runCode(this)">&#9654; Run</button>
+      </div>
+      <pre class="code-body"><span class="cm">// class MyString extends String { }  ← COMPILE ERROR: String is final</span>
+
+<span class="kw">public class</span> <span class="cls">StringFinal</span> {
+    <span class="kw">public static void</span> main(<span class="cls">String</span>[] args) {
+        <span class="kw">final</span> <span class="cls">String</span> greeting = <span class="str">"Hello"</span>;
+        <span class="cm">// greeting = "Hi";  ← COMPILE ERROR: final variable</span>
+
+        <span class="cls">String</span> s1 = <span class="str">"Java"</span>;
+        <span class="cls">String</span> s2 = <span class="str">"Java"</span>;   <span class="cm">// same pool object</span>
+        <span class="cls">String</span> s3 = <span class="kw">new</span> <span class="cls">String</span>(<span class="str">"Java"</span>);
+
+        System.out.println(s1 == s2);          <span class="cm">// true  (same pool ref)</span>
+        System.out.println(s1 == s3);          <span class="cm">// false (new heap object)</span>
+        System.out.println(s1.equals(s3));     <span class="cm">// true  (same content)</span>
+        System.out.println(greeting + <span class="str">" World"</span>); <span class="cm">// new String — original unchanged</span>
+    }
+}</pre>
+      <div class="terminal">true
+false
+true
+Hello World</div>
+    </div>
+
+    <h3>Packages — Brief Overview</h3>
+    <div class="card" style="background:#12152a;">
+      <p>A <strong>package</strong> is a namespace that groups related classes. Packages prevent naming conflicts, control access (default/package-private modifier), and make large codebases manageable.</p>
+      <div class="code-cell" style="margin-top:0.8rem;">
+        <div class="code-cell-header">
+          <span>com/example/shapes/Circle.java</span>
+          <button class="run-btn" onclick="runCode(this)">&#9654; Run</button>
+        </div>
+        <pre class="code-body"><span class="cm">// File: com/example/shapes/Circle.java</span>
+<span class="kw">package</span> com.example.shapes;   <span class="cm">// declare the package</span>
+
+<span class="kw">public class</span> <span class="cls">Circle</span> {
+    <span class="kw">private double</span> radius;
+
+    <span class="kw">public</span> <span class="cls">Circle</span>(<span class="kw">double</span> r) { <span class="kw">this</span>.radius = r; }
+
+    <span class="kw">public double</span> area() { <span class="kw">return</span> Math.PI * radius * radius; }
+}
+
+<span class="cm">// File: Main.java</span>
+<span class="kw">import</span> com.example.shapes.Circle;   <span class="cm">// import the class</span>
+<span class="cm">// import com.example.shapes.*;     // or import all from package</span>
+
+<span class="kw">public class</span> <span class="cls">Main</span> {
+    <span class="kw">public static void</span> main(<span class="cls">String</span>[] args) {
+        <span class="cls">Circle</span> c = <span class="kw">new</span> <span class="cls">Circle</span>(<span class="num">7.0</span>);
+        System.out.printf(<span class="str">"Area = %.2f%n"</span>, c.area());
+    }
+}</pre>
+        <div class="terminal">Area = 153.94</div>
+      </div>
+
+      <h3>Standard Java Packages</h3>
+      <table>
+        <tr><th>Package</th><th>Contains</th></tr>
+        <tr><td><code>java.lang</code></td><td>Core classes: String, Math, Object, System (auto-imported)</td></tr>
+        <tr><td><code>java.util</code></td><td>Collections, Date, Scanner, Arrays, Random</td></tr>
+        <tr><td><code>java.io</code></td><td>File I/O: File, BufferedReader, PrintWriter</td></tr>
+        <tr><td><code>java.net</code></td><td>Networking: URL, Socket, ServerSocket</td></tr>
+        <tr><td><code>java.awt / javax.swing</code></td><td>GUI components</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<script>
+/* ── Run button: toggle terminal output ── */
+function runCode(btn) {
+  const cell    = btn.closest('.code-cell');
+  const term    = cell.querySelector('.terminal');
+  const showing = term.classList.contains('show');
+  term.classList.toggle('show', !showing);
+  btn.textContent = showing ? '▶ Run' : '■ Hide';
+}
+
+/* ── Overload resolver ── */
+function resolveOverload() {
+  const sel = document.getElementById('overloadSel').value;
+  const el  = document.getElementById('overloadResult');
+  const map = {
+    int:    'Exact match → <strong>demo(int a)</strong> is called. Output: <code>int: 5</code>',
+    twoInt: 'Exact match → <strong>demo(int a, int b)</strong> is called. Output: <code>ints: 3,7</code>',
+    double: 'Exact match → <strong>demo(double a)</strong> is called. Output: <code>double: 9.5</code>',
+    long:   'No exact match. Java widens <code>long → double</code> → <strong>demo(double a)</strong> is called.'
+  };
+  el.innerHTML = map[sel] || '';
+}
+
+/* ── Bank simulator ── */
+function bankSim() {
+  const mumBal      = parseFloat(document.getElementById('mumBal').value)      || 0;
+  const mumRate     = parseFloat(document.getElementById('mumRate').value)      || 0;
+  const harryBal    = parseFloat(document.getElementById('harryBal').value)     || 0;
+  const harryDep    = parseFloat(document.getElementById('harryDeposit').value) || 0;
+  const transfer    = parseFloat(document.getElementById('transferAmt').value)  || 0;
+  const overdraft   = 200;
+
+  let mum   = mumBal;
+  let harry = harryBal + harryDep;
+
+  mum += mum * (mumRate / 100);   // add interest
+
+  let msg = '';
+  if (harry - transfer >= -overdraft) {
+    harry -= transfer;
+    mum   += transfer;
+    msg    = `Transfer of £${transfer.toFixed(2)} succeeded.`;
+  } else {
+    msg = `Transfer of £${transfer.toFixed(2)} DENIED — overdraft limit exceeded.`;
+  }
+
+  document.getElementById('bankResult').innerHTML =
+    `Mummy's balance: <strong>£${mum.toFixed(2)}</strong> (after ${mumRate}% interest + transfer)<br>` +
+    `Harry's balance: <strong>£${harry.toFixed(2)}</strong> (after deposit &amp; transfer)<br>` +
+    msg;
+}
+
+/* ── Tax calculator ── */
+function calcTax() {
+  const type  = document.getElementById('itemType').value;
+  const cost  = parseFloat(document.getElementById('itemCost').value);
+  const el    = document.getElementById('taxResult');
+  if (isNaN(cost) || cost < 0) { el.textContent = 'Please enter a valid price.'; return; }
+  const tax   = cost * 0.06;
+  const label = type === 'toy' ? 'Toy' : 'Book';
+  el.innerHTML = `${label} price: <strong>$${cost.toFixed(2)}</strong> &nbsp;&rarr;&nbsp; Tax (6%): <strong>$${tax.toFixed(2)}</strong> &nbsp;&rarr;&nbsp; Total: <strong>$${(cost+tax).toFixed(2)}</strong>`;
+}
+
+/* ── Sticky nav active link on scroll ── */
+(function() {
+  const sections = document.querySelectorAll('section[id]');
+  const links    = document.querySelectorAll('nav a');
+  const obs      = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector('nav a[href="#' + e.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => obs.observe(s));
+})();
+</script>
+
+<style>
+.xn-extra-wrap{max-width:1100px;margin:2.5rem auto;padding:0 1.5rem;}
+.xn-intro{background:rgba(108,99,255,.08);border-left:4px solid #6c63ff;border-radius:0 8px 8px 0;padding:1rem 1.2rem;margin:1rem 0 1.5rem;color:var(--muted);font-size:.92rem;}
+.xn-prob{background:var(--card);border:1px solid var(--border);border-left:4px solid #6c63ff;border-radius:10px;padding:1.1rem 1.2rem;margin:1rem 0;}
+.xn-q{margin-bottom:.75rem;color:var(--text);}
+.xn-tag{display:inline-block;background:#6c63ff;color:#fff;font-size:.72rem;font-weight:700;padding:.14rem .6rem;border-radius:20px;margin-right:.45rem;vertical-align:middle;}
+.xn-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.xn-in{background:#12152a;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.5rem .85rem;font-size:.95rem;min-width:180px;font-family:'Cascadia Code','Fira Code',monospace;}
+.xn-in:focus{outline:none;border-color:#6c63ff;}
+.xn-check,.xn-toggle{border:none;border-radius:8px;padding:.5rem 1.15rem;cursor:pointer;font-weight:700;font-size:.88rem;}
+.xn-check{background:#6c63ff;color:#fff;}
+.xn-check:hover{background:#574fd6;}
+.xn-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.xn-toggle:hover{border-color:#00d4aa;color:#00d4aa;}
+.xn-fb{margin-top:.65rem;font-weight:700;font-size:.9rem;min-height:1rem;}
+.xn-fb.xn-ok{color:#00d4aa;}
+.xn-fb.xn-no{color:#ff6b6b;}
+.xn-fb.xn-warn{color:#f7c948;}
+.xn-sol{display:none;margin-top:.85rem;padding:.95rem 1.05rem;background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.3);border-radius:8px;font-size:.9rem;color:var(--text);}
+.xn-sol.open{display:block;animation:xnfade .25s ease;}
+@keyframes xnfade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.xn-sol .xf{background:#12152a;color:#f7c948;font-family:'Cascadia Code','Fira Code',monospace;padding:.55rem .85rem;border-radius:6px;margin:.45rem 0;overflow-x:auto;white-space:pre-wrap;font-size:.86rem;}
+.xn-sol b{color:#00d4aa;}
+.xn-opts{display:flex;flex-direction:column;gap:.45rem;margin-top:.4rem;}
+.xn-opt{text-align:left;background:#12152a;border:1px solid var(--border);color:var(--text);padding:.55rem .85rem;border-radius:6px;cursor:pointer;font-size:.9rem;font-family:inherit;}
+.xn-opt:hover:not(:disabled){border-color:#6c63ff;}
+.xn-opt.xn-ok{background:rgba(0,212,170,.18);border-color:#00d4aa;color:#00d4aa;font-weight:700;}
+.xn-opt.xn-no{background:rgba(255,107,107,.15);border-color:#ff6b6b;color:#ff6b6b;}
+.xn-codeblock{background:#12152a;border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;font-family:'Cascadia Code','Fira Code',monospace;font-size:.85rem;line-height:1.6;white-space:pre;overflow-x:auto;margin:.5rem 0 .8rem;color:#e2e8f0;}
+</style>
+
+<section id="xn-extra" class="xn-extra-wrap">
+  <h2>🔢 Engineered Numerical Practice</h2>
+  <div class="xn-intro">
+    Fresh exam-style computational problems built from this week's concepts. Type your answer and hit
+    <b>Check</b> for instant feedback, or reveal the worked steps. <em>(Press Enter in any answer box to check.)</em>
+  </div>
+
+  <div class="xn-prob" data-ans="197.92" data-tol="0.1" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP1</span><b>Cylinder volume (super.getArea).</b>
+      In the <code>Cylinder extends Circle</code> example, <code>getVolume()</code> returns
+      <code>super.getArea() * height</code>, where <code>Circle.getArea() = radius * radius * Math.PI</code>.
+      For <code>radius = 3</code>, <code>height = 7</code>, what does <code>getVolume()</code> return? (use π = 3.14159)
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="volume">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">base area = π * r * r = 3.14159 * 9 = 28.27431
+volume    = 28.27431 * 7 ≈ 197.92</div>
+      Result ≈ <b>197.92</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="87.96" data-tol="0.1" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP2</span><b>Cylinder surface area (overridden getArea).</b>
+      <code>Cylinder</code> overrides <code>getArea()</code> as
+      <code>(2 * super.getArea()) + (2 * Math.PI * radius * height)</code>.
+      For <code>radius = 2</code>, <code>height = 5</code>, what is the returned value? (π = 3.14159)
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="surface area">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">super.getArea() = π * 2 * 2 = 12.56637
+2 * super.getArea()      = 25.13274
+2 * π * r * h = 2*π*2*5   = 62.83185
+total ≈ 25.13274 + 62.83185 = 87.96</div>
+      Result ≈ <b>87.96</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="5200" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP3</span><b>SavingsAccount.addInterest().</b>
+      <code>addInterest()</code> does <code>deposit(getBalance() * interestRate / 100)</code>.
+      A <code>SavingsAccount</code> with <code>interestRate = 4</code> currently holds a balance of
+      <code>5000</code>. What is the balance after one call to <code>addInterest()</code>?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="balance">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">interest = 5000 * 4 / 100 = 200
+new balance = 5000 + 200 = 5200</div>
+      Result = <b>5200</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="630" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP4</span><b>CheckingAccount balance with fees.</b>
+      Recall <code>FREE_TRANSACTIONS = 3</code>, <code>TRANSACTION_FEE = 20</code>; every deposit/withdraw
+      increments <code>transactionCount</code>, and <code>deductFees()</code> withdraws
+      <code>TRANSACTION_FEE * (transactionCount - FREE_TRANSACTIONS)</code> when the count exceeds 3.
+      Starting balance <code>500</code>, then: <code>deposit(100)</code>, <code>withdraw(50)</code>,
+      <code>deposit(200)</code>, <code>withdraw(100)</code>, then <code>deductFees()</code>. Final balance?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="final balance">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">500 +100 = 600   (count 1)
+600 - 50 = 550   (count 2)
+550 +200 = 750   (count 3)
+750 -100 = 650   (count 4)
+fees = 20 * (4 - 3) = 20
+650 - 20 = 630</div>
+      Result = <b>630</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="15" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP5</span><b>Taxable.calculateTax().</b>
+      The <code>Taxable</code> interface defines <code>taxRate = 0.06</code> and <code>Book.calculateTax()</code>
+      returns <code>price * taxRate</code>. For a <code>Book</code> with <code>price = 250</code>, what tax is returned?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="tax">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">tax = 250 * 0.06 = 15.0</div>
+      Result = <b>15</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="54" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP6</span><b>Triangle.getArea().</b>
+      The abstract <code>Shape</code> hierarchy has <code>Triangle.getArea()</code> returning
+      <code>0.5 * base * height</code>. For <code>base = 12</code>, <code>height = 9</code>, what is the area?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="area">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">area = 0.5 * 12 * 9 = 54.0</div>
+      Result = <b>54</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="56" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP7</span><b>Rectangle.getArea().</b>
+      <code>Rectangle.getArea()</code> returns <code>length * width</code>. A
+      <code>new Rectangle("red", 7, 8)</code> is created. What does <code>getArea()</code> return?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="area">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">area = length * width = 7 * 8 = 56</div>
+      Result = <b>56</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">NP8</span><b>Dynamic method dispatch — output prediction.</b>
+      With <code>class B extends A</code> where both define <code>display()</code>, what is printed?
+      <div class="xn-codeblock">A a = new B();   // A's display prints "From A", B's prints "From B"
+a.display();</div>
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) From A</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) From B</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Compile-time error</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) From A then From B</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The reference type is <code>A</code>, but the actual object is a <code>B</code>. Overridden instance
+      methods are resolved at <b>runtime</b> against the object's dynamic type, so <code>B.display()</code> runs
+      → prints <b>From B</b>.
+    </div>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  if(window.__xnInit) return; window.__xnInit=true;
+  function num(s){
+    if(s==null) return NaN;
+    s=(''+s).replace(/−/g,'-').replace(/[^0-9.\-]/g,'');
+    if(s===''||s==='-'||s==='.') return NaN;
+    return parseFloat(s);
+  }
+  window.xnCheck=function(btn){
+    var p=btn.closest('.xn-prob'); if(!p) return;
+    var ans=parseFloat(p.getAttribute('data-ans'));
+    var tol=parseFloat(p.getAttribute('data-tol')||'0.05');
+    var unit=p.getAttribute('data-unit')||'';
+    var inp=p.querySelector('.xn-in'); var fb=p.querySelector('.xn-fb');
+    var v=num(inp.value);
+    if(isNaN(v)){ fb.className='xn-fb xn-warn'; fb.textContent='⚠ Enter a numeric answer first.'; return; }
+    if(Math.abs(v-ans)<=tol){ fb.className='xn-fb xn-ok'; fb.innerHTML='✓ Correct! Answer = '+ans+unit; }
+    else { fb.className='xn-fb xn-no'; fb.innerHTML='✗ Not quite — you entered '+v+'. Try again, or reveal the steps.'; }
+  };
+  window.xnToggle=function(btn){
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol');
+    var open=s.classList.toggle('open'); btn.textContent=open?'Hide steps':'Show steps';
+  };
+  window.xnPick=function(btn,ok){
+    var box=btn.parentElement;
+    box.querySelectorAll('.xn-opt').forEach(function(b){b.disabled=true; b.style.cursor='default';});
+    btn.classList.add(ok?'xn-ok':'xn-no');
+    if(!ok){ box.querySelectorAll('.xn-opt').forEach(function(b){ if(b.getAttribute('data-correct')==='1') b.classList.add('xn-ok'); }); }
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol'); if(s) s.classList.add('open');
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter' && e.target.classList && e.target.classList.contains('xn-in')){
+      var b=e.target.closest('.xn-prob').querySelector('.xn-check'); if(b) b.click();
+    }
+  });
+})();
+</script>
+
+<section id="xn-mcq" class="xn-extra-wrap">
+  <h2>📝 Exam-Style MCQs — 2 Marks Each</h2>
+  <p style="opacity:.85;font-size:.95em;margin-bottom:1rem;">Each question is worth 2 marks — a mix of applied numerical and conceptual items. Click an option to check it; the correct answer and explanation appear instantly.</p>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q1 · 2 marks</span> Given these two overloaded methods, which line is printed by the call <code>f(7)</code>?
+      <div class="xn-codeblock">static int f(int n)  { return n * n; }
+static int f(long n) { return (int)(n + 1); }
+
+System.out.println(f(7));</div>
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) 49</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 8</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 14</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Ambiguous — compile error</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Overload resolution prefers the most specific match without widening. The literal <code>7</code> is an <code>int</code>, so <code>f(int)</code> is chosen over <code>f(long)</code> (which would require a widening conversion).
+      <div class="xf">f(int) chosen → 7 * 7 = 49</div>
+      Had no <code>f(int)</code> existed, <code>7</code> would widen to <code>long</code> and give 8 (the distractor). The answer is <b>49</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q2 · 2 marks</span> A <code>BankAccount</code> starts with a balance of <code>2000</code>. Its <code>withdraw()</code> rejects (does nothing to the balance) when the amount exceeds the balance. After the calls below, what is the final balance?
+      <div class="xn-codeblock">acc.withdraw(2500);   // amount &gt; balance
+acc.deposit(500);
+acc.withdraw(300);</div>
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) -300</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) 2200</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) -300 then 2200</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 2500</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The first withdraw is rejected because 2500 &gt; 2000, so the balance is unchanged.
+      <div class="xf">2000  (withdraw 2500 rejected, no change)
+2000 + 500 = 2500   (deposit)
+2500 - 300 = 2200   (withdraw)</div>
+      Treating the rejected withdraw as if it applied (2000 − 2500 = −300) is the common mistake. The answer is <b>2200</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q3 · 2 marks</span> With dynamic method dispatch, which value does <code>area</code> hold after this code runs?
+      <div class="xn-codeblock">class Shape           { int getArea() { return 0; } }
+class Square extends Shape {
+    int side;
+    Square(int s) { side = s; }
+    int getArea() { return side * side; }
+}
+
+Shape s = new Square(9);
+int area = s.getArea();</div>
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 0</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 18</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 81</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Compile error — <code>Shape</code> has no <code>side</code></button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The reference type is <code>Shape</code>, but the <em>object</em> is a <code>Square</code>. Overridden instance methods are dispatched on the runtime object (late binding), so <code>Square.getArea()</code> runs.
+      <div class="xf">side = 9
+getArea() = 9 * 9 = 81</div>
+      Returning 0 would happen only with static binding to <code>Shape</code> (the distractor). The answer is <b>81</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q4 · 2 marks</span> Two methods named <code>draw</code> in the <em>same</em> class differ only in their parameter lists; a third <code>draw</code> in a subclass has the identical signature as one in the parent. Which statement correctly classifies these relationships?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) All three are overriding; resolved at runtime.</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) The two in the same class are overloading (compile-time); the subclass one with the same signature is overriding (runtime).</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) All three are overloading; resolved at compile time.</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) The same-class pair is overriding; the subclass method is overloading.</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <b>Overloading</b> = same name, different parameter lists, within one class — resolved by the compiler (static binding). <b>Overriding</b> = a subclass method with the <em>identical</em> signature as a parent method — resolved at runtime (dynamic dispatch). So the two same-class variants overload each other, and the matching-signature subclass method overrides. The answer is <b>B</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q5 · 2 marks</span> You must model a capability (<code>Taxable</code>) that several <em>unrelated</em> classes can gain, while also sharing some common state and a partially-implemented method among a family of related shapes. Which design best fits?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Use one abstract class for both purposes; interfaces cannot share behaviour.</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Use one interface for both; abstract classes cannot declare methods.</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) Use an <code>interface</code> for the cross-cutting capability and an <code>abstract class</code> for the shared state plus partial implementation.</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Neither — only concrete classes can be instantiated, so both must be concrete.</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      A class can implement <em>many</em> interfaces, so a capability that crosses unrelated hierarchies (like <code>Taxable</code>) is best an <b>interface</b>. Shared instance fields plus a half-finished method that related subclasses complete is exactly what an <b>abstract class</b> provides (a class extends only one). The answer is <b>C</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q6 · 2 marks</span> Which line below causes a <em>compile-time</em> error?
+      <div class="xn-codeblock">final class Engine { }
+class V8 extends Engine { }                 // line 1
+
+class Account {
+    final int id = 100;
+    void reset() { id = 0; }                // line 2
+}
+
+final void run() { }                        // line 3 (inside a class)</div>
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Only line 2</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Only line 3</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) None — all are legal</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">D) Lines 1 and 2 (both)</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>final</code> on a class forbids subclassing, so <code>V8 extends Engine</code> (line 1) fails. <code>final</code> on a field makes it non-reassignable, so <code>id = 0</code> (line 2) fails. A <code>final</code> <em>method</em> (line 3) is perfectly legal — it merely cannot be overridden. So lines 1 and 2 are the errors. The answer is <b>D</b>.
+    </div>
+  </div>
+</section>
+<script src="../claude-tutor.js"></script>
+
+</body>
+</html>

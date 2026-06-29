@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 2 — Hadoop & HDFS | Big Data Analytics</title>
+<style>
+  :root { --primary:#667eea; --primary-dark:#764ba2; --accent:#f39c12; --success:#27ae60; --danger:#e74c3c; --bg:#f5f7fa; --card:#fff; --text:#2c3e50; --muted:#6c7a89; --border:#e1e8ed; }
+  body.dark { --bg:#1a1a2e; --card:#252541; --text:#e8e8f0; --muted:#a0a0b8; --border:#3a3a5c; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; transition: all 0.3s; }
+  header { background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:40px 20px; text-align:center; }
+  header h1 { font-size:2.2em; margin-bottom:6px; }
+  header .breadcrumb { font-size:0.95em; opacity:0.9; }
+  header .breadcrumb a { color:#ffd700; text-decoration:none; }
+  nav { position:sticky; top:0; background:var(--card); z-index:100; padding:10px; overflow-x:auto; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,0.08); border-bottom:1px solid var(--border); }
+  nav button { background:transparent; color:var(--text); border:2px solid var(--border); padding:6px 14px; margin:2px; border-radius:18px; cursor:pointer; font-size:0.82em; font-weight:600; transition:all 0.2s; }
+  nav button:hover { border-color:var(--primary); color:var(--primary); }
+  nav button.active { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; border-color:transparent; }
+  .icon-btn { background:var(--bg); width:32px; height:32px; border-radius:50%; padding:0; }
+  main { max-width:1100px; margin:25px auto; padding:0 18px; }
+  section { background:var(--card); margin:25px 0; padding:28px; border-radius:14px; box-shadow:0 4px 16px rgba(0,0,0,0.06); scroll-margin-top:80px; }
+  section h2 { color:var(--primary-dark); border-bottom:3px solid var(--primary); padding-bottom:8px; margin-bottom:18px; font-size:1.7em; }
+  body.dark section h2 { color:#b8a8ff; }
+  section h3 { margin:18px 0 10px; font-size:1.25em; }
+  section h4 { color:var(--primary-dark); margin:12px 0 8px; }
+  body.dark section h4 { color:#c4b5ff; }
+  p { margin-bottom:10px; }
+  ul, ol { margin:8px 0 12px 26px; }
+  li { margin-bottom:5px; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:14px 0; }
+  .card { background:linear-gradient(135deg,#f6f9fc,#eef2f7); border-left:4px solid var(--primary-dark); padding:14px; border-radius:8px; }
+  body.dark .card { background:linear-gradient(135deg,#2a2a4a,#353560); }
+  .card h4 { color:var(--primary-dark); margin-bottom:6px; font-size:1em; }
+  body.dark .card h4 { color:#c4b5ff; }
+  .card p { font-size:0.9em; margin:0; color:var(--muted); }
+  .flow { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px; margin:20px 0; }
+  .flow-box { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; padding:12px 18px; border-radius:10px; font-weight:600; text-align:center; min-width:120px; }
+  .flow-box small { display:block; font-size:0.75em; opacity:0.85; margin-top:3px; }
+  .arrow { color:var(--primary-dark); font-size:1.6em; font-weight:bold; }
+  table { width:100%; border-collapse:collapse; margin:12px 0; }
+  th, td { padding:9px 12px; border:1px solid var(--border); text-align:left; }
+  th { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; }
+  tr:nth-child(even) td { background:var(--bg); }
+  .code-block, .formula { background:#2c3e50; color:#ecf0f1; padding:12px 14px; border-radius:8px; font-family:'Courier New',monospace; font-size:0.92em; overflow-x:auto; margin:10px 0; white-space:pre-wrap; line-height:1.5; }
+  code { background:var(--bg); padding:2px 6px; border-radius:4px; font-family:'Courier New',monospace; font-size:0.92em; border:1px solid var(--border); }
+  .quiz { background:linear-gradient(135deg,#e8f5e9,#dcedc8); border-left:4px solid var(--success); padding:16px; border-radius:10px; margin:12px 0; }
+  body.dark .quiz { background:linear-gradient(135deg,#1a3a2e,#2a4a3e); }
+  .quiz-option { display:block; margin:6px 0; padding:10px 12px; background:var(--card); border:2px solid var(--border); border-radius:8px; cursor:pointer; transition:all 0.2s; }
+  .quiz-option:hover { border-color:var(--success); transform:translateX(3px); }
+  .quiz-option.correct { background:#c8e6c9!important; border-color:var(--success); color:#1b5e20; }
+  .quiz-option.wrong { background:#ffcdd2!important; border-color:var(--danger); color:#b71c1c; }
+  .insight { background:linear-gradient(135deg,#e3f2fd,#bbdefb); border-left:4px solid #1976d2; padding:12px 16px; border-radius:8px; margin:12px 0; }
+  body.dark .insight { background:linear-gradient(135deg,#1a2a4a,#253560); }
+  .warning { background:linear-gradient(135deg,#fff3e0,#ffe0b2); border-left:4px solid #f57c00; padding:12px 16px; border-radius:8px; margin:12px 0; }
+  body.dark .warning { background:linear-gradient(135deg,#3a2a1a,#4a3525); }
+  .example { background:linear-gradient(135deg,#f3e5f5,#e1bee7); border-left:4px solid #8e24aa; padding:14px 16px; border-radius:8px; margin:12px 0; }
+  body.dark .example { background:linear-gradient(135deg,#2a1a3a,#3a253f); }
+  .summary { background:linear-gradient(135deg,#fff9c4,#fff59d); border-left:4px solid #fbc02d; padding:16px; border-radius:10px; margin:14px 0; }
+  body.dark .summary { background:linear-gradient(135deg,#3a3a1a,#4a4a25); color:var(--text); }
+  .arch { display:grid; gap:14px; margin:20px 0; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); }
+  .arch-node { border:2px solid var(--primary); border-radius:12px; padding:16px; text-align:center; }
+  body.dark .arch-node { background:#2a2a4a; }
+  .arch-node.master { background:linear-gradient(135deg,#e74c3c,#c0392b); color:white; border-color:#a02020; }
+  .arch-node.worker { background:linear-gradient(135deg,#3498db,#2980b9); color:white; border-color:#1f5a82; }
+  .arch-node.coord { background:linear-gradient(135deg,#f39c12,#d35400); color:white; border-color:#a04004; }
+  .arch-node h5 { font-size:1.1em; margin-bottom:6px; }
+  .arch-node small { font-size:0.82em; opacity:0.95; }
+  footer { text-align:center; padding:24px; color:var(--muted); font-size:0.9em; border-top:1px solid var(--border); margin-top:30px; }
+  .toc { background:var(--bg); padding:16px 20px; border-radius:10px; margin-bottom:20px; }
+  .toc h3 { margin-bottom:8px; color:var(--primary-dark); }
+  body.dark .toc h3 { color:#c4b5ff; }
+  .toc ol { columns:2; column-gap:30px; }
+  @media (max-width:700px) { .toc ol { columns:1; } }
+  .steps { counter-reset:step; margin:14px 0; }
+  .step { counter-increment:step; padding:14px 14px 14px 60px; margin:8px 0; background:var(--bg); border-radius:10px; position:relative; }
+  .step::before { content:counter(step); position:absolute; left:14px; top:14px; width:32px; height:32px; background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../BigDataAnalytics_Complete_Course.html">📚 Full Course</a> › <a href="index.html">Weekly Modules</a> › Week 2</div>
+  <h1>🐘 Week 2 — Big Data Technologies: Hadoop & HDFS</h1>
+</header>
+
+<nav>
+  <button onclick="g('intro',this)" class="active">1. Intro</button>
+  <button onclick="g('features',this)">2. Features</button>
+  <button onclick="g('advantages',this)">3. Advantages</button>
+  <button onclick="g('history',this)">4. History</button>
+  <button onclick="g('hdfs',this)">5. HDFS</button>
+  <button onclick="g('arch',this)">6. Architecture</button>
+  <button onclick="g('storage',this)">7. Blocks & Replication</button>
+  <button onclick="g('write',this)">8. Write Op</button>
+  <button onclick="g('read',this)">9. Read Op</button>
+  <button onclick="g('commands',this)">10. Commands</button>
+  <button onclick="g('ecosystem',this)">11. Ecosystem</button>
+  <button onclick="g('applications',this)">12. Applications</button>
+  <button onclick="g('quiz',this)">🎯 Quiz</button>
+  <button onclick="g('summary',this)">📝 Summary</button>
+  <button class="icon-btn" onclick="dark()">🌓</button>
+</nav>
+
+<main>
+
+<section class="toc">
+  <h3>📑 Table of Contents</h3>
+  <ol>
+    <li><a href="#intro">Introduction to Hadoop</a></li>
+    <li><a href="#features">Features of Hadoop</a></li>
+    <li><a href="#advantages">Advantages of Hadoop</a></li>
+    <li><a href="#history">History of Hadoop</a></li>
+    <li><a href="#hdfs">What is HDFS?</a></li>
+    <li><a href="#arch">HDFS Architecture</a></li>
+    <li><a href="#storage">Blocks, Replication & Fault Tolerance</a></li>
+    <li><a href="#write">HDFS Write Operation (6 steps)</a></li>
+    <li><a href="#read">HDFS Read Operation (5 steps)</a></li>
+    <li><a href="#commands">HDFS Commands</a></li>
+    <li><a href="#ecosystem">Hadoop Ecosystem</a></li>
+    <li><a href="#applications">Applications of Hadoop</a></li>
+    <li><a href="#quiz">12-Question Quiz</a></li>
+    <li><a href="#summary">Summary & Exam Tips</a></li>
+  </ol>
+</section>
+
+<!-- ============ 1. INTRO ============ -->
+<section id="intro">
+  <h2>1️⃣ Introduction to Hadoop</h2>
+
+  <p><strong>Apache Hadoop</strong> is an <strong>open-source framework</strong> for storing and processing massive datasets across clusters of commodity hardware. It's the foundation of the modern Big Data ecosystem.</p>
+
+  <h3>Two Core Components</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🗄️ HDFS (Hadoop Distributed File System)</h4><p>Storage layer — stores files across many machines, with built-in replication for reliability.</p></div>
+    <div class="card"><h4>⚙️ MapReduce / YARN</h4><p>Processing layer — distributes computation across the cluster (covered in Week 3).</p></div>
+  </div>
+
+  <div class="insight">
+    <strong>💡 Key idea:</strong> Hadoop moves <em>computation to the data</em> (data locality), instead of moving large data to compute. This drastically reduces network traffic.
+  </div>
+</section>
+
+<!-- ============ 2. FEATURES ============ -->
+<section id="features">
+  <h2>2️⃣ Core Features of Hadoop</h2>
+
+  <div class="card-grid">
+    <div class="card"><h4>🌐 Distributed Processing</h4><p>Tasks split across many nodes — work happens in parallel across the cluster.</p></div>
+    <div class="card"><h4>📈 Scalability</h4><p>Handles large datasets; scales by adding more nodes (horizontal scaling).</p></div>
+    <div class="card"><h4>🛡️ Fault Tolerance</h4><p>Data replicated across multiple nodes — survives hardware failures gracefully.</p></div>
+    <div class="card"><h4>📖 Open Source</h4><p>Free, large community, extensive tooling, customizable.</p></div>
+  </div>
+</section>
+
+<!-- ============ 3. ADVANTAGES ============ -->
+<section id="advantages">
+  <h2>3️⃣ Advantages of Hadoop</h2>
+
+  <div class="card-grid">
+    <div class="card"><h4>💰 Cost-Effective</h4><p>Uses cheap commodity hardware instead of expensive specialized servers.</p></div>
+    <div class="card"><h4>🚀 High Throughput</h4><p>Optimized for processing large amounts of data quickly via parallelism.</p></div>
+    <div class="card"><h4>📍 Data Locality</h4><p>Hadoop moves <strong>computation to the data</strong> — minimizes network traffic.</p></div>
+    <div class="card"><h4>🎭 Versatility</h4><p>Can store & process structured, semi-structured, and unstructured data.</p></div>
+  </div>
+
+  <div class="example">
+    <strong>Data Locality Example:</strong> If a 100GB log file is split across DataNodes A, B, C — Hadoop sends the MapReduce code to A, B, C to process locally instead of sending all 100GB over the network to one machine.
+  </div>
+</section>
+
+<!-- ============ 4. HISTORY ============ -->
+<section id="history">
+  <h2>4️⃣ History of Hadoop</h2>
+
+  <h3>Origins</h3>
+  <p>Hadoop is inspired by two seminal Google papers:</p>
+  <ul>
+    <li><strong>Google File System (GFS) paper</strong> (2003) — distributed file system design</li>
+    <li><strong>MapReduce paper</strong> (2004) — programming model for processing large data</li>
+  </ul>
+
+  <p>Doug Cutting and Mike Cafarella created Hadoop in 2005 (named after Cutting's son's toy elephant 🐘). It became an Apache project in 2008.</p>
+
+  <h3>Key Milestones</h3>
+  <table>
+    <tr><th>Version</th><th>Year</th><th>Key Change</th></tr>
+    <tr><td>Hadoop 1.x</td><td>2011</td><td>MapReduce + HDFS; JobTracker bottleneck</td></tr>
+    <tr><td>Hadoop 2.x</td><td>2013</td><td>YARN introduced; supports non-MR frameworks</td></tr>
+    <tr><td>Hadoop 3.x</td><td>2017</td><td>Erasure coding, GPU support, multiple NameNodes</td></tr>
+  </table>
+</section>
+
+<!-- ============ 5. HDFS ============ -->
+<section id="hdfs">
+  <h2>5️⃣ HDFS (Hadoop Distributed File System)</h2>
+
+  <p>HDFS is the <strong>primary data storage system</strong> for Hadoop applications. Designed to:</p>
+  <ul>
+    <li>Store <strong>very large files</strong> reliably</li>
+    <li>Provide <strong>high-throughput</strong> access to data</li>
+    <li>Work across a <strong>distributed cluster</strong> of commodity servers</li>
+    <li>Detect and recover from hardware failures automatically</li>
+  </ul>
+
+  <h3>HDFS Design Principles</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📦 Large Files</h4><p>Optimized for files of GB to TB sizes (not millions of small files).</p></div>
+    <div class="card"><h4>📝 Write-Once, Read-Many</h4><p>Files are written once then read many times — append-only model.</p></div>
+    <div class="card"><h4>🌊 Streaming Access</h4><p>Optimized for reading entire files sequentially — not random access.</p></div>
+    <div class="card"><h4>💻 Commodity Hardware</h4><p>Assumes hardware will fail — builds in redundancy.</p></div>
+  </div>
+</section>
+
+<!-- ============ 6. ARCHITECTURE ============ -->
+<section id="arch">
+  <h2>6️⃣ HDFS Architecture — Master/Slave</h2>
+
+  <p>HDFS uses a <strong>master-slave architecture</strong>:</p>
+
+  <div class="arch">
+    <div class="arch-node master">
+      <h5>👑 NameNode</h5>
+      <small>(Master)<br>Metadata only — filenames, permissions, block locations</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🔧 DataNode 1</h5>
+      <small>Stores actual blocks</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🔧 DataNode 2</h5>
+      <small>Stores blocks + replicas</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🔧 DataNode 3</h5>
+      <small>3rd replica (RF=3 default)</small>
+    </div>
+  </div>
+
+  <h3>NameNode — The Master</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📋 Manages Namespace</h4><p>The file system namespace (directory tree)</p></div>
+    <div class="card"><h4>📚 Stores Metadata</h4><p>File permissions, sizes, locations of blocks</p></div>
+    <div class="card"><h4>🚫 No Actual Data</h4><p>Does NOT store the actual data — only the index</p></div>
+    <div class="card"><h4>⚠️ Single Point of Failure</h4><p>In Hadoop 1.x. Hadoop 2.x added standby NameNode for HA.</p></div>
+  </div>
+
+  <h3>DataNodes — The Workers</h3>
+  <div class="card-grid">
+    <div class="card"><h4>💾 Store Blocks</h4><p>Actual data is stored as blocks on the local filesystem</p></div>
+    <div class="card"><h4>🔄 Replicate Data</h4><p>Each block stored on multiple DataNodes (default: 3 copies)</p></div>
+    <div class="card"><h4>📨 Serve R/W</h4><p>Handle read/write requests directly from clients</p></div>
+    <div class="card"><h4>💓 Heartbeat</h4><p>Send heartbeats to NameNode to signal they're alive</p></div>
+    <div class="card"><h4>🛠️ Block Creation / Deletion / Replication</h4><p>Perform <strong>block creation, deletion, and replication</strong> on command from the NameNode</p></div>
+  </div>
+
+  <h3>ASCII Architecture Diagram</h3>
+  <div class="code-block">+-------------------+
+|     NameNode      |
+|    (Metadata)     |
++-------------------+
+        |
+   +----+----+----+
+   |    |    |    |
++------+ +------+ +------+
+|Data  | |Data  | |Data  |
+|Node1 | |Node2 | |Node3 |
+|Block1| |Block1| |Block1|
+|Block2| |Block3| |Block2|
+|Block4| |Block4| |Block3|
++------+ +------+ +------+
+   ^      ^       ^
+   +-- Replication ---+
+        ^
+   +---------+
+   | Client  |
+   +---------+</div>
+
+  <h3>Key Advantages of HDFS Architecture</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🛡️ Fault Tolerance</h4><p>Replication ensures data not lost on DataNode failure</p></div>
+    <div class="card"><h4>📈 Scalability</h4><p>Add more DataNodes → more storage and throughput</p></div>
+    <div class="card"><h4>🚀 High Throughput</h4><p>Parallel reads from multiple DataNodes</p></div>
+    <div class="card"><h4>📍 Data Locality</h4><p>Compute happens where data resides</p></div>
+  </div>
+</section>
+
+<!-- ============ 7. STORAGE ============ -->
+<section id="storage">
+  <h2>7️⃣ Blocks, Replication & Fault Tolerance</h2>
+
+  <h3>HDFS Blocks</h3>
+  <ul>
+    <li>HDFS breaks files into <strong>blocks</strong> — the smallest storage unit</li>
+    <li>Default block size: <strong>128 MB</strong> (configurable, often 256 MB)</li>
+    <li>Storing in blocks lets HDFS <strong>distribute large files across DataNodes</strong></li>
+  </ul>
+
+  <div class="example">
+    <strong>Example:</strong> A 500 MB file with 128 MB blocks splits into 4 blocks (128 + 128 + 128 + 116 MB), each stored on different DataNodes with replicas.
+  </div>
+
+  <h3>Replication Factor</h3>
+  <ul>
+    <li>Each block is <strong>replicated across multiple DataNodes</strong></li>
+    <li>Replication factor determines how many copies — <strong>default = 3</strong></li>
+    <li>If a DataNode fails, data remains accessible from other replicas</li>
+  </ul>
+
+  <h3>Replica Placement Strategy</h3>
+  <ol>
+    <li><strong>First replica</strong> — on local DataNode (where writer is)</li>
+    <li><strong>Second replica</strong> — on a different rack</li>
+    <li><strong>Third replica</strong> — on the same rack as the second (different node)</li>
+  </ol>
+  <p>This balances reliability (rack failures) with bandwidth efficiency.</p>
+
+  <h3>Why Larger Block Size?</h3>
+  <div class="card-grid">
+    <div class="card"><h4>💼 Less Metadata</h4><p>Fewer blocks → smaller NameNode memory footprint</p></div>
+    <div class="card"><h4>⚡ Less Seek Overhead</h4><p>More time spent reading data, less seeking</p></div>
+    <div class="card"><h4>📦 Better for Big Files</h4><p>Reduces management overhead for huge files</p></div>
+  </div>
+</section>
+
+<!-- ============ 8. WRITE ============ -->
+<section id="write">
+  <h2>8️⃣ HDFS Write Operation — Step by Step</h2>
+
+  <div class="steps">
+    <div class="step"><strong>Client Request:</strong> Client sends a write request to the NameNode for a new file.</div>
+    <div class="step"><strong>NameNode Check:</strong> NameNode verifies file doesn't exist & client has write permission.</div>
+    <div class="step"><strong>DataNode Allocation:</strong> NameNode returns a list of DataNodes for storing blocks (selected by proximity, available storage, and replication factor).</div>
+    <div class="step"><strong>Data Streaming (Pipeline):</strong>
+      <ul>
+        <li>Client divides file into blocks</li>
+        <li>Streams data to the first DataNode</li>
+        <li>First DataNode stores its portion AND forwards to the next DataNode in the pipeline</li>
+        <li>Process repeats until all DataNodes in pipeline have the block</li>
+      </ul>
+    </div>
+    <div class="step"><strong>Acknowledgement:</strong> Each DataNode sends ACK back through the pipeline. The first DataNode sends final ACK to the client.</div>
+    <div class="step"><strong>NameNode Update:</strong> After receiving all ACKs, client tells NameNode the write is complete. NameNode updates metadata with file info and block locations.</div>
+  </div>
+
+  <div class="insight">
+    <strong>💡 Why a pipeline?</strong> Instead of the client copying the same block 3 times to 3 DataNodes (3× upload bandwidth), the data flows through a chain: Client → DN1 → DN2 → DN3 (1× upload bandwidth from client).
+  </div>
+</section>
+
+<!-- ============ 9. READ ============ -->
+<section id="read">
+  <h2>9️⃣ HDFS Read Operation — Step by Step</h2>
+
+  <div class="steps">
+    <div class="step"><strong>Client Request:</strong> Client sends a read request to the NameNode.</div>
+    <div class="step"><strong>NameNode Lookup:</strong> NameNode checks its metadata to find block locations.</div>
+    <div class="step"><strong>DataNode Information:</strong> NameNode returns a list of DataNode locations for each block. Multiple locations per block (due to replication).</div>
+    <div class="step"><strong>Data Retrieval:</strong> Client contacts DataNodes <strong>directly</strong> (parallel reads, preferring the closest DataNode to minimize latency).</div>
+    <div class="step"><strong>Data Assembly:</strong> DataNodes stream blocks to client. Client assembles blocks in correct order to reconstruct the file.</div>
+  </div>
+
+  <h3>Key Considerations for Both Operations</h3>
+  <table>
+    <tr><th>Concept</th><th>Description</th></tr>
+    <tr><td><strong>Fault Tolerance</strong></td><td>If a DataNode fails, data read from another replica</td></tr>
+    <tr><td><strong>Data Locality</strong></td><td>HDFS tries to read from the closest DataNode</td></tr>
+    <tr><td><strong>Concurrency Control</strong></td><td>HDFS supports concurrent reads. Writes are exclusive — only one writer per file to maintain data consistency</td></tr>
+    <tr><td><strong>Pipelining</strong></td><td>Writes use a DataNode pipeline (DN1 → DN2 → DN3) instead of separate connections — saves client bandwidth and improves write efficiency</td></tr>
+  </table>
+</section>
+
+<!-- ============ 10. COMMANDS ============ -->
+<section id="commands">
+  <h2>🔟 HDFS Commands</h2>
+
+  <h3>General Command Structure</h3>
+  <div class="formula">hdfs dfs &lt;command&gt; &lt;options&gt; &lt;arguments&gt;</div>
+  <p>(<code>hadoop fs</code> works interchangeably.)</p>
+
+  <h3>File & Directory Management</h3>
+  <div class="code-block">hdfs dfs -ls /                         # list root
+hdfs dfs -ls /user/data                # list directory
+hdfs dfs -mkdir /user/data             # create directory
+hdfs dfs -mkdir -p /a/b/c              # create with parents
+hdfs dfs -rm /user/data/file.txt       # remove file
+hdfs dfs -rm -r /user/data             # recursive remove
+hdfs dfs -rmdir /empty_dir             # remove empty dir
+hdfs dfs -mv /source /dest             # move/rename
+hdfs dfs -cp /source /dest             # copy</div>
+
+  <h3>Uploading & Downloading</h3>
+  <div class="code-block">hdfs dfs -put local.txt /user/data/         # upload local → HDFS
+hdfs dfs -copyFromLocal local.txt /data/    # same as put
+hdfs dfs -get /user/data/file.txt ./        # download HDFS → local
+hdfs dfs -copyToLocal /data/file.txt ./     # same as get</div>
+
+  <h3>Viewing File Content</h3>
+  <div class="code-block">hdfs dfs -cat /user/data/file.txt           # full content
+hdfs dfs -tail /user/data/file.txt          # last 1KB
+hdfs dfs -head /user/data/file.txt          # first 1KB</div>
+
+  <h3>Other Useful Commands</h3>
+  <div class="code-block">hdfs dfs -du /user/data                     # disk usage
+hdfs dfs -du -h /user/data                  # human-readable
+hdfs dfs -count /user/data                  # count files/dirs/bytes
+hdfs dfs -chmod 755 /user/data/file.txt     # permissions
+hdfs dfs -chown user:group /user/data       # owner
+hdfs dfs -chgrp group1 /user/data/file2.txt # change group</div>
+
+  <h3>HDFS Admin Commands</h3>
+  <div class="code-block">hdfs dfsadmin -report                       # cluster status
+hdfs fsck /                                 # filesystem check
+hdfs balancer                               # rebalance data
+hdfs dfsadmin -safemode get                 # check safe mode</div>
+</section>
+
+<!-- ============ 11. ECOSYSTEM ============ -->
+<section id="ecosystem">
+  <h2>1️⃣1️⃣ Hadoop Ecosystem</h2>
+
+  <p>Hadoop is more than HDFS + MapReduce. The ecosystem includes many specialized tools:</p>
+
+  <h3>Visual Representations of the Ecosystem</h3>
+  <p>Two common ways to depict the Hadoop ecosystem (both highlighted in the course PDF):</p>
+
+  <h4>(a) Layered Diagram</h4>
+  <p>HDFS at the bottom (storage); YARN above HDFS (resource management); processing frameworks (MapReduce, Spark, Pig, Hive) above YARN; other components (HBase, Flume, Sqoop, ZooKeeper) placed appropriately by function.</p>
+  <div class="code-block">+----------------------------------------------------+
+| Hive | Pig | HBase | Flume | Sqoop | ZooKeeper    |  <- Tools
++----------------------------------------------------+
+|         MapReduce  |  Spark  |  Tez               |  <- Processing
++----------------------------------------------------+
+|                     YARN                           |  <- Resource Mgmt
++----------------------------------------------------+
+|                     HDFS                           |  <- Storage
++----------------------------------------------------+</div>
+
+  <h4>(b) Graph-Based Diagram</h4>
+  <p>Nodes represent each component; edges show <strong>relationships and data flow</strong> between them — e.g., Sqoop → HDFS → Hive → BI Tool, or Flume → HDFS → Spark → HBase.</p>
+  <div class="code-block">  [RDBMS]            [Log Sources]
+     |                    |
+   Sqoop                Flume
+     |                    |
+     v                    v
+  +----------------------------+
+  |            HDFS            |   <- central storage hub
+  +----------------------------+
+     |        |        |
+     v        v        v
+   Hive    Spark    MapReduce        ZooKeeper
+     |        |                       (coordinates
+     v        v                        HDFS HA &
+  [BI Tool] HBase <--- Spark           HBase)
+              |
+              v
+        [Real-time App]
+
+  Legend:  A --> B  means "A sends / feeds data to B"</div>
+
+  <div class="insight"><strong>📌 Key Points the diagrams emphasise:</strong>
+    <ul>
+      <li><strong>Interoperability:</strong> Components are designed to work together as a comprehensive platform.</li>
+      <li><strong>Evolving ecosystem:</strong> New projects and tools are added continuously.</li>
+      <li><strong>Choosing the right tools:</strong> The tool selection depends on specific application requirements.</li>
+    </ul>
+  </div>
+
+  <h3>1. Core Components</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🗄️ HDFS</h4><p>Storage layer — base of everything</p></div>
+    <div class="card"><h4>⚙️ YARN (Yet Another Resource Negotiator)</h4><p>Manages CPU + memory across cluster. Allows MR + Spark + Tez to coexist. Components: <strong>ResourceManager, NodeManager, ApplicationMaster, Container</strong>.</p></div>
+    <div class="card"><h4>🔀 MapReduce</h4><p>Original parallel processing framework. Map + Reduce phases.</p></div>
+  </div>
+
+  <h3>2. Data Processing</h3>
+  <div class="card-grid">
+    <div class="card"><h4>⚡ Spark</h4><p>Fast, general-purpose in-memory processing. Batch + streaming + ML + SQL.</p></div>
+    <div class="card"><h4>🐷 Pig</h4><p>High-level data flow language (<strong>Pig Latin</strong>). Translates to MapReduce.</p></div>
+    <div class="card"><h4>🐝 Hive</h4><p>Data warehouse with SQL-like queries (<strong>HiveQL</strong>). Translates to MR/Tez/Spark.</p></div>
+  </div>
+
+  <h3>3. NoSQL & Storage</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📊 HBase</h4><p>Column-oriented NoSQL DB on HDFS. Real-time R/W, large sparse tables.</p></div>
+  </div>
+
+  <h3>4. Data Ingestion</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🌊 Flume</h4><p>Distributed service for collecting & moving large amounts of <strong>log data</strong>.</p></div>
+    <div class="card"><h4>🔄 Sqoop</h4><p>Transfers data between Hadoop and <strong>relational databases</strong> (MySQL, Oracle, PostgreSQL).</p></div>
+  </div>
+
+  <h3>5. Coordination</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🐘 ZooKeeper</h4><p>Centralized service for distributed configuration, synchronization, and naming. Used for HDFS NameNode HA, HBase coordination.</p></div>
+  </div>
+
+  <h3>Choosing the Right Tool</h3>
+  <table>
+    <tr><th>Need</th><th>Tool</th></tr>
+    <tr><td>Distributed storage</td><td>HDFS</td></tr>
+    <tr><td>Resource management</td><td>YARN</td></tr>
+    <tr><td>Batch processing (legacy)</td><td>MapReduce</td></tr>
+    <tr><td>Fast processing</td><td>Spark</td></tr>
+    <tr><td>SQL-like querying</td><td>Hive</td></tr>
+    <tr><td>Real-time NoSQL</td><td>HBase</td></tr>
+    <tr><td>Log ingestion</td><td>Flume</td></tr>
+    <tr><td>RDBMS ↔ Hadoop</td><td>Sqoop</td></tr>
+    <tr><td>Coordination</td><td>ZooKeeper</td></tr>
+  </table>
+</section>
+
+<!-- ============ APPLICATIONS ============ -->
+<section id="applications">
+  <h2>1️⃣2️⃣ Applications of Hadoop</h2>
+
+  <div class="card-grid">
+    <div class="card"><h4>🏛️ Data Warehousing</h4><p>Build large-scale data warehouses for storing and analyzing historical data across the enterprise.</p></div>
+    <div class="card"><h4>🔄 ETL Processing</h4><p>Extract, Transform, Load operations on big data — clean and reshape data before downstream analytics.</p></div>
+    <div class="card"><h4>🤖 Machine Learning</h4><p>Train and deploy ML models on massive datasets — distributed training over HDFS.</p></div>
+    <div class="card"><h4>📜 Log Processing</h4><p>Process and analyze logs from servers, applications, and networks at scale.</p></div>
+    <div class="card"><h4>📱 Social Media Analytics</h4><p>Analyze social media data to understand user behavior, sentiment, and trends.</p></div>
+  </div>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section id="quiz">
+  <h2>🎯 12-Question Quiz</h2>
+
+  <div class="quiz">
+    <p><strong>Q1.</strong> Hadoop is based on which two Google papers?</p>
+    <div class="quiz-option" onclick="qa(this,1)">GFS and MapReduce ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Bigtable and Spanner</div>
+    <div class="quiz-option" onclick="qa(this,0)">Borg and Kubernetes</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q2.</strong> Default HDFS block size is:</p>
+    <div class="quiz-option" onclick="qa(this,0)">64 MB</div>
+    <div class="quiz-option" onclick="qa(this,1)">128 MB ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">512 MB</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q3.</strong> Default replication factor in HDFS:</p>
+    <div class="quiz-option" onclick="qa(this,0)">1</div>
+    <div class="quiz-option" onclick="qa(this,0)">2</div>
+    <div class="quiz-option" onclick="qa(this,1)">3 ✓</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q4.</strong> Where does actual file data reside?</p>
+    <div class="quiz-option" onclick="qa(this,0)">NameNode</div>
+    <div class="quiz-option" onclick="qa(this,1)">DataNodes ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">YARN</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q5.</strong> Why does the NameNode store only metadata?</p>
+    <div class="quiz-option" onclick="qa(this,1)">To keep it lightweight and fast for lookups ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">To save disk space</div>
+    <div class="quiz-option" onclick="qa(this,0)">Because data is encrypted</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q6.</strong> In HDFS write, blocks are sent via:</p>
+    <div class="quiz-option" onclick="qa(this,0)">Client copying to each replica separately</div>
+    <div class="quiz-option" onclick="qa(this,1)">Pipeline — through chain of DataNodes ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">NameNode forwarding</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q7.</strong> In HDFS read, where does the client get the actual data from?</p>
+    <div class="quiz-option" onclick="qa(this,0)">NameNode</div>
+    <div class="quiz-option" onclick="qa(this,1)">Directly from DataNodes ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Through ZooKeeper</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q8.</strong> Which tool transfers data between Hadoop and RDBMS?</p>
+    <div class="quiz-option" onclick="qa(this,0)">Flume</div>
+    <div class="quiz-option" onclick="qa(this,1)">Sqoop ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Hive</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q9.</strong> Which provides a SQL-like interface on Hadoop data?</p>
+    <div class="quiz-option" onclick="qa(this,0)">Pig</div>
+    <div class="quiz-option" onclick="qa(this,1)">Hive ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Flume</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q10.</strong> What is the role of ZooKeeper?</p>
+    <div class="quiz-option" onclick="qa(this,1)">Coordination, synchronization, naming registry ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Storage</div>
+    <div class="quiz-option" onclick="qa(this,0)">Query processing</div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q11.</strong> HDFS command to list a directory:</p>
+    <div class="quiz-option" onclick="qa(this,0)"><code>hdfs dfs -dir /</code></div>
+    <div class="quiz-option" onclick="qa(this,1)"><code>hdfs dfs -ls /</code> ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)"><code>hdfs dfs -show /</code></div>
+  </div>
+
+  <div class="quiz">
+    <p><strong>Q12.</strong> Data locality means:</p>
+    <div class="quiz-option" onclick="qa(this,0)">Storing data in a single rack</div>
+    <div class="quiz-option" onclick="qa(this,1)">Moving computation to where data resides ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Encrypting data locally</div>
+  </div>
+</section>
+
+<!-- ============ SUMMARY ============ -->
+<section id="summary">
+  <h2>📝 Summary & Exam Tips</h2>
+
+  <div class="summary">
+    <h3>🎯 Key Takeaways</h3>
+    <ul>
+      <li><strong>Hadoop</strong> = open-source framework for distributed storage + processing of large datasets</li>
+      <li><strong>HDFS</strong> = master-slave: <strong>1 NameNode</strong> (metadata) + many <strong>DataNodes</strong> (actual data)</li>
+      <li><strong>Block size</strong> = 128 MB default; <strong>Replication factor</strong> = 3 default</li>
+      <li><strong>Write</strong>: 6 steps, uses pipeline; <strong>Read</strong>: 5 steps, direct from DataNodes</li>
+      <li><strong>Data locality</strong>: compute moves TO data (key Hadoop principle)</li>
+      <li><strong>Ecosystem layers</strong>: HDFS → YARN → MR/Spark → Hive/Pig/HBase + Flume/Sqoop + ZooKeeper</li>
+      <li><strong>Hadoop 2.x</strong> added YARN — decoupled resource mgmt from MR</li>
+    </ul>
+  </div>
+
+  <div class="warning">
+    <strong>📌 Common Exam Pitfalls:</strong>
+    <ul>
+      <li>Saying NameNode stores data (it stores ONLY metadata)</li>
+      <li>Forgetting that writes use a pipeline (not separate connections)</li>
+      <li>Confusing Flume (logs) vs Sqoop (RDBMS)</li>
+      <li>Confusing Pig (Pig Latin) vs Hive (HiveQL/SQL-like)</li>
+    </ul>
+  </div>
+
+  <p style="text-align:center; margin-top:30px;"><a href="Week_01_Forecasting.html" style="color:var(--primary); font-weight:bold;">← Previous: Week 1</a> &nbsp;|&nbsp; <a href="index.html" style="color:var(--primary); font-weight:bold;">Index</a> &nbsp;|&nbsp; <a href="Week_03_MapReduce.html" style="color:var(--primary); font-weight:bold;">Next: Week 3 → MapReduce</a></p>
+</section>
+
+</main>
+
+<footer>
+  <p>📚 Week 2 of 10 — Big Data Analytics • Detailed Study Module</p>
+</footer>
+
+<script>
+function g(id, btn) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); }
+function dark() { document.body.classList.toggle('dark'); try { localStorage.setItem('bda_dark', document.body.classList.contains('dark')?'1':'0'); } catch(e){} }
+if (localStorage.getItem('bda_dark')==='1') document.body.classList.add('dark');
+function qa(el, c) { el.parentElement.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('correct','wrong')); el.classList.add(c?'correct':'wrong'); }
+</script>
+
+<script src="../claude-tutor.js"></script>
+</body>
+</html>
