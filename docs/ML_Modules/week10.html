@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 10 – CNN, Transfer Learning, RNN &amp; Imbalanced Data</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d2e; --accent:#6c63ff; --accent2:#00d4aa; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --code:#2d3748; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+  header { background:linear-gradient(135deg,#6c63ff,#00d4aa); padding:3rem 2rem; text-align:center; }
+  header h1 { font-size:2.5rem; font-weight:800; color:#fff; }
+  header p { font-size:1.1rem; color:rgba(255,255,255,0.85); margin-top:0.5rem; }
+  nav { background:var(--card); border-bottom:2px solid var(--accent); display:flex; flex-wrap:wrap; gap:0.25rem; padding:0.75rem 1rem; position:sticky; top:0; z-index:100; }
+  nav a { color:var(--muted); text-decoration:none; padding:0.4rem 1rem; border-radius:6px; font-size:0.9rem; transition:all 0.2s; }
+  nav a:hover, nav a.active { background:var(--accent); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:2rem 1.5rem; }
+  section { margin-bottom:3rem; }
+  h2 { font-size:1.8rem; color:var(--accent); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  h3 { font-size:1.2rem; color:var(--accent2); margin:1.2rem 0 0.6rem; }
+  h4 { font-size:1rem; color:#f7c948; margin:0.8rem 0 0.3rem; }
+  p { margin-bottom:0.8rem; color:var(--text); }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .highlight { border-left:4px solid var(--accent); background:rgba(108,99,255,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight2 { border-left:4px solid var(--accent2); background:rgba(0,212,170,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight3 { border-left:4px solid #f7c948; background:rgba(247,201,72,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .formula { background:var(--code); border-radius:8px; padding:1rem 1.5rem; font-family:monospace; font-size:1.05rem; color:#f7c948; text-align:center; margin:1rem 0; overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+  th { background:var(--accent); color:#fff; padding:0.7rem 1rem; text-align:left; }
+  td { padding:0.6rem 1rem; border-bottom:1px solid var(--border); }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.03); }
+  ul,ol { padding-left:1.5rem; margin-bottom:0.8rem; }
+  li { margin-bottom:0.3rem; }
+  .tag { background:var(--accent); color:#fff; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag2 { background:var(--accent2); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  svg text { font-family:'Segoe UI',sans-serif; }
+  .step { display:flex; gap:1rem; align-items:flex-start; margin-bottom:0.8rem; }
+  .step-num { background:var(--accent); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:700px) { .two-col { grid-template-columns:1fr; } header h1 { font-size:1.8rem; } }
+  .interactive-box { background:var(--card); border:2px solid var(--accent); border-radius:12px; padding:1.5rem; margin:1.5rem 0; }
+  input[type=number],input[type=text],select,textarea { background:var(--code); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:0.4rem 0.8rem; font-size:0.95rem; width:100%; margin-bottom:0.5rem; }
+  textarea { font-family:monospace; resize:vertical; }
+  button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:0.6rem 1.5rem; cursor:pointer; font-size:0.95rem; font-weight:600; transition:opacity 0.2s; }
+  button:hover { opacity:0.85; }
+  .result-box { background:rgba(0,212,170,0.1); border:1px solid var(--accent2); border-radius:8px; padding:1rem; margin-top:1rem; font-weight:600; color:var(--accent2); min-height:2rem; font-family:monospace; font-size:0.92rem; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+  @media(max-width:700px) { .grid3 { grid-template-columns:1fr; } }
+  .matrix-grid { display:inline-grid; gap:2px; }
+  .matrix-cell { width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:4px; font-size:0.85rem; font-weight:600; }
+  .svg-wrap { background:#12152a; border-radius:10px; overflow:hidden; }
+  .callout { background:rgba(247,201,72,0.1); border:1px solid #f7c948; border-radius:8px; padding:1rem 1.2rem; margin:1rem 0; }
+  .mono { font-family:monospace; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Week 10: Advanced Deep Learning</h1>
+  <p>CNN · Transfer Learning · RNN / LSTM / GRU · Handling Imbalanced Data</p>
+</header>
+<nav>
+  <a href="#cnn">CNN</a>
+  <a href="#padding">Padding &amp; Stride</a>
+  <a href="#pooling">Pooling</a>
+  <a href="#arch">CNN Architecture</a>
+  <a href="#transfer">Transfer Learning</a>
+  <a href="#rnn">RNN</a>
+  <a href="#lstm">LSTM &amp; GRU</a>
+  <a href="#imbalanced">Imbalanced Data</a>
+  <a href="#smote">SMOTE</a>
+  <a href="#interactive">Calculators</a>
+</nav>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════════ 1. CNN ═══ -->
+<section id="cnn">
+  <h2>🧠 Convolutional Neural Networks (CNN)</h2>
+  <div class="card">
+    <p>CNNs are the backbone of computer vision. Unlike fully-connected networks that treat every pixel equally, CNNs exploit <strong>spatial locality</strong> — nearby pixels are more related than distant ones. They do this with <em>filters</em> (kernels) that slide across the image detecting local patterns.</p>
+
+    <h3>Intuition: Local Feature Detection</h3>
+    <div class="two-col">
+      <div class="highlight">
+        <strong>Early layers:</strong> detect low-level features — horizontal edges, vertical edges, diagonal lines, colour blobs.
+      </div>
+      <div class="highlight2">
+        <strong>Later layers:</strong> combine those into high-level concepts — eyes, wheels, faces, entire objects.
+      </div>
+    </div>
+    <p>A single <strong>kernel</strong> (small matrix of learnable weights) is convolved across the entire input. The same kernel sees every patch of the image — this is <em>weight sharing</em>, which massively reduces parameters vs. a fully connected layer.</p>
+
+    <h3>The Convolution Operation</h3>
+    <div class="formula">output[i, j] = &sum;&sum; input[i+m, j+n] &times; kernel[m, n]</div>
+    <p>For each position (i, j) in the output, we take the element-wise product of the kernel with the corresponding patch of the input, then sum everything up to produce one scalar.</p>
+
+    <h3>Output Size Formula</h3>
+    <div class="formula">output_size = (n<sub>h</sub> &minus; k<sub>h</sub> + 1) &times; (n<sub>w</sub> &minus; k<sub>w</sub> + 1)</div>
+    <p>Where n<sub>h</sub>=input height, k<sub>h</sub>=kernel height (similarly for width). With a 5&times;5 input and 3&times;3 kernel: (5&minus;3+1) &times; (5&minus;3+1) = <strong>3&times;3 output</strong>.</p>
+
+    <h3>SVG: Convolution Diagram (5×5 input, 3×3 kernel → 3×3 output)</h3>
+    <div class="svg-wrap">
+      <svg viewBox="0 0 700 300" width="100%" height="300">
+        <defs>
+          <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+          </marker>
+        </defs>
+        <!-- Input 5x5 -->
+        <text x="80" y="25" fill="#94a3b8" font-size="12" text-anchor="middle">Input (5×5)</text>
+        <!-- Draw 5x5 grid -->
+        <g id="input-grid">
+          <!-- Row 0 -->
+          <rect x="10" y="35" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="28" y="58" fill="#e2e8f0" font-size="11" text-anchor="middle">1</text>
+          <rect x="46" y="35" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="64" y="58" fill="#e2e8f0" font-size="11" text-anchor="middle">0</text>
+          <rect x="82" y="35" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="100" y="58" fill="#e2e8f0" font-size="11" text-anchor="middle">1</text>
+          <rect x="118" y="35" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="136" y="58" fill="#e2e8f0" font-size="11" text-anchor="middle">0</text>
+          <rect x="154" y="35" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="172" y="58" fill="#e2e8f0" font-size="11" text-anchor="middle">1</text>
+          <!-- Row 1 -->
+          <rect x="10" y="71" width="36" height="36" fill="#6c63ff33" stroke="#6c63ff" stroke-width="2"/>
+          <text x="28" y="94" fill="#a9a3ff" font-size="11" text-anchor="middle">1</text>
+          <rect x="46" y="71" width="36" height="36" fill="#6c63ff33" stroke="#6c63ff" stroke-width="2"/>
+          <text x="64" y="94" fill="#a9a3ff" font-size="11" text-anchor="middle">1</text>
+          <rect x="82" y="71" width="36" height="36" fill="#6c63ff33" stroke="#6c63ff" stroke-width="2"/>
+          <text x="100" y="94" fill="#a9a3ff" font-size="11" text-anchor="middle">1</text>
+          <rect x="118" y="71" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="136" y="94" fill="#e2e8f0" font-size="11" text-anchor="middle">0</text>
+          <rect x="154" y="71" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="172" y="94" fill="#e2e8f0" font-size="11" text-anchor="middle">1</text>
+          <!-- Row 2 -->
+          <rect x="10" y="107" width="36" height="36" fill="#6c63ff33" stroke="#6c63ff" stroke-width="2"/>
+          <text x="28" y="130" fill="#a9a3ff" font-size="11" text-anchor="middle">0</text>
+          <rect x="46" y="107" width="36" height="36" fill="#6c63ff33" stroke="#6c63ff" stroke-width="2"/>
+          <text x="64" y="130" fill="#a9a3ff" font-size="11" text-anchor="middle">1</text>
+          <rect x="82" y="107" width="36" height="36" fill="#6c63ff33" stroke="#6c63ff" stroke-width="2"/>
+          <text x="100" y="130" fill="#a9a3ff" font-size="11" text-anchor="middle">0</text>
+          <rect x="118" y="107" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="136" y="130" fill="#e2e8f0" font-size="11" text-anchor="middle">1</text>
+          <rect x="154" y="107" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="172" y="130" fill="#e2e8f0" font-size="11" text-anchor="middle">0</text>
+          <!-- Row 3 -->
+          <rect x="10" y="143" width="36" height="36" fill="#6c63ff33" stroke="#6c63ff" stroke-width="2"/>
+          <text x="28" y="166" fill="#a9a3ff" font-size="11" text-anchor="middle">1</text>
+          <rect x="46" y="143" width="36" height="36" fill="#6c63ff33" stroke="#6c63ff" stroke-width="2"/>
+          <text x="64" y="166" fill="#a9a3ff" font-size="11" text-anchor="middle">0</text>
+          <rect x="82" y="143" width="36" height="36" fill="#6c63ff33" stroke="#6c63ff" stroke-width="2"/>
+          <text x="100" y="166" fill="#a9a3ff" font-size="11" text-anchor="middle">1</text>
+          <rect x="118" y="143" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="136" y="166" fill="#e2e8f0" font-size="11" text-anchor="middle">0</text>
+          <rect x="154" y="143" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="172" y="166" fill="#e2e8f0" font-size="11" text-anchor="middle">1</text>
+          <!-- Row 4 -->
+          <rect x="10" y="179" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="28" y="202" fill="#e2e8f0" font-size="11" text-anchor="middle">0</text>
+          <rect x="46" y="179" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="64" y="202" fill="#e2e8f0" font-size="11" text-anchor="middle">1</text>
+          <rect x="82" y="179" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="100" y="202" fill="#e2e8f0" font-size="11" text-anchor="middle">0</text>
+          <rect x="118" y="179" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="136" y="202" fill="#e2e8f0" font-size="11" text-anchor="middle">1</text>
+          <rect x="154" y="179" width="36" height="36" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+          <text x="172" y="202" fill="#e2e8f0" font-size="11" text-anchor="middle">1</text>
+        </g>
+        <!-- blue outline indicating current patch rows 1-3, cols 0-2 -->
+        <rect x="8" y="69" width="114" height="114" fill="none" stroke="#6c63ff" stroke-width="3" stroke-dasharray="6,2" rx="3"/>
+        <text x="65" y="235" fill="#6c63ff" font-size="10" text-anchor="middle">Highlighted patch = current kernel position</text>
+
+        <!-- Kernel 3x3 -->
+        <text x="310" y="25" fill="#94a3b8" font-size="12" text-anchor="middle">Kernel (3×3)</text>
+        <rect x="274" y="90" width="36" height="36" fill="#f7c94833" stroke="#f7c948" stroke-width="2"/>
+        <text x="292" y="113" fill="#f7c948" font-size="11" text-anchor="middle">1</text>
+        <rect x="310" y="90" width="36" height="36" fill="#f7c94833" stroke="#f7c948" stroke-width="2"/>
+        <text x="328" y="113" fill="#f7c948" font-size="11" text-anchor="middle">0</text>
+        <rect x="346" y="90" width="36" height="36" fill="#f7c94833" stroke="#f7c948" stroke-width="2"/>
+        <text x="364" y="113" fill="#f7c948" font-size="11" text-anchor="middle">1</text>
+        <rect x="274" y="126" width="36" height="36" fill="#f7c94833" stroke="#f7c948" stroke-width="2"/>
+        <text x="292" y="149" fill="#f7c948" font-size="11" text-anchor="middle">0</text>
+        <rect x="310" y="126" width="36" height="36" fill="#f7c94833" stroke="#f7c948" stroke-width="2"/>
+        <text x="328" y="149" fill="#f7c948" font-size="11" text-anchor="middle">1</text>
+        <rect x="346" y="126" width="36" height="36" fill="#f7c94833" stroke="#f7c948" stroke-width="2"/>
+        <text x="364" y="149" fill="#f7c948" font-size="11" text-anchor="middle">0</text>
+        <rect x="274" y="162" width="36" height="36" fill="#f7c94833" stroke="#f7c948" stroke-width="2"/>
+        <text x="292" y="185" fill="#f7c948" font-size="11" text-anchor="middle">1</text>
+        <rect x="310" y="162" width="36" height="36" fill="#f7c94833" stroke="#f7c948" stroke-width="2"/>
+        <text x="328" y="185" fill="#f7c948" font-size="11" text-anchor="middle">0</text>
+        <rect x="346" y="162" width="36" height="36" fill="#f7c94833" stroke="#f7c948" stroke-width="2"/>
+        <text x="364" y="185" fill="#f7c948" font-size="11" text-anchor="middle">1</text>
+
+        <!-- Arrow -->
+        <line x1="400" y1="145" x2="435" y2="145" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr2)"/>
+        <text x="417" y="138" fill="#94a3b8" font-size="10" text-anchor="middle">⊗</text>
+
+        <!-- Output 3x3 -->
+        <text x="520" y="25" fill="#94a3b8" font-size="12" text-anchor="middle">Output (3×3)</text>
+        <rect x="440" y="90" width="48" height="48" fill="#00d4aa33" stroke="#00d4aa" stroke-width="2.5"/>
+        <text x="464" y="119" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">4</text>
+        <rect x="488" y="90" width="48" height="48" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+        <text x="512" y="119" fill="#94a3b8" font-size="13" text-anchor="middle">3</text>
+        <rect x="536" y="90" width="48" height="48" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+        <text x="560" y="119" fill="#94a3b8" font-size="13" text-anchor="middle">4</text>
+        <rect x="440" y="138" width="48" height="48" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+        <text x="464" y="167" fill="#94a3b8" font-size="13" text-anchor="middle">2</text>
+        <rect x="488" y="138" width="48" height="48" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+        <text x="512" y="167" fill="#94a3b8" font-size="13" text-anchor="middle">4</text>
+        <rect x="536" y="138" width="48" height="48" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+        <text x="560" y="167" fill="#94a3b8" font-size="13" text-anchor="middle">2</text>
+        <rect x="440" y="186" width="48" height="48" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+        <text x="464" y="215" fill="#94a3b8" font-size="13" text-anchor="middle">2</text>
+        <rect x="488" y="186" width="48" height="48" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+        <text x="512" y="215" fill="#94a3b8" font-size="13" text-anchor="middle">3</text>
+        <rect x="536" y="186" width="48" height="48" fill="#1e2240" stroke="#2d3748" stroke-width="1.5"/>
+        <text x="560" y="215" fill="#94a3b8" font-size="13" text-anchor="middle">3</text>
+
+        <text x="464" y="270" fill="#00d4aa" font-size="11" text-anchor="middle">top-left = 4</text>
+        <text x="312" y="260" fill="#94a3b8" font-size="10" text-anchor="middle">(element-wise multiply + sum)</text>
+      </svg>
+    </div>
+
+    <h3>Numerical Worked Example</h3>
+    <p>Using the 5×5 input and 3×3 kernel above, let's compute <strong>output[0,0]</strong> (top-left of output).</p>
+    <div class="highlight">
+      <p><strong>Input patch (rows 0-2, cols 0-2):</strong></p>
+      <p class="mono">[ 1 0 1 ]   Kernel: [ 1 0 1 ]</p>
+      <p class="mono">[ 1 1 1 ]           [ 0 1 0 ]</p>
+      <p class="mono">[ 0 1 0 ]           [ 1 0 1 ]</p>
+      <br>
+      <p><strong>Element-wise multiply and sum:</strong></p>
+      <p class="mono">(1×1)+(0×0)+(1×1) + (1×0)+(1×1)+(1×0) + (0×1)+(1×0)+(0×1)</p>
+      <p class="mono">= (1+0+1) + (0+1+0) + (0+0+0) = 2 + 1 + 0 = <strong style="color:#f7c948;">3</strong></p>
+      <p style="color:#94a3b8; font-size:0.9rem;">Note: the diagram shows the highlighted patch at rows 1-3, cols 0-2 giving output[1,0]=4.</p>
+    </div>
+    <p>Let's verify <strong>output[1,0]</strong> using input patch rows 1-3, cols 0-2:</p>
+    <div class="highlight2">
+      <p class="mono">Input patch:      Kernel:</p>
+      <p class="mono">[ 1 1 1 ]         [ 1 0 1 ]</p>
+      <p class="mono">[ 0 1 0 ]         [ 0 1 0 ]</p>
+      <p class="mono">[ 1 0 1 ]         [ 1 0 1 ]</p>
+      <br>
+      <p><strong>Sum:</strong> (1+0+1)+(0+1+0)+(1+0+1) = 2+1+2 = <strong style="color:#00d4aa;">4 ✓</strong></p>
+    </div>
+
+    <h3>Multiple Kernels = Multiple Feature Maps</h3>
+    <p>In practice, a conv layer uses <strong>K kernels</strong> simultaneously. Each kernel specialises in detecting a different feature (e.g., horizontal edge, vertical edge, colour contrast). The output is a 3D volume: <strong>output_h × output_w × K</strong>.</p>
+    <div class="callout">
+      Example: 32×32 image + 16 kernels of 3×3 → 30×30×16 feature maps (with no padding)
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 2. PADDING & STRIDE ═══ -->
+<section id="padding">
+  <h2>🔲 Padding &amp; Stride</h2>
+  <div class="card">
+    <h3>Padding</h3>
+    <p>Without padding, each convolution shrinks the spatial dimensions. After many layers, the feature map becomes tiny. Padding adds zeros around the border to control output size.</p>
+
+    <div class="two-col">
+      <div class="highlight">
+        <h4>Valid Convolution (no padding, p=0)</h4>
+        <p>Output shrinks: (n − k + 1)</p>
+        <p>5×5 input, 3×3 kernel → 3×3 output</p>
+        <p><strong>Use when:</strong> you want to reduce spatial size naturally</p>
+      </div>
+      <div class="highlight2">
+        <h4>Same Convolution (p = (k−1)/2)</h4>
+        <p>Output = same size as input</p>
+        <p>5×5 input, 3×3 kernel, p=1 → 5×5 output</p>
+        <p><strong>Use when:</strong> you want to preserve spatial dimensions</p>
+      </div>
+    </div>
+
+    <div class="formula">output_size = n + 2p &minus; k + 1 &nbsp;&nbsp;&nbsp; (with padding p, no stride)</div>
+
+    <h3>Stride</h3>
+    <p>Stride s controls how many pixels the kernel jumps at each step. Stride=1 is a full slide; stride=2 skips every other position, halving the output size.</p>
+    <div class="formula">output_size = floor((n + 2p &minus; k) / s + 1)</div>
+
+    <h3>SVG: Stride=1 vs Stride=2</h3>
+    <div class="svg-wrap">
+      <svg viewBox="0 0 680 220" width="100%" height="220">
+        <!-- Stride=1 title -->
+        <text x="150" y="22" fill="#f7c948" font-size="13" font-weight="bold" text-anchor="middle">Stride = 1</text>
+        <!-- 5 cells -->
+        <rect x="10"  y="35" width="44" height="44" fill="#6c63ff44" stroke="#6c63ff" stroke-width="2" rx="3"/>
+        <rect x="55"  y="35" width="44" height="44" fill="#6c63ff44" stroke="#6c63ff" stroke-width="2" rx="3"/>
+        <rect x="100" y="35" width="44" height="44" fill="#6c63ff44" stroke="#6c63ff" stroke-width="2" rx="3"/>
+        <rect x="145" y="35" width="44" height="44" fill="#1e2240" stroke="#2d3748" stroke-width="1.5" rx="3"/>
+        <rect x="190" y="35" width="44" height="44" fill="#1e2240" stroke="#2d3748" stroke-width="1.5" rx="3"/>
+        <text x="32"  y="62" fill="#a9a3ff" font-size="13" text-anchor="middle">1</text>
+        <text x="77"  y="62" fill="#a9a3ff" font-size="13" text-anchor="middle">2</text>
+        <text x="122" y="62" fill="#a9a3ff" font-size="13" text-anchor="middle">3</text>
+        <text x="167" y="62" fill="#e2e8f0" font-size="13" text-anchor="middle">4</text>
+        <text x="212" y="62" fill="#e2e8f0" font-size="13" text-anchor="middle">5</text>
+        <!-- positions at stride 1: 0,1,2 -->
+        <text x="32" y="100" fill="#6c63ff" font-size="11" text-anchor="middle">pos 0</text>
+        <text x="77" y="100" fill="#6c63ff" font-size="11" text-anchor="middle">pos 1</text>
+        <text x="122" y="100" fill="#6c63ff" font-size="11" text-anchor="middle">pos 2</text>
+        <!-- kernel 3 wide -->
+        <rect x="10"  y="115" width="132" height="30" fill="#6c63ff33" stroke="#6c63ff" stroke-width="2" rx="4"/>
+        <text x="76" y="135" fill="#6c63ff" font-size="11" text-anchor="middle">kernel at pos 0, step=1 → 3 positions</text>
+        <text x="110" y="175" fill="#94a3b8" font-size="11" text-anchor="middle">n=5, k=3, s=1 → floor((5-3)/1+1) = 3 outputs</text>
+
+        <!-- Stride=2 title -->
+        <text x="490" y="22" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">Stride = 2</text>
+        <!-- 5 cells -->
+        <rect x="350" y="35" width="44" height="44" fill="#00d4aa44" stroke="#00d4aa" stroke-width="2" rx="3"/>
+        <rect x="395" y="35" width="44" height="44" fill="#00d4aa44" stroke="#00d4aa" stroke-width="2" rx="3"/>
+        <rect x="440" y="35" width="44" height="44" fill="#00d4aa44" stroke="#00d4aa" stroke-width="2" rx="3"/>
+        <rect x="485" y="35" width="44" height="44" fill="#1e2240" stroke="#2d3748" stroke-width="1.5" rx="3"/>
+        <rect x="530" y="35" width="44" height="44" fill="#1e2240" stroke="#2d3748" stroke-width="1.5" rx="3"/>
+        <text x="372" y="62" fill="#a0f0e0" font-size="13" text-anchor="middle">1</text>
+        <text x="417" y="62" fill="#a0f0e0" font-size="13" text-anchor="middle">2</text>
+        <text x="462" y="62" fill="#a0f0e0" font-size="13" text-anchor="middle">3</text>
+        <text x="507" y="62" fill="#e2e8f0" font-size="13" text-anchor="middle">4</text>
+        <text x="552" y="62" fill="#e2e8f0" font-size="13" text-anchor="middle">5</text>
+        <!-- stride=2: positions 0 and 2 -->
+        <rect x="350" y="115" width="132" height="30" fill="#00d4aa33" stroke="#00d4aa" stroke-width="2" rx="4"/>
+        <text x="416" y="132" fill="#00d4aa" font-size="10" text-anchor="middle">pos 0 (covers 1,2,3)</text>
+        <rect x="440" y="150" width="132" height="30" fill="#00d4aa22" stroke="#00d4aa" stroke-width="1.5" stroke-dasharray="4,3" rx="4"/>
+        <text x="506" y="167" fill="#00d4aa" font-size="10" text-anchor="middle">pos 2 (covers 3,4,5)</text>
+        <text x="490" y="200" fill="#94a3b8" font-size="11" text-anchor="middle">n=5, k=3, s=2 → floor((5-3)/2+1) = 2 outputs</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 3. POOLING ═══ -->
+<section id="pooling">
+  <h2>🌊 Pooling Layers</h2>
+  <div class="card">
+    <p>Pooling reduces spatial dimensions, giving translational invariance and reducing computation. It operates independently on each feature map channel.</p>
+
+    <div class="two-col">
+      <div class="highlight">
+        <h4>Max Pooling</h4>
+        <p>Takes the <strong>maximum</strong> value in each pool region.</p>
+        <p>Retains the strongest activation — "was this feature present anywhere in the region?"</p>
+      </div>
+      <div class="highlight2">
+        <h4>Average Pooling</h4>
+        <p>Takes the <strong>mean</strong> value in each pool region.</p>
+        <p>Smoother representation — useful in later layers (global average pooling).</p>
+      </div>
+    </div>
+
+    <h3>SVG: 4×4 Input → 2×2 Max Pooling → 2×2 Output</h3>
+    <div class="svg-wrap">
+      <svg viewBox="0 0 600 260" width="100%" height="260">
+        <defs>
+          <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+          </marker>
+        </defs>
+        <!-- 4x4 input -->
+        <text x="110" y="24" fill="#94a3b8" font-size="12" text-anchor="middle">Input (4×4)</text>
+        <!-- Row 0: region A (top-left) -->
+        <rect x="10"  y="35" width="50" height="50" fill="#6c63ff44" stroke="#6c63ff" stroke-width="2.5"/>
+        <text x="35"  y="65" fill="#a9a3ff" font-size="14" font-weight="bold" text-anchor="middle">2</text>
+        <rect x="60"  y="35" width="50" height="50" fill="#6c63ff44" stroke="#6c63ff" stroke-width="2.5"/>
+        <text x="85"  y="65" fill="#a9a3ff" font-size="14" font-weight="bold" text-anchor="middle">7</text>
+        <!-- Row 0: region B (top-right) -->
+        <rect x="110" y="35" width="50" height="50" fill="#f7c94833" stroke="#f7c948" stroke-width="2.5"/>
+        <text x="135" y="65" fill="#f7c948" font-size="14" font-weight="bold" text-anchor="middle">1</text>
+        <rect x="160" y="35" width="50" height="50" fill="#f7c94833" stroke="#f7c948" stroke-width="2.5"/>
+        <text x="185" y="65" fill="#f7c948" font-size="14" font-weight="bold" text-anchor="middle">4</text>
+        <!-- Row 1: region A -->
+        <rect x="10"  y="85" width="50" height="50" fill="#6c63ff44" stroke="#6c63ff" stroke-width="2.5"/>
+        <text x="35"  y="115" fill="#a9a3ff" font-size="14" font-weight="bold" text-anchor="middle">3</text>
+        <rect x="60"  y="85" width="50" height="50" fill="#6c63ff44" stroke="#6c63ff" stroke-width="2.5"/>
+        <text x="85"  y="115" fill="#a9a3ff" font-size="14" font-weight="bold" text-anchor="middle">5</text>
+        <!-- Row 1: region B -->
+        <rect x="110" y="85" width="50" height="50" fill="#f7c94833" stroke="#f7c948" stroke-width="2.5"/>
+        <text x="135" y="115" fill="#f7c948" font-size="14" font-weight="bold" text-anchor="middle">9</text>
+        <rect x="160" y="85" width="50" height="50" fill="#f7c94833" stroke="#f7c948" stroke-width="2.5"/>
+        <text x="185" y="115" fill="#f7c948" font-size="14" font-weight="bold" text-anchor="middle">2</text>
+        <!-- Row 2: region C (bottom-left) -->
+        <rect x="10"  y="135" width="50" height="50" fill="#00d4aa33" stroke="#00d4aa" stroke-width="2.5"/>
+        <text x="35"  y="165" fill="#a0f0e0" font-size="14" font-weight="bold" text-anchor="middle">8</text>
+        <rect x="60"  y="135" width="50" height="50" fill="#00d4aa33" stroke="#00d4aa" stroke-width="2.5"/>
+        <text x="85"  y="165" fill="#a0f0e0" font-size="14" font-weight="bold" text-anchor="middle">1</text>
+        <!-- Row 2: region D (bottom-right) -->
+        <rect x="110" y="135" width="50" height="50" fill="#ff6b6b33" stroke="#ff6b6b" stroke-width="2.5"/>
+        <text x="135" y="165" fill="#ff9999" font-size="14" font-weight="bold" text-anchor="middle">6</text>
+        <rect x="160" y="135" width="50" height="50" fill="#ff6b6b33" stroke="#ff6b6b" stroke-width="2.5"/>
+        <text x="185" y="165" fill="#ff9999" font-size="14" font-weight="bold" text-anchor="middle">3</text>
+        <!-- Row 3: region C -->
+        <rect x="10"  y="185" width="50" height="50" fill="#00d4aa33" stroke="#00d4aa" stroke-width="2.5"/>
+        <text x="35"  y="215" fill="#a0f0e0" font-size="14" font-weight="bold" text-anchor="middle">4</text>
+        <rect x="60"  y="185" width="50" height="50" fill="#00d4aa33" stroke="#00d4aa" stroke-width="2.5"/>
+        <text x="85"  y="215" fill="#a0f0e0" font-size="14" font-weight="bold" text-anchor="middle">2</text>
+        <!-- Row 3: region D -->
+        <rect x="110" y="185" width="50" height="50" fill="#ff6b6b33" stroke="#ff6b6b" stroke-width="2.5"/>
+        <text x="135" y="215" fill="#ff9999" font-size="14" font-weight="bold" text-anchor="middle">0</text>
+        <rect x="160" y="185" width="50" height="50" fill="#ff6b6b33" stroke="#ff6b6b" stroke-width="2.5"/>
+        <text x="185" y="215" fill="#ff9999" font-size="14" font-weight="bold" text-anchor="middle">5</text>
+
+        <!-- Arrow + label -->
+        <line x1="222" y1="125" x2="270" y2="125" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr3)"/>
+        <text x="247" y="115" fill="#94a3b8" font-size="10" text-anchor="middle">2×2 pool</text>
+
+        <!-- Max pool output 2x2 -->
+        <text x="340" y="80" fill="#94a3b8" font-size="11" text-anchor="middle">Max Pool</text>
+        <rect x="285" y="90"  width="60" height="60" fill="#6c63ff44" stroke="#6c63ff" stroke-width="2.5"/>
+        <text x="315" y="126" fill="#a9a3ff" font-size="17" font-weight="bold" text-anchor="middle">7</text>
+        <rect x="345" y="90"  width="60" height="60" fill="#f7c94833" stroke="#f7c948" stroke-width="2.5"/>
+        <text x="375" y="126" fill="#f7c948" font-size="17" font-weight="bold" text-anchor="middle">9</text>
+        <rect x="285" y="150" width="60" height="60" fill="#00d4aa33" stroke="#00d4aa" stroke-width="2.5"/>
+        <text x="315" y="186" fill="#a0f0e0" font-size="17" font-weight="bold" text-anchor="middle">8</text>
+        <rect x="345" y="150" width="60" height="60" fill="#ff6b6b33" stroke="#ff6b6b" stroke-width="2.5"/>
+        <text x="375" y="186" fill="#ff9999" font-size="17" font-weight="bold" text-anchor="middle">6</text>
+
+        <!-- Avg pool output 2x2 -->
+        <text x="520" y="80" fill="#94a3b8" font-size="11" text-anchor="middle">Avg Pool</text>
+        <rect x="465" y="90"  width="60" height="60" fill="#6c63ff44" stroke="#6c63ff" stroke-width="2.5"/>
+        <text x="495" y="126" fill="#a9a3ff" font-size="15" font-weight="bold" text-anchor="middle">4.25</text>
+        <rect x="525" y="90"  width="60" height="60" fill="#f7c94833" stroke="#f7c948" stroke-width="2.5"/>
+        <text x="555" y="126" fill="#f7c948" font-size="15" font-weight="bold" text-anchor="middle">4.0</text>
+        <rect x="465" y="150" width="60" height="60" fill="#00d4aa33" stroke="#00d4aa" stroke-width="2.5"/>
+        <text x="495" y="186" fill="#a0f0e0" font-size="15" font-weight="bold" text-anchor="middle">3.75</text>
+        <rect x="525" y="150" width="60" height="60" fill="#ff6b6b33" stroke="#ff6b6b" stroke-width="2.5"/>
+        <text x="555" y="186" fill="#ff9999" font-size="15" font-weight="bold" text-anchor="middle">3.5</text>
+      </svg>
+    </div>
+
+    <h3>Verification</h3>
+    <div class="highlight">
+      <p><strong>Top-left region (purple): {2,7,3,5}</strong></p>
+      <p>Max = 7 &nbsp;|&nbsp; Average = (2+7+3+5)/4 = 17/4 = 4.25 ✓</p>
+    </div>
+    <div class="highlight2">
+      <p><strong>Top-right region (yellow): {1,4,9,2}</strong></p>
+      <p>Max = 9 &nbsp;|&nbsp; Average = (1+4+9+2)/4 = 16/4 = 4.0 ✓</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 4. CNN ARCHITECTURE ═══ -->
+<section id="arch">
+  <h2>🏗️ CNN Architecture</h2>
+  <div class="card">
+    <p>A typical CNN stacks convolutional, activation, and pooling layers to progressively extract higher-level features, then flattens and uses fully-connected layers for classification.</p>
+
+    <h3>LeNet/AlexNet Style Architecture</h3>
+    <div class="svg-wrap">
+      <svg viewBox="0 0 900 200" width="100%" height="200">
+        <defs>
+          <marker id="arr4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+          </marker>
+        </defs>
+        <!-- Boxes -->
+        <!-- Input -->
+        <rect x="5" y="60" width="70" height="80" rx="6" fill="#1e2240" stroke="#6c63ff" stroke-width="2"/>
+        <text x="40" y="97" fill="#a9a3ff" font-size="9" font-weight="bold" text-anchor="middle">Input</text>
+        <text x="40" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">32×32×1</text>
+        <line x1="75" y1="100" x2="93" y2="100" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr4)"/>
+
+        <!-- Conv1 -->
+        <rect x="93" y="50" width="70" height="100" rx="6" fill="#6c63ff33" stroke="#6c63ff" stroke-width="2"/>
+        <text x="128" y="88" fill="#a9a3ff" font-size="9" font-weight="bold" text-anchor="middle">Conv1</text>
+        <text x="128" y="101" fill="#94a3b8" font-size="8" text-anchor="middle">6 kernels</text>
+        <text x="128" y="113" fill="#94a3b8" font-size="8" text-anchor="middle">5×5 → ReLU</text>
+        <text x="128" y="125" fill="#f7c948" font-size="8" text-anchor="middle">28×28×6</text>
+        <line x1="163" y1="100" x2="181" y2="100" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr4)"/>
+
+        <!-- Pool1 -->
+        <rect x="181" y="60" width="70" height="80" rx="6" fill="#00d4aa22" stroke="#00d4aa" stroke-width="2"/>
+        <text x="216" y="97" fill="#a0f0e0" font-size="9" font-weight="bold" text-anchor="middle">Pool1</text>
+        <text x="216" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">MaxPool 2×2</text>
+        <text x="216" y="122" fill="#f7c948" font-size="8" text-anchor="middle">14×14×6</text>
+        <line x1="251" y1="100" x2="269" y2="100" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr4)"/>
+
+        <!-- Conv2 -->
+        <rect x="269" y="40" width="70" height="120" rx="6" fill="#6c63ff33" stroke="#6c63ff" stroke-width="2"/>
+        <text x="304" y="78" fill="#a9a3ff" font-size="9" font-weight="bold" text-anchor="middle">Conv2</text>
+        <text x="304" y="91" fill="#94a3b8" font-size="8" text-anchor="middle">16 kernels</text>
+        <text x="304" y="103" fill="#94a3b8" font-size="8" text-anchor="middle">5×5 → ReLU</text>
+        <text x="304" y="115" fill="#f7c948" font-size="8" text-anchor="middle">10×10×16</text>
+        <line x1="339" y1="100" x2="357" y2="100" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr4)"/>
+
+        <!-- Pool2 -->
+        <rect x="357" y="60" width="70" height="80" rx="6" fill="#00d4aa22" stroke="#00d4aa" stroke-width="2"/>
+        <text x="392" y="97" fill="#a0f0e0" font-size="9" font-weight="bold" text-anchor="middle">Pool2</text>
+        <text x="392" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">MaxPool 2×2</text>
+        <text x="392" y="122" fill="#f7c948" font-size="8" text-anchor="middle">5×5×16</text>
+        <line x1="427" y1="100" x2="445" y2="100" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr4)"/>
+
+        <!-- Flatten -->
+        <rect x="445" y="65" width="70" height="70" rx="6" fill="#f7c94822" stroke="#f7c948" stroke-width="2"/>
+        <text x="480" y="97" fill="#f7c948" font-size="9" font-weight="bold" text-anchor="middle">Flatten</text>
+        <text x="480" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">400 units</text>
+        <line x1="515" y1="100" x2="533" y2="100" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr4)"/>
+
+        <!-- FC1 -->
+        <rect x="533" y="60" width="70" height="80" rx="6" fill="#ff6b6b22" stroke="#ff6b6b" stroke-width="2"/>
+        <text x="568" y="93" fill="#ff9999" font-size="9" font-weight="bold" text-anchor="middle">FC1</text>
+        <text x="568" y="106" fill="#94a3b8" font-size="8" text-anchor="middle">120 → ReLU</text>
+        <line x1="603" y1="100" x2="621" y2="100" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr4)"/>
+
+        <!-- FC2 -->
+        <rect x="621" y="65" width="70" height="70" rx="6" fill="#ff6b6b22" stroke="#ff6b6b" stroke-width="2"/>
+        <text x="656" y="97" fill="#ff9999" font-size="9" font-weight="bold" text-anchor="middle">FC2</text>
+        <text x="656" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">84 → ReLU</text>
+        <line x1="691" y1="100" x2="709" y2="100" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr4)"/>
+
+        <!-- Softmax -->
+        <rect x="709" y="70" width="80" height="60" rx="6" fill="#00d4aa44" stroke="#00d4aa" stroke-width="2"/>
+        <text x="749" y="97" fill="#00d4aa" font-size="9" font-weight="bold" text-anchor="middle">Softmax</text>
+        <text x="749" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">10 classes</text>
+
+        <!-- Labels below -->
+        <text x="450" y="180" fill="#94a3b8" font-size="9" text-anchor="middle">↑ Feature Extraction (spatial)  ↑ &nbsp;&nbsp; ↑ Classification (flat) ↑</text>
+      </svg>
+    </div>
+
+    <h3>Feature Map Dimensions at Each Stage</h3>
+    <table>
+      <tr><th>Layer</th><th>Operation</th><th>Output Shape</th><th>Parameters</th></tr>
+      <tr><td>Input</td><td>—</td><td>32×32×1</td><td>0</td></tr>
+      <tr><td>Conv1</td><td>6 kernels 5×5, s=1</td><td>28×28×6</td><td>6×(5×5×1+1) = 156</td></tr>
+      <tr><td>Pool1</td><td>MaxPool 2×2, s=2</td><td>14×14×6</td><td>0</td></tr>
+      <tr><td>Conv2</td><td>16 kernels 5×5, s=1</td><td>10×10×16</td><td>16×(5×5×6+1) = 2,416</td></tr>
+      <tr><td>Pool2</td><td>MaxPool 2×2, s=2</td><td>5×5×16</td><td>0</td></tr>
+      <tr><td>Flatten</td><td>—</td><td>400</td><td>0</td></tr>
+      <tr><td>FC1</td><td>Dense + ReLU</td><td>120</td><td>400×120+120 = 48,120</td></tr>
+      <tr><td>FC2</td><td>Dense + ReLU</td><td>84</td><td>120×84+84 = 10,164</td></tr>
+      <tr><td>Output</td><td>Softmax</td><td>10</td><td>84×10+10 = 850</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 5. TRANSFER LEARNING ═══ -->
+<section id="transfer">
+  <h2>🔁 Transfer Learning</h2>
+  <div class="card">
+    <p>Training a deep CNN from scratch requires millions of images and weeks of compute. Transfer learning reuses a model already trained on a large dataset (like ImageNet) and adapts it to a new, smaller task.</p>
+
+    <div class="two-col">
+      <div class="highlight">
+        <h4>Pre-training</h4>
+        <p>Train on a massive dataset: ImageNet has 1.2 million images across 1,000 categories. The model learns universal visual features.</p>
+      </div>
+      <div class="highlight2">
+        <h4>Fine-tuning</h4>
+        <p>Take the pre-trained weights, replace the final classification layer for the new task (e.g., 5 flower species), and continue training — often with a low learning rate.</p>
+      </div>
+    </div>
+
+    <h3>Why it Works: Feature Reuse Pyramid</h3>
+    <div class="svg-wrap">
+      <svg viewBox="0 0 700 260" width="100%" height="260">
+        <!-- Pyramid layers -->
+        <polygon points="350,10 180,250 520,250" fill="none" stroke="#2d3748" stroke-width="1"/>
+        <!-- Layer 1 (top - most specific) -->
+        <polygon points="350,10 320,55 380,55" fill="#6c63ff" opacity="0.85"/>
+        <text x="350" y="40" fill="#fff" font-size="9" text-anchor="middle" font-weight="bold">Task head</text>
+        <!-- Layer 2 -->
+        <polygon points="320,58 280,110 420,110 380,58" fill="#5a54d4" opacity="0.8"/>
+        <text x="350" y="90" fill="#fff" font-size="9" text-anchor="middle">High-level semantics</text>
+        <text x="350" y="103" fill="#e2e8f0" font-size="8" text-anchor="middle">(dog ears, car wheels)</text>
+        <!-- Layer 3 -->
+        <polygon points="280,113 230,170 470,170 420,113" fill="#4a44b0" opacity="0.8"/>
+        <text x="350" y="143" fill="#fff" font-size="9" text-anchor="middle">Mid-level features</text>
+        <text x="350" y="156" fill="#e2e8f0" font-size="8" text-anchor="middle">(circles, corners, curves)</text>
+        <!-- Layer 4 (base) -->
+        <polygon points="230,173 180,250 520,250 470,173" fill="#3a349a" opacity="0.8"/>
+        <text x="350" y="203" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">Low-level features</text>
+        <text x="350" y="218" fill="#e2e8f0" font-size="9" text-anchor="middle">(edges, textures, colours)</text>
+        <text x="350" y="232" fill="#a9a3ff" font-size="9" text-anchor="middle">Highly transferable across tasks</text>
+
+        <!-- Annotations -->
+        <text x="545" y="40" fill="#f7c948" font-size="10">Replace for</text>
+        <text x="545" y="54" fill="#f7c948" font-size="10">new task</text>
+        <line x1="382" y1="35" x2="540" y2="40" stroke="#f7c948" stroke-width="1" stroke-dasharray="4,2"/>
+
+        <text x="545" y="110" fill="#00d4aa" font-size="10">Fine-tune if</text>
+        <text x="545" y="124" fill="#00d4aa" font-size="10">data is large</text>
+        <line x1="422" y1="108" x2="540" y2="112" stroke="#00d4aa" stroke-width="1" stroke-dasharray="4,2"/>
+
+        <text x="545" y="200" fill="#94a3b8" font-size="10">Freeze these</text>
+        <text x="545" y="214" fill="#94a3b8" font-size="10">layers (reuse)</text>
+        <line x1="472" y1="205" x2="540" y2="205" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>
+      </svg>
+    </div>
+
+    <h3>When to Freeze vs Fine-tune</h3>
+    <table>
+      <tr><th>New Dataset Size</th><th>Similarity to Original</th><th>Strategy</th></tr>
+      <tr><td>Small</td><td>Similar</td><td>Freeze all layers, train only new head</td></tr>
+      <tr><td>Small</td><td>Different</td><td>Freeze early layers, fine-tune later layers + head</td></tr>
+      <tr><td>Large</td><td>Similar</td><td>Fine-tune all layers with low LR</td></tr>
+      <tr><td>Large</td><td>Different</td><td>Fine-tune all layers or train from scratch</td></tr>
+    </table>
+
+    <h3>Popular Pre-trained Models</h3>
+    <table>
+      <tr><th>Model</th><th>Year</th><th>Architecture</th><th>Key Innovation</th></tr>
+      <tr><td><strong style="color:#a9a3ff;">AlexNet</strong></td><td>2012</td><td>5 conv + 3 FC</td><td>First deep CNN to win ImageNet; used ReLU + dropout</td></tr>
+      <tr><td><strong style="color:#a9a3ff;">VGG</strong></td><td>2014</td><td>16-19 layers</td><td>Exclusively 3×3 kernels; simple uniform architecture</td></tr>
+      <tr><td><strong style="color:#00d4aa;">ResNet</strong></td><td>2015</td><td>50-152 layers</td><td>Skip connections → trains very deep networks</td></tr>
+      <tr><td><strong style="color:#f7c948;">BERT</strong></td><td>2018</td><td>Transformer encoder</td><td>Bidirectional NLP pre-training (masked LM)</td></tr>
+      <tr><td><strong style="color:#f7c948;">GPT</strong></td><td>2018–</td><td>Transformer decoder</td><td>Autoregressive language modelling at scale</td></tr>
+      <tr><td><strong style="color:#f7c948;">T5</strong></td><td>2019</td><td>Enc–dec transformer</td><td>Unified text-to-text framework for all NLP tasks</td></tr>
+    </table>
+
+    <div class="highlight3">
+      <strong>ResNet Skip Connection:</strong> Instead of learning H(x), learn the residual F(x) = H(x) − x. Then the output is F(x) + x. This makes gradients flow cleanly through even 150+ layers.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 6. RNN ═══ -->
+<section id="rnn">
+  <h2>🔄 Recurrent Neural Networks (RNN)</h2>
+  <div class="card">
+    <p>Standard feedforward networks assume inputs are independent. But in language, audio, and time series, <strong>context matters</strong> — the word "bank" means something different after "river" vs "money". RNNs solve this with a <em>hidden state</em> that carries information across time steps.</p>
+
+    <h3>Hidden State Equations</h3>
+    <div class="formula">s<sub>t</sub> = &sigma;(U x<sub>t</sub> + W s<sub>t&minus;1</sub> + b)</div>
+    <div class="formula">y<sub>t</sub> = f(V s<sub>t</sub> + c)</div>
+    <p>Where: x<sub>t</sub> = input at time t, s<sub>t</sub> = hidden state at time t, U/W/V = weight matrices (shared across all time steps), b/c = biases, σ = activation (usually tanh).</p>
+    <p>The key insight: <strong>the same weights U, W, V are used at every time step</strong> — this is weight sharing over time.</p>
+
+    <h3>Unrolled RNN Diagram (4 time steps)</h3>
+    <div class="svg-wrap">
+      <svg viewBox="0 0 700 230" width="100%" height="230">
+        <defs>
+          <marker id="arr5" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L7,3 z" fill="#94a3b8"/>
+          </marker>
+          <marker id="arr5g" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L7,3 z" fill="#00d4aa"/>
+          </marker>
+          <marker id="arr5y" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L7,3 z" fill="#f7c948"/>
+          </marker>
+        </defs>
+        <!-- Time labels -->
+        <text x="100" y="20" fill="#94a3b8" font-size="11" text-anchor="middle">t = 1</text>
+        <text x="250" y="20" fill="#94a3b8" font-size="11" text-anchor="middle">t = 2</text>
+        <text x="400" y="20" fill="#94a3b8" font-size="11" text-anchor="middle">t = 3</text>
+        <text x="550" y="20" fill="#94a3b8" font-size="11" text-anchor="middle">t = 4</text>
+
+        <!-- RNN cells (circles) -->
+        <circle cx="100" cy="115" r="30" fill="#1e2240" stroke="#6c63ff" stroke-width="2.5"/>
+        <text x="100" y="119" fill="#a9a3ff" font-size="11" font-weight="bold" text-anchor="middle">s₁</text>
+        <circle cx="250" cy="115" r="30" fill="#1e2240" stroke="#6c63ff" stroke-width="2.5"/>
+        <text x="250" y="119" fill="#a9a3ff" font-size="11" font-weight="bold" text-anchor="middle">s₂</text>
+        <circle cx="400" cy="115" r="30" fill="#1e2240" stroke="#6c63ff" stroke-width="2.5"/>
+        <text x="400" y="119" fill="#a9a3ff" font-size="11" font-weight="bold" text-anchor="middle">s₃</text>
+        <circle cx="550" cy="115" r="30" fill="#1e2240" stroke="#6c63ff" stroke-width="2.5"/>
+        <text x="550" y="119" fill="#a9a3ff" font-size="11" font-weight="bold" text-anchor="middle">s₄</text>
+
+        <!-- Input arrows (x_t) -->
+        <line x1="100" y1="195" x2="100" y2="148" stroke="#f7c948" stroke-width="2" marker-end="url(#arr5y)"/>
+        <text x="100" y="210" fill="#f7c948" font-size="11" text-anchor="middle">x₁</text>
+        <line x1="250" y1="195" x2="250" y2="148" stroke="#f7c948" stroke-width="2" marker-end="url(#arr5y)"/>
+        <text x="250" y="210" fill="#f7c948" font-size="11" text-anchor="middle">x₂</text>
+        <line x1="400" y1="195" x2="400" y2="148" stroke="#f7c948" stroke-width="2" marker-end="url(#arr5y)"/>
+        <text x="400" y="210" fill="#f7c948" font-size="11" text-anchor="middle">x₃</text>
+        <line x1="550" y1="195" x2="550" y2="148" stroke="#f7c948" stroke-width="2" marker-end="url(#arr5y)"/>
+        <text x="550" y="210" fill="#f7c948" font-size="11" text-anchor="middle">x₄</text>
+
+        <!-- Output arrows (y_t) -->
+        <line x1="100" y1="85" x2="100" y2="48" stroke="#00d4aa" stroke-width="2" marker-end="url(#arr5g)"/>
+        <text x="100" y="42" fill="#00d4aa" font-size="11" text-anchor="middle">y₁</text>
+        <line x1="250" y1="85" x2="250" y2="48" stroke="#00d4aa" stroke-width="2" marker-end="url(#arr5g)"/>
+        <text x="250" y="42" fill="#00d4aa" font-size="11" text-anchor="middle">y₂</text>
+        <line x1="400" y1="85" x2="400" y2="48" stroke="#00d4aa" stroke-width="2" marker-end="url(#arr5g)"/>
+        <text x="400" y="42" fill="#00d4aa" font-size="11" text-anchor="middle">y₃</text>
+        <line x1="550" y1="85" x2="550" y2="48" stroke="#00d4aa" stroke-width="2" marker-end="url(#arr5g)"/>
+        <text x="550" y="42" fill="#00d4aa" font-size="11" text-anchor="middle">y₄</text>
+
+        <!-- Hidden state arrows between cells (W weight) -->
+        <line x1="131" y1="115" x2="218" y2="115" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr5)"/>
+        <text x="175" y="109" fill="#94a3b8" font-size="9" text-anchor="middle">W</text>
+        <line x1="281" y1="115" x2="368" y2="115" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr5)"/>
+        <text x="325" y="109" fill="#94a3b8" font-size="9" text-anchor="middle">W</text>
+        <line x1="431" y1="115" x2="518" y2="115" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr5)"/>
+        <text x="475" y="109" fill="#94a3b8" font-size="9" text-anchor="middle">W</text>
+
+        <!-- s0 initial state -->
+        <circle cx="0" cy="115" r="0"/>
+        <line x1="10" y1="115" x2="68" y2="115" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arr5)"/>
+        <text x="5" y="109" fill="#94a3b8" font-size="9">s₀</text>
+      </svg>
+    </div>
+
+    <h3>Backpropagation Through Time (BPTT)</h3>
+    <p>Training an RNN means unrolling it through all time steps and applying backpropagation. The gradient of the loss at the final step must flow backward through every time step.</p>
+    <div class="highlight">
+      <strong>Vanishing gradient:</strong> When sequences are long, gradients at early time steps shrink to near-zero (repeated multiplication by W with |eigenvalue| &lt; 1). The network cannot learn long-range dependencies.
+    </div>
+    <div class="highlight3">
+      <strong>Exploding gradient:</strong> When |eigenvalue| &gt; 1, gradients blow up exponentially. Fixed with gradient clipping: if ‖∇‖ &gt; threshold, scale it down.
+    </div>
+
+    <h3>Applications</h3>
+    <ul>
+      <li>Text generation, language modelling</li>
+      <li>Speech recognition (audio sequence → text)</li>
+      <li>Time series forecasting (stock prices, sensor data)</li>
+      <li>Machine translation (sequence-to-sequence)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 7. LSTM & GRU ═══ -->
+<section id="lstm">
+  <h2>🔐 LSTM &amp; GRU</h2>
+  <div class="card">
+    <p>LSTM (Long Short-Term Memory) solves the vanishing gradient problem by introducing a separate <strong>cell state</strong> C<sub>t</sub> that acts as a "memory highway" — gradients can flow through it unchanged. Three gates control what to forget, add, and output.</p>
+
+    <h3>LSTM Equations</h3>
+    <div class="formula">Forget gate: &nbsp; f<sub>t</sub> = &sigma;(W<sub>f</sub>[h<sub>t&minus;1</sub>, x<sub>t</sub>] + b<sub>f</sub>)</div>
+    <div class="formula">Input gate: &nbsp;&nbsp; i<sub>t</sub> = &sigma;(W<sub>i</sub>[h<sub>t&minus;1</sub>, x<sub>t</sub>] + b<sub>i</sub>)</div>
+    <div class="formula">Cell candidate: g̃<sub>t</sub> = tanh(W<sub>g</sub>[h<sub>t&minus;1</sub>, x<sub>t</sub>] + b<sub>g</sub>)</div>
+    <div class="formula">Cell state: &nbsp;&nbsp;&nbsp; C<sub>t</sub> = f<sub>t</sub> ⊙ C<sub>t&minus;1</sub> + i<sub>t</sub> ⊙ g̃<sub>t</sub></div>
+    <div class="formula">Output gate: &nbsp; o<sub>t</sub> = &sigma;(W<sub>o</sub>[h<sub>t&minus;1</sub>, x<sub>t</sub>] + b<sub>o</sub>)</div>
+    <div class="formula">Hidden state: &nbsp; h<sub>t</sub> = o<sub>t</sub> ⊙ tanh(C<sub>t</sub>)</div>
+    <p>⊙ denotes element-wise (Hadamard) product. [h<sub>t-1</sub>, x<sub>t</sub>] denotes concatenation.</p>
+
+    <h3>LSTM Cell Diagram</h3>
+    <div class="svg-wrap">
+      <svg viewBox="0 0 700 280" width="100%" height="280">
+        <!-- Cell border -->
+        <rect x="100" y="30" width="500" height="210" rx="12" fill="#1e2240" stroke="#6c63ff" stroke-width="2.5"/>
+        <text x="350" y="24" fill="#a9a3ff" font-size="13" font-weight="bold" text-anchor="middle">LSTM Cell</text>
+
+        <!-- Cell state line (top) -->
+        <line x1="50" y1="75" x2="650" y2="75" stroke="#f7c948" stroke-width="3"/>
+        <text x="45" y="70" fill="#f7c948" font-size="10" text-anchor="end">C<tspan dy="3" font-size="8">t-1</tspan></text>
+        <text x="655" y="70" fill="#f7c948" font-size="10">C<tspan dy="3" font-size="8">t</tspan></text>
+
+        <!-- Forget gate (circle) -->
+        <circle cx="180" cy="75" r="18" fill="#ff6b6b44" stroke="#ff6b6b" stroke-width="2"/>
+        <text x="180" y="80" fill="#ff9999" font-size="14" font-weight="bold" text-anchor="middle">×</text>
+        <text x="180" y="117" fill="#ff9999" font-size="10" text-anchor="middle">Forget</text>
+        <text x="180" y="129" fill="#ff9999" font-size="10" text-anchor="middle">Gate f<tspan dy="3" font-size="8">t</tspan></text>
+
+        <!-- Sigmoid for forget gate -->
+        <rect x="148" y="155" width="64" height="28" rx="6" fill="#ff6b6b33" stroke="#ff6b6b" stroke-width="1.5"/>
+        <text x="180" y="173" fill="#ff9999" font-size="11" font-weight="bold" text-anchor="middle">σ</text>
+        <line x1="180" y1="183" x2="180" y2="223" stroke="#ff6b6b" stroke-width="1.5"/>
+        <text x="180" y="240" fill="#94a3b8" font-size="9" text-anchor="middle">[h<tspan dy="3" font-size="7">t-1</tspan><tspan dy="-3">, x</tspan><tspan dy="3" font-size="7">t</tspan><tspan dy="-3">]</tspan></text>
+        <line x1="180" y1="93" x2="180" y2="155" stroke="#ff6b6b" stroke-width="1.5"/>
+
+        <!-- Input gate (circle) -->
+        <circle cx="310" cy="75" r="18" fill="#6c63ff44" stroke="#6c63ff" stroke-width="2"/>
+        <text x="310" y="80" fill="#a9a3ff" font-size="14" font-weight="bold" text-anchor="middle">×</text>
+        <text x="310" y="117" fill="#a9a3ff" font-size="10" text-anchor="middle">Input</text>
+        <text x="310" y="129" fill="#a9a3ff" font-size="10" text-anchor="middle">Gate i<tspan dy="3" font-size="8">t</tspan></text>
+
+        <!-- Add gate -->
+        <circle cx="370" cy="75" r="18" fill="#00d4aa33" stroke="#00d4aa" stroke-width="2"/>
+        <text x="370" y="80" fill="#00d4aa" font-size="16" font-weight="bold" text-anchor="middle">+</text>
+
+        <!-- Sigmoid+tanh for input gate -->
+        <rect x="268" y="148" width="52" height="26" rx="6" fill="#6c63ff33" stroke="#6c63ff" stroke-width="1.5"/>
+        <text x="294" y="165" fill="#a9a3ff" font-size="10" font-weight="bold" text-anchor="middle">σ (i<tspan dy="3" font-size="7">t</tspan><tspan dy="-3">)</tspan></text>
+        <rect x="326" y="148" width="68" height="26" rx="6" fill="#00d4aa33" stroke="#00d4aa" stroke-width="1.5"/>
+        <text x="360" y="165" fill="#a0f0e0" font-size="10" font-weight="bold" text-anchor="middle">tanh (g̃<tspan dy="3" font-size="7">t</tspan><tspan dy="-3">)</tspan></text>
+
+        <line x1="294" y1="93" x2="310" y2="93" stroke="#6c63ff" stroke-width="1.5"/>
+        <line x1="310" y1="93" x2="310" y2="148" stroke="#6c63ff" stroke-width="1.5"/>
+        <line x1="360" y1="93" x2="360" y2="148" stroke="#00d4aa" stroke-width="1.5"/>
+        <line x1="360" y1="93" x2="370" y2="93" stroke="#00d4aa" stroke-width="1.5"/>
+        <line x1="370" y1="93" x2="370" y2="75" stroke="#00d4aa" stroke-width="1.5"/>
+
+        <!-- Output gate -->
+        <circle cx="530" cy="75" r="18" fill="#f7c94844" stroke="#f7c948" stroke-width="2"/>
+        <text x="530" y="80" fill="#f7c948" font-size="14" font-weight="bold" text-anchor="middle">×</text>
+        <text x="530" y="117" fill="#f7c948" font-size="10" text-anchor="middle">Output</text>
+        <text x="530" y="129" fill="#f7c948" font-size="10" text-anchor="middle">Gate o<tspan dy="3" font-size="8">t</tspan></text>
+
+        <rect x="498" y="150" width="64" height="26" rx="6" fill="#f7c94833" stroke="#f7c948" stroke-width="1.5"/>
+        <text x="530" y="167" fill="#f7c948" font-size="11" font-weight="bold" text-anchor="middle">σ (o<tspan dy="3" font-size="7">t</tspan><tspan dy="-3">)</tspan></text>
+        <line x1="530" y1="93" x2="530" y2="150" stroke="#f7c948" stroke-width="1.5"/>
+
+        <!-- tanh before output -->
+        <rect x="444" y="60" width="52" height="26" rx="6" fill="#00d4aa22" stroke="#00d4aa" stroke-width="1.5"/>
+        <text x="470" y="77" fill="#a0f0e0" font-size="10" font-weight="bold" text-anchor="middle">tanh</text>
+        <line x1="388" y1="75" x2="444" y2="75" stroke="#f7c948" stroke-width="2"/>
+        <line x1="496" y1="75" x2="512" y2="75" stroke="#f7c948" stroke-width="2"/>
+
+        <!-- h_t output -->
+        <line x1="548" y1="75" x2="600" y2="75" stroke="#6c63ff" stroke-width="2"/>
+        <line x1="600" y1="75" x2="600" y2="250" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="5,2"/>
+        <text x="620" y="180" fill="#a9a3ff" font-size="11">h<tspan dy="3" font-size="8">t</tspan></text>
+
+        <!-- x_t and h_t-1 inputs at bottom -->
+        <text x="350" y="270" fill="#94a3b8" font-size="10" text-anchor="middle">Inputs: x<tspan dy="3" font-size="8">t</tspan><tspan dy="-3"> and h</tspan><tspan dy="3" font-size="8">t-1</tspan><tspan dy="-3"> fed into all gate σ functions simultaneously</tspan></text>
+      </svg>
+    </div>
+
+    <h3>Intuition for Each Gate</h3>
+    <div class="grid3">
+      <div class="card" style="border-top:4px solid #ff6b6b;">
+        <h4>Forget Gate f<sub>t</sub></h4>
+        <p>Decides what to <strong>erase</strong> from cell state. Output close to 0 → forget; close to 1 → keep.</p>
+        <p>Example: when reading a new subject in text, forget previous subject's gender for pronoun agreement.</p>
+      </div>
+      <div class="card" style="border-top:4px solid #6c63ff;">
+        <h4>Input Gate i<sub>t</sub></h4>
+        <p>Decides what <strong>new information</strong> to store. Works with the tanh candidate to add selected content to cell state.</p>
+      </div>
+      <div class="card" style="border-top:4px solid #f7c948;">
+        <h4>Output Gate o<sub>t</sub></h4>
+        <p>Decides what to <strong>output</strong> as the hidden state h<sub>t</sub> from the (filtered) cell state.</p>
+      </div>
+    </div>
+
+    <h3>GRU — Simplified LSTM</h3>
+    <p>GRU (Gated Recurrent Unit) merges the forget and input gates into a single <strong>update gate</strong>, and eliminates the separate cell state. It has fewer parameters but often matches LSTM performance.</p>
+    <div class="formula">Reset gate: &nbsp;&nbsp; r<sub>t</sub> = &sigma;(W<sub>r</sub>[h<sub>t&minus;1</sub>, x<sub>t</sub>])</div>
+    <div class="formula">Update gate: &nbsp; z<sub>t</sub> = &sigma;(W<sub>z</sub>[h<sub>t&minus;1</sub>, x<sub>t</sub>])</div>
+    <div class="formula">Candidate: &nbsp;&nbsp;&nbsp; h̃<sub>t</sub> = tanh(W[r<sub>t</sub>⊙h<sub>t&minus;1</sub>, x<sub>t</sub>])</div>
+    <div class="formula">Output: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; h<sub>t</sub> = (1&minus;z<sub>t</sub>)⊙h<sub>t&minus;1</sub> + z<sub>t</sub>⊙h̃<sub>t</sub></div>
+
+    <h3>Comparison Table</h3>
+    <table>
+      <tr><th>Property</th><th>Vanilla RNN</th><th>LSTM</th><th>GRU</th></tr>
+      <tr><td>Gates</td><td>None</td><td>3 (forget, input, output)</td><td>2 (reset, update)</td></tr>
+      <tr><td>Cell state</td><td>No</td><td>Yes (separate from h)</td><td>No</td></tr>
+      <tr><td>Long-range memory</td><td>Poor</td><td>Excellent</td><td>Good</td></tr>
+      <tr><td>Parameters</td><td>Fewest</td><td>Most</td><td>Medium</td></tr>
+      <tr><td>Training speed</td><td>Fastest</td><td>Slowest</td><td>Medium</td></tr>
+      <tr><td>Vanishing gradient</td><td>Severe</td><td>Mitigated</td><td>Mitigated</td></tr>
+      <tr><td>Typical use</td><td>Short sequences</td><td>Long sequences, NLP</td><td>NLP, when speed matters</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 8. IMBALANCED DATA ═══ -->
+<section id="imbalanced">
+  <h2>⚖️ Handling Imbalanced Data</h2>
+  <div class="card">
+    <p>In many real-world tasks, one class vastly outnumbers the other. A model that always predicts the majority class achieves high accuracy but is completely useless.</p>
+
+    <div class="callout">
+      <strong>Classic example — Fraud Detection:</strong><br>
+      99% of transactions are legitimate, 1% are fraudulent.<br>
+      A model that always predicts "legitimate" achieves <strong>99% accuracy</strong> — yet catches <strong>zero</strong> frauds.
+    </div>
+
+    <h3>Why Accuracy Is Misleading</h3>
+    <table>
+      <tr><th></th><th>Predicted: Legitimate</th><th>Predicted: Fraud</th></tr>
+      <tr><td><strong>Actual: Legitimate</strong></td><td style="color:#00d4aa;">9,900 (TN)</td><td style="color:#ff6b6b;">0 (FP)</td></tr>
+      <tr><td><strong>Actual: Fraud</strong></td><td style="color:#ff6b6b;">100 (FN)</td><td style="color:#00d4aa;">0 (TP)</td></tr>
+    </table>
+    <p>Accuracy = (9900+0)/(10000) = 99% but Recall = 0/(100+0) = <strong>0%</strong>. Always use F1-score, precision, recall, or AUC-ROC for imbalanced problems.</p>
+
+    <h3>Strategy 1: Undersampling</h3>
+    <div class="highlight">
+      <strong>Random Undersampling:</strong> Randomly remove samples from the majority class until balanced.<br>
+      <strong>Pro:</strong> Fast, reduces training time.<br>
+      <strong>Con:</strong> Loses potentially important information from the majority class.
+    </div>
+
+    <h3>Strategy 2: Oversampling</h3>
+    <div class="highlight2">
+      <strong>Random Oversampling:</strong> Duplicate minority class samples (with replacement).<br>
+      <strong>Pro:</strong> No information loss.<br>
+      <strong>Con:</strong> Exact copies can cause severe overfitting — model memorises duplicates.
+    </div>
+
+    <h3>Strategy 3: Class Weights in Loss</h3>
+    <p>Penalise misclassification of the minority class more heavily by scaling the loss:</p>
+    <div class="formula">weighted_loss = &minus;[w<sub>0</sub> &sdot; y log(ŷ) + w<sub>1</sub> &sdot; (1&minus;y) log(1&minus;ŷ)]</div>
+    <p>Set w<sub>minority</sub> = N_majority / N_minority. In our fraud example: w<sub>fraud</sub> = 9900/100 = <strong>99</strong>.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 9. SMOTE ═══ -->
+<section id="smote">
+  <h2>🧪 SMOTE</h2>
+  <div class="card">
+    <p>SMOTE (Synthetic Minority Oversampling Technique) generates <em>new</em> minority class examples rather than duplicating existing ones. Synthetic points are interpolated between real minority samples, forcing the model to learn a smoother decision boundary.</p>
+
+    <h3>SMOTE Formula</h3>
+    <div class="formula">x<sub>synthetic</sub> = x<sub>i</sub> + &lambda; &times; (x<sub>nearest</sub> &minus; x<sub>i</sub>) &nbsp;&nbsp;&nbsp; &lambda; &isin; [0, 1]</div>
+    <p>The synthetic point lies on the <strong>line segment</strong> between x<sub>i</sub> and one of its K nearest minority-class neighbours. λ is drawn uniformly at random from [0, 1].</p>
+
+    <h3>Algorithm Step-by-Step</h3>
+    <div class="step"><div class="step-num">1</div><div>For each minority sample x<sub>i</sub>, find its K nearest neighbours within the minority class.</div></div>
+    <div class="step"><div class="step-num">2</div><div>Randomly select one neighbour x<sub>nn</sub> from those K neighbours.</div></div>
+    <div class="step"><div class="step-num">3</div><div>Draw λ uniformly from [0, 1].</div></div>
+    <div class="step"><div class="step-num">4</div><div>Create: x<sub>new</sub> = x<sub>i</sub> + λ × (x<sub>nn</sub> − x<sub>i</sub>)</div></div>
+    <div class="step"><div class="step-num">5</div><div>Repeat until the desired balance ratio is reached.</div></div>
+
+    <h3>Worked Example: 3 Minority Points → Generate 2 Synthetic Points</h3>
+    <p>Minority class points: A=(2,3), B=(4,5), C=(3,7). Using K=2 neighbours each.</p>
+    <div class="highlight">
+      <p><strong>Generate synthetic point between A=(2,3) and B=(4,5), λ=0.5:</strong></p>
+      <p class="mono">x_new = (2,3) + 0.5 × ((4,5) − (2,3))</p>
+      <p class="mono">     = (2,3) + 0.5 × (2,2)</p>
+      <p class="mono">     = (2,3) + (1,1) = <strong style="color:#00d4aa;">(3, 4)</strong></p>
+    </div>
+    <div class="highlight2">
+      <p><strong>Generate synthetic point between B=(4,5) and C=(3,7), λ=0.75:</strong></p>
+      <p class="mono">x_new = (4,5) + 0.75 × ((3,7) − (4,5))</p>
+      <p class="mono">     = (4,5) + 0.75 × (−1,2)</p>
+      <p class="mono">     = (4,5) + (−0.75, 1.5) = <strong style="color:#00d4aa;">(3.25, 6.5)</strong></p>
+    </div>
+
+    <h3>SVG: SMOTE in 2D Feature Space</h3>
+    <div class="svg-wrap">
+      <svg viewBox="0 0 600 380" width="100%" height="380">
+        <!-- Axes -->
+        <line x1="60" y1="330" x2="560" y2="330" stroke="#2d3748" stroke-width="2"/>
+        <line x1="60" y1="330" x2="60" y2="30" stroke="#2d3748" stroke-width="2"/>
+        <text x="560" y="344" fill="#94a3b8" font-size="11">Feature 1</text>
+        <text x="30" y="30" fill="#94a3b8" font-size="11" text-anchor="middle">F2</text>
+
+        <!-- Grid lines (light) -->
+        <line x1="60" y1="230" x2="560" y2="230" stroke="#1e2240" stroke-width="1"/>
+        <line x1="60" y1="130" x2="560" y2="130" stroke="#1e2240" stroke-width="1"/>
+        <line x1="160" y1="30" x2="160" y2="330" stroke="#1e2240" stroke-width="1"/>
+        <line x1="260" y1="30" x2="260" y2="330" stroke="#1e2240" stroke-width="1"/>
+        <line x1="360" y1="30" x2="360" y2="330" stroke="#1e2240" stroke-width="1"/>
+        <line x1="460" y1="30" x2="460" y2="330" stroke="#1e2240" stroke-width="1"/>
+
+        <!-- Majority class (blue circles) -->
+        <circle cx="400" cy="100" r="7" fill="#6c63ff" opacity="0.7"/>
+        <circle cx="450" cy="150" r="7" fill="#6c63ff" opacity="0.7"/>
+        <circle cx="500" cy="80"  r="7" fill="#6c63ff" opacity="0.7"/>
+        <circle cx="480" cy="200" r="7" fill="#6c63ff" opacity="0.7"/>
+        <circle cx="420" cy="250" r="7" fill="#6c63ff" opacity="0.7"/>
+        <circle cx="520" cy="180" r="7" fill="#6c63ff" opacity="0.7"/>
+        <circle cx="380" cy="180" r="7" fill="#6c63ff" opacity="0.7"/>
+        <circle cx="430" cy="310" r="7" fill="#6c63ff" opacity="0.7"/>
+        <text x="490" y="345" fill="#6c63ff" font-size="11">Majority (blue)</text>
+
+        <!-- Minority class (red triangles) -->
+        <!-- A = (2, 3) mapped to canvas: x=60+2*80=220, y=330-3*60=150... Let me use: x=60+val*70, y=330-val*55 -->
+        <!-- A=(2,3) → (200, 165), B=(4,5) → (340, 55), C=(3,7) → (270,... let's redefine scale to fit nicely -->
+        <!-- scale: x_px = 60 + feat1 * 90, y_px = 330 - feat2 * 40  -->
+        <!-- A=(2,3): (240,210), B=(4,5): (420,110), C=(3,7): (330,50) -->
+        <polygon points="240,202 233,220 247,220" fill="#ff6b6b" stroke="#ff9999" stroke-width="1.5"/>
+        <text x="240" y="240" fill="#ff9999" font-size="10" text-anchor="middle">A(2,3)</text>
+        <polygon points="420,102 413,120 427,120" fill="#ff6b6b" stroke="#ff9999" stroke-width="1.5"/>
+        <text x="420" y="133" fill="#ff9999" font-size="10" text-anchor="middle">B(4,5)</text>
+        <polygon points="330,42 323,60 337,60" fill="#ff6b6b" stroke="#ff9999" stroke-width="1.5"/>
+        <text x="330" y="73" fill="#ff9999" font-size="10" text-anchor="middle">C(3,7)</text>
+        <text x="200" y="345" fill="#ff6b6b" font-size="11">Minority (red triangles)</text>
+
+        <!-- Lines between minority points -->
+        <line x1="240" y1="210" x2="420" y2="110" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="5,3" opacity="0.6"/>
+        <line x1="420" y1="110" x2="330" y2="50" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="5,3" opacity="0.6"/>
+        <line x1="240" y1="210" x2="330" y2="50" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="5,3" opacity="0.3"/>
+
+        <!-- Synthetic point 1: (3,4) → (330,150) -->
+        <circle cx="330" cy="170" r="8" fill="none" stroke="#00d4aa" stroke-width="2.5"/>
+        <circle cx="330" cy="170" r="3" fill="#00d4aa"/>
+        <text x="350" y="165" fill="#00d4aa" font-size="10">S1(3,4)</text>
+        <!-- Mark on A-B line at λ=0.5 midpoint -->
+        <circle cx="330" cy="160" r="2" fill="#00d4aa" opacity="0.5"/>
+
+        <!-- Synthetic point 2: (3.25, 6.5) → (352.5, 70) -->
+        <circle cx="353" cy="70" r="8" fill="none" stroke="#00d4aa" stroke-width="2.5"/>
+        <circle cx="353" cy="70" r="3" fill="#00d4aa"/>
+        <text x="368" y="65" fill="#00d4aa" font-size="10">S2(3.25,6.5)</text>
+
+        <!-- Legend -->
+        <circle cx="75" cy="350" r="6" fill="none" stroke="#00d4aa" stroke-width="2"/>
+        <circle cx="75" cy="350" r="2" fill="#00d4aa"/>
+        <text x="88" y="354" fill="#00d4aa" font-size="10">Synthetic (SMOTE)</text>
+      </svg>
+    </div>
+
+    <h3>Hybrid Methods</h3>
+    <table>
+      <tr><th>Method</th><th>Description</th><th>Benefit</th></tr>
+      <tr><td><strong>SMOTE + Tomek Links</strong></td><td>SMOTE to oversample, then remove Tomek link pairs (majority samples too close to minority border)</td><td>Cleaner decision boundary</td></tr>
+      <tr><td><strong>SMOTE + ENN</strong></td><td>SMOTE then apply Edited Nearest Neighbours to remove noisy samples</td><td>Smoother class regions</td></tr>
+      <tr><td><strong>Class Weights</strong></td><td>Increase loss for minority class misclassification (no data generation needed)</td><td>Simple, often effective</td></tr>
+      <tr><td><strong>Focal Loss</strong></td><td>Down-weights easy examples, focuses training on hard misclassified ones</td><td>Used in RetinaNet/object detection</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ 10. INTERACTIVE ═══ -->
+<section id="interactive">
+  <h2>🧮 Interactive Calculators</h2>
+
+  <!-- CNN Convolution Calculator -->
+  <div class="interactive-box">
+    <h3 style="margin-top:0; color:#f7c948;">CNN Convolution Calculator</h3>
+    <p>Enter a 5×5 input matrix and 3×3 kernel to compute the full 3×3 convolution output.</p>
+    <div class="two-col">
+      <div>
+        <h4>Input Matrix (5×5) — space-separated rows</h4>
+        <textarea id="input-matrix" rows="5" placeholder="row 0: values">1 0 1 0 1
+1 1 1 0 1
+0 1 0 1 0
+1 0 1 0 1
+0 1 0 1 1</textarea>
+      </div>
+      <div>
+        <h4>Kernel (3×3) — space-separated rows</h4>
+        <textarea id="kernel-matrix" rows="3" placeholder="row 0: values">1 0 1
+0 1 0
+1 0 1</textarea>
+        <br>
+        <button onclick="computeConvolution()">Compute Convolution</button>
+      </div>
+    </div>
+    <div class="result-box" id="conv-result">Output will appear here...</div>
+  </div>
+
+  <!-- SMOTE Visualizer / Calculator -->
+  <div class="interactive-box">
+    <h3 style="margin-top:0; color:#00d4aa;">SMOTE Point Generator</h3>
+    <p>Enter two minority-class points and a λ value to generate a synthetic SMOTE point.</p>
+    <div class="two-col">
+      <div>
+        <label>Point A — Feature 1:</label>
+        <input type="number" id="ax1" value="2" step="0.1">
+        <label>Point A — Feature 2:</label>
+        <input type="number" id="ax2" value="3" step="0.1">
+        <label>Point B — Feature 1 (neighbour):</label>
+        <input type="number" id="bx1" value="4" step="0.1">
+        <label>Point B — Feature 2 (neighbour):</label>
+        <input type="number" id="bx2" value="5" step="0.1">
+      </div>
+      <div>
+        <label>λ (0 to 1, or leave 0 for random):</label>
+        <input type="number" id="lambda-val" value="0.5" min="0" max="1" step="0.01">
+        <br><br>
+        <button onclick="computeSMOTE()">Generate Synthetic Point</button>
+        <button onclick="computeSMOTE(true)" style="background:var(--accent2); color:#000; margin-top:0.5rem;">Random λ</button>
+      </div>
+    </div>
+    <div class="result-box" id="smote-result">Result will appear here...</div>
+  </div>
+
+  <!-- Output size calculator -->
+  <div class="interactive-box">
+    <h3 style="margin-top:0; color:#6c63ff;">CNN Output Size Calculator</h3>
+    <p>Compute conv/pool output dimensions: <code>floor((n + 2p − k) / s + 1)</code></p>
+    <div class="two-col">
+      <div>
+        <label>Input size (n):</label>
+        <input type="number" id="n-val" value="28" min="1">
+        <label>Kernel size (k):</label>
+        <input type="number" id="k-val" value="3" min="1">
+      </div>
+      <div>
+        <label>Padding (p):</label>
+        <input type="number" id="p-val" value="0" min="0">
+        <label>Stride (s):</label>
+        <input type="number" id="s-val" value="1" min="1">
+        <button onclick="computeOutputSize()">Calculate</button>
+      </div>
+    </div>
+    <div class="result-box" id="size-result">Result will appear here...</div>
+  </div>
+</section>
+
+</div><!-- end container -->
+
+<script>
+// ── Convolution calculator ──────────────────────────────────────────────────
+function parseMatrix(text, rows, cols) {
+  const lines = text.trim().split('\n');
+  const mat = [];
+  for (let r = 0; r < rows; r++) {
+    const nums = (lines[r] || '').trim().split(/\s+/).map(Number);
+    mat.push(nums);
+  }
+  return mat;
+}
+
+function computeConvolution() {
+  const inputText  = document.getElementById('input-matrix').value;
+  const kernelText = document.getElementById('kernel-matrix').value;
+  const input  = parseMatrix(inputText, 5, 5);
+  const kernel = parseMatrix(kernelText, 3, 3);
+
+  // Validate
+  for (let r = 0; r < 5; r++) {
+    if (!input[r] || input[r].length < 5) {
+      document.getElementById('conv-result').innerHTML = 'Error: Input must be 5 rows × 5 values each.';
+      return;
+    }
+  }
+  for (let r = 0; r < 3; r++) {
+    if (!kernel[r] || kernel[r].length < 3) {
+      document.getElementById('conv-result').innerHTML = 'Error: Kernel must be 3 rows × 3 values each.';
+      return;
+    }
+  }
+
+  // Compute 3x3 output
+  const out = [];
+  for (let i = 0; i < 3; i++) {
+    const row = [];
+    for (let j = 0; j < 3; j++) {
+      let sum = 0;
+      let terms = [];
+      for (let m = 0; m < 3; m++) {
+        for (let n = 0; n < 3; n++) {
+          const v = input[i+m][j+n] * kernel[m][n];
+          sum += v;
+          terms.push(`(${input[i+m][j+n]}×${kernel[m][n]})`);
+        }
+      }
+      row.push({ sum, terms });
+    }
+    out.push(row);
+  }
+
+  let html = '<strong>Output Matrix (3×3):</strong><br><br>';
+  html += '<table style="font-size:0.85rem; width:auto; margin-bottom:1rem;">';
+  html += '<tr><th>Row\\Col</th><th>0</th><th>1</th><th>2</th></tr>';
+  for (let i = 0; i < 3; i++) {
+    html += `<tr><td><strong>${i}</strong></td>`;
+    for (let j = 0; j < 3; j++) {
+      html += `<td style="text-align:center; color:#f7c948; font-size:1.1rem; padding:0.5rem;">${out[i][j].sum}</td>`;
+    }
+    html += '</tr>';
+  }
+  html += '</table>';
+
+  // Show workings for first element
+  html += `<br><strong>Workings for output[0,0]:</strong><br>`;
+  html += out[0][0].terms.join(' + ') + ` = <strong style="color:#00d4aa;">${out[0][0].sum}</strong>`;
+
+  document.getElementById('conv-result').innerHTML = html;
+}
+
+// ── SMOTE calculator ────────────────────────────────────────────────────────
+function computeSMOTE(useRandom) {
+  const ax1 = parseFloat(document.getElementById('ax1').value);
+  const ax2 = parseFloat(document.getElementById('ax2').value);
+  const bx1 = parseFloat(document.getElementById('bx1').value);
+  const bx2 = parseFloat(document.getElementById('bx2').value);
+  let lam   = parseFloat(document.getElementById('lambda-val').value);
+
+  if (useRandom) {
+    lam = Math.random();
+    document.getElementById('lambda-val').value = lam.toFixed(4);
+  }
+
+  if (isNaN(ax1) || isNaN(ax2) || isNaN(bx1) || isNaN(bx2) || isNaN(lam)) {
+    document.getElementById('smote-result').innerHTML = 'Please enter valid numbers.';
+    return;
+  }
+
+  lam = Math.max(0, Math.min(1, lam));
+
+  const diff1 = bx1 - ax1;
+  const diff2 = bx2 - ax2;
+  const sx1   = ax1 + lam * diff1;
+  const sx2   = ax2 + lam * diff2;
+
+  let html = `<strong>SMOTE Calculation:</strong><br><br>`;
+  html += `A = (${ax1}, ${ax2}), &nbsp; B = (${bx1}, ${bx2}), &nbsp; λ = ${lam.toFixed(4)}<br><br>`;
+  html += `x<sub>synthetic</sub> = A + λ × (B − A)<br>`;
+  html += `= (${ax1}, ${ax2}) + ${lam.toFixed(4)} × (${diff1.toFixed(3)}, ${diff2.toFixed(3)})<br>`;
+  html += `= (${ax1}, ${ax2}) + (${(lam*diff1).toFixed(4)}, ${(lam*diff2).toFixed(4)})<br>`;
+  html += `= <strong style="color:#f7c948;">(${sx1.toFixed(4)}, ${sx2.toFixed(4)})</strong><br><br>`;
+  html += `This synthetic point lies ${(lam*100).toFixed(1)}% of the way from A toward B.`;
+
+  document.getElementById('smote-result').innerHTML = html;
+}
+
+// ── Output size calculator ──────────────────────────────────────────────────
+function computeOutputSize() {
+  const n = parseInt(document.getElementById('n-val').value);
+  const k = parseInt(document.getElementById('k-val').value);
+  const p = parseInt(document.getElementById('p-val').value);
+  const s = parseInt(document.getElementById('s-val').value);
+
+  if ([n,k,p,s].some(isNaN) || s === 0) {
+    document.getElementById('size-result').innerHTML = 'Please enter valid positive integers (stride ≥ 1).';
+    return;
+  }
+
+  const raw = (n + 2*p - k) / s + 1;
+  const out = Math.floor(raw);
+
+  let html = `<strong>Formula:</strong> floor((n + 2p − k) / s + 1)<br><br>`;
+  html += `= floor((${n} + 2×${p} − ${k}) / ${s} + 1)<br>`;
+  html += `= floor((${n + 2*p - k}) / ${s} + 1)<br>`;
+  html += `= floor(${raw.toFixed(4)})<br>`;
+  html += `= <strong style="color:#f7c948; font-size:1.2rem;">${out}</strong>`;
+
+  if (out <= 0) {
+    html += `<br><span style="color:#ff6b6b;">Warning: Output size ≤ 0! Increase input size or reduce kernel/stride.</span>`;
+  } else {
+    html += `<br><br>Output is a ${out}×${out} feature map (for square input).`;
+    if (p === Math.floor((k-1)/2) && s === 1) {
+      html += `<br><span style="color:#00d4aa;">This is "same" padding — output matches input size ✓</span>`;
+    }
+  }
+
+  document.getElementById('size-result').innerHTML = html;
+}
+
+// ── Nav scroll highlighting ─────────────────────────────────────────────────
+document.querySelectorAll('nav a').forEach(link => {
+  link.addEventListener('click', function() {
+    document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+window.addEventListener('scroll', () => {
+  const sections = document.querySelectorAll('section[id]');
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 150) current = s.id;
+  });
+  document.querySelectorAll('nav a').forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+});
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

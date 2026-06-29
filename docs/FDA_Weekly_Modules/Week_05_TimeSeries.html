@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 5 — Time Series Analysis</title>
+<style>
+:root{--primary:#1e88e5;--primary-dark:#0d47a1;--accent:#ff9800;--success:#43a047;--danger:#e53935;--bg:#f5f8fb;--card:#fff;--text:#1a2332;--muted:#5a6a7a;--border:#dde5ec}
+body.dark{--bg:#0f1721;--card:#1a2535;--text:#e0e8f0;--muted:#a0b0c0;--border:#2a3545}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;transition:all .3s}
+header{background:linear-gradient(135deg,#1e88e5,#0d47a1);color:white;padding:40px 20px;text-align:center}
+header h1{font-size:2.2em;margin-bottom:6px}header .breadcrumb{font-size:.95em;opacity:.95}header .breadcrumb a{color:#ffd54f;text-decoration:none}
+nav{position:sticky;top:0;background:var(--card);z-index:100;padding:10px;overflow-x:auto;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.08);border-bottom:1px solid var(--border)}
+nav button{background:transparent;color:var(--text);border:2px solid var(--border);padding:6px 14px;margin:2px;border-radius:18px;cursor:pointer;font-size:.82em;font-weight:600}
+nav button:hover{border-color:var(--primary);color:var(--primary)}nav button.active{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-color:transparent}
+.icon-btn{background:var(--bg);width:32px;height:32px;border-radius:50%;padding:0}
+main{max-width:1100px;margin:25px auto;padding:0 18px}
+section{background:var(--card);margin:25px 0;padding:28px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.06);scroll-margin-top:80px}
+section h2{color:var(--primary-dark);border-bottom:3px solid var(--primary);padding-bottom:8px;margin-bottom:18px;font-size:1.7em}
+body.dark section h2{color:#82b1ff}section h3{margin:18px 0 10px;font-size:1.25em}
+section h4{color:var(--primary-dark);margin:12px 0 8px}body.dark section h4{color:#90caf9}
+p{margin-bottom:10px}ul,ol{margin:8px 0 12px 26px}li{margin-bottom:5px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.card{background:linear-gradient(135deg,#f0f6fc,#e8f0f8);border-left:4px solid var(--primary-dark);padding:14px;border-radius:8px}
+body.dark .card{background:linear-gradient(135deg,#1f2a3a,#2a3545)}
+.card h4{color:var(--primary-dark);margin-bottom:6px;font-size:1em}body.dark .card h4{color:#90caf9}
+.card p{font-size:.9em;margin:0;color:var(--muted)}
+table{width:100%;border-collapse:collapse;margin:12px 0}th,td{padding:9px 12px;border:1px solid var(--border);text-align:left}
+th{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white}tr:nth-child(even) td{background:var(--bg)}
+.code-block{background:#1a2535;color:#ecf0f1;padding:12px 14px;border-radius:8px;font-family:'Courier New',monospace;font-size:.9em;overflow-x:auto;margin:10px 0;white-space:pre-wrap;line-height:1.5}
+code{background:var(--bg);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:.92em;border:1px solid var(--border)}
+.quiz{background:linear-gradient(135deg,#e8f5e9,#dcedc8);border-left:4px solid var(--success);padding:16px;border-radius:10px;margin:12px 0}
+body.dark .quiz{background:linear-gradient(135deg,#1a3a2e,#2a4a3e)}
+.quiz-option{display:block;margin:6px 0;padding:10px 12px;background:var(--card);border:2px solid var(--border);border-radius:8px;cursor:pointer}
+.quiz-option:hover{border-color:var(--success);transform:translateX(3px)}
+.quiz-option.correct{background:#c8e6c9!important;border-color:var(--success);color:#1b5e20}
+.quiz-option.wrong{background:#ffcdd2!important;border-color:var(--danger);color:#b71c1c}
+.insight{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-left:4px solid #1976d2;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .insight{background:linear-gradient(135deg,#1a2a4a,#253560)}
+.warning{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-left:4px solid #f57c00;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .warning{background:linear-gradient(135deg,#3a2a1a,#4a3525)}
+.example{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left:4px solid #8e24aa;padding:14px 16px;border-radius:8px;margin:12px 0}
+body.dark .example{background:linear-gradient(135deg,#2a1a3a,#3a253f)}
+.summary{background:linear-gradient(135deg,#fff9c4,#fff59d);border-left:4px solid #fbc02d;padding:16px;border-radius:10px;margin:14px 0}
+body.dark .summary{background:linear-gradient(135deg,#3a3a1a,#4a4a25);color:var(--text)}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.9em;border-top:1px solid var(--border);margin-top:30px}
+.toc{background:var(--bg);padding:16px 20px;border-radius:10px;margin-bottom:20px}
+.toc h3{margin-bottom:8px;color:var(--primary-dark)}body.dark .toc h3{color:#90caf9}.toc ol{columns:2;column-gap:30px}
+.svg-diagram{background:var(--bg);padding:16px;border-radius:10px;margin:14px 0;text-align:center}.svg-diagram svg{max-width:100%;height:auto}
+.formula{background:linear-gradient(135deg,#f0f4ff,#dce7ff);padding:14px 18px;border-radius:8px;font-family:Georgia,serif;font-size:1.05em;text-align:center;margin:12px 0;border-left:4px solid var(--primary)}
+body.dark .formula{background:linear-gradient(135deg,#1f2a3a,#2a3a55)}
+</style>
+</head>
+<body>
+
+<header><div class="breadcrumb"><a href="index.html">📚 FDA Modules</a> › Week 5</div><h1>📈 Week 5 — Time Series Analysis</h1></header>
+
+<nav>
+<button onclick="g('intro',this)" class="active">1. Intro</button>
+<button onclick="g('components',this)">2. Components</button>
+<button onclick="g('decomp',this)">3. Decomposition</button>
+<button onclick="g('ma',this)">4. Moving Avg</button>
+<button onclick="g('smoothing',this)">5. Smoothing</button>
+<button onclick="g('ar',this)">6. AR/ARIMA</button>
+<button onclick="g('scenario',this)">7. Scenario</button>
+<button onclick="g('quiz',this)">🎯 Quiz</button>
+<button onclick="g('summary',this)">📝 Summary</button>
+<button class="icon-btn" onclick="dark()">🌓</button>
+</nav>
+
+<main>
+
+<section class="toc"><h3>📑 Contents</h3><ol>
+<li><a href="#intro">Time Series Data Intro</a></li>
+<li><a href="#components">Components (Trend/Season/Cycle/Residual)</a></li>
+<li><a href="#decomp">Decomposition Techniques</a></li>
+<li><a href="#ma">Moving Averages (SMA/WMA/EMA)</a></li>
+<li><a href="#smoothing">Smoothing Techniques</a></li>
+<li><a href="#ar">Autoregressive Models &amp; ARIMA</a></li>
+<li><a href="#scenario">Scenario Analysis (ARIMA/LSTM/GARCH)</a></li>
+<li><a href="#quiz">14-Question Quiz</a></li>
+<li><a href="#summary">Summary</a></li>
+</ol></section>
+
+<section id="intro">
+<h2>1️⃣ Introduction to Time Series Data</h2>
+<p><strong>Time series data</strong> = observations recorded at successive time intervals (daily stock prices, monthly sales, quarterly GDP).</p>
+
+<h3>Key Characteristics</h3>
+<div class="card-grid">
+<div class="card"><h4>📈 Trend</h4><p>Long-term upward/downward direction (revenue growth)</p></div>
+<div class="card"><h4>🔄 Seasonality</h4><p>Regular pattern at fixed intervals (Dec retail spike)</p></div>
+<div class="card"><h4>🌊 Cyclic Patterns</h4><p>Longer, irregular cycles (economic booms/busts)</p></div>
+<div class="card"><h4>⚡ Irregular Variation</h4><p>Random shocks (pandemic, geopolitical events)</p></div>
+</div>
+
+<h3>Stationary vs Non-Stationary</h3>
+<table>
+<tr><th>Type</th><th>Properties</th><th>Tests</th></tr>
+<tr><td>Stationary</td><td>Constant mean, variance, autocorrelation over time</td><td>ADF (p&lt;0.05 = stationary), KPSS</td></tr>
+<tr><td>Non-Stationary</td><td>Changing properties (e.g., growing revenue)</td><td>Apply differencing, log, detrending</td></tr>
+</table>
+
+<h3>Applications</h3>
+<ul>
+<li>Stock price &amp; portfolio risk analysis</li>
+<li>Macroeconomic forecasting (GDP, inflation)</li>
+<li>Demand &amp; inventory planning</li>
+<li>Weather, agriculture, energy</li>
+<li>Healthcare/epidemiology monitoring</li>
+</ul>
+
+<div class="code-block">import yfinance as yf
+data = yf.download('AAPL', start='2020-01-01', end='2023-01-01')</div>
+</section>
+
+<section id="components">
+<h2>2️⃣ Time Series Components</h2>
+
+<div class="svg-diagram">
+<svg viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg">
+<text x="350" y="20" text-anchor="middle" font-weight="bold">Decomposition</text>
+<rect x="40" y="50" width="140" height="160" rx="10" fill="#1e88e5"/>
+<text x="110" y="80" fill="white" text-anchor="middle" font-weight="bold" font-size="14">Trend</text>
+<polyline points="60,180 90,150 120,130 150,110 170,95" fill="none" stroke="white" stroke-width="3"/>
+<rect x="200" y="50" width="140" height="160" rx="10" fill="#43a047"/>
+<text x="270" y="80" fill="white" text-anchor="middle" font-weight="bold" font-size="14">Seasonal</text>
+<polyline points="220,160 240,120 260,160 280,120 300,160 320,120" fill="none" stroke="white" stroke-width="3"/>
+<rect x="360" y="50" width="140" height="160" rx="10" fill="#ff9800"/>
+<text x="430" y="80" fill="white" text-anchor="middle" font-weight="bold" font-size="14">Cyclic</text>
+<path d="M 380 150 Q 410 100 440 150 Q 470 200 490 130" fill="none" stroke="white" stroke-width="3"/>
+<rect x="520" y="50" width="140" height="160" rx="10" fill="#e53935"/>
+<text x="590" y="80" fill="white" text-anchor="middle" font-weight="bold" font-size="14">Residual</text>
+<polyline points="540,150 555,130 570,165 585,140 600,155 620,125 640,160" fill="none" stroke="white" stroke-width="2"/>
+</svg>
+</div>
+
+<h3>Additive vs Multiplicative</h3>
+<table>
+<tr><th>Model</th><th>Formula</th><th>When to Use</th></tr>
+<tr><td>Additive</td><td>Y = Trend + Seasonal + Residual</td><td>Components independent; seasonal magnitude stays constant</td></tr>
+<tr><td>Multiplicative</td><td>Y = Trend × Seasonal × Residual</td><td>Seasonal effect grows with trend (financial data often fits)</td></tr>
+</table>
+
+<h3>Importance of Decomposition</h3>
+<ul>
+<li>Reveals <strong>true underlying signal</strong> vs noise</li>
+<li>Improves forecast accuracy by modelling each piece</li>
+<li>Helps detect anomalies in residuals</li>
+<li>Supports strategic planning (trend) &amp; operational planning (seasonality)</li>
+</ul>
+</section>
+
+<section id="decomp">
+<h2>3️⃣ Decomposition Techniques</h2>
+
+<h3>Software Options</h3>
+<table>
+<tr><th>Tool</th><th>Strengths</th></tr>
+<tr><td>Python (statsmodels)</td><td>Flexible, <code>seasonal_decompose()</code></td></tr>
+<tr><td>R (forecast, stats)</td><td>Statistical depth, large datasets</td></tr>
+<tr><td>Excel</td><td>Small datasets, visual, no coding</td></tr>
+</table>
+
+<div class="code-block">import pandas as pd, statsmodels.api as sm
+data = pd.read_csv('series.csv', parse_dates=['date'], index_col='date')
+decomp = sm.tsa.seasonal_decompose(data['value'], model='additive')
+decomp.plot()</div>
+
+<h3>Advanced Decomposition Methods</h3>
+<div class="card-grid">
+<div class="card"><h4>STL</h4><p>Seasonal-Trend using LOESS. Flexible, handles changing seasonality.</p></div>
+<div class="card"><h4>X-12/X-13 ARIMA</h4><p>Used by census agencies for complex seasonality.</p></div>
+<div class="card"><h4>Wavelet</h4><p>Captures non-stationary, multi-scale patterns.</p></div>
+<div class="card"><h4>EMD</h4><p>Empirical Mode Decomposition — adaptive, for non-linear data.</p></div>
+</div>
+</section>
+
+<section id="ma">
+<h2>4️⃣ Moving Averages</h2>
+
+<h3>Simple Moving Average (SMA)</h3>
+<div class="formula">SMA_t = (X_{t-n+1} + ... + X_t) / n</div>
+<div class="example"><strong>3-period SMA of 10, 20, 30, 40, 50:</strong>
+<br>SMA₃ = (10+20+30)/3 = <strong>20</strong>; SMA₄ = (20+30+40)/3 = <strong>30</strong>; SMA₅ = (30+40+50)/3 = <strong>40</strong></div>
+
+<h3>Weighted Moving Average (WMA)</h3>
+<div class="formula">WMA = Σ (wᵢ × Xᵢ) / Σ wᵢ &nbsp;&nbsp;(higher weights for recent data)</div>
+<div class="example">Weights 3, 2, 1 over 10, 20, 30:<br>
+WMA = (3·30 + 2·20 + 1·10)/(3+2+1) = 140/6 ≈ <strong>23.33</strong></div>
+
+<h3>Advanced MAs</h3>
+<table>
+<tr><th>Type</th><th>Use</th></tr>
+<tr><td><strong>EMA</strong> (Exponential)</td><td>Recent data weighted more; smoother yet responsive</td></tr>
+<tr><td><strong>DEMA</strong> (Double EMA)</td><td>Less lag — fast-paced trading</td></tr>
+<tr><td><strong>TEMA</strong> (Triple EMA)</td><td>Even less lag, sharp trend detection</td></tr>
+</table>
+
+<h3>Trading Signals</h3>
+<ul>
+<li><strong>Golden Cross</strong>: 50-day SMA crosses above 200-day → bullish</li>
+<li><strong>Death Cross</strong>: 50-day SMA crosses below 200-day → bearish</li>
+<li>Volume MA confirms price moves</li>
+</ul>
+
+<div class="code-block">data['SMA50'] = data['Close'].rolling(window=50).mean()
+data['SMA200'] = data['Close'].rolling(window=200).mean()
+data['EMA20'] = data['Close'].ewm(span=20, adjust=False).mean()</div>
+</section>
+
+<section id="smoothing">
+<h2>5️⃣ Smoothing Techniques</h2>
+
+<h3>Why Smooth?</h3>
+<p>Reduce noise → reveal underlying trends → better forecasts.</p>
+
+<h3>Comparison</h3>
+<table>
+<tr><th>Technique</th><th>Captures Trend?</th><th>Seasonality?</th><th>Best For</th></tr>
+<tr><td>SMA</td><td>✓ (lagged)</td><td>✗</td><td>Stable data</td></tr>
+<tr><td>WMA</td><td>✓ (faster)</td><td>✗</td><td>Recent-relevant data</td></tr>
+<tr><td>SES (Simple Exp Smoothing)</td><td>✗</td><td>✗</td><td>Flat, non-seasonal</td></tr>
+<tr><td>Holt's (Double)</td><td>✓</td><td>✗</td><td>Trended series</td></tr>
+<tr><td>Holt-Winters (Triple)</td><td>✓</td><td>✓</td><td>Trend + seasonality</td></tr>
+<tr><td>LOESS</td><td>✓</td><td>✓</td><td>Complex non-linear</td></tr>
+</table>
+
+<div class="warning"><strong>📌 Trade-off:</strong> More smoothing = clearer trend but slower to react to real shifts. Balance based on application.</div>
+</section>
+
+<section id="ar">
+<h2>6️⃣ Autoregressive Models &amp; ARIMA</h2>
+
+<h3>AR(p) Model</h3>
+<div class="formula">Xₜ = φ₁ Xₜ₋₁ + φ₂ Xₜ₋₂ + ... + φₚ Xₜ₋ₚ + εₜ</div>
+<p>Predicts current value from p past values plus noise.</p>
+
+<h3>Building an AR Model</h3>
+<ol>
+<li><strong>Stationarity Check</strong> — ADF test</li>
+<li><strong>Order Selection</strong> — PACF plot reveals significant lags</li>
+<li><strong>Parameter Estimation</strong> — OLS or MLE</li>
+<li><strong>Model Evaluation</strong> — AIC, BIC (lower = better)</li>
+</ol>
+
+<h3>ARIMA in Python</h3>
+<div class="code-block">import pmdarima as pm
+from statsmodels.tsa.arima.model import ARIMA
+
+# Auto-pick (p,d,q)
+auto = pm.auto_arima(data, seasonal=False, stepwise=True)
+print(auto.summary())
+
+# Manual ARIMA
+model = ARIMA(data, order=(2,1,2)).fit()
+forecast = model.forecast(steps=30)</div>
+
+<h3>ARIMA vs LSTM vs GARCH</h3>
+<table>
+<tr><th>Model</th><th>Best For</th><th>Limitation</th></tr>
+<tr><td>ARIMA</td><td>Linear, short-term</td><td>Misses non-linear shifts, volatility</td></tr>
+<tr><td>LSTM (Deep Learning)</td><td>Non-linear, long sequences</td><td>Data &amp; compute hungry, less interpretable</td></tr>
+<tr><td>GARCH</td><td>Volatility clustering (financial)</td><td>Focuses on variance, not levels</td></tr>
+</table>
+</section>
+
+<section id="scenario">
+<h2>7️⃣ Scenario Analysis in Finance</h2>
+
+<h3>Real-World Applications</h3>
+<ul>
+<li><strong>JPMorgan Chase, Goldman Sachs</strong> — ARIMA + LSTM for stock forecasting &amp; HFT</li>
+<li><strong>Bridgewater Associates</strong> — GARCH for portfolio volatility management</li>
+</ul>
+
+<h3>How Scenarios Differ</h3>
+<div class="card-grid">
+<div class="card"><h4>ARIMA scenarios</h4><p>Adjust trend or seasonality assumptions for recession/expansion</p></div>
+<div class="card"><h4>LSTM scenarios</h4><p>Feed geopolitical, macro inputs; learn complex impacts</p></div>
+<div class="card"><h4>GARCH scenarios</h4><p>Simulate volatility spikes during crises or shocks</p></div>
+</div>
+
+<h3>Strengths &amp; Limits of ARIMA</h3>
+<div class="card-grid">
+<div class="card" style="border-color:#43a047"><h4>✅ Strengths</h4><p>Linear patterns, interpretable, fast on small/medium data</p></div>
+<div class="card" style="border-color:#e53935"><h4>❌ Limits</h4><p>Non-linear shifts, volatility clustering, structural breaks</p></div>
+</div>
+
+<div class="insight"><strong>💡 Practical Tip:</strong> Combine ARIMA (level), LSTM (complex patterns), and GARCH (volatility) in a hybrid model for robust real-world forecasting.</div>
+</section>
+
+<section id="quiz">
+<h2>🎯 14-Question Quiz</h2>
+
+<div class="quiz"><p><strong>Q1.</strong> Seasonality means:</p>
+<div class="quiz-option" onclick="qa(this,1)">Patterns at fixed intervals ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Long-term direction</div>
+<div class="quiz-option" onclick="qa(this,0)">Random shocks</div>
+</div>
+
+<div class="quiz"><p><strong>Q2.</strong> Stationarity test:</p>
+<div class="quiz-option" onclick="qa(this,1)">ADF / KPSS ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">F-test</div>
+<div class="quiz-option" onclick="qa(this,0)">Chi-square</div>
+</div>
+
+<div class="quiz"><p><strong>Q3.</strong> Multiplicative decomposition fits when:</p>
+<div class="quiz-option" onclick="qa(this,1)">Seasonal magnitude grows with trend ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Components are independent</div>
+<div class="quiz-option" onclick="qa(this,0)">Series is flat</div>
+</div>
+
+<div class="quiz"><p><strong>Q4.</strong> Golden Cross:</p>
+<div class="quiz-option" onclick="qa(this,1)">50-MA crosses above 200-MA (bullish) ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">50-MA below 200-MA (bearish)</div>
+<div class="quiz-option" onclick="qa(this,0)">200-MA = 50-MA</div>
+</div>
+
+<div class="quiz"><p><strong>Q5.</strong> EMA differs from SMA by:</p>
+<div class="quiz-option" onclick="qa(this,1)">Weighting recent data more ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Skipping outliers</div>
+<div class="quiz-option" onclick="qa(this,0)">Resampling monthly</div>
+</div>
+
+<div class="quiz"><p><strong>Q6.</strong> Holt-Winters captures:</p>
+<div class="quiz-option" onclick="qa(this,1)">Level + trend + seasonality ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Only level</div>
+<div class="quiz-option" onclick="qa(this,0)">Only seasonality</div>
+</div>
+
+<div class="quiz"><p><strong>Q7.</strong> ARIMA stands for:</p>
+<div class="quiz-option" onclick="qa(this,1)">AutoRegressive Integrated Moving Average ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Adaptive Regression Multi-Average</div>
+<div class="quiz-option" onclick="qa(this,0)">Annual Reset Moving Average</div>
+</div>
+
+<div class="quiz"><p><strong>Q8.</strong> PACF helps determine:</p>
+<div class="quiz-option" onclick="qa(this,1)">AR order (p) ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Seasonality length</div>
+<div class="quiz-option" onclick="qa(this,0)">Trend slope</div>
+</div>
+
+<div class="quiz"><p><strong>Q9.</strong> Lower AIC means:</p>
+<div class="quiz-option" onclick="qa(this,1)">Better-fit model ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Worse fit</div>
+<div class="quiz-option" onclick="qa(this,0)">More parameters</div>
+</div>
+
+<div class="quiz"><p><strong>Q10.</strong> Best for volatility clustering:</p>
+<div class="quiz-option" onclick="qa(this,1)">GARCH ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">SMA</div>
+<div class="quiz-option" onclick="qa(this,0)">SES</div>
+</div>
+
+<div class="quiz"><p><strong>Q11.</strong> LSTM is best at:</p>
+<div class="quiz-option" onclick="qa(this,1)">Non-linear, long-range patterns ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Tiny datasets</div>
+<div class="quiz-option" onclick="qa(this,0)">Linear trends only</div>
+</div>
+
+<div class="quiz"><p><strong>Q12.</strong> Residuals capture:</p>
+<div class="quiz-option" onclick="qa(this,1)">Unpredictable variation ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Trend</div>
+<div class="quiz-option" onclick="qa(this,0)">Seasonality</div>
+</div>
+
+<div class="quiz"><p><strong>Q13.</strong> Differencing is used to:</p>
+<div class="quiz-option" onclick="qa(this,1)">Achieve stationarity ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Add trend</div>
+<div class="quiz-option" onclick="qa(this,0)">Smooth data</div>
+</div>
+
+<div class="quiz"><p><strong>Q14.</strong> SMA is poor at responding to:</p>
+<div class="quiz-option" onclick="qa(this,1)">Rapid trend changes (lag) ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Slow trends</div>
+<div class="quiz-option" onclick="qa(this,0)">Constant data</div>
+</div>
+</section>
+
+<section id="summary">
+<h2>📝 Summary &amp; Exam Tips</h2>
+
+<div class="summary">
+<h3>🎯 Key Takeaways</h3>
+<ul>
+<li><strong>4 components</strong>: Trend, Seasonality, Cyclic, Residual</li>
+<li><strong>Stationary</strong> = constant mean/variance. ADF tests it (p &lt; 0.05 = stationary)</li>
+<li>To make stationary: difference, log, detrend</li>
+<li><strong>Additive</strong> vs <strong>Multiplicative</strong> decomposition</li>
+<li>Moving Averages: SMA (equal weight), WMA (custom weights), EMA (recent-heavy)</li>
+<li>Golden Cross = bullish; Death Cross = bearish</li>
+<li>Smoothing: SES (flat), Holt (trend), Holt-Winters (trend+seasonal), LOESS (complex)</li>
+<li>ARIMA: AR(p) + I(d) + MA(q). Use ADF, PACF/ACF, AIC for selection</li>
+<li>Hybrid: ARIMA (levels) + LSTM (non-linear) + GARCH (volatility)</li>
+</ul>
+</div>
+
+<div class="warning"><strong>📌 Pitfalls:</strong>
+<ul>
+<li>Forgetting stationarity check before ARIMA</li>
+<li>Confusing trend with cycle (cycles are unpredictable in length)</li>
+<li>Over-smoothing — loses real signals</li>
+<li>Using ARIMA for non-linear/volatile series</li>
+</ul>
+</div>
+
+<p style="text-align:center;margin-top:30px">
+<a href="Week_04_TimeValueMoney.html" style="color:var(--primary);font-weight:bold">← Week 4</a> |
+<a href="index.html" style="color:var(--primary);font-weight:bold">📚 Index</a> |
+<a href="Week_06_PredictiveML.html" style="color:var(--primary);font-weight:bold">Week 6 → Predictive Analytics</a>
+</p>
+</section>
+
+</main>
+
+<footer><p>📈 Week 5 of 12 — Financial Data Analytics</p></footer>
+
+<script>
+function g(id,btn){document.getElementById(id).scrollIntoView({behavior:'smooth'});document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function dark(){document.body.classList.toggle('dark');try{localStorage.setItem('fda_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}}
+if(localStorage.getItem('fda_dark')==='1')document.body.classList.add('dark');
+function qa(el,c){el.parentElement.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('correct','wrong'));el.classList.add(c?'correct':'wrong')}
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

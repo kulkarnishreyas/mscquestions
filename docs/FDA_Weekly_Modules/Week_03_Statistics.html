@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 3 — Descriptive &amp; Inferential Statistics</title>
+<style>
+:root{--primary:#1e88e5;--primary-dark:#0d47a1;--accent:#ff9800;--success:#43a047;--danger:#e53935;--bg:#f5f8fb;--card:#fff;--text:#1a2332;--muted:#5a6a7a;--border:#dde5ec}
+body.dark{--bg:#0f1721;--card:#1a2535;--text:#e0e8f0;--muted:#a0b0c0;--border:#2a3545}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;transition:all .3s}
+header{background:linear-gradient(135deg,#1e88e5,#0d47a1);color:white;padding:40px 20px;text-align:center}
+header h1{font-size:2.2em;margin-bottom:6px}header .breadcrumb{font-size:.95em;opacity:.95}header .breadcrumb a{color:#ffd54f;text-decoration:none}
+nav{position:sticky;top:0;background:var(--card);z-index:100;padding:10px;overflow-x:auto;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.08);border-bottom:1px solid var(--border)}
+nav button{background:transparent;color:var(--text);border:2px solid var(--border);padding:6px 14px;margin:2px;border-radius:18px;cursor:pointer;font-size:.82em;font-weight:600}
+nav button:hover{border-color:var(--primary);color:var(--primary)}nav button.active{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-color:transparent}
+.icon-btn{background:var(--bg);width:32px;height:32px;border-radius:50%;padding:0}
+main{max-width:1100px;margin:25px auto;padding:0 18px}
+section{background:var(--card);margin:25px 0;padding:28px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.06);scroll-margin-top:80px}
+section h2{color:var(--primary-dark);border-bottom:3px solid var(--primary);padding-bottom:8px;margin-bottom:18px;font-size:1.7em}
+body.dark section h2{color:#82b1ff}section h3{margin:18px 0 10px;font-size:1.25em}
+section h4{color:var(--primary-dark);margin:12px 0 8px}body.dark section h4{color:#90caf9}
+p{margin-bottom:10px}ul,ol{margin:8px 0 12px 26px}li{margin-bottom:5px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.card{background:linear-gradient(135deg,#f0f6fc,#e8f0f8);border-left:4px solid var(--primary-dark);padding:14px;border-radius:8px}
+body.dark .card{background:linear-gradient(135deg,#1f2a3a,#2a3545)}
+.card h4{color:var(--primary-dark);margin-bottom:6px;font-size:1em}body.dark .card h4{color:#90caf9}
+.card p{font-size:.9em;margin:0;color:var(--muted)}
+table{width:100%;border-collapse:collapse;margin:12px 0}
+th,td{padding:9px 12px;border:1px solid var(--border);text-align:left}
+th{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white}
+tr:nth-child(even) td{background:var(--bg)}
+.code-block{background:#1a2535;color:#ecf0f1;padding:12px 14px;border-radius:8px;font-family:'Courier New',monospace;font-size:.9em;overflow-x:auto;margin:10px 0;white-space:pre-wrap;line-height:1.5}
+code{background:var(--bg);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:.92em;border:1px solid var(--border)}
+.quiz{background:linear-gradient(135deg,#e8f5e9,#dcedc8);border-left:4px solid var(--success);padding:16px;border-radius:10px;margin:12px 0}
+body.dark .quiz{background:linear-gradient(135deg,#1a3a2e,#2a4a3e)}
+.quiz-option{display:block;margin:6px 0;padding:10px 12px;background:var(--card);border:2px solid var(--border);border-radius:8px;cursor:pointer}
+.quiz-option:hover{border-color:var(--success);transform:translateX(3px)}
+.quiz-option.correct{background:#c8e6c9!important;border-color:var(--success);color:#1b5e20}
+.quiz-option.wrong{background:#ffcdd2!important;border-color:var(--danger);color:#b71c1c}
+.insight{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-left:4px solid #1976d2;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .insight{background:linear-gradient(135deg,#1a2a4a,#253560)}
+.warning{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-left:4px solid #f57c00;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .warning{background:linear-gradient(135deg,#3a2a1a,#4a3525)}
+.example{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left:4px solid #8e24aa;padding:14px 16px;border-radius:8px;margin:12px 0}
+body.dark .example{background:linear-gradient(135deg,#2a1a3a,#3a253f)}
+.summary{background:linear-gradient(135deg,#fff9c4,#fff59d);border-left:4px solid #fbc02d;padding:16px;border-radius:10px;margin:14px 0}
+body.dark .summary{background:linear-gradient(135deg,#3a3a1a,#4a4a25);color:var(--text)}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.9em;border-top:1px solid var(--border);margin-top:30px}
+.toc{background:var(--bg);padding:16px 20px;border-radius:10px;margin-bottom:20px}
+.toc h3{margin-bottom:8px;color:var(--primary-dark)}body.dark .toc h3{color:#90caf9}.toc ol{columns:2;column-gap:30px}
+.svg-diagram{background:var(--bg);padding:16px;border-radius:10px;margin:14px 0;text-align:center}.svg-diagram svg{max-width:100%;height:auto}
+.formula{background:linear-gradient(135deg,#f0f4ff,#dce7ff);padding:14px 18px;border-radius:8px;font-family:Georgia,serif;font-size:1.05em;text-align:center;margin:12px 0;border-left:4px solid var(--primary)}
+body.dark .formula{background:linear-gradient(135deg,#1f2a3a,#2a3a55)}
+</style>
+</head>
+<body>
+
+<header><div class="breadcrumb"><a href="index.html">📚 FDA Modules</a> › Week 3</div><h1>📐 Week 3 — Descriptive &amp; Inferential Statistics</h1></header>
+
+<nav>
+<button onclick="g('descriptive',this)" class="active">1. Descriptive</button>
+<button onclick="g('central',this)">2. Central Tendency</button>
+<button onclick="g('dispersion',this)">3. Dispersion</button>
+<button onclick="g('inferential',this)">4. Inferential</button>
+<button onclick="g('hypothesis',this)">5. Hypothesis Testing</button>
+<button onclick="g('correlation',this)">6. Correlation</button>
+<button onclick="g('regression',this)">7. Regression</button>
+<button onclick="g('quiz',this)">🎯 Quiz</button>
+<button onclick="g('summary',this)">📝 Summary</button>
+<button class="icon-btn" onclick="dark()">🌓</button>
+</nav>
+
+<main>
+
+<section class="toc"><h3>📑 Contents</h3><ol>
+<li><a href="#descriptive">Descriptive Statistics Overview</a></li>
+<li><a href="#central">Measures of Central Tendency</a></li>
+<li><a href="#dispersion">Measures of Dispersion</a></li>
+<li><a href="#inferential">Inferential Statistics</a></li>
+<li><a href="#hypothesis">Hypothesis Testing</a></li>
+<li><a href="#correlation">Correlation Analysis</a></li>
+<li><a href="#regression">Regression Analysis</a></li>
+<li><a href="#quiz">15-Question Quiz</a></li>
+<li><a href="#summary">Summary &amp; Exam Tips</a></li>
+</ol></section>
+
+<section id="descriptive">
+<h2>1️⃣ Descriptive Statistics Overview</h2>
+<p>Descriptive statistics <strong>summarise</strong> data to reveal patterns. Four families of measures cover most analyses:</p>
+
+<div class="card-grid">
+<div class="card"><h4>📍 Central Tendency</h4><p><strong>Mean, Median, Mode</strong> — the "typical" value.</p></div>
+<div class="card"><h4>📏 Variability</h4><p><strong>Range, Variance, SD, IQR</strong> — how spread out the data is.</p></div>
+<div class="card"><h4>📐 Distribution Shape</h4><p><strong>Skewness</strong> (asymmetry) and <strong>Kurtosis</strong> (tail heaviness).</p></div>
+<div class="card"><h4>🔗 Relationships</h4><p><strong>Covariance, Correlation</strong> — how variables move together.</p></div>
+</div>
+
+<h3>Quick example — fund weekly returns: 3%, 5%, -2%, 8%, 3%</h3>
+<ul>
+<li><strong>Mean</strong> = (3+5−2+8+3)/5 = <strong>3.4%</strong></li>
+<li><strong>Median</strong> = 3% (sorted: -2, 3, 3, 5, 8 → middle)</li>
+<li><strong>Mode</strong> = 3% (appears twice)</li>
+</ul>
+
+<h3>Visual Tools for EDA</h3>
+<table>
+<tr><th>Chart</th><th>Use</th></tr>
+<tr><td>Histogram</td><td>Frequency distribution</td></tr>
+<tr><td>Bar</td><td>Compare categories</td></tr>
+<tr><td>Box Plot</td><td>Median, quartiles, outliers</td></tr>
+<tr><td>Line Graph</td><td>Time-series trends (stock prices)</td></tr>
+<tr><td>Scatter Plot</td><td>Two-variable relationships</td></tr>
+<tr><td>Heatmap</td><td>Correlation matrix</td></tr>
+</table>
+</section>
+
+<section id="central">
+<h2>2️⃣ Measures of Central Tendency</h2>
+
+<div class="formula">Mean = (Σ xᵢ) / n &nbsp;&nbsp;|&nbsp;&nbsp; Median = middle value when sorted &nbsp;&nbsp;|&nbsp;&nbsp; Mode = most frequent</div>
+
+<h3>Three-Stock Comparison</h3>
+<table>
+<tr><th>Stock</th><th>Mean</th><th>Median</th><th>Mode</th></tr>
+<tr><td>A</td><td>7.4%</td><td>7%</td><td>7%</td></tr>
+<tr><td>B</td><td>6.2%</td><td>6%</td><td>6%</td></tr>
+<tr><td>C</td><td>9.8%</td><td>12%</td><td>15%</td></tr>
+</table>
+<p>Stock C has the highest mean but also the widest spread (volatile). Stock B is most stable.</p>
+
+<h3>When to use what?</h3>
+<div class="card-grid">
+<div class="card"><h4>📊 Mean</h4><p>Best for symmetric data. <strong>Sensitive to outliers</strong> — extreme values pull it.</p></div>
+<div class="card"><h4>📍 Median</h4><p>Robust to outliers/skewness. Best for income, real estate prices.</p></div>
+<div class="card"><h4>🔁 Mode</h4><p>For categorical/repeated data. Trading: most-frequent price level (support/resistance).</p></div>
+</div>
+
+<div class="warning"><strong>📌 Limitations:</strong> Central tendency alone doesn't tell you about <em>spread</em>. Two stocks with same mean return (8%) can have wildly different risk profiles.</div>
+</section>
+
+<section id="dispersion">
+<h2>3️⃣ Measures of Dispersion</h2>
+
+<h3>Core Measures</h3>
+<table>
+<tr><th>Measure</th><th>Formula</th><th>Notes</th></tr>
+<tr><td>Range</td><td>Max − Min</td><td>Simplest, ignores distribution</td></tr>
+<tr><td>Variance (σ²)</td><td>Σ(xᵢ − μ)² / N</td><td>Squared units — hard to interpret</td></tr>
+<tr><td>Standard Deviation (σ)</td><td>√Variance</td><td>Same units as data — most popular</td></tr>
+<tr><td>IQR</td><td>Q3 − Q1</td><td>Middle 50% — robust to outliers</td></tr>
+</table>
+
+<h3>Worked Example — returns: 5%, -3%, 7%, 10%, 2%</h3>
+<ul>
+<li>μ = (5 − 3 + 7 + 10 + 2)/5 = <strong>4.2%</strong></li>
+<li>Squared deviations: 0.64, 51.84, 7.84, 33.64, 4.84</li>
+<li>σ² = 98.8/5 = <strong>19.76%²</strong></li>
+<li>σ = √19.76 ≈ <strong>4.44%</strong></li>
+<li>Range = 10 − (−3) = <strong>13%</strong></li>
+</ul>
+
+<h3>Sharpe Ratio</h3>
+<div class="formula">Sharpe = (Portfolio Return − Risk-Free Rate) / σ</div>
+<p>Compares return per unit of risk. Higher is better. Used to compare investments fairly.</p>
+
+<div class="example"><strong>📊 Three stocks compared:</strong>
+<ul>
+<li>Stock A: Mean 7%, SD 4.5% — balanced</li>
+<li>Stock B: Mean 6%, SD 2.8% — stable (lowest risk)</li>
+<li>Stock C: Mean 9%, SD 6.0% — high reward, high risk</li>
+</ul>
+Risk-averse investors prefer B; aggressive investors lean to C.
+</div>
+
+<h3>Distribution Shape</h3>
+<div class="card-grid">
+<div class="card"><h4>↗️ Positive Skew</h4><p>Long right tail. Most values low, a few large. E.g., income.</p></div>
+<div class="card"><h4>↖️ Negative Skew</h4><p>Long left tail. Most values high, a few small.</p></div>
+<div class="card"><h4>📈 High Kurtosis</h4><p>Heavy tails — more outliers than normal distribution.</p></div>
+</div>
+</section>
+
+<section id="inferential">
+<h2>4️⃣ Inferential Statistics</h2>
+
+<p><strong>Inferential statistics</strong> draws conclusions about a <em>population</em> from a <em>sample</em>. Crucial in finance where you can't observe every transaction.</p>
+
+<h3>Descriptive vs Inferential</h3>
+<table>
+<tr><th>Aspect</th><th>Descriptive</th><th>Inferential</th></tr>
+<tr><td>Scope</td><td>Dataset itself</td><td>Sample → Population</td></tr>
+<tr><td>Goal</td><td>Describe</td><td>Generalize, predict</td></tr>
+<tr><td>Techniques</td><td>Charts, summary stats</td><td>Hypothesis tests, regression, ANOVA</td></tr>
+<tr><td>Output</td><td>Summary numbers</td><td>Conclusions with confidence levels</td></tr>
+</table>
+
+<h3>Key Inferential Methods in Finance</h3>
+<div class="card-grid">
+<div class="card"><h4>📈 Regression</h4><p>Simple (1 predictor) or Multiple. E.g., predict stock from inflation + rates.</p></div>
+<div class="card"><h4>⏳ Time Series (ARIMA)</h4><p>Forecast future from historical sequence.</p></div>
+<div class="card"><h4>🎲 Monte Carlo</h4><p>Simulate 1000s of scenarios for portfolio risk.</p></div>
+<div class="card"><h4>🧪 Hypothesis Tests</h4><p>Test strategy effectiveness, return differences.</p></div>
+<div class="card"><h4>📊 Confidence Intervals</h4><p>Range estimate (e.g., 95% CI for mean return).</p></div>
+<div class="card"><h4>⚠️ Value at Risk (VaR)</h4><p>Potential loss in extreme adverse cases.</p></div>
+</div>
+
+<h3>Sample Size Matters</h3>
+<ul>
+<li><strong>Larger sample</strong> → smaller margin of error, narrower CIs, higher statistical power</li>
+<li><strong>Small sample</strong> → wider intervals (2%–15%), risk of Type II errors</li>
+<li>Balance precision vs cost — large samples are expensive</li>
+</ul>
+</section>
+
+<section id="hypothesis">
+<h2>5️⃣ Hypothesis Testing</h2>
+
+<h3>Setting Up Hypotheses</h3>
+<div class="card-grid">
+<div class="card"><h4>H₀ (Null)</h4><p>Default — no effect/difference. We try to <em>reject</em> it.</p></div>
+<div class="card"><h4>H₁ (Alternative)</h4><p>What you want to support — the new claim.</p></div>
+</div>
+
+<div class="example"><strong>Example:</strong> "Does new strategy beat the 8% benchmark?"
+<ul><li>H₀: μ ≤ 8% (no outperformance)</li>
+<li>H₁: μ &gt; 8% (outperforms)</li></ul>
+</div>
+
+<h3>Common Tests</h3>
+<table>
+<tr><th>Test</th><th>Use When</th><th>Finance Example</th></tr>
+<tr><td>t-test</td><td>Small sample, σ unknown</td><td>Fund return vs market benchmark</td></tr>
+<tr><td>z-test</td><td>Large sample (n&gt;30), σ known</td><td>Compare stock transaction volumes</td></tr>
+<tr><td>χ² (Chi-Square)</td><td>Categorical relationships</td><td>Stock movement vs sector</td></tr>
+<tr><td>ANOVA</td><td>Means across &gt;2 groups</td><td>Returns of 3+ portfolios</td></tr>
+</table>
+
+<h3>p-Value Decision Rule</h3>
+<div class="formula">If p &lt; α (typically 0.05) → Reject H₀ (significant result)<br>If p ≥ α → Fail to reject H₀</div>
+
+<div class="example"><strong>Example:</strong> p = 0.02, α = 0.05 → significant. Evidence the strategy beats the benchmark.</div>
+
+<h3>Type I and Type II Errors</h3>
+<table>
+<tr><th></th><th>H₀ True</th><th>H₀ False</th></tr>
+<tr><td>Reject H₀</td><td>❌ Type I (α)</td><td>✓ Correct</td></tr>
+<tr><td>Fail to reject</td><td>✓ Correct</td><td>❌ Type II (β)</td></tr>
+</table>
+</section>
+
+<section id="correlation">
+<h2>6️⃣ Correlation Analysis</h2>
+
+<h3>Pearson's Correlation Coefficient (<em>r</em>)</h3>
+<p>The most common measure of <strong>linear</strong> association between two variables in finance. Range: <strong>−1 to +1</strong>.</p>
+<div class="formula">r = Σ(xᵢ − x̄)(yᵢ − ȳ) / √[Σ(xᵢ − x̄)² · Σ(yᵢ − ȳ)²]</div>
+<div class="warning"><strong>Pearson assumes a LINEAR relationship.</strong> Non-linear patterns (e.g., U-shape) can produce r ≈ 0 even when variables are strongly related — always plot the data first.</div>
+
+<h3>Interpreting r</h3>
+<table>
+<tr><th>r</th><th>Strength</th></tr>
+<tr><td>+1</td><td>Perfect positive — variables move identically up</td></tr>
+<tr><td>0.7 to &lt;1</td><td>Strong positive</td></tr>
+<tr><td>0.3 to 0.7</td><td>Moderate</td></tr>
+<tr><td>0 to 0.3</td><td>Weak</td></tr>
+<tr><td>0</td><td>No linear relationship</td></tr>
+<tr><td>−1</td><td>Perfect negative</td></tr>
+</table>
+
+<h3>Finance Applications</h3>
+<div class="card-grid">
+<div class="card"><h4>🎯 Diversification</h4><p>Pick low-correlated assets — gains offset losses.</p></div>
+<div class="card"><h4>🛡️ Hedging</h4><p>Negatively-correlated pairs (equities &amp; bonds) protect portfolios.</p></div>
+<div class="card"><h4>📊 Portfolio Optimisation</h4><p>Key input to Modern Portfolio Theory (MPT).</p></div>
+<div class="card"><h4>⚠️ Systemic Risk</h4><p>In crises, correlations <em>increase</em> — reducing diversification benefits.</p></div>
+</div>
+
+<div class="warning"><strong>⚠️ Correlation ≠ Causation</strong>. Linear only. Sensitive to outliers. Correlations <em>change over time</em>.</div>
+</section>
+
+<section id="regression">
+<h2>7️⃣ Regression Analysis</h2>
+
+<div class="formula">Y = β₀ + β₁X + ε</div>
+
+<p>Where Y = dependent (e.g., sales), X = independent (e.g., ad spend), β₀ = intercept, β₁ = slope, ε = error.</p>
+
+<h3>Example — Ad Spend vs Sales</h3>
+<table>
+<tr><th>Ad Spend (X, ₹k)</th><th>10</th><th>15</th><th>20</th><th>25</th><th>30</th></tr>
+<tr><td>Sales (Y, ₹k)</td><td>50</td><td>65</td><td>80</td><td>95</td><td>110</td></tr>
+</table>
+<p>Best-fit: <strong>Y = 20 + 3X</strong>. Each extra ₹1,000 ad spend → ₹3,000 extra sales. Forecast Y for X=25: <strong>20 + 75 = ₹95,000</strong>.</p>
+
+<h3>Python Implementation</h3>
+<div class="code-block">from sklearn.linear_model import LinearRegression
+import numpy as np
+
+X = np.array([10,15,20,25,30]).reshape(-1,1)
+Y = np.array([50,65,80,95,110])
+
+model = LinearRegression()
+model.fit(X, Y)
+
+print(f"Y = {model.intercept_:.2f} + {model.coef_[0]:.2f} X")
+print("Predict for ₹25k spend:", model.predict([[25]])[0])</div>
+
+<h3>Assumptions of Linear Regression</h3>
+<ol>
+<li><strong>Linearity</strong> — relationship is straight-line</li>
+<li><strong>Independence of errors</strong> — no autocorrelation</li>
+<li><strong>Homoscedasticity</strong> — constant error variance</li>
+<li><strong>Normal errors</strong> — residuals normally distributed</li>
+<li><strong>No omitted variables</strong> — all relevant predictors included</li>
+</ol>
+
+<h3>Evaluating Coefficients</h3>
+<ul>
+<li><strong>p-value &lt; 0.05</strong> → variable is significant</li>
+<li><strong>|t-stat| &gt; 2</strong> → strong impact</li>
+<li><strong>R²</strong> = % of variance explained; <strong>Adjusted R²</strong> penalises extra variables</li>
+<li><strong>VIF &gt; 10</strong> → multicollinearity issue</li>
+</ul>
+
+<h3>Finance Applications &amp; Limitations</h3>
+<div class="card-grid">
+<div class="card"><h4>📈 Forecasting</h4><p>Stock prices, revenue, indicators.</p></div>
+<div class="card"><h4>🎯 Risk Mgmt</h4><p>Portfolio sensitivity (beta) to market.</p></div>
+<div class="card"><h4>🧪 Strategy Testing</h4><p>Marketing ROI, innovation impact.</p></div>
+<div class="card"><h4>⚠️ Limitations</h4><p>Linear only; sensitive to outliers; multicollinearity; overfitting.</p></div>
+</div>
+</section>
+
+<section id="quiz">
+<h2>🎯 15-Question Quiz</h2>
+
+<div class="quiz"><p><strong>Q1.</strong> Median is preferred over Mean when:</p>
+<div class="quiz-option" onclick="qa(this,1)">Data is skewed / has outliers ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Data is symmetric</div>
+<div class="quiz-option" onclick="qa(this,0)">Sample is small</div>
+</div>
+
+<div class="quiz"><p><strong>Q2.</strong> Standard Deviation is the:</p>
+<div class="quiz-option" onclick="qa(this,1)">Square root of variance ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Square of variance</div>
+<div class="quiz-option" onclick="qa(this,0)">Sum of deviations</div>
+</div>
+
+<div class="quiz"><p><strong>Q3.</strong> IQR is computed as:</p>
+<div class="quiz-option" onclick="qa(this,1)">Q3 − Q1 ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Q4 − Q1</div>
+<div class="quiz-option" onclick="qa(this,0)">Max − Min</div>
+</div>
+
+<div class="quiz"><p><strong>Q4.</strong> Sharpe Ratio formula:</p>
+<div class="quiz-option" onclick="qa(this,1)">(Rp − Rf) / σp ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Rp × σp</div>
+<div class="quiz-option" onclick="qa(this,0)">σp / Rp</div>
+</div>
+
+<div class="quiz"><p><strong>Q5.</strong> If p = 0.02 and α = 0.05:</p>
+<div class="quiz-option" onclick="qa(this,1)">Reject H₀ (significant) ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Fail to reject H₀</div>
+<div class="quiz-option" onclick="qa(this,0)">Test is invalid</div>
+</div>
+
+<div class="quiz"><p><strong>Q6.</strong> Use a t-test when:</p>
+<div class="quiz-option" onclick="qa(this,1)">Small sample, σ unknown ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">n &gt; 30 and σ known</div>
+<div class="quiz-option" onclick="qa(this,0)">Comparing 5 groups</div>
+</div>
+
+<div class="quiz"><p><strong>Q7.</strong> ANOVA is for:</p>
+<div class="quiz-option" onclick="qa(this,1)">Comparing means across &gt;2 groups ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Categorical relationships</div>
+<div class="quiz-option" onclick="qa(this,0)">Forecasting prices</div>
+</div>
+
+<div class="quiz"><p><strong>Q8.</strong> Correlation r ranges:</p>
+<div class="quiz-option" onclick="qa(this,1)">−1 to +1 ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">0 to 1</div>
+<div class="quiz-option" onclick="qa(this,0)">−100 to +100</div>
+</div>
+
+<div class="quiz"><p><strong>Q9.</strong> r = −0.85 indicates:</p>
+<div class="quiz-option" onclick="qa(this,1)">Strong negative correlation ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Weak positive</div>
+<div class="quiz-option" onclick="qa(this,0)">No relationship</div>
+</div>
+
+<div class="quiz"><p><strong>Q10.</strong> In Y = β₀ + β₁X, β₁ is:</p>
+<div class="quiz-option" onclick="qa(this,1)">The slope ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">The intercept</div>
+<div class="quiz-option" onclick="qa(this,0)">The error</div>
+</div>
+
+<div class="quiz"><p><strong>Q11.</strong> Linear regression assumes:</p>
+<div class="quiz-option" onclick="qa(this,1)">Homoscedasticity (constant error variance) ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Multicollinearity</div>
+<div class="quiz-option" onclick="qa(this,0)">Skewed errors</div>
+</div>
+
+<div class="quiz"><p><strong>Q12.</strong> Confidence interval represents:</p>
+<div class="quiz-option" onclick="qa(this,1)">Range estimate for a population parameter ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Exact population value</div>
+<div class="quiz-option" onclick="qa(this,0)">Sample mean</div>
+</div>
+
+<div class="quiz"><p><strong>Q13.</strong> Type II error =</p>
+<div class="quiz-option" onclick="qa(this,1)">Failing to reject a false H₀ ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Rejecting a true H₀</div>
+<div class="quiz-option" onclick="qa(this,0)">Wrong sampling</div>
+</div>
+
+<div class="quiz"><p><strong>Q14.</strong> Correlation does NOT imply:</p>
+<div class="quiz-option" onclick="qa(this,1)">Causation ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">A relationship</div>
+<div class="quiz-option" onclick="qa(this,0)">Statistical significance</div>
+</div>
+
+<div class="quiz"><p><strong>Q15.</strong> VIF &gt; 10 indicates:</p>
+<div class="quiz-option" onclick="qa(this,1)">Multicollinearity problem ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Strong fit</div>
+<div class="quiz-option" onclick="qa(this,0)">High R²</div>
+</div>
+</section>
+
+<section id="summary">
+<h2>📝 Summary &amp; Exam Tips</h2>
+
+<div class="summary">
+<h3>🎯 Key Takeaways</h3>
+<ul>
+<li><strong>Central tendency</strong>: Mean (avg), Median (mid), Mode (most freq). Median is robust to outliers.</li>
+<li><strong>Dispersion</strong>: Range, Variance, SD, IQR. SD same units as data — easiest to interpret.</li>
+<li><strong>Sharpe Ratio</strong> = (return − risk-free) / SD — risk-adjusted performance.</li>
+<li><strong>Descriptive</strong> describes; <strong>Inferential</strong> generalises from sample to population.</li>
+<li><strong>Hypothesis testing</strong>: set H₀ (null), H₁ (alt); reject H₀ if p &lt; α (usually 0.05).</li>
+<li>Tests: <strong>t-test</strong> (small/unknown σ), <strong>z-test</strong> (large/known σ), <strong>χ²</strong> (categorical), <strong>ANOVA</strong> (&gt;2 means).</li>
+<li><strong>Type I</strong> = rejecting true H₀; <strong>Type II</strong> = failing to reject false H₀.</li>
+<li><strong>Correlation r</strong> ∈ [−1, +1]. Strong if |r| ≥ 0.7. ≠ causation.</li>
+<li><strong>Regression</strong> Y = β₀ + β₁X + ε. Assumes linearity, independence, homoscedasticity, normal errors.</li>
+<li>Evaluate β: p &lt; 0.05 significant; R² = % variance explained.</li>
+</ul>
+</div>
+
+<div class="warning"><strong>📌 Common Pitfalls:</strong>
+<ul>
+<li>Reporting Mean for skewed data — use Median instead</li>
+<li>Inferring causation from correlation</li>
+<li>Forgetting regression assumptions (linearity, homoscedasticity)</li>
+<li>Using high R² as the only measure — Adjusted R² is better for multi-variable models</li>
+<li>p-values can be misleading with small/large samples — always check effect size</li>
+</ul>
+</div>
+
+<p style="text-align:center;margin-top:30px">
+<a href="Week_02_FinancialStatements.html" style="color:var(--primary);font-weight:bold">← Week 2</a> |
+<a href="index.html" style="color:var(--primary);font-weight:bold">📚 Index</a> |
+<a href="Week_04_TimeValueMoney.html" style="color:var(--primary);font-weight:bold">Week 4 → Time Value of Money</a>
+</p>
+</section>
+
+</main>
+
+<footer><p>📐 Week 3 of 12 — Financial Data Analytics</p></footer>
+
+<script>
+function g(id,btn){document.getElementById(id).scrollIntoView({behavior:'smooth'});document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function dark(){document.body.classList.toggle('dark');try{localStorage.setItem('fda_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}}
+if(localStorage.getItem('fda_dark')==='1')document.body.classList.add('dark');
+function qa(el,c){el.parentElement.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('correct','wrong'));el.classList.add(c?'correct':'wrong')}
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

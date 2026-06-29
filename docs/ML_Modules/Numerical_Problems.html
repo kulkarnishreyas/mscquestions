@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Numerical Problems — Machine Learning</title>
+<style>
+  :root { --primary:#8e44ad; --primary-dark:#5b2c6f; --success:#27ae60; --danger:#e53935; --bg:#f5f7fa; --card:#fff; --text:#2c3e50; --muted:#6c7a89; --border:#e1e8ed; }
+  body.dark { --bg:#1a1a2e; --card:#252541; --text:#e8e8f0; --muted:#a0a0b8; --border:#3a3a5c; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
+  header { background:linear-gradient(135deg,#8e44ad,#5b2c6f); color:white; padding:40px 20px; text-align:center; }
+  header h1 { font-size:2.2em; margin-bottom:6px; }
+  header .breadcrumb { font-size:0.95em; opacity:0.9; }
+  header .breadcrumb a { color:#ffd700; text-decoration:none; }
+  main { max-width:1100px; margin:25px auto; padding:0 18px; }
+  section { background:var(--card); margin:25px 0; padding:28px; border-radius:14px; box-shadow:0 4px 16px rgba(0,0,0,0.06); }
+  section h2 { color:var(--primary-dark); border-bottom:3px solid var(--primary); padding-bottom:8px; margin-bottom:18px; font-size:1.6em; }
+  body.dark section h2 { color:#d7bde2; }
+  section h3 { margin:18px 0 10px; font-size:1.2em; color:var(--primary-dark); }
+  body.dark section h3 { color:#d7bde2; }
+  p { margin-bottom:10px; }
+  ul, ol { margin:8px 0 12px 26px; }
+  li { margin-bottom:5px; }
+  table { width:100%; border-collapse:collapse; margin:12px 0; }
+  th, td { padding:8px 10px; border:1px solid var(--border); text-align:left; font-size:0.92em; }
+  th { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; }
+  tr:nth-child(even) td { background:var(--bg); }
+  .problem { background:linear-gradient(135deg,#fff8e1,#ffecb3); border-left:4px solid #ff9800; padding:14px; border-radius:8px; margin:14px 0; }
+  body.dark .problem { background:linear-gradient(135deg,#3a2a1a,#4a3525); }
+  .problem h4 { color:#bf360c; margin-bottom:6px; }
+  body.dark .problem h4 { color:#ffb55a; }
+  .solution { background:linear-gradient(135deg,#e8f5e9,#c8e6c9); border-left:4px solid var(--success); padding:14px; border-radius:8px; margin:8px 0 14px; }
+  body.dark .solution { background:linear-gradient(135deg,#1a3a2e,#2a4a3e); }
+  .solution h4 { color:#1b5e20; margin-bottom:6px; }
+  body.dark .solution h4 { color:#a5d6a7; }
+  .formula { background:#2c3e50; color:#ecf0f1; padding:12px 14px; border-radius:8px; font-family:'Courier New',monospace; margin:10px 0; }
+  footer { text-align:center; padding:24px; color:var(--muted); font-size:0.9em; border-top:1px solid var(--border); margin-top:30px; }
+  nav.toc { background:var(--card); padding:18px; border-radius:10px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+  nav.toc h3 { color:var(--primary-dark); margin-bottom:8px; }
+  body.dark nav.toc h3 { color:#d7bde2; }
+  nav.toc a { color:var(--primary); margin-right:12px; display:inline-block; margin-bottom:4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="index.html">← Weekly Modules</a></div>
+  <h1>🔢 Numerical Problems — Machine Learning</h1>
+  <p style="opacity:0.95;">Step-by-step worked numerical examples from the ML course PDFs</p>
+</header>
+
+<main>
+
+<nav class="toc">
+  <h3>📑 Contents</h3>
+  <a href="#w2-mae">W2 — MAE / MSE / RMSE</a>
+  <a href="#w3-log">W3 — Logistic Regression</a>
+  <a href="#w4-id3">W4 — ID3 Entropy & Info Gain</a>
+  <a href="#w5-bayes">W5 — Naive Bayes (Medical Diagnosis)</a>
+  <a href="#w5-buyer">W5 — Naive Bayes (Computer Buyer)</a>
+  <a href="#w6-kmeans">W6 — K-Means</a>
+  <a href="#w6-kmeansp">W6 — K-Means++</a>
+  <a href="#w9-backprop">W9 — Backpropagation</a>
+</nav>
+
+<!-- ============ W2 ============ -->
+<section id="w2-mae">
+  <h2>Week 2 — MAE, MSE, RMSE on a Student Score Dataset</h2>
+
+  <div class="problem">
+    <h4>Dataset (5 students, regression model predictions)</h4>
+    <table>
+      <tr><th>Student</th><th>Actual y<sub>i</sub></th><th>Predicted ŷ<sub>i</sub></th><th>|y − ŷ|</th><th>(y − ŷ)²</th></tr>
+      <tr><td>1</td><td>20</td><td>22</td><td>2</td><td>4</td></tr>
+      <tr><td>2</td><td>25</td><td>26</td><td>1</td><td>1</td></tr>
+      <tr><td>3</td><td>18</td><td>15</td><td>3</td><td>9</td></tr>
+      <tr><td>4</td><td>30</td><td>25</td><td>5</td><td>25</td></tr>
+      <tr><td>5</td><td>22</td><td>21</td><td>1</td><td>1</td></tr>
+      <tr><td><strong>Σ</strong></td><td>—</td><td>—</td><td><strong>12</strong></td><td><strong>40</strong></td></tr>
+    </table>
+  </div>
+
+  <div class="solution">
+    <h4>Step-by-step Solutions</h4>
+    <p><strong>Mean Absolute Error (MAE):</strong></p>
+    <div class="formula">MAE = (1/n) · Σ |yᵢ − ŷᵢ| = (1/5) × 12 = <strong>2.4</strong></div>
+
+    <p><strong>Mean Squared Error (MSE):</strong></p>
+    <div class="formula">MSE = (1/n) · Σ (yᵢ − ŷᵢ)² = (1/5) × 40 = <strong>8</strong></div>
+
+    <p><strong>Root Mean Squared Error (RMSE):</strong></p>
+    <div class="formula">RMSE = √MSE = √8 ≈ <strong>2.828</strong></div>
+
+    <p><strong>Residual Sum of Squares (RSS):</strong></p>
+    <div class="formula">RSS = Σ (yᵢ − ŷᵢ)² = <strong>40</strong></div>
+
+    <p>MSE penalises larger errors more heavily (squared) — sensitive to outliers. RMSE has the same units as the target.</p>
+  </div>
+</section>
+
+<!-- ============ W3 ============ -->
+<section id="w3-log">
+  <h2>Week 3 — Logistic Regression: Credit-Card Upgrade Prediction</h2>
+
+  <div class="problem">
+    <h4>Setup (from PDF)</h4>
+    <p>A credit-card company wants to identify cardholders likely to upgrade from a Standard to a Premium card. Dataset: 30 cardholders with features:</p>
+    <ul>
+      <li>x₁ = Total credit-card purchases in the last year</li>
+      <li>x₂ = Whether the customer bought an add-on card (1 = Yes, 0 = No)</li>
+      <li>Target y ∈ {0 = stay on Standard, 1 = upgrade to Premium}</li>
+    </ul>
+  </div>
+
+  <div class="solution">
+    <h4>Prediction Steps</h4>
+    <ol>
+      <li>Train a logistic regression to learn weights w₀, w₁, w₂.</li>
+      <li>For a new applicant, compute z = w₀ + w₁·x₁ + w₂·x₂.</li>
+      <li>Apply sigmoid: <span class="formula">h<sub>w</sub>(x) = 1 / (1 + e<sup>−z</sup>)</span></li>
+      <li>If h<sub>w</sub>(x) ≥ 0.5 → predict "upgrade" (Class 1); else "stay" (Class 0).</li>
+    </ol>
+    <p><strong>Cost function (single observation):</strong></p>
+    <div class="formula">If y=1:  Cost = −log(h<sub>w</sub>(x))
+If y=0:  Cost = −log(1 − h<sub>w</sub>(x))</div>
+    <p><strong>Gradient descent update:</strong></p>
+    <div class="formula">w<sub>j</sub> := w<sub>j</sub> − α · Σ<sub>i</sub>(h<sub>w</sub>(xᵢ) − yᵢ) · xᵢⱼ</div>
+  </div>
+</section>
+
+<!-- ============ W4 ============ -->
+<section id="w4-id3">
+  <h2>Week 4 — ID3 Decision Tree: Entropy &amp; Information Gain</h2>
+
+  <div class="problem">
+    <h4>Dataset (14 customers, "Buy Status" target)</h4>
+    <table>
+      <tr><th>ID</th><th>Age</th><th>Income</th><th>Student</th><th>Credit Rank</th><th>Buy</th></tr>
+      <tr><td>1</td><td>Youth</td><td>High</td><td>No</td><td>Fair</td><td>No</td></tr>
+      <tr><td>2</td><td>Youth</td><td>High</td><td>No</td><td>Excellent</td><td>No</td></tr>
+      <tr><td>3</td><td>Middle</td><td>High</td><td>No</td><td>Fair</td><td>Yes</td></tr>
+      <tr><td>4</td><td>Senior</td><td>Medium</td><td>No</td><td>Fair</td><td>Yes</td></tr>
+      <tr><td>5</td><td>Senior</td><td>Low</td><td>Yes</td><td>Fair</td><td>Yes</td></tr>
+      <tr><td>6</td><td>Senior</td><td>Low</td><td>Yes</td><td>Excellent</td><td>No</td></tr>
+      <tr><td>7</td><td>Middle</td><td>Low</td><td>Yes</td><td>Excellent</td><td>Yes</td></tr>
+      <tr><td>8</td><td>Youth</td><td>Medium</td><td>No</td><td>Fair</td><td>No</td></tr>
+      <tr><td>9</td><td>Youth</td><td>Low</td><td>Yes</td><td>Fair</td><td>Yes</td></tr>
+      <tr><td>10</td><td>Senior</td><td>Medium</td><td>Yes</td><td>Fair</td><td>Yes</td></tr>
+      <tr><td>11</td><td>Youth</td><td>Medium</td><td>Yes</td><td>Excellent</td><td>Yes</td></tr>
+      <tr><td>12</td><td>Middle</td><td>Medium</td><td>No</td><td>Excellent</td><td>Yes</td></tr>
+      <tr><td>13</td><td>Middle</td><td>High</td><td>Yes</td><td>Fair</td><td>No</td></tr>
+      <tr><td>14</td><td>Senior</td><td>Medium</td><td>No</td><td>Excellent</td><td>No</td></tr>
+    </table>
+    <p>Find the attribute with highest <strong>information gain</strong> for the root split.</p>
+  </div>
+
+  <div class="solution">
+    <h4>Steps (from PDF)</h4>
+    <ol>
+      <li><strong>Compute target entropy</strong> of "Buy" across all 14 records.</li>
+      <li><strong>For each attribute</strong>, partition data by attribute value, compute child entropies, then the weighted average.</li>
+      <li><strong>Information Gain</strong> = Entropy(parent) − Entropy<sub>weighted</sub>(child).</li>
+    </ol>
+    <p><strong>Worked weighted entropy for Age:</strong></p>
+    <div class="formula">Entropy<sub>Age</sub> = (5/14)·Entropy(Youth) + (4/14)·Entropy(Middle) + (5/14)·Entropy(Senior)
+Gain(Age) = Entropy(D) − Entropy<sub>Age</sub></div>
+    <p>Repeat for Income, Student, Credit_Rank — pick the attribute with the highest gain as the root. Recurse on each child subset.</p>
+    <p><strong>Stop conditions:</strong> subset is pure (all same class), no attributes left, or pre-set depth reached.</p>
+  </div>
+</section>
+
+<!-- ============ W5 BAYES ============ -->
+<section id="w5-bayes">
+  <h2>Week 5 — Bayes' Theorem: Medical Diagnosis (Cancer Test)</h2>
+
+  <div class="problem">
+    <h4>Given Data</h4>
+    <ul>
+      <li>P(Cancer) = 0.008; P(No Cancer) = 0.992</li>
+      <li>True positive rate (test+ given Cancer) = 0.98 → False negative = 0.02</li>
+      <li>True negative rate (test− given No Cancer) = 0.97 → False positive = 0.03</li>
+    </ul>
+    <p>The test returns <strong>positive</strong>. What's the more likely hypothesis?</p>
+  </div>
+
+  <div class="solution">
+    <h4>Solution</h4>
+    <p>Bayes' theorem: <span class="formula">P(H | D) ∝ P(D | H) · P(H)</span></p>
+    <p><strong>Numerator for Cancer:</strong></p>
+    <div class="formula">P(Positive | Cancer) · P(Cancer) = 0.98 × 0.008 = <strong>0.0078</strong></div>
+    <p><strong>Numerator for No Cancer:</strong></p>
+    <div class="formula">P(Positive | No Cancer) · P(No Cancer) = 0.03 × 0.992 ≈ <strong>0.0298</strong></div>
+    <p><strong>Conclusion:</strong> 0.0298 &gt; 0.0078 → the more likely hypothesis is <strong>No Cancer</strong> (despite the positive test, because cancer is rare).</p>
+    <p>This illustrates why <strong>prior probability</strong> matters: a positive test for a rare disease can still favour "no disease" via base-rate effects.</p>
+  </div>
+</section>
+
+<section id="w5-buyer">
+  <h2>Week 5 — Naive Bayes Classifier: Predicting Computer Buyers</h2>
+
+  <div class="problem">
+    <h4>Dataset (14 prior customers)</h4>
+    <p>Same Age / Income / Student / Credit_rating attributes as the ID3 example. Target: <code>buys_computer ∈ {Yes, No}</code>.</p>
+  </div>
+
+  <div class="solution">
+    <h4>Naive Bayes Solution Sketch</h4>
+    <ol>
+      <li><strong>Compute priors:</strong> P(Yes) and P(No) from class frequencies.</li>
+      <li><strong>Compute conditional probabilities</strong> for each attribute value given each class — assuming attributes are <strong>conditionally independent</strong> given the class:
+        <div class="formula">P(x | c) = P(x₁ | c) · P(x₂ | c) · … · P(x<sub>m</sub> | c)</div>
+      </li>
+      <li><strong>For a new tuple</strong>, compute:
+        <div class="formula">P(c | x) ∝ P(c) · ∏ P(xⱼ | c)</div>
+        for each class, and pick the class with the highest posterior.
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ W6 K-MEANS ============ -->
+<section id="w6-kmeans">
+  <h2>Week 6 — K-Means Numerical Example</h2>
+
+  <div class="problem">
+    <h4>Dataset: 8 points × 2 features</h4>
+    <p>Points: (2,10), (2,5), (8,4), (5,8), (7,5), (6,4), (1,2), (4,9).</p>
+    <p>Initial centroids (random): C1 = (2,10), C2 = (2,5), C3 = (8,4). K = 3.</p>
+  </div>
+
+  <div class="solution">
+    <h4>Iteration 1: Distance to each centroid (Euclidean), Assignment</h4>
+    <table>
+      <tr><th>X₁</th><th>X₂</th><th>d(C1)</th><th>d(C2)</th><th>d(C3)</th><th>Cluster</th></tr>
+      <tr><td>2</td><td>10</td><td>0</td><td>5</td><td>8.485</td><td>C1</td></tr>
+      <tr><td>2</td><td>5</td><td>5</td><td>0</td><td>6.082</td><td>C2</td></tr>
+      <tr><td>8</td><td>4</td><td>8.485</td><td>6.082</td><td>0</td><td>C3</td></tr>
+      <tr><td>5</td><td>8</td><td>3.605</td><td>4.242</td><td>5</td><td>C1</td></tr>
+      <tr><td>7</td><td>5</td><td>7.071</td><td>5</td><td>1.414</td><td>C3</td></tr>
+      <tr><td>6</td><td>4</td><td>7.211</td><td>4.123</td><td>2</td><td>C3</td></tr>
+      <tr><td>1</td><td>2</td><td>8.062</td><td>3.162</td><td>7.28</td><td>C2</td></tr>
+      <tr><td>4</td><td>9</td><td>2.236</td><td>4.472</td><td>6.40</td><td>C1</td></tr>
+    </table>
+    <h4>Recompute centroids</h4>
+    <ul>
+      <li>New C1 = mean of {(2,10), (5,8), (4,9)} = ((2+5+4)/3, (10+8+9)/3) = (3.67, 9)</li>
+      <li>New C2 = mean of {(2,5), (1,2)} = (1.5, 3.5)</li>
+      <li>New C3 = mean of {(8,4), (7,5), (6,4)} = (7, 4.33)</li>
+    </ul>
+    <p>Repeat the distance-assignment-recompute loop until cluster assignments stop changing → that's convergence.</p>
+  </div>
+</section>
+
+<section id="w6-kmeansp">
+  <h2>Week 6 — K-Means++ Smart Initialisation</h2>
+
+  <div class="problem">
+    <h4>Dataset (1-D): [1, 3, 10, 15, 35, 50, 95, 100]</h4>
+    <p>Goal: pick 3 initial centroids using K-Means++.</p>
+  </div>
+
+  <div class="solution">
+    <h4>Steps</h4>
+    <ol>
+      <li>Pick the <strong>first centroid randomly</strong> — say, 1.</li>
+      <li>Compute the distance of each remaining point from the nearest selected centroid:
+        <table>
+          <tr><th>Point</th><th>3</th><th>10</th><th>15</th><th>35</th><th>50</th><th>95</th><th>100</th></tr>
+          <tr><td>Distance from {1}</td><td>2</td><td>9</td><td>14</td><td>34</td><td>49</td><td>94</td><td>99</td></tr>
+        </table>
+      </li>
+      <li>Pick the next centroid <strong>proportional to squared distance</strong> — the farthest point (100) has the highest probability. Choose 100.</li>
+      <li>Now compute min distance to {1, 100} for each remaining point; pick the next centroid (likely 50, in the middle).</li>
+      <li>Final initial centroids: <strong>{1, 50, 100}</strong> — well-spaced. Continue standard K-Means.</li>
+    </ol>
+    <p>K-Means++ reduces variability across runs and improves clustering quality vs. random initialisation.</p>
+  </div>
+</section>
+
+<!-- ============ W9 ============ -->
+<section id="w9-backprop">
+  <h2>Week 9 — Backpropagation in a Feedforward Network</h2>
+
+  <div class="problem">
+    <h4>Setup (from PDF Section 3 — Backprop numerical example)</h4>
+    <p>A multilayer feedforward network with input layer, one hidden layer, and an output layer. Forward-pass with given weights and inputs, compute error, then back-propagate to update weights.</p>
+  </div>
+
+  <div class="solution">
+    <h4>Five steps of backpropagation</h4>
+    <ol>
+      <li><strong>Forward pass:</strong> compute the activation a<sup>(l)</sup> = σ(W<sup>(l)</sup>a<sup>(l−1)</sup> + b<sup>(l)</sup>) layer by layer, ending in the output ŷ.</li>
+      <li><strong>Compute loss</strong> — e.g., squared error (½(y − ŷ)²) or cross-entropy.</li>
+      <li><strong>Output-layer error:</strong> δ<sup>(L)</sup> = (ŷ − y) ⊙ σ'(z<sup>(L)</sup>)</li>
+      <li><strong>Back-propagate to hidden layers:</strong> δ<sup>(l)</sup> = (W<sup>(l+1)</sup>)<sup>T</sup>·δ<sup>(l+1)</sup> ⊙ σ'(z<sup>(l)</sup>)</li>
+      <li><strong>Weight update (gradient descent):</strong>
+        <div class="formula">W<sup>(l)</sup> := W<sup>(l)</sup> − η · δ<sup>(l)</sup> · (a<sup>(l−1)</sup>)<sup>T</sup></div>
+      </li>
+    </ol>
+    <p>The PDF works through the XNOR-function multilayer example to show that a single perceptron cannot learn XNOR (non-linear), but a feedforward net with a hidden layer can.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  🧠 Machine Learning • Numerical Problems Companion
+</footer>
+<script src="../claude-tutor.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 2 — Financial Statements &amp; Visualisation</title>
+<style>
+:root{--primary:#1e88e5;--primary-dark:#0d47a1;--accent:#ff9800;--success:#43a047;--danger:#e53935;--bg:#f5f8fb;--card:#fff;--text:#1a2332;--muted:#5a6a7a;--border:#dde5ec}
+body.dark{--bg:#0f1721;--card:#1a2535;--text:#e0e8f0;--muted:#a0b0c0;--border:#2a3545}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;transition:all 0.3s}
+header{background:linear-gradient(135deg,#1e88e5,#0d47a1);color:white;padding:40px 20px;text-align:center}
+header h1{font-size:2.2em;margin-bottom:6px}
+header .breadcrumb{font-size:0.95em;opacity:0.95}
+header .breadcrumb a{color:#ffd54f;text-decoration:none}
+nav{position:sticky;top:0;background:var(--card);z-index:100;padding:10px;overflow-x:auto;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-bottom:1px solid var(--border)}
+nav button{background:transparent;color:var(--text);border:2px solid var(--border);padding:6px 14px;margin:2px;border-radius:18px;cursor:pointer;font-size:0.82em;font-weight:600}
+nav button:hover{border-color:var(--primary);color:var(--primary)}
+nav button.active{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-color:transparent}
+.icon-btn{background:var(--bg);width:32px;height:32px;border-radius:50%;padding:0}
+main{max-width:1100px;margin:25px auto;padding:0 18px}
+section{background:var(--card);margin:25px 0;padding:28px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,0.06);scroll-margin-top:80px}
+section h2{color:var(--primary-dark);border-bottom:3px solid var(--primary);padding-bottom:8px;margin-bottom:18px;font-size:1.7em}
+body.dark section h2{color:#82b1ff}
+section h3{margin:18px 0 10px;font-size:1.25em}
+section h4{color:var(--primary-dark);margin:12px 0 8px}
+body.dark section h4{color:#90caf9}
+p{margin-bottom:10px}
+ul,ol{margin:8px 0 12px 26px}
+li{margin-bottom:5px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.card{background:linear-gradient(135deg,#f0f6fc,#e8f0f8);border-left:4px solid var(--primary-dark);padding:14px;border-radius:8px}
+body.dark .card{background:linear-gradient(135deg,#1f2a3a,#2a3545)}
+.card h4{color:var(--primary-dark);margin-bottom:6px;font-size:1em}
+body.dark .card h4{color:#90caf9}
+.card p{font-size:0.9em;margin:0;color:var(--muted)}
+.flow{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:20px 0}
+.flow-box{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;padding:12px 18px;border-radius:10px;font-weight:600;text-align:center;min-width:120px}
+.arrow{color:var(--primary-dark);font-size:1.6em;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0}
+th,td{padding:9px 12px;border:1px solid var(--border);text-align:left}
+th{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white}
+tr:nth-child(even) td{background:var(--bg)}
+.code-block{background:#1a2535;color:#ecf0f1;padding:12px 14px;border-radius:8px;font-family:'Courier New',monospace;font-size:0.9em;overflow-x:auto;margin:10px 0;white-space:pre-wrap;line-height:1.5}
+code{background:var(--bg);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:0.92em;border:1px solid var(--border)}
+.quiz{background:linear-gradient(135deg,#e8f5e9,#dcedc8);border-left:4px solid var(--success);padding:16px;border-radius:10px;margin:12px 0}
+body.dark .quiz{background:linear-gradient(135deg,#1a3a2e,#2a4a3e)}
+.quiz-option{display:block;margin:6px 0;padding:10px 12px;background:var(--card);border:2px solid var(--border);border-radius:8px;cursor:pointer}
+.quiz-option:hover{border-color:var(--success);transform:translateX(3px)}
+.quiz-option.correct{background:#c8e6c9!important;border-color:var(--success);color:#1b5e20}
+.quiz-option.wrong{background:#ffcdd2!important;border-color:var(--danger);color:#b71c1c}
+.insight{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-left:4px solid #1976d2;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .insight{background:linear-gradient(135deg,#1a2a4a,#253560)}
+.warning{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-left:4px solid #f57c00;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .warning{background:linear-gradient(135deg,#3a2a1a,#4a3525)}
+.example{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left:4px solid #8e24aa;padding:14px 16px;border-radius:8px;margin:12px 0}
+body.dark .example{background:linear-gradient(135deg,#2a1a3a,#3a253f)}
+.summary{background:linear-gradient(135deg,#fff9c4,#fff59d);border-left:4px solid #fbc02d;padding:16px;border-radius:10px;margin:14px 0}
+body.dark .summary{background:linear-gradient(135deg,#3a3a1a,#4a4a25);color:var(--text)}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:0.9em;border-top:1px solid var(--border);margin-top:30px}
+.toc{background:var(--bg);padding:16px 20px;border-radius:10px;margin-bottom:20px}
+.toc h3{margin-bottom:8px;color:var(--primary-dark)}
+body.dark .toc h3{color:#90caf9}
+.toc ol{columns:2;column-gap:30px}
+.svg-diagram{background:var(--bg);padding:16px;border-radius:10px;margin:14px 0;text-align:center}
+.svg-diagram svg{max-width:100%;height:auto}
+.formula{background:linear-gradient(135deg,#f0f4ff,#dce7ff);padding:14px 18px;border-radius:8px;font-family:Georgia,serif;font-size:1.05em;text-align:center;margin:12px 0;border-left:4px solid var(--primary)}
+body.dark .formula{background:linear-gradient(135deg,#1f2a3a,#2a3a55)}
+</style>
+</head>
+<body>
+
+<header>
+<div class="breadcrumb"><a href="index.html">📚 FDA Modules</a> › Week 2</div>
+<h1>📑 Week 2 — Financial Statements &amp; Visualisation</h1>
+</header>
+
+<nav>
+<button onclick="g('overview',this)" class="active">1. Overview</button>
+<button onclick="g('balance',this)">2. Balance Sheet</button>
+<button onclick="g('income',this)">3. Income Statement</button>
+<button onclick="g('cashflow',this)">4. Cash Flow</button>
+<button onclick="g('ratios',this)">5. Financial Ratios</button>
+<button onclick="g('viz',this)">6. Visualisation</button>
+<button onclick="g('quiz',this)">🎯 Quiz</button>
+<button onclick="g('summary',this)">📝 Summary</button>
+<button class="icon-btn" onclick="dark()">🌓</button>
+</nav>
+
+<main>
+
+<section class="toc">
+<h3>📑 Table of Contents</h3>
+<ol>
+<li><a href="#overview">Financial Statements Overview</a></li>
+<li><a href="#balance">Balance Sheet Analysis</a></li>
+<li><a href="#income">Income Statement Analysis</a></li>
+<li><a href="#cashflow">Cash Flow Statement Analysis</a></li>
+<li><a href="#ratios">Financial Ratios &amp; Ratio Analysis</a></li>
+<li><a href="#viz">Data Visualisation Techniques</a></li>
+<li><a href="#quiz">15-Question Quiz</a></li>
+<li><a href="#summary">Summary &amp; Exam Tips</a></li>
+</ol>
+</section>
+
+<section id="overview">
+<h2>1️⃣ Financial Statements Overview</h2>
+
+<p>Financial statements are tools that show an organisation's <strong>financial health</strong>. They guide decisions on investments, operations, and compliance.</p>
+
+<h3>The Three Core Statements</h3>
+<div class="svg-diagram">
+<svg viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg">
+<rect x="30" y="40" width="180" height="160" rx="12" fill="#1e88e5"/>
+<text x="120" y="75" fill="white" text-anchor="middle" font-weight="bold" font-size="16">📊 Income Statement</text>
+<text x="120" y="105" fill="white" text-anchor="middle" font-size="12">Performance over period</text>
+<text x="120" y="135" fill="white" text-anchor="middle" font-size="11">Revenue - COGS - OpEx</text>
+<text x="120" y="155" fill="white" text-anchor="middle" font-size="11">= Operating Income</text>
+<text x="120" y="180" fill="white" text-anchor="middle" font-size="11">→ Net Income</text>
+<rect x="260" y="40" width="180" height="160" rx="12" fill="#43a047"/>
+<text x="350" y="75" fill="white" text-anchor="middle" font-weight="bold" font-size="16">⚖️ Balance Sheet</text>
+<text x="350" y="105" fill="white" text-anchor="middle" font-size="12">Position at a point</text>
+<text x="350" y="135" fill="white" text-anchor="middle" font-size="13" font-weight="bold">Assets =</text>
+<text x="350" y="155" fill="white" text-anchor="middle" font-size="13" font-weight="bold">Liabilities + Equity</text>
+<rect x="490" y="40" width="180" height="160" rx="12" fill="#ff9800"/>
+<text x="580" y="75" fill="white" text-anchor="middle" font-weight="bold" font-size="16">💵 Cash Flow</text>
+<text x="580" y="105" fill="white" text-anchor="middle" font-size="12">Liquidity over period</text>
+<text x="580" y="135" fill="white" text-anchor="middle" font-size="11">CFO (Operating)</text>
+<text x="580" y="155" fill="white" text-anchor="middle" font-size="11">CFI (Investing)</text>
+<text x="580" y="175" fill="white" text-anchor="middle" font-size="11">CFF (Financing)</text>
+</svg>
+</div>
+
+<h3>How They Interrelate</h3>
+<div class="card-grid">
+<div class="card"><h4>Income → Balance Sheet</h4><p><strong>Net Income</strong> flows into <strong>Retained Earnings</strong> (equity section). Profitable year = equity grows.</p></div>
+<div class="card"><h4>Balance Sheet ↔ Cash Flow</h4><p>Changes in receivables, payables, PPE all appear in cash flow categories.</p></div>
+<div class="card"><h4>Income → Cash Flow</h4><p>CFO starts with Net Income, adjusts for non-cash items (depreciation) and working capital changes.</p></div>
+</div>
+
+<div class="example"><strong>📋 Tech Solutions Ltd. (example):</strong>
+<ul>
+<li>Revenue ₹5,00,000 − COGS ₹3,00,000 − OpEx ₹1,00,000 = <strong>Net Income ₹1,00,000</strong></li>
+<li>Net Profit Margin = 100,000/500,000 = <strong>20%</strong></li>
+<li>Total Assets ₹7,00,000; Liabilities ₹4,00,000; Equity ₹3,00,000</li>
+<li>D/E Ratio = 4,00,000/3,00,000 = <strong>1.33</strong></li>
+<li>CFO +₹1,20,000; CFI −₹80,000; CFF +₹50,000 → Net Cash +₹90,000</li>
+</ul>
+</div>
+</section>
+
+<section id="balance">
+<h2>2️⃣ Balance Sheet Analysis</h2>
+
+<div class="formula">Assets = Liabilities + Equity</div>
+
+<h3>Components</h3>
+<div class="card-grid">
+<div class="card"><h4>📦 Assets</h4><p><strong>Current</strong> (≤1 yr — cash, receivables, inventory) and <strong>Non-Current</strong> (PPE, intangibles).</p></div>
+<div class="card"><h4>💳 Liabilities</h4><p><strong>Current</strong> (payables, short-term loans) and <strong>Non-Current</strong> (long-term debt).</p></div>
+<div class="card"><h4>👥 Equity</h4><p>Residual: Assets − Liabilities. Includes share capital, retained earnings.</p></div>
+</div>
+
+<h3>Key Balance Sheet Ratios</h3>
+<table>
+<tr><th>Ratio</th><th>Formula</th><th>Interpretation</th></tr>
+<tr><td>Current Ratio</td><td>Current Assets / Current Liabilities</td><td>&gt;1 = good liquidity</td></tr>
+<tr><td>Quick (Acid-Test)</td><td>(Current Assets − Inventory) / Current Liab.</td><td>Stricter liquidity</td></tr>
+<tr><td>Debt-to-Equity</td><td>Total Liabilities / Equity</td><td>Higher = more leveraged</td></tr>
+<tr><td>Equity Ratio</td><td>Total Equity / Total Assets</td><td>Higher = less debt dependence</td></tr>
+<tr><td>Debt Ratio</td><td>Total Liabilities / Total Assets</td><td>% of assets financed by debt</td></tr>
+<tr><td>Asset Turnover</td><td>Net Sales / Total Assets</td><td>Asset utilisation efficiency</td></tr>
+<tr><td>ROA</td><td>(Net Income / Avg Assets) × 100</td><td>Profit per ₹1 of assets</td></tr>
+<tr><td>ROE</td><td>(Net Income / Avg Equity) × 100</td><td>Profit per ₹1 of equity</td></tr>
+</table>
+
+<h3>📋 Case Study: XYZ Corporation</h3>
+<div class="example">
+<p><strong>Given:</strong> Current Assets ₹1,70,000 (incl. inventory ₹40,000); Non-Current ₹2,30,000. Current Liab ₹90,000; Non-Current Liab ₹1,50,000. Equity ₹1,60,000. Net Sales ₹5,00,000; Net Income ₹40,000.</p>
+<ul>
+<li>Current Ratio = 170/90 = <strong>1.89</strong> (strong)</li>
+<li>Quick Ratio = (170−40)/90 = <strong>1.44</strong></li>
+<li>D/E = 240/160 = <strong>1.5</strong></li>
+<li>Debt Ratio = 240/400 = <strong>0.6</strong> (60% debt-financed)</li>
+<li>Asset Turnover = 500/400 = <strong>1.25</strong></li>
+<li>ROA = 40/400 × 100 = <strong>10%</strong></li>
+<li>ROE = 40/160 × 100 = <strong>25%</strong></li>
+<li>Working Capital = 170 − 90 = <strong>₹80,000</strong></li>
+</ul>
+</div>
+
+<h3>Liquidity, Solvency, &amp; Leverage</h3>
+<div class="card-grid">
+<div class="card"><h4>💧 Liquidity</h4><p>Ability to meet <em>short-term</em> obligations. Measured via Current &amp; Quick ratios.</p></div>
+<div class="card"><h4>🏛️ Solvency</h4><p>Ability to meet <em>long-term</em> obligations. D/E and Debt ratios.</p></div>
+<div class="card"><h4>📊 Leverage</h4><p>How much debt is used. Higher leverage = higher risk + higher potential return.</p></div>
+</div>
+</section>
+
+<section id="income">
+<h2>3️⃣ Income Statement Analysis</h2>
+
+<h3>Key Line Items (Top to Bottom)</h3>
+<div class="flow">
+<div class="flow-box">Revenue</div>
+<span class="arrow">−</span>
+<div class="flow-box">COGS</div>
+<span class="arrow">=</span>
+<div class="flow-box">Gross Profit</div>
+</div>
+<div class="flow">
+<div class="flow-box">Gross Profit</div>
+<span class="arrow">−</span>
+<div class="flow-box">OpEx</div>
+<span class="arrow">=</span>
+<div class="flow-box">Operating Income</div>
+</div>
+<div class="flow">
+<div class="flow-box">Op Income</div>
+<span class="arrow">±</span>
+<div class="flow-box">Other Inc/Exp</div>
+<span class="arrow">−</span>
+<div class="flow-box">Taxes</div>
+<span class="arrow">=</span>
+<div class="flow-box" style="background:linear-gradient(135deg,#43a047,#2e7d32)">Net Income</div>
+</div>
+
+<h3>Profit Margins</h3>
+<table>
+<tr><th>Margin</th><th>Formula</th><th>Meaning</th></tr>
+<tr><td>Gross Profit Margin</td><td>(Gross Profit / Revenue) × 100</td><td>Production efficiency</td></tr>
+<tr><td>Operating Margin</td><td>(Operating Income / Revenue) × 100</td><td>Core ops profitability</td></tr>
+<tr><td>Net Profit Margin</td><td>(Net Income / Revenue) × 100</td><td>Overall profitability</td></tr>
+</table>
+
+<div class="example"><strong>📋 Example:</strong> Revenue ₹40,00,000, COGS ₹25,00,000, OpEx ₹7,00,000, Tax ₹3,00,000.
+<ul>
+<li>Gross Profit = 40 − 25 = ₹15 lakh → Gross Margin = <strong>37.5%</strong></li>
+<li>Operating Income = 15 − 7 = ₹8 lakh → Op Margin = <strong>20%</strong></li>
+<li>Net Income = 8 − 3 = ₹5 lakh → Net Margin = <strong>12.5%</strong></li>
+</ul>
+</div>
+
+<h3>Growth Rates</h3>
+<div class="formula">Growth Rate = (Current − Previous) / Previous × 100</div>
+<ul>
+<li><strong>Revenue Growth:</strong> 45L vs 40L → +12.5%</li>
+<li><strong>Net Income Growth:</strong> 6L vs 5L → +20%</li>
+<li><strong>EPS Growth:</strong> tracks per-share profitability</li>
+</ul>
+</section>
+
+<section id="cashflow">
+<h2>4️⃣ Cash Flow Statement Analysis</h2>
+
+<h3>The Three Sections</h3>
+<div class="card-grid">
+<div class="card" style="border-color:#43a047"><h4>⚙️ CFO — Operating</h4><p>Cash from core business. Starts with net income, adjusts non-cash items (depreciation) and working-capital changes. <strong>Positive = healthy ops.</strong></p></div>
+<div class="card" style="border-color:#ff9800"><h4>🏗️ CFI — Investing</h4><p>Cash for buying/selling long-term assets. <strong>Negative often = growth investment</strong>; positive may signal asset sales.</p></div>
+<div class="card" style="border-color:#1e88e5"><h4>💰 CFF — Financing</h4><p>Cash from debt &amp; equity. Positive = raising funds; negative = repaying debt or returning to shareholders.</p></div>
+</div>
+
+<div class="formula">Free Cash Flow (FCF) = CFO − Capital Expenditures</div>
+
+<h3>Cash Flow Ratios</h3>
+<table>
+<tr><th>Ratio</th><th>Formula</th><th>Use</th></tr>
+<tr><td>OCF Ratio</td><td>CFO / Current Liabilities</td><td>Short-term liquidity from operations</td></tr>
+<tr><td>Cash Flow to Debt</td><td>CFO / Total Debt</td><td>Debt servicing ability</td></tr>
+<tr><td>Cash Flow Coverage</td><td>CFO / (Interest + Principal)</td><td>Debt repayment buffer</td></tr>
+<tr><td>Cash Flow Margin</td><td>CFO / Revenue</td><td>Cash efficiency from sales</td></tr>
+<tr><td>FCF / OCF</td><td>FCF / CFO</td><td>% of cash free for distribution</td></tr>
+</table>
+
+<div class="insight"><strong>💡 Profit ≠ Cash:</strong> A profitable company can still go bankrupt if it can't collect receivables (lots of profit on paper, no actual cash). The Cash Flow Statement reveals this hidden truth.</div>
+</section>
+
+<section id="ratios">
+<h2>5️⃣ Financial Ratios &amp; Ratio Analysis</h2>
+
+<h3>4 Categories of Ratios</h3>
+
+<h4>🔵 Liquidity Ratios (short-term obligations)</h4>
+<ul>
+<li><strong>Current Ratio</strong> = Current Assets / Current Liabilities (target &gt; 1)</li>
+<li><strong>Quick Ratio</strong> = (Current Assets − Inventory) / Current Liabilities (target &gt; 0.7)</li>
+</ul>
+
+<h4>🟢 Profitability Ratios</h4>
+<ul>
+<li>Gross Profit Margin, Operating Margin, Net Profit Margin</li>
+<li><strong>ROA</strong> = Net Income / Total Assets × 100</li>
+<li><strong>ROE</strong> = Net Income / Equity × 100</li>
+</ul>
+
+<h4>🔴 Leverage Ratios</h4>
+<ul>
+<li><strong>D/E Ratio</strong> = Total Liab / Equity</li>
+<li><strong>Interest Coverage</strong> = Operating Income / Interest Expense (higher = safer)</li>
+</ul>
+
+<h4>🟠 Efficiency Ratios</h4>
+<ul>
+<li><strong>Asset Turnover</strong> = Revenue / Total Assets</li>
+<li><strong>Inventory Turnover</strong> = COGS / Average Inventory</li>
+</ul>
+
+<h3>Interpreting Trends</h3>
+<div class="card-grid">
+<div class="card"><h4>📈 Profitability Trends</h4><p>Rising gross/operating/net margins = stronger pricing, cost control.</p></div>
+<div class="card"><h4>💧 Liquidity Trends</h4><p>Improving = better cash management; declining = potential distress.</p></div>
+<div class="card"><h4>🏛️ Solvency Trends</h4><p>Falling D/E = reduced debt reliance; rising interest coverage = stability.</p></div>
+<div class="card"><h4>⚙️ Efficiency Trends</h4><p>Rising asset turnover = better resource use.</p></div>
+</div>
+</section>
+
+<section id="viz">
+<h2>6️⃣ Data Visualisation Techniques</h2>
+
+<h3>Python: Pie Chart (Market Share)</h3>
+<div class="code-block">import matplotlib.pyplot as plt
+
+companies = ['Company A','Company B','Company C','Company D']
+share = [30, 25, 20, 25]
+
+plt.pie(share, labels=companies, autopct='%1.1f%%', startangle=90)
+plt.title('Market Share of Companies')
+plt.show()</div>
+
+<h3>Python: Line Chart (Monthly Revenue)</h3>
+<div class="code-block">months = ['Jan','Feb','Mar','Apr']
+revenue = [50000, 52000, 51000, 53000]
+
+plt.plot(months, revenue, marker='o')
+plt.title('Monthly Revenue Trend')
+plt.xlabel('Month'); plt.ylabel('Revenue (₹)')
+plt.show()</div>
+
+<h3>R: Bar Chart (ggplot2)</h3>
+<div class="code-block">library(ggplot2)
+data &lt;- data.frame(Quarter=c('Q1','Q2','Q3','Q4'), Profit=c(20000,25000,23000,27000))
+ggplot(data, aes(x=Quarter, y=Profit)) +
+  geom_bar(stat='identity', fill='blue') +
+  ggtitle('Quarterly Profit')</div>
+
+<h3>Excel Options</h3>
+<ul>
+<li><strong>Pivot Tables &amp; Charts</strong> for aggregating large datasets</li>
+<li><strong>Built-in Charts</strong>: Line, Bar, Column, Pie</li>
+<li><strong>Conditional Formatting</strong> for heatmap-style highlighting</li>
+</ul>
+
+<h3>Choosing the Right Chart</h3>
+<table>
+<tr><th>Need</th><th>Chart</th></tr>
+<tr><td>Trend over time</td><td>Line / Area</td></tr>
+<tr><td>Compare categories</td><td>Bar / Column</td></tr>
+<tr><td>Parts of a whole</td><td>Pie / Donut</td></tr>
+<tr><td>Distribution of values</td><td>Histogram</td></tr>
+<tr><td>Two-variable relationship</td><td>Scatter</td></tr>
+<tr><td>Spread &amp; outliers</td><td>Box plot</td></tr>
+<tr><td>Correlation matrix</td><td>Heatmap</td></tr>
+<tr><td>Cash flow steps</td><td>Waterfall</td></tr>
+<tr><td>Multiple KPIs together</td><td>Dashboard</td></tr>
+</table>
+
+<h3>Design Principles</h3>
+<ul>
+<li><strong>Simplify</strong> — remove decoration, no 3D effects</li>
+<li><strong>Right chart for the data</strong> — don't use pie for &gt;6 categories</li>
+<li><strong>Clear labels</strong> — titles, axis labels, legends</li>
+<li><strong>Colour wisely</strong> — accessibility, high-contrast</li>
+<li><strong>Truthful scaling</strong> — start y-axis at 0 when comparing magnitudes</li>
+<li><strong>Add context</strong> — annotations, benchmarks</li>
+</ul>
+</section>
+
+<section id="quiz">
+<h2>🎯 15-Question Quiz</h2>
+
+<div class="quiz"><p><strong>Q1.</strong> The fundamental accounting equation:</p>
+<div class="quiz-option" onclick="qa(this,1)">Assets = Liabilities + Equity ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Income = Revenue − Tax</div>
+<div class="quiz-option" onclick="qa(this,0)">Cash = Profit + Loans</div>
+</div>
+
+<div class="quiz"><p><strong>Q2.</strong> Income Statement covers:</p>
+<div class="quiz-option" onclick="qa(this,0)">A single point in time</div>
+<div class="quiz-option" onclick="qa(this,1)">A period (quarter/year) ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">A single transaction</div>
+</div>
+
+<div class="quiz"><p><strong>Q3.</strong> Quick Ratio excludes:</p>
+<div class="quiz-option" onclick="qa(this,0)">Cash</div>
+<div class="quiz-option" onclick="qa(this,1)">Inventory ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Receivables</div>
+</div>
+
+<div class="quiz"><p><strong>Q4.</strong> ROE measures:</p>
+<div class="quiz-option" onclick="qa(this,1)">Net Income / Equity ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Revenue / Assets</div>
+<div class="quiz-option" onclick="qa(this,0)">Liabilities / Equity</div>
+</div>
+
+<div class="quiz"><p><strong>Q5.</strong> CFO starts with:</p>
+<div class="quiz-option" onclick="qa(this,1)">Net Income, adjusted for non-cash items ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Total Assets</div>
+<div class="quiz-option" onclick="qa(this,0)">Revenue</div>
+</div>
+
+<div class="quiz"><p><strong>Q6.</strong> Free Cash Flow =</p>
+<div class="quiz-option" onclick="qa(this,1)">CFO − CapEx ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">CFO + CapEx</div>
+<div class="quiz-option" onclick="qa(this,0)">Net Income − Tax</div>
+</div>
+
+<div class="quiz"><p><strong>Q7.</strong> A D/E ratio of 1.5 means:</p>
+<div class="quiz-option" onclick="qa(this,1)">₹1.50 in liabilities per ₹1 of equity ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">50% of equity is debt</div>
+<div class="quiz-option" onclick="qa(this,0)">Equity exceeds debt 1.5x</div>
+</div>
+
+<div class="quiz"><p><strong>Q8.</strong> Operating Margin =</p>
+<div class="quiz-option" onclick="qa(this,1)">Operating Income / Revenue ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Net Income / Revenue</div>
+<div class="quiz-option" onclick="qa(this,0)">Gross Profit / COGS</div>
+</div>
+
+<div class="quiz"><p><strong>Q9.</strong> Net income flows into balance sheet via:</p>
+<div class="quiz-option" onclick="qa(this,1)">Retained Earnings (equity) ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Inventory</div>
+<div class="quiz-option" onclick="qa(this,0)">Goodwill</div>
+</div>
+
+<div class="quiz"><p><strong>Q10.</strong> Negative CFI typically indicates:</p>
+<div class="quiz-option" onclick="qa(this,1)">Investments in growth / new assets ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Selling assets in distress</div>
+<div class="quiz-option" onclick="qa(this,0)">Paying dividends</div>
+</div>
+
+<div class="quiz"><p><strong>Q11.</strong> Best chart for two-variable relationship:</p>
+<div class="quiz-option" onclick="qa(this,0)">Pie</div>
+<div class="quiz-option" onclick="qa(this,1)">Scatter ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Line</div>
+</div>
+
+<div class="quiz"><p><strong>Q12.</strong> Waterfall charts are best for:</p>
+<div class="quiz-option" onclick="qa(this,1)">Visualising cash flow / step-by-step changes ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Categorical distribution</div>
+<div class="quiz-option" onclick="qa(this,0)">Correlation</div>
+</div>
+
+<div class="quiz"><p><strong>Q13.</strong> Asset Turnover = 1.25 means:</p>
+<div class="quiz-option" onclick="qa(this,1)">₹1.25 in sales per ₹1 of assets ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">25% asset growth</div>
+<div class="quiz-option" onclick="qa(this,0)">125% return on assets</div>
+</div>
+
+<div class="quiz"><p><strong>Q14.</strong> Working Capital =</p>
+<div class="quiz-option" onclick="qa(this,1)">Current Assets − Current Liabilities ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Total Assets − Total Liabilities</div>
+<div class="quiz-option" onclick="qa(this,0)">Equity − Liabilities</div>
+</div>
+
+<div class="quiz"><p><strong>Q15.</strong> Interest Coverage Ratio shows:</p>
+<div class="quiz-option" onclick="qa(this,1)">How many times Op Income covers Interest expense ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">% of revenue from interest</div>
+<div class="quiz-option" onclick="qa(this,0)">Interest income</div>
+</div>
+</section>
+
+<section id="summary">
+<h2>📝 Summary &amp; Exam Tips</h2>
+
+<div class="summary">
+<h3>🎯 Key Takeaways</h3>
+<ul>
+<li><strong>3 statements</strong>: Income (period), Balance Sheet (point), Cash Flow (period)</li>
+<li>Equation: <strong>Assets = Liabilities + Equity</strong></li>
+<li>Income Statement waterfall: Revenue → Gross Profit → Op Income → Pre-tax → Net Income</li>
+<li>Cash Flow sections: <strong>CFO + CFI + CFF = Net Cash Change</strong></li>
+<li><strong>FCF</strong> = CFO − CapEx; the cash available for distribution / debt paydown</li>
+<li>Ratios: <strong>Liquidity</strong> (Current, Quick), <strong>Profitability</strong> (GP%, OP%, NP%, ROA, ROE), <strong>Leverage</strong> (D/E, Interest Coverage), <strong>Efficiency</strong> (Asset Turnover)</li>
+<li>Statements <strong>interconnect</strong>: Net income → Retained Earnings; Receivables change → CFO</li>
+<li>Viz: line for trends, bar for categories, pie for proportions, scatter for relationships, heatmap for correlations</li>
+</ul>
+</div>
+
+<div class="warning"><strong>📌 Common Exam Pitfalls:</strong>
+<ul>
+<li>Forgetting that Income Statement is for a <em>period</em>, Balance Sheet at a <em>point</em></li>
+<li>Confusing CFO with Net Income (CFO adjusts for non-cash items)</li>
+<li>Positive CFI ≠ good (could mean asset sales / distress)</li>
+<li>D/E uses <em>total liabilities</em>, not just long-term debt</li>
+<li>ROE uses <em>average equity</em>, not end-period</li>
+</ul>
+</div>
+
+<p style="text-align:center;margin-top:30px">
+<a href="Week_01_Introduction.html" style="color:var(--primary);font-weight:bold">← Week 1</a> |
+<a href="index.html" style="color:var(--primary);font-weight:bold">📚 Index</a> |
+<a href="Week_03_Statistics.html" style="color:var(--primary);font-weight:bold">Week 3 → Statistics</a>
+</p>
+</section>
+
+</main>
+
+<footer><p>📑 Week 2 of 12 — Financial Data Analytics</p></footer>
+
+<script>
+function g(id,btn){document.getElementById(id).scrollIntoView({behavior:'smooth'});document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function dark(){document.body.classList.toggle('dark');try{localStorage.setItem('fda_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}}
+if(localStorage.getItem('fda_dark')==='1')document.body.classList.add('dark');
+function qa(el,c){el.parentElement.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('correct','wrong'));el.classList.add(c?'correct':'wrong')}
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 5 — NoSQL & HBase | Big Data Analytics</title>
+<style>
+:root{--primary:#667eea;--primary-dark:#764ba2;--accent:#f39c12;--success:#27ae60;--danger:#e74c3c;--bg:#f5f7fa;--card:#fff;--text:#2c3e50;--muted:#6c7a89;--border:#e1e8ed}
+body.dark{--bg:#1a1a2e;--card:#252541;--text:#e8e8f0;--muted:#a0a0b8;--border:#3a3a5c}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;transition:all 0.3s}
+header{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:40px 20px;text-align:center}
+header h1{font-size:2.2em;margin-bottom:6px}
+header .breadcrumb{font-size:0.95em;opacity:0.9}
+header .breadcrumb a{color:#ffd700;text-decoration:none}
+nav{position:sticky;top:0;background:var(--card);z-index:100;padding:10px;overflow-x:auto;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-bottom:1px solid var(--border)}
+nav button{background:transparent;color:var(--text);border:2px solid var(--border);padding:6px 14px;margin:2px;border-radius:18px;cursor:pointer;font-size:0.82em;font-weight:600}
+nav button:hover{border-color:var(--primary);color:var(--primary)}
+nav button.active{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-color:transparent}
+.icon-btn{background:var(--bg);width:32px;height:32px;border-radius:50%;padding:0}
+main{max-width:1100px;margin:25px auto;padding:0 18px}
+section{background:var(--card);margin:25px 0;padding:28px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,0.06);scroll-margin-top:80px}
+section h2{color:var(--primary-dark);border-bottom:3px solid var(--primary);padding-bottom:8px;margin-bottom:18px;font-size:1.7em}
+body.dark section h2{color:#b8a8ff}
+section h3{margin:18px 0 10px;font-size:1.25em}
+section h4{color:var(--primary-dark);margin:12px 0 8px}
+body.dark section h4{color:#c4b5ff}
+p{margin-bottom:10px}
+ul,ol{margin:8px 0 12px 26px}
+li{margin-bottom:5px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.card{background:linear-gradient(135deg,#f6f9fc,#eef2f7);border-left:4px solid var(--primary-dark);padding:14px;border-radius:8px}
+body.dark .card{background:linear-gradient(135deg,#2a2a4a,#353560)}
+.card h4{color:var(--primary-dark);margin-bottom:6px;font-size:1em}
+body.dark .card h4{color:#c4b5ff}
+.card p{font-size:0.9em;margin:0;color:var(--muted)}
+.flow{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:20px 0}
+.flow-box{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;padding:12px 18px;border-radius:10px;font-weight:600;text-align:center;min-width:120px}
+.flow-box small{display:block;font-size:0.75em;opacity:0.85;margin-top:3px}
+.arrow{color:var(--primary-dark);font-size:1.6em;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0}
+th,td{padding:9px 12px;border:1px solid var(--border);text-align:left}
+th{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white}
+tr:nth-child(even) td{background:var(--bg)}
+.code-block,.formula{background:#2c3e50;color:#ecf0f1;padding:12px 14px;border-radius:8px;font-family:'Courier New',monospace;font-size:0.92em;overflow-x:auto;margin:10px 0;white-space:pre-wrap;line-height:1.5}
+code{background:var(--bg);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:0.92em;border:1px solid var(--border)}
+.quiz{background:linear-gradient(135deg,#e8f5e9,#dcedc8);border-left:4px solid var(--success);padding:16px;border-radius:10px;margin:12px 0}
+body.dark .quiz{background:linear-gradient(135deg,#1a3a2e,#2a4a3e)}
+.quiz-option{display:block;margin:6px 0;padding:10px 12px;background:var(--card);border:2px solid var(--border);border-radius:8px;cursor:pointer}
+.quiz-option:hover{border-color:var(--success);transform:translateX(3px)}
+.quiz-option.correct{background:#c8e6c9!important;border-color:var(--success);color:#1b5e20}
+.quiz-option.wrong{background:#ffcdd2!important;border-color:var(--danger);color:#b71c1c}
+.insight{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-left:4px solid #1976d2;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .insight{background:linear-gradient(135deg,#1a2a4a,#253560)}
+.warning{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-left:4px solid #f57c00;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .warning{background:linear-gradient(135deg,#3a2a1a,#4a3525)}
+.example{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left:4px solid #8e24aa;padding:14px 16px;border-radius:8px;margin:12px 0}
+body.dark .example{background:linear-gradient(135deg,#2a1a3a,#3a253f)}
+.summary{background:linear-gradient(135deg,#fff9c4,#fff59d);border-left:4px solid #fbc02d;padding:16px;border-radius:10px;margin:14px 0}
+body.dark .summary{background:linear-gradient(135deg,#3a3a1a,#4a4a25);color:var(--text)}
+.arch{display:grid;gap:14px;margin:20px 0;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.arch-node{border:2px solid var(--primary);border-radius:12px;padding:16px;text-align:center}
+body.dark .arch-node{background:#2a2a4a}
+.arch-node.master{background:linear-gradient(135deg,#e74c3c,#c0392b);color:white;border-color:#a02020}
+.arch-node.worker{background:linear-gradient(135deg,#3498db,#2980b9);color:white;border-color:#1f5a82}
+.arch-node.coord{background:linear-gradient(135deg,#f39c12,#d35400);color:white;border-color:#a04004}
+.arch-node h5{font-size:1.1em;margin-bottom:6px}
+.arch-node small{font-size:0.82em;opacity:0.95}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:0.9em;border-top:1px solid var(--border);margin-top:30px}
+.toc{background:var(--bg);padding:16px 20px;border-radius:10px;margin-bottom:20px}
+.toc h3{margin-bottom:8px;color:var(--primary-dark)}
+body.dark .toc h3{color:#c4b5ff}
+.toc ol{columns:2;column-gap:30px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../BigDataAnalytics_Complete_Course.html">📚 Full Course</a> › <a href="index.html">Weekly Modules</a> › Week 5</div>
+  <h1>📂 Week 5 — NoSQL & HBase</h1>
+</header>
+
+<nav>
+  <button onclick="g('intro',this)" class="active">1. What is NoSQL</button>
+  <button onclick="g('why',this)">2. Why NoSQL</button>
+  <button onclick="g('chars',this)">3. Characteristics</button>
+  <button onclick="g('types',this)">4. NoSQL Types</button>
+  <button onclick="g('cap',this)">5. CAP Theorem</button>
+  <button onclick="g('vs',this)">6. SQL vs NoSQL</button>
+  <button onclick="g('hbase',this)">7. HBase</button>
+  <button onclick="g('hive',this)">8. Hive vs HBase</button>
+  <button onclick="g('arch',this)">9. HBase Arch</button>
+  <button onclick="g('model',this)">10. Data Model</button>
+  <button onclick="g('quiz',this)">🎯 Quiz</button>
+  <button onclick="g('summary',this)">📝 Summary</button>
+  <button class="icon-btn" onclick="dark()">🌓</button>
+</nav>
+
+<main>
+
+<section class="toc">
+  <h3>📑 Table of Contents</h3>
+  <ol>
+    <li><a href="#intro">What is NoSQL?</a></li>
+    <li><a href="#why">Why NoSQL? Motivation</a></li>
+    <li><a href="#chars">Key Characteristics</a></li>
+    <li><a href="#types">4 Types of NoSQL Databases</a></li>
+    <li><a href="#cap">CAP Theorem</a></li>
+    <li><a href="#vs">SQL vs NoSQL Comparison</a></li>
+    <li><a href="#hbase">Apache HBase Introduction</a></li>
+    <li><a href="#hive">HBase vs Hive</a></li>
+    <li><a href="#arch">HBase Architecture</a></li>
+    <li><a href="#model">HBase Data Model</a></li>
+    <li><a href="#quiz">12-Question Quiz</a></li>
+    <li><a href="#summary">Summary & Exam Tips</a></li>
+  </ol>
+</section>
+
+<section id="intro">
+  <h2>1️⃣ What is NoSQL?</h2>
+  <p><strong>NoSQL</strong> stands for <em>"Not Only SQL"</em>. It's a diverse category of database management systems that deviate from the traditional relational (SQL) model.</p>
+
+  <h3>Key Differences from SQL</h3>
+  <ul>
+    <li>Don't enforce strict <strong>tabular structures</strong> (rows/columns)</li>
+    <li>No <strong>predefined schemas</strong></li>
+    <li>Offer flexible ways to store/retrieve data</li>
+    <li>Designed for <strong>large volumes</strong>, varied types (unstructured/semi-structured), <strong>high-velocity</strong> data</li>
+  </ul>
+
+  <div class="insight"><strong>💡 The name is intentional:</strong> "Not Only SQL" means NoSQL doesn't replace SQL — it complements it for use cases where relational databases struggle.</div>
+</section>
+
+<section id="why">
+  <h2>2️⃣ Why NoSQL? The Motivation</h2>
+  <p>NoSQL emerged because <strong>traditional RDBMS struggle</strong> with the scale and agility requirements of modern web applications and Big Data.</p>
+
+  <h3>Key Motivations</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📈 Scalability</h4><p>Need to scale beyond a single server. RDBMS hits limits when vertical scaling becomes too expensive.</p></div>
+    <div class="card"><h4>🎭 Data Flexibility</h4><p>Modern data is messy — JSON, logs, social posts, sensor data. Schema must evolve quickly.</p></div>
+    <div class="card"><h4>⚡ Availability & Performance</h4><p>24/7 web apps can't afford downtime; need low-latency responses worldwide.</p></div>
+    <div class="card"><h4>🐘 Handling Big Data</h4><p>Petabytes of data, billions of records, millions of writes/sec.</p></div>
+  </div>
+</section>
+
+<section id="chars">
+  <h2>3️⃣ Key Characteristics of NoSQL</h2>
+
+  <div class="card-grid">
+    <div class="card"><h4>🚫 Non-Relational</h4><p>Data isn't forced into table structures with rows/columns.</p></div>
+    <div class="card"><h4>🔄 Schema Flexibility</h4><p>Dynamic or implicit schemas — each document/row can have different fields.</p></div>
+    <div class="card"><h4>📈 Horizontal Scalability</h4><p>Designed to scale OUT (add more servers) instead of UP (bigger server).</p></div>
+    <div class="card"><h4>🌐 Distributed Architecture</h4><p>Often inherently distributed across nodes for availability and fault tolerance.</p></div>
+    <div class="card"><h4>🎛️ Varied Consistency Models</h4><p>Many NoSQL DBs offer <strong>tunable consistency</strong> based on CAP theorem — trade strong consistency for availability/partition tolerance.</p></div>
+  </div>
+
+  <div class="insight"><strong>SQL vs NoSQL on consistency:</strong> SQL typically emphasizes <strong>strong consistency (ACID)</strong>. NoSQL often prioritizes <strong>availability + partition tolerance</strong>, sometimes at the cost of strict consistency.</div>
+</section>
+
+<section id="types">
+  <h2>4️⃣ Four Types of NoSQL Databases</h2>
+
+  <div class="card-grid">
+    <div class="card"><h4>📄 ① Document Databases</h4>
+      <p><strong>Store:</strong> Document-like structures (JSON, BSON, XML)</p>
+      <p><strong>Best for:</strong> Content management, e-commerce, analytics where data structure varies</p>
+      <p><strong>Examples:</strong> MongoDB, CouchDB</p>
+    </div>
+    <div class="card"><h4>🔑 ② Key-Value Stores</h4>
+      <p><strong>Store:</strong> Simplest form — unique keys paired with values</p>
+      <p><strong>Best for:</strong> Caching, user profiles, session management (fast lookups)</p>
+      <p><strong>Examples:</strong> Redis, DynamoDB, Riak</p>
+    </div>
+    <div class="card"><h4>📊 ③ Column-Oriented (Wide-Column)</h4>
+      <p><strong>Store:</strong> Data in columns rather than rows</p>
+      <p><strong>Best for:</strong> Queries over large datasets that only need specific columns</p>
+      <p><strong>Examples:</strong> HBase, Cassandra</p>
+    </div>
+    <div class="card"><h4>🕸️ ④ Graph Databases</h4>
+      <p><strong>Store:</strong> Data as nodes and edges</p>
+      <p><strong>Best for:</strong> Social networks, recommendation engines, fraud detection</p>
+      <p><strong>Examples:</strong> Neo4j, ArangoDB</p>
+    </div>
+  </div>
+
+  <h3>Choosing the Right Type</h3>
+  <table>
+    <tr><th>Use Case</th><th>Best Type</th><th>Why</th></tr>
+    <tr><td>User session cache</td><td>Key-Value</td><td>Simple lookups, fast TTL</td></tr>
+    <tr><td>Product catalog</td><td>Document</td><td>Products have varying attributes</td></tr>
+    <tr><td>IoT sensor data</td><td>Column-oriented</td><td>Time-series + sparse columns</td></tr>
+    <tr><td>Social network friends</td><td>Graph</td><td>Heavy relationship queries</td></tr>
+    <tr><td>Real-time analytics</td><td>Column-oriented</td><td>Aggregate over specific columns</td></tr>
+  </table>
+</section>
+
+<section id="cap">
+  <h2>5️⃣ CAP Theorem — The Distributed Database Trade-off</h2>
+
+  <p>The <strong>CAP theorem</strong> states that a distributed data store can guarantee at most <strong>2 out of 3</strong> of:</p>
+
+  <div class="flow">
+    <div class="flow-box" style="background:linear-gradient(135deg,#e74c3c,#c0392b)">C — Consistency<br><small>all nodes see same data</small></div>
+    <div class="flow-box" style="background:linear-gradient(135deg,#27ae60,#16a085)">A — Availability<br><small>every request gets a response</small></div>
+    <div class="flow-box" style="background:linear-gradient(135deg,#3498db,#2980b9)">P — Partition Tolerance<br><small>system works despite network failures</small></div>
+  </div>
+
+  <h3>Combinations</h3>
+  <table>
+    <tr><th>Pick</th><th>What you give up</th><th>Examples</th></tr>
+    <tr><td><strong>CP</strong> (Consistency + Partition)</td><td>Availability</td><td>HBase, MongoDB (default), Redis</td></tr>
+    <tr><td><strong>AP</strong> (Availability + Partition)</td><td>Strong Consistency</td><td>Cassandra, CouchDB, DynamoDB</td></tr>
+    <tr><td><strong>CA</strong> (Consistency + Availability)</td><td>Partition Tolerance</td><td>Traditional RDBMS (single-node)</td></tr>
+  </table>
+
+  <div class="warning"><strong>⚠️ Reality:</strong> In a real distributed system, network partitions WILL happen. So you must choose between <strong>CP</strong> or <strong>AP</strong>. CA is only theoretical (single node).</div>
+</section>
+
+<section id="vs">
+  <h2>6️⃣ SQL vs NoSQL — Full Comparison</h2>
+
+  <table>
+    <tr><th>Feature</th><th>SQL (Relational)</th><th>NoSQL (Non-Relational)</th></tr>
+    <tr><td>Data Model</td><td>Tables with rows/cols</td><td>Document, Key-Value, Column, Graph</td></tr>
+    <tr><td>Schema</td><td>Predefined, rigid</td><td>Dynamic, flexible</td></tr>
+    <tr><td>Scalability</td><td>Primarily Vertical (Scale-up)</td><td>Primarily Horizontal (Scale-out)</td></tr>
+    <tr><td>Data Structure</td><td>Structured only</td><td>Structured + Semi + Unstructured</td></tr>
+    <tr><td>Consistency</td><td>Strong (ACID)</td><td>Tunable (often Eventual / BASE)</td></tr>
+    <tr><td>Joins</td><td>Native support</td><td>Limited or none</td></tr>
+    <tr><td>Transactions</td><td>Full ACID</td><td>Limited (often row-level)</td></tr>
+    <tr><td>Query Language</td><td>SQL (standardized)</td><td>Varies per DB (CQL, MongoDB query, etc.)</td></tr>
+    <tr><td>Use Cases</td><td>Transactional apps, complex queries</td><td>Big data, real-time apps, high scalability</td></tr>
+    <tr><td>Examples</td><td>MySQL, PostgreSQL, Oracle</td><td>MongoDB, Cassandra, HBase, Redis</td></tr>
+  </table>
+
+  <div class="insight"><strong>💡 BASE vs ACID:</strong>
+    <ul>
+      <li><strong>ACID</strong> (SQL): Atomicity, Consistency, Isolation, Durability</li>
+      <li><strong>BASE</strong> (many NoSQL): Basically Available, Soft state, Eventual consistency</li>
+    </ul>
+  </div>
+</section>
+
+<section id="hbase">
+  <h2>7️⃣ Apache HBase</h2>
+
+  <p><strong>HBase</strong> is a NoSQL database modeled after Google's Bigtable. It runs on top of HDFS.</p>
+
+  <h3>Key Features</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🗄️ Built on HDFS</h4><p>Inherits HDFS's reliability + scalability</p></div>
+    <div class="card"><h4>📊 Column-Oriented</h4><p>Stores data by column family for efficient column-specific queries</p></div>
+    <div class="card"><h4>⚡ Real-Time R/W</h4><p>Random access to very large datasets</p></div>
+    <div class="card"><h4>🚀 Overcomes HDFS Limits</h4><p>HDFS is write-once + sequential; HBase adds random access + in-place updates</p></div>
+    <div class="card"><h4>📦 Sparse Data Friendly</h4><p>Empty cells take no space — great for sparse data with thousands of optional columns</p></div>
+    <div class="card"><h4>🛡️ Fault Tolerant</h4><p>Built-in replication via HDFS underneath</p></div>
+  </div>
+
+  <h3>When to Use HBase?</h3>
+  <ul>
+    <li>Need <strong>real-time random reads/writes</strong> on huge tables (billions of rows)</li>
+    <li>Data has <strong>varying columns per row</strong> (sparse data)</li>
+    <li>Want to integrate with Hadoop ecosystem</li>
+    <li>Need <strong>strong consistency</strong> (HBase is CP in CAP)</li>
+  </ul>
+
+  <div class="warning"><strong>⚠️ When NOT to use HBase:</strong>
+    <ul>
+      <li>You need joins or complex SQL queries → use Hive or RDBMS</li>
+      <li>You have small data (few GB) → use RDBMS</li>
+      <li>You need true ACID transactions across rows → use RDBMS</li>
+    </ul>
+  </div>
+</section>
+
+<section id="hive">
+  <h2>8️⃣ HBase vs Hive — Common Confusion</h2>
+
+  <p>Both are in the Hadoop ecosystem but serve different purposes:</p>
+
+  <div class="card-grid">
+    <div class="card" style="border-color:#e74c3c">
+      <h4>📊 HBase</h4>
+      <p><strong>What:</strong> NoSQL <strong>database</strong> on HDFS</p>
+      <p><strong>Use:</strong> Real-time, random R/W</p>
+      <p><strong>Query:</strong> Java API, REST, shell (no SQL)</p>
+      <p><strong>Strength:</strong> Sparse data, fast lookups, updates</p>
+    </div>
+    <div class="card" style="border-color:#27ae60">
+      <h4>🐝 Hive</h4>
+      <p><strong>What:</strong> Data <strong>warehouse</strong> on Hadoop</p>
+      <p><strong>Use:</strong> Analytics, reporting, ETL (batch)</p>
+      <p><strong>Query:</strong> HiveQL (SQL-like)</p>
+      <p><strong>Strength:</strong> Complex SQL queries on big data</p>
+    </div>
+  </div>
+
+  <h3>Side-by-side</h3>
+  <table>
+    <tr><th>Aspect</th><th>HBase</th><th>Hive</th></tr>
+    <tr><td>Purpose</td><td>Real-time data store</td><td>Batch analytics warehouse</td></tr>
+    <tr><td>Latency</td><td>Low (ms)</td><td>High (seconds to minutes)</td></tr>
+    <tr><td>Query Language</td><td>No SQL</td><td>HiveQL (SQL-like)</td></tr>
+    <tr><td>Schema</td><td>Schema-on-read</td><td>Schema-on-read</td></tr>
+    <tr><td>Updates</td><td>Single row updates</td><td>Limited (append/overwrite)</td></tr>
+    <tr><td>Joins</td><td>Limited</td><td>Yes (translates to MR/Tez/Spark)</td></tr>
+  </table>
+</section>
+
+<section id="arch">
+  <h2>9️⃣ HBase Architecture</h2>
+
+  <p>HBase uses a <strong>master-slave architecture</strong>:</p>
+
+  <div class="arch">
+    <div class="arch-node master">
+      <h5>👑 HMaster</h5>
+      <small>Master server. Assigns regions, schema changes, monitors via ZooKeeper, load balancing.</small>
+    </div>
+    <div class="arch-node coord">
+      <h5>🦓 ZooKeeper</h5>
+      <small>Coordination service. Tracks cluster state, holds config.</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🔧 RegionServer 1</h5>
+      <small>Serves regions. Has MemStore + BlockCache + HFile + WAL.</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🔧 RegionServer 2</h5>
+      <small>Same as above. Each manages multiple regions.</small>
+    </div>
+  </div>
+
+  <h3>HMaster (Master)</h3>
+  <ul>
+    <li>Manages the cluster</li>
+    <li>Assigns regions (data partitions) to RegionServers</li>
+    <li>Handles schema changes & metadata operations</li>
+    <li>Monitors RegionServers via ZooKeeper</li>
+    <li>Manages load balancing across RegionServers</li>
+  </ul>
+
+  <h3>RegionServers (Workers)</h3>
+  <ul>
+    <li>Worker nodes that serve data regions</li>
+    <li>Handle client read/write requests for assigned regions</li>
+    <li>Each manages multiple <strong>regions</strong> (a region = range of table rows)</li>
+  </ul>
+
+  <h3>RegionServer Internal Components</h3>
+  <div class="card-grid">
+    <div class="card"><h4>💾 MemStore</h4><p>In-memory <strong>write cache</strong>. New data goes here first. Flushed to HFiles when full.</p></div>
+    <div class="card"><h4>📚 BlockCache</h4><p>In-memory <strong>read cache</strong>. Stores frequently accessed data for fast reads.</p></div>
+    <div class="card"><h4>📁 HFile</h4><p>Actual <strong>storage file on HDFS</strong>. Stores sorted key-values persistently.</p></div>
+    <div class="card"><h4>📝 WAL (Write Ahead Log)</h4><p>Durability log on HDFS. New data → WAL first, then MemStore. If RegionServer crashes, WAL recovers data.</p></div>
+  </div>
+
+  <h3>ZooKeeper's Role</h3>
+  <ul>
+    <li>Maintains cluster state</li>
+    <li>Tracks active/failed RegionServers</li>
+    <li>Holds configuration information</li>
+    <li>Used for leader election (in case HMaster fails)</li>
+  </ul>
+
+  <h3>Architecture Diagram (Textual)</h3>
+  <div class="code-block">+--------------+    (find RegionServer)    +-----------+
+| HBase Client | -----------------------> | ZooKeeper | <---> +---------+
++--------------+                          +-----------+        | HMaster |
+       |                                       ^               +---------+
+       | (read/write)                          | (heartbeat)       |
+       v                                       |                   | (monitor)
++--------------+ (manages regions) +--------------+ (stores HFiles) +------+
+| RegionServer | <---------------> | RegionServer | --------------> | HDFS |
++--------------+                   +--------------+                 +------+</div>
+</section>
+
+<section id="model">
+  <h2>🔟 HBase Data Model</h2>
+
+  <p>HBase uses a <strong>column-family-based</strong> data model. Don't confuse it with relational tables!</p>
+
+  <h3>Core Concepts</h3>
+  <table>
+    <tr><th>Concept</th><th>Description</th></tr>
+    <tr><td><strong>Table</strong></td><td>Stores data, column-oriented (not row-oriented like RDBMS)</td></tr>
+    <tr><td><strong>RowKey</strong></td><td>Unique row identifier. Acts as the primary index. Rows sorted lexicographically.</td></tr>
+    <tr><td><strong>Column Family</strong></td><td>Groups related columns. Defined at table creation. Columns within a family stored together physically.</td></tr>
+    <tr><td><strong>Column Qualifier</strong></td><td>Specific column name within a family. Can be added <strong>dynamically</strong> per row.</td></tr>
+    <tr><td><strong>Cell</strong></td><td>Intersection of (RowKey, Family:Qualifier) — contains the actual value.</td></tr>
+    <tr><td><strong>Timestamp</strong></td><td>Every cell value is versioned with a timestamp. HBase stores multiple versions.</td></tr>
+  </table>
+
+  <h3>Visual Example</h3>
+  <div class="code-block">RowKey      | Family: profile          | Family: activity
+            |  name | email           |  last_login | clicks
+------------+-------+-----------------+-------------+--------
+user001     | Alice | alice@x.com     | 2024-05-01  | 42
+user002     | Bob   | bob@y.com       | 2024-05-15  | (empty)
+user003     | Carol | carol@z.com     | (empty)     | 5</div>
+
+  <div class="insight"><strong>💡 Key insight:</strong> Empty cells don't take space — HBase efficiently stores sparse data with millions of optional columns.</div>
+
+  <h3>Common Use Cases</h3>
+  <ul>
+    <li><strong>Time-series data</strong> — append-heavy workloads with timestamps</li>
+    <li><strong>Messaging systems</strong> — store message history per user</li>
+    <li><strong>Web indexes</strong> — Bigtable was originally built for Google's web crawl</li>
+    <li><strong>IoT data</strong> — sparse sensor data with millions of devices</li>
+  </ul>
+</section>
+
+<section id="quiz">
+  <h2>🎯 12-Question Quiz</h2>
+
+  <div class="quiz"><p><strong>Q1.</strong> NoSQL stands for:</p><div class="quiz-option" onclick="qa(this,0)">No SQL allowed</div><div class="quiz-option" onclick="qa(this,1)">Not Only SQL ✓</div><div class="quiz-option" onclick="qa(this,0)">No-Schema QL</div></div>
+
+  <div class="quiz"><p><strong>Q2.</strong> MongoDB is what type of NoSQL DB?</p><div class="quiz-option" onclick="qa(this,1)">Document ✓</div><div class="quiz-option" onclick="qa(this,0)">Key-Value</div><div class="quiz-option" onclick="qa(this,0)">Graph</div></div>
+
+  <div class="quiz"><p><strong>Q3.</strong> Neo4j is best categorized as:</p><div class="quiz-option" onclick="qa(this,0)">Document</div><div class="quiz-option" onclick="qa(this,0)">Column</div><div class="quiz-option" onclick="qa(this,1)">Graph ✓</div></div>
+
+  <div class="quiz"><p><strong>Q4.</strong> Redis is primarily:</p><div class="quiz-option" onclick="qa(this,1)">Key-Value store ✓</div><div class="quiz-option" onclick="qa(this,0)">Document store</div><div class="quiz-option" onclick="qa(this,0)">Graph DB</div></div>
+
+  <div class="quiz"><p><strong>Q5.</strong> CAP theorem stands for:</p><div class="quiz-option" onclick="qa(this,0)">Cache, Atomic, Performance</div><div class="quiz-option" onclick="qa(this,1)">Consistency, Availability, Partition tolerance ✓</div><div class="quiz-option" onclick="qa(this,0)">Cluster, Auth, Permissions</div></div>
+
+  <div class="quiz"><p><strong>Q6.</strong> In a distributed DB, you must choose between:</p><div class="quiz-option" onclick="qa(this,0)">CA only</div><div class="quiz-option" onclick="qa(this,1)">CP or AP (since P is unavoidable) ✓</div><div class="quiz-option" onclick="qa(this,0)">All 3 simultaneously</div></div>
+
+  <div class="quiz"><p><strong>Q7.</strong> HBase is built on top of:</p><div class="quiz-option" onclick="qa(this,1)">HDFS ✓</div><div class="quiz-option" onclick="qa(this,0)">Cassandra</div><div class="quiz-option" onclick="qa(this,0)">MongoDB</div></div>
+
+  <div class="quiz"><p><strong>Q8.</strong> HBase's master daemon is:</p><div class="quiz-option" onclick="qa(this,0)">ResourceManager</div><div class="quiz-option" onclick="qa(this,1)">HMaster ✓</div><div class="quiz-option" onclick="qa(this,0)">NameNode</div></div>
+
+  <div class="quiz"><p><strong>Q9.</strong> HBase tracks cluster state using:</p><div class="quiz-option" onclick="qa(this,0)">HDFS</div><div class="quiz-option" onclick="qa(this,1)">ZooKeeper ✓</div><div class="quiz-option" onclick="qa(this,0)">YARN</div></div>
+
+  <div class="quiz"><p><strong>Q10.</strong> Where does new data go FIRST in HBase write path?</p><div class="quiz-option" onclick="qa(this,1)">WAL + MemStore ✓</div><div class="quiz-option" onclick="qa(this,0)">HFile</div><div class="quiz-option" onclick="qa(this,0)">BlockCache</div></div>
+
+  <div class="quiz"><p><strong>Q11.</strong> HBase's row identifier is called:</p><div class="quiz-option" onclick="qa(this,0)">Primary Key</div><div class="quiz-option" onclick="qa(this,1)">RowKey ✓</div><div class="quiz-option" onclick="qa(this,0)">Index Key</div></div>
+
+  <div class="quiz"><p><strong>Q12.</strong> Hive is best for:</p><div class="quiz-option" onclick="qa(this,0)">Real-time random R/W</div><div class="quiz-option" onclick="qa(this,1)">SQL-like batch analytics on Hadoop ✓</div><div class="quiz-option" onclick="qa(this,0)">Caching session data</div></div>
+</section>
+
+<section id="summary">
+  <h2>📝 Summary & Exam Tips</h2>
+
+  <div class="summary">
+    <h3>🎯 Key Takeaways</h3>
+    <ul>
+      <li><strong>NoSQL</strong> = "Not Only SQL" — flexible, scalable, non-relational</li>
+      <li><strong>4 types</strong>: Document (MongoDB), Key-Value (Redis), Column (HBase, Cassandra), Graph (Neo4j)</li>
+      <li><strong>CAP theorem</strong>: Pick 2 of Consistency, Availability, Partition tolerance — in practice CP or AP</li>
+      <li><strong>HBase</strong> = Column-oriented NoSQL DB on HDFS for real-time R/W of sparse big data</li>
+      <li><strong>HBase architecture</strong>: HMaster (master) + RegionServers (workers) + ZooKeeper (coord)</li>
+      <li><strong>RegionServer internals</strong>: MemStore (write), BlockCache (read), HFile (storage), WAL (durability)</li>
+      <li><strong>Data model</strong>: Table → RowKey → Column Family → Column Qualifier → Cell (with Timestamp)</li>
+      <li><strong>HBase vs Hive</strong>: HBase = DB for real-time; Hive = warehouse for batch SQL analytics</li>
+    </ul>
+  </div>
+
+  <div class="warning"><strong>📌 Common Exam Pitfalls:</strong>
+    <ul>
+      <li>Confusing HBase (column-oriented DB) with Hive (SQL warehouse)</li>
+      <li>Saying NoSQL means "no schema" (it means "flexible schema")</li>
+      <li>Forgetting that HBase is CP in CAP (strong consistency)</li>
+      <li>Cassandra and HBase BOTH column-oriented but DIFFERENT (Cassandra is AP, HBase is CP)</li>
+    </ul>
+  </div>
+
+  <p style="text-align:center;margin-top:30px"><a href="Week_04_MR_Examples.html" style="color:var(--primary);font-weight:bold">← Week 4</a> | <a href="index.html" style="color:var(--primary);font-weight:bold">Index</a> | <a href="Week_06_Hive_HBase.html" style="color:var(--primary);font-weight:bold">Week 6 → Hive &amp; HBase Deep Dive</a></p>
+</section>
+
+</main>
+
+<footer><p>📚 Week 5 of 10 — Big Data Analytics</p></footer>
+
+<script>
+function g(id,btn){document.getElementById(id).scrollIntoView({behavior:'smooth'});document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function dark(){document.body.classList.toggle('dark');try{localStorage.setItem('bda_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}}
+if(localStorage.getItem('bda_dark')==='1')document.body.classList.add('dark');
+function qa(el,c){el.parentElement.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('correct','wrong'));el.classList.add(c?'correct':'wrong')}
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

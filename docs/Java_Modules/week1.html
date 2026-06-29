@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 1 – Programming in Java</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d2e; --accent:#6c63ff; --accent2:#00d4aa; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --code:#2d3748; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+  header { background:linear-gradient(135deg,#6c63ff,#00d4aa); padding:3rem 2rem; text-align:center; }
+  header h1 { font-size:2.5rem; font-weight:800; color:#fff; }
+  header p { font-size:1.1rem; color:rgba(255,255,255,0.85); margin-top:0.5rem; }
+  nav { background:var(--card); border-bottom:2px solid var(--accent); display:flex; flex-wrap:wrap; gap:0.25rem; padding:0.75rem 1rem; position:sticky; top:0; z-index:100; }
+  nav a { color:var(--muted); text-decoration:none; padding:0.4rem 1rem; border-radius:6px; font-size:0.9rem; transition:all 0.2s; }
+  nav a:hover, nav a.active { background:var(--accent); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:2rem 1.5rem; }
+  section { margin-bottom:3rem; }
+  h2 { font-size:1.8rem; color:var(--accent); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  h3 { font-size:1.2rem; color:var(--accent2); margin:1.2rem 0 0.6rem; }
+  h4 { font-size:1rem; color:#f7c948; margin:0.8rem 0 0.3rem; }
+  p { margin-bottom:0.8rem; color:var(--text); }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .highlight { border-left:4px solid var(--accent); background:rgba(108,99,255,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight2 { border-left:4px solid var(--accent2); background:rgba(0,212,170,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .formula { background:var(--code); border-radius:8px; padding:1rem 1.5rem; font-family:monospace; font-size:1.05rem; color:#f7c948; margin:1rem 0; overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+  th { background:var(--accent); color:#fff; padding:0.7rem 1rem; text-align:left; }
+  td { padding:0.6rem 1rem; border-bottom:1px solid var(--border); }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.03); }
+  ul,ol { padding-left:1.5rem; margin-bottom:0.8rem; }
+  li { margin-bottom:0.3rem; }
+  .tag { background:var(--accent); color:#fff; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag2 { background:var(--accent2); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  svg text { font-family:'Segoe UI',sans-serif; }
+  .step { display:flex; gap:1rem; align-items:flex-start; margin-bottom:0.8rem; }
+  .step-num { background:var(--accent); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:700px) { .two-col { grid-template-columns:1fr; } header h1 { font-size:1.8rem; } }
+  .interactive-box { background:var(--card); border:2px solid var(--accent); border-radius:12px; padding:1.5rem; margin:1.5rem 0; }
+  input[type=number], input[type=text], select { background:var(--code); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:0.4rem 0.8rem; font-size:0.95rem; margin-bottom:0.5rem; }
+  button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:0.6rem 1.5rem; cursor:pointer; font-size:0.95rem; font-weight:600; transition:opacity 0.2s; }
+  button:hover { opacity:0.85; }
+  .result-box { background:rgba(0,212,170,0.1); border:1px solid var(--accent2); border-radius:8px; padding:1rem; margin-top:1rem; font-weight:600; color:var(--accent2); min-height:2rem; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+  @media(max-width:700px) { .grid3 { grid-template-columns:1fr; } }
+
+  /* ---- Code Cell Styles ---- */
+  .code-cell { background:#12152a; border:1px solid var(--border); border-radius:10px; margin:1.2rem 0; overflow:hidden; }
+  .code-cell-header { background:#1e2235; padding:0.5rem 1rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); }
+  .code-cell-header span { font-size:0.8rem; color:var(--muted); font-family:monospace; }
+  .run-btn { background:#6c63ff; color:#fff; border:none; border-radius:6px; padding:0.3rem 1rem; cursor:pointer; font-size:0.85rem; font-weight:700; transition:all 0.2s; display:flex; align-items:center; gap:0.4rem; }
+  .run-btn:hover { background:#574fd6; }
+  .run-btn.running { background:#f7c948; color:#000; }
+  .code-body { padding:1rem 1.2rem; font-family:'Cascadia Code','Fira Code','Consolas',monospace; font-size:0.88rem; line-height:1.7; overflow-x:auto; white-space:pre; }
+  .output-area { display:none; border-top:1px solid var(--border); background:#0a0d1a; padding:0.8rem 1.2rem; font-family:'Cascadia Code','Fira Code','Consolas',monospace; font-size:0.88rem; color:#00d4aa; white-space:pre; }
+  .output-area.visible { display:block; animation:fadeIn 0.25s ease; }
+  .output-label { font-size:0.75rem; color:var(--muted); margin-bottom:0.3rem; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(-4px);} to{opacity:1;transform:translateY(0);} }
+
+  /* Java syntax highlighting */
+  .kw { color:#c792ea; font-weight:600; }      /* keywords */
+  .kw2 { color:#82aaff; }                       /* types */
+  .str { color:#c3e88d; }                        /* strings */
+  .cmt { color:#546e7a; font-style:italic; }     /* comments */
+  .num { color:#f78c6c; }                        /* numbers */
+  .cls { color:#ffcb6b; }                        /* class names */
+  .mth { color:#82aaff; }                        /* method names */
+  .ann { color:#f7c948; }                        /* annotations */
+
+  /* Feature cards */
+  .feature-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem; text-align:center; transition:all 0.25s; cursor:pointer; }
+  .feature-card:hover { border-color:var(--accent); transform:translateY(-3px); background:#1e2240; }
+  .feature-icon { font-size:1.6rem; margin-bottom:0.4rem; }
+  .feature-title { color:#f7c948; font-weight:700; font-size:0.95rem; margin-bottom:0.3rem; }
+  .feature-desc { color:var(--muted); font-size:0.82rem; line-height:1.5; display:none; }
+  .feature-card.open .feature-desc { display:block; color:var(--text); }
+  .feature-card.open { border-color:var(--accent2); background:#1a2a25; }
+
+  /* OOP pillar cards */
+  .pillar-card { background:var(--card); border-radius:12px; padding:1.5rem; border-top:4px solid; margin-bottom:1rem; }
+
+  /* keyword explanation table */
+  .kw-table { width:100%; border-collapse:collapse; margin:1rem 0; }
+  .kw-table th { background:#2d2a5e; color:#c792ea; padding:0.6rem 1rem; text-align:left; font-family:monospace; }
+  .kw-table td { padding:0.6rem 1rem; border-bottom:1px solid var(--border); font-size:0.92rem; }
+  .kw-table td:first-child { font-family:monospace; color:#c792ea; font-weight:700; }
+
+  /* Timeline */
+  .timeline { position:relative; padding-left:2rem; }
+  .timeline::before { content:''; position:absolute; left:0.45rem; top:0; bottom:0; width:2px; background:linear-gradient(to bottom,#6c63ff,#00d4aa); }
+  .tl-item { position:relative; margin-bottom:1.2rem; }
+  .tl-dot { position:absolute; left:-1.65rem; top:0.4rem; width:12px; height:12px; border-radius:50%; background:#6c63ff; border:2px solid var(--bg); }
+  .tl-year { color:#f7c948; font-weight:700; font-size:0.85rem; }
+  .tl-text { color:var(--text); font-size:0.95rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>&#9749; Week 1: Programming in Java</h1>
+  <p>History &middot; JDK/JRE/JVM &middot; WORA &middot; OOP Fundamentals &middot; Constructors &middot; Packages</p>
+</header>
+
+<nav id="main-nav">
+  <a href="#history" class="active">History</a>
+  <a href="#jdk-jre-jvm">JDK/JRE/JVM</a>
+  <a href="#wora">WORA</a>
+  <a href="#features">Features</a>
+  <a href="#first-program">First Program</a>
+  <a href="#scanner">Scanner Input</a>
+  <a href="#oop-intro">OOP Intro</a>
+  <a href="#oop-pillars">OOP Pillars</a>
+  <a href="#class-structure">Class Structure</a>
+  <a href="#constructors">Constructors</a>
+  <a href="#packages">Packages</a>
+  <a href="#xn-extra">🔢 Numericals</a>
+  <a href="#xn-mcq">📝 MCQs</a>
+</nav>
+
+<div class="container">
+
+<!-- ===================== SECTION 1: History ===================== -->
+<section id="history">
+  <h2>&#128218; History of Java</h2>
+  <div class="card">
+    <p>Java is one of the most widely used programming languages in the world. Its journey from a small research project to a global standard is a fascinating story.</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1991</div>
+        <div class="tl-text"><strong>Sun Microsystems</strong> formed the "Green Team" led by <strong>James Gosling</strong>, Mike Sheridan, and Patrick Naughton. The goal was to create a language for consumer electronics (set-top boxes, TVs).</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#00d4aa;"></div>
+        <div class="tl-year">1992</div>
+        <div class="tl-text">The language was originally named <strong>"Oak"</strong> (after the oak tree outside Gosling's office). A demo device called <em>Star7</em> was built running Oak.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#f7c948;"></div>
+        <div class="tl-year">1995</div>
+        <div class="tl-text">Oak was renamed <strong>"Java"</strong> (reportedly after Java coffee). Sun officially released Java 1.0 with the famous slogan: <em>"Write Once, Run Anywhere"</em> (WORA). Netscape browser added Java applet support.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1996&ndash;2004</div>
+        <div class="tl-text">Java grew rapidly. Java 1.1, 1.2 ("Playground"), 1.3 ("Kestrel"), 1.4 ("Merlin"), and Java 5.0 ("Tiger") introduced generics, enums, annotations, and enhanced for-loops.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#00d4aa;"></div>
+        <div class="tl-year">2006</div>
+        <div class="tl-text">Sun made Java open-source under the <strong>GNU GPL</strong> license — the OpenJDK project was born.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#ff6b6b;"></div>
+        <div class="tl-year">2010</div>
+        <div class="tl-text"><strong>Oracle Corporation</strong> acquired Sun Microsystems for $7.4 billion, gaining ownership of Java.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#f7c948;"></div>
+        <div class="tl-year">2023</div>
+        <div class="tl-text">On the <strong>TIOBE index</strong>, Java is ranked <strong>4th</strong> (after Python, C, and C++). Still one of the most in-demand languages for enterprise, Android, and backend development.</div>
+      </div>
+    </div>
+
+    <div class="highlight" style="margin-top:1.2rem;">
+      <strong>Key People &amp; Facts:</strong>
+      <ul style="margin-top:0.5rem;">
+        <li><strong>James Gosling</strong> — Father of Java, designed the original language</li>
+        <li><strong>Green Team</strong> — Small research group at Sun Microsystems (1991)</li>
+        <li><strong>Sun Microsystems</strong> — Original developer, founded 1982</li>
+        <li><strong>Oracle</strong> — Current owner since 2010</li>
+        <li>Renamed from <strong>Oak &rarr; Java</strong> in 1995</li>
+      </ul>
+    </div>
+
+    <!-- SVG: Java Logo History -->
+    <svg viewBox="0 0 700 120" width="100%" height="120" style="margin-top:1rem;">
+      <rect x="0" y="0" width="700" height="120" rx="10" fill="#12152a"/>
+      <!-- Timeline bar -->
+      <line x1="30" y1="60" x2="670" y2="60" stroke="#2d3748" stroke-width="2"/>
+      <!-- Nodes -->
+      <circle cx="80"  cy="60" r="14" fill="#6c63ff"/>
+      <text x="80"  y="65" fill="#fff" font-size="9" text-anchor="middle" font-weight="bold">1991</text>
+      <text x="80"  y="90" fill="#94a3b8" font-size="9" text-anchor="middle">Green Team</text>
+
+      <circle cx="210" cy="60" r="14" fill="#6c63ff"/>
+      <text x="210" y="65" fill="#fff" font-size="9" text-anchor="middle" font-weight="bold">1992</text>
+      <text x="210" y="90" fill="#94a3b8" font-size="9" text-anchor="middle">Oak born</text>
+
+      <circle cx="340" cy="60" r="18" fill="#00d4aa"/>
+      <text x="340" y="65" fill="#000" font-size="9" text-anchor="middle" font-weight="bold">1995</text>
+      <text x="340" y="90" fill="#00d4aa" font-size="9" text-anchor="middle" font-weight="bold">Java 1.0 + WORA</text>
+
+      <circle cx="470" cy="60" r="14" fill="#f7c948"/>
+      <text x="470" y="65" fill="#000" font-size="9" text-anchor="middle" font-weight="bold">2010</text>
+      <text x="470" y="90" fill="#94a3b8" font-size="9" text-anchor="middle">Oracle acquires</text>
+
+      <circle cx="600" cy="60" r="14" fill="#6c63ff"/>
+      <text x="600" y="65" fill="#fff" font-size="9" text-anchor="middle" font-weight="bold">2023</text>
+      <text x="600" y="90" fill="#94a3b8" font-size="9" text-anchor="middle">TIOBE #4</text>
+
+      <text x="350" y="22" fill="#e2e8f0" font-size="12" text-anchor="middle" font-weight="bold">Java Timeline</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ===================== SECTION 2: JDK / JRE / JVM ===================== -->
+<section id="jdk-jre-jvm">
+  <h2>&#9881;&#65039; JDK / JRE / JVM</h2>
+  <div class="card">
+    <p>Understanding the three components of Java's execution model is fundamental. They are nested: <strong>JDK &sup; JRE &sup; JVM</strong>.</p>
+
+    <!-- SVG: three nested circles -->
+    <svg viewBox="0 0 500 320" width="100%" height="320" style="background:#12152a;border-radius:10px;display:block;margin:1rem auto;">
+      <!-- JDK outer -->
+      <ellipse cx="250" cy="165" rx="230" ry="135" fill="rgba(108,99,255,0.15)" stroke="#6c63ff" stroke-width="2.5"/>
+      <!-- JRE middle -->
+      <ellipse cx="250" cy="175" rx="160" ry="95" fill="rgba(0,212,170,0.15)" stroke="#00d4aa" stroke-width="2.5"/>
+      <!-- JVM inner -->
+      <ellipse cx="250" cy="185" rx="85" ry="55" fill="rgba(247,201,72,0.2)" stroke="#f7c948" stroke-width="2.5"/>
+
+      <!-- Labels -->
+      <text x="250" y="193" fill="#f7c948" font-size="14" font-weight="bold" text-anchor="middle">JVM</text>
+      <text x="250" y="210" fill="#f7c948" font-size="9" text-anchor="middle">Runs Bytecode</text>
+
+      <text x="380" y="145" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">JRE</text>
+      <text x="380" y="160" fill="#00d4aa" font-size="9" text-anchor="middle">Class Libraries + JVM</text>
+
+      <text x="80" y="70" fill="#6c63ff" font-size="14" font-weight="bold" text-anchor="middle">JDK</text>
+      <text x="80" y="87" fill="#6c63ff" font-size="9" text-anchor="middle">javac + tools + JRE</text>
+
+      <!-- Tool labels inside JDK but outside JRE -->
+      <text x="120" y="130" fill="#94a3b8" font-size="8.5" text-anchor="middle">javac</text>
+      <text x="155" y="108" fill="#94a3b8" font-size="8.5" text-anchor="middle">javadoc</text>
+      <text x="365" y="108" fill="#94a3b8" font-size="8.5" text-anchor="middle">jdb</text>
+      <text x="395" y="130" fill="#94a3b8" font-size="8.5" text-anchor="middle">jar</text>
+
+      <!-- Class library label inside JRE but outside JVM -->
+      <text x="145" y="200" fill="#94a3b8" font-size="8.5" text-anchor="middle">java.lang</text>
+      <text x="145" y="215" fill="#94a3b8" font-size="8.5" text-anchor="middle">java.util</text>
+      <text x="355" y="200" fill="#94a3b8" font-size="8.5" text-anchor="middle">java.io</text>
+      <text x="355" y="215" fill="#94a3b8" font-size="8.5" text-anchor="middle">javax.*</text>
+    </svg>
+
+    <div class="grid3" style="margin-top:1.2rem;">
+      <div class="card" style="border-top:4px solid #6c63ff;margin-bottom:0;">
+        <h4 style="margin-top:0;color:#6c63ff;font-size:1.05rem;">JDK — Java Development Kit</h4>
+        <p style="font-size:0.9rem;">The complete package for <strong>developers</strong>. Contains everything needed to write, compile, and run Java programs.</p>
+        <ul style="font-size:0.88rem;">
+          <li><strong>javac</strong> — Java compiler (.java &rarr; .class)</li>
+          <li><strong>java</strong> — Java launcher (runs .class)</li>
+          <li><strong>javadoc</strong> — Documentation generator</li>
+          <li><strong>jar</strong> — Archive tool</li>
+          <li><strong>jdb</strong> — Java debugger</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:4px solid #00d4aa;margin-bottom:0;">
+        <h4 style="margin-top:0;color:#00d4aa;font-size:1.05rem;">JRE — Java Runtime Environment</h4>
+        <p style="font-size:0.9rem;">Needed to <strong>run</strong> Java programs (not develop). Contains the JVM plus the standard class libraries.</p>
+        <ul style="font-size:0.88rem;">
+          <li><strong>JVM</strong> — Bytecode executor</li>
+          <li><strong>java.lang</strong> — Core classes</li>
+          <li><strong>java.util</strong> — Utility classes</li>
+          <li><strong>java.io</strong> — I/O classes</li>
+          <li>Other standard libraries</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:4px solid #f7c948;margin-bottom:0;">
+        <h4 style="margin-top:0;color:#f7c948;font-size:1.05rem;">JVM — Java Virtual Machine</h4>
+        <p style="font-size:0.9rem;">The engine that <strong>executes bytecode</strong>. Platform-specific — different JVM for Windows, Linux, macOS.</p>
+        <ul style="font-size:0.88rem;">
+          <li>Reads .class (bytecode) files</li>
+          <li>Interprets or JIT-compiles to native machine code</li>
+          <li>Manages memory (Garbage Collection)</li>
+          <li>Provides security sandbox</li>
+          <li>Platform-specific implementation</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Compilation and Execution Flow</h3>
+    <div class="formula" style="font-size:0.95rem; text-align:left; line-height:2;">
+      Source Code (.java)  &mdash;&mdash;[javac]&mdash;&rarr;  Bytecode (.class)  &mdash;&mdash;[JVM]&mdash;&rarr;  Machine Output
+    </div>
+    <div class="highlight2">
+      <strong>Key Insight:</strong> The bytecode (.class file) is <em>platform-independent</em>. The JVM is <em>platform-specific</em>. This is the secret behind "Write Once, Run Anywhere".
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 3: WORA ===================== -->
+<section id="wora">
+  <h2>&#127760; Platform Independence (WORA)</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>"Write Once, Run Anywhere"</strong> — Java source code is compiled once into platform-neutral bytecode. That bytecode can run on any machine that has a JVM installed, regardless of the underlying OS or CPU architecture.
+    </div>
+
+    <!-- SVG: WORA Flow Diagram -->
+    <svg viewBox="0 0 720 260" width="100%" height="260" style="background:#12152a;border-radius:10px;display:block;margin:1rem 0;">
+      <defs>
+        <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+        </marker>
+        <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#6c63ff"/>
+        </marker>
+      </defs>
+
+      <!-- Source file -->
+      <rect x="20" y="90" width="110" height="70" rx="8" fill="#1e2235" stroke="#6c63ff" stroke-width="2"/>
+      <text x="75" y="117" fill="#6c63ff" font-size="11" font-weight="bold" text-anchor="middle">First.java</text>
+      <text x="75" y="133" fill="#94a3b8" font-size="9.5" text-anchor="middle">Source Code</text>
+      <text x="75" y="148" fill="#c792ea" font-size="9" text-anchor="middle">.java</text>
+
+      <!-- javac -->
+      <rect x="165" y="100" width="80" height="50" rx="8" fill="#2d2a5e" stroke="#6c63ff" stroke-width="1.5"/>
+      <text x="205" y="122" fill="#c792ea" font-size="10" font-weight="bold" text-anchor="middle">javac</text>
+      <text x="205" y="138" fill="#94a3b8" font-size="9" text-anchor="middle">compiler</text>
+      <line x1="131" y1="125" x2="163" y2="125" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+      <!-- Bytecode -->
+      <rect x="270" y="90" width="120" height="70" rx="8" fill="#1e2235" stroke="#00d4aa" stroke-width="2"/>
+      <text x="330" y="115" fill="#00d4aa" font-size="11" font-weight="bold" text-anchor="middle">First.class</text>
+      <text x="330" y="131" fill="#94a3b8" font-size="9.5" text-anchor="middle">Bytecode</text>
+      <text x="330" y="147" fill="#00d4aa" font-size="9" text-anchor="middle">platform-neutral</text>
+      <line x1="246" y1="125" x2="268" y2="125" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+      <!-- Arrows down to platforms -->
+      <line x1="330" y1="162" x2="120" y2="205" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr3)"/>
+      <line x1="330" y1="162" x2="330" y2="205" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr3)"/>
+      <line x1="330" y1="162" x2="530" y2="205" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr3)"/>
+      <line x1="330" y1="162" x2="660" y2="205" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr3)"/>
+
+      <!-- Platform boxes -->
+      <rect x="60"  y="208" width="115" height="40" rx="6" fill="#1e2235" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="117" y="224" fill="#f7c948" font-size="9.5" font-weight="bold" text-anchor="middle">JVM (Linux)</text>
+      <text x="117" y="238" fill="#94a3b8" font-size="8.5" text-anchor="middle">x86 native</text>
+
+      <rect x="270" y="208" width="120" height="40" rx="6" fill="#1e2235" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="330" y="224" fill="#f7c948" font-size="9.5" font-weight="bold" text-anchor="middle">JVM (Windows)</text>
+      <text x="330" y="238" fill="#94a3b8" font-size="8.5" text-anchor="middle">Win native</text>
+
+      <rect x="468" y="208" width="120" height="40" rx="6" fill="#1e2235" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="528" y="224" fill="#f7c948" font-size="9.5" font-weight="bold" text-anchor="middle">JVM (macOS)</text>
+      <text x="528" y="238" fill="#94a3b8" font-size="8.5" text-anchor="middle">ARM native</text>
+
+      <rect x="600" y="208" width="110" height="40" rx="6" fill="#1e2235" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="655" y="224" fill="#f7c948" font-size="9.5" font-weight="bold" text-anchor="middle">JVM (Mobile)</text>
+      <text x="655" y="238" fill="#94a3b8" font-size="8.5" text-anchor="middle">Android/etc</text>
+
+      <!-- Title -->
+      <text x="360" y="30" fill="#e2e8f0" font-size="13" font-weight="bold" text-anchor="middle">Write Once, Run Anywhere — WORA</text>
+      <text x="360" y="52" fill="#94a3b8" font-size="10" text-anchor="middle">One .class bytecode file runs on any JVM, on any platform</text>
+    </svg>
+
+    <div class="two-col">
+      <div class="highlight">
+        <h4>Why is Bytecode Platform-Independent?</h4>
+        <p style="font-size:0.9rem;">Bytecode is an intermediate representation — it's NOT specific to any CPU (x86, ARM, MIPS). The JVM on each platform translates bytecode to the platform's native machine code.</p>
+      </div>
+      <div class="highlight2">
+        <h4>JVM is Platform-Specific</h4>
+        <p style="font-size:0.9rem;">Even though bytecode is universal, you need a JVM installed on each target platform. Oracle, OpenJDK, and others provide JVMs for every major OS.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 4: Features ===================== -->
+<section id="features">
+  <h2>&#10024; Features of Java</h2>
+  <div class="card">
+    <p>Java was designed with a rich set of features. Click any card to reveal its description.</p>
+    <div class="grid3" id="features-grid" style="margin-top:1rem;">
+
+      <div class="feature-card" onclick="toggleFeature(this)">
+        <div class="feature-icon">&#129380;</div>
+        <div class="feature-title">Simple</div>
+        <div class="feature-desc">Java has a clean, easy-to-learn syntax. It removed complex features of C++ like pointers, operator overloading, and multiple inheritance, making it easier for beginners.</div>
+      </div>
+
+      <div class="feature-card" onclick="toggleFeature(this)">
+        <div class="feature-icon">&#127757;</div>
+        <div class="feature-title">Object Oriented</div>
+        <div class="feature-desc">Everything in Java is modeled as objects. Java supports all four OOP pillars: Abstraction, Encapsulation, Inheritance, and Polymorphism. Even primitive wrappers are classes.</div>
+      </div>
+
+      <div class="feature-card" onclick="toggleFeature(this)">
+        <div class="feature-icon">&#128218;</div>
+        <div class="feature-title">Interpreted</div>
+        <div class="feature-desc">Java bytecode is interpreted by the JVM at runtime. Modern JVMs also use Just-In-Time (JIT) compilation for frequently executed code, combining interpretation and compilation.</div>
+      </div>
+
+      <div class="feature-card" onclick="toggleFeature(this)">
+        <div class="feature-icon">&#9889;</div>
+        <div class="feature-title">High Performance</div>
+        <div class="feature-desc">Through JIT compilation and efficient bytecode, Java achieves near-native performance. The JVM optimizes hot code paths automatically at runtime using HotSpot technology.</div>
+      </div>
+
+      <div class="feature-card" onclick="toggleFeature(this)">
+        <div class="feature-icon">&#128230;</div>
+        <div class="feature-title">Portable</div>
+        <div class="feature-desc">Java bytecode is platform-neutral. The same .class file runs unchanged on Windows, Linux, macOS, and mobile. "Write Once, Run Anywhere" is the key portability promise.</div>
+      </div>
+
+      <div class="feature-card" onclick="toggleFeature(this)">
+        <div class="feature-icon">&#128737;&#65039;</div>
+        <div class="feature-title">Robust</div>
+        <div class="feature-desc">Java has strong type-checking at compile time, automatic garbage collection (no memory leaks), exception handling, and no direct pointer manipulation — making programs reliable.</div>
+      </div>
+
+      <div class="feature-card" onclick="toggleFeature(this)">
+        <div class="feature-icon">&#128274;</div>
+        <div class="feature-title">Secure</div>
+        <div class="feature-desc">Java runs inside the JVM sandbox, preventing unauthorized access to system resources. No explicit pointers prevent buffer overflows. Bytecode is verified before execution.</div>
+      </div>
+
+      <div class="feature-card" onclick="toggleFeature(this)">
+        <div class="feature-icon">&#128256;</div>
+        <div class="feature-title">Multithreaded</div>
+        <div class="feature-desc">Java has built-in support for multithreading via the Thread class and Runnable interface. Multiple threads can run concurrently, enabling efficient use of multicore processors.</div>
+      </div>
+
+      <div class="feature-card" onclick="toggleFeature(this)">
+        <div class="feature-icon">&#128257;</div>
+        <div class="feature-title">Dynamic</div>
+        <div class="feature-desc">Java can load classes at runtime using Class.forName(). It supports reflection, dynamic linking, and runtime polymorphism. Classes can be loaded on demand from the network or disk.</div>
+      </div>
+
+      <div class="feature-card" onclick="toggleFeature(this)">
+        <div class="feature-icon">&#127760;</div>
+        <div class="feature-title">Distributed</div>
+        <div class="feature-desc">Java's java.net package provides extensive support for TCP/IP networking, HTTP, FTP, and RMI (Remote Method Invocation) for distributed computing across networks.</div>
+      </div>
+
+      <div class="feature-card" onclick="toggleFeature(this)">
+        <div class="feature-icon">&#127758;</div>
+        <div class="feature-title">Architecture-Neutral</div>
+        <div class="feature-desc">Java's bytecode has no implementation-dependent aspects. Primitive types have fixed sizes (int is always 32 bits), unlike C/C++ where size depends on the platform architecture.</div>
+      </div>
+
+    </div>
+    <p style="margin-top:1rem;color:var(--muted);font-size:0.85rem;">Click any card above to toggle its description.</p>
+  </div>
+</section>
+
+<!-- ===================== SECTION 5: First Java Program ===================== -->
+<section id="first-program">
+  <h2>&#128187; First Java Program</h2>
+  <div class="card">
+    <p>Every Java programmer starts with Hello World. Let's understand every single keyword in this program.</p>
+
+    <!-- Code Cell 1: Hello World -->
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>First.java</span>
+        <button class="run-btn" onclick="runCell('hello-output', this)">&#9654; Run</button>
+      </div>
+      <div class="code-body"><span class="kw">public</span> <span class="kw">class</span> <span class="cls">First</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw2">void</span> <span class="mth">main</span>(<span class="cls">String</span> s[]) {
+        <span class="cls">System</span>.out.<span class="mth">println</span>(<span class="str">"Hello Welcome to learn Java"</span>);
+    }
+}</div>
+      <div class="output-area" id="hello-output">
+        <div class="output-label">Output:</div>Hello Welcome to learn Java</div>
+    </div>
+
+    <h3>Keyword Breakdown</h3>
+    <table class="kw-table">
+      <tr><th>Keyword</th><th>Meaning</th></tr>
+      <tr><td>public</td><td>Access modifier — the class/method is accessible from anywhere (outside the package too)</td></tr>
+      <tr><td>class</td><td>Declares a new class — the fundamental building block in Java. Everything must be inside a class.</td></tr>
+      <tr><td>First</td><td>The class name — must match the filename (First.java). By convention, class names use PascalCase.</td></tr>
+      <tr><td>static</td><td>Means the method belongs to the class itself, not an instance. JVM calls main() without creating an object.</td></tr>
+      <tr><td>void</td><td>Return type — main() returns nothing. The JVM doesn't need a return value from main.</td></tr>
+      <tr><td>main</td><td>The method name — the entry point of every Java application. JVM looks specifically for main(String[]).</td></tr>
+      <tr><td>String s[]</td><td>Command-line arguments — an array of Strings passed when running: java First arg1 arg2</td></tr>
+      <tr><td>System.out.println</td><td>System = class in java.lang, out = static PrintStream field, println = method that prints and adds a newline</td></tr>
+    </table>
+
+    <h3>How to Compile and Run</h3>
+    <div class="formula" style="font-size:0.9rem; line-height:2.2; text-align:left;">
+      Step 1: Save as  <span style="color:#c3e88d;">First.java</span><br>
+      Step 2: Compile: <span style="color:#c792ea;">javac First.java</span>  &rarr;  creates <span style="color:#00d4aa;">First.class</span><br>
+      Step 3: Run:     <span style="color:#c792ea;">java First</span>           &rarr;  JVM executes First.class
+    </div>
+
+    <div class="two-col" style="margin-top:1rem;">
+      <div class="highlight">
+        <h4>Why is main() static?</h4>
+        <p style="font-size:0.9rem;">The JVM needs to call main() <em>before</em> any objects exist. If main() were an instance method, the JVM would need an object of the class to call it — but you can't create objects without a running program. Making it static solves this chicken-and-egg problem.</p>
+      </div>
+      <div class="highlight2">
+        <h4>Why String s[]?</h4>
+        <p style="font-size:0.9rem;">Java accepts command-line arguments as an array of strings. Running <code style="color:#c3e88d;">java First Alice 25</code> would put "Alice" at s[0] and "25" at s[1]. You can also write it as <code style="color:#c3e88d;">String[] s</code> — both are equivalent.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 6: Scanner Input ===================== -->
+<section id="scanner">
+  <h2>&#128270; Scanner Input</h2>
+  <div class="card">
+    <p>To accept user input at runtime, Java provides the <strong>Scanner</strong> class from the <code style="color:#00d4aa;">java.util</code> package. Here's a program that reads two integers and adds them.</p>
+
+    <!-- Code Cell 2: Addition with static output -->
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>Addition.java</span>
+        <button class="run-btn" onclick="runCell('addition-static-output', this)">&#9654; Run</button>
+      </div>
+      <div class="code-body"><span class="kw">import</span> java.util.*;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="cls">Addition</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw2">void</span> <span class="mth">main</span>(<span class="cls">String</span> s[]) {
+        <span class="kw2">int</span> num_1, num_2, result = <span class="num">0</span>;
+        <span class="cls">Scanner</span> scan = <span class="kw">new</span> <span class="cls">Scanner</span>(<span class="cls">System</span>.in);
+        num_1 = scan.<span class="mth">nextInt</span>();
+        num_2 = scan.<span class="mth">nextInt</span>();
+        result = num_1 + num_2;
+        <span class="cls">System</span>.out.<span class="mth">println</span>(<span class="str">"Result="</span> + result);
+    }
+}</div>
+      <div class="output-area" id="addition-static-output">
+        <div class="output-label">Sample run (inputs: 10, 25):</div>Result=35</div>
+    </div>
+
+    <!-- Interactive Addition -->
+    <div class="interactive-box">
+      <h3 style="margin-top:0;">&#127358; Interactive: Try the Addition Program</h3>
+      <p style="color:var(--muted);font-size:0.9rem;">Enter two numbers and click Run to simulate Scanner input:</p>
+      <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-bottom:0.8rem;">
+        <div>
+          <label style="font-size:0.85rem;color:var(--muted);display:block;margin-bottom:0.3rem;">num_1</label>
+          <input type="number" id="add-num1" value="10" style="width:120px;">
+        </div>
+        <div style="font-size:1.5rem;color:var(--accent);margin-top:1rem;">+</div>
+        <div>
+          <label style="font-size:0.85rem;color:var(--muted);display:block;margin-bottom:0.3rem;">num_2</label>
+          <input type="number" id="add-num2" value="25" style="width:120px;">
+        </div>
+        <div style="margin-top:1rem;">
+          <button onclick="runAddition()">&#9654; Run</button>
+        </div>
+      </div>
+      <div class="result-box" id="addition-result" style="display:none;"></div>
+    </div>
+
+    <h3>Scanner Methods</h3>
+    <table>
+      <tr><th>Method</th><th>Reads</th><th>Example</th></tr>
+      <tr><td><code>nextInt()</code></td><td>int value</td><td>int age = scan.nextInt();</td></tr>
+      <tr><td><code>nextFloat()</code></td><td>float value</td><td>float price = scan.nextFloat();</td></tr>
+      <tr><td><code>nextDouble()</code></td><td>double value</td><td>double pi = scan.nextDouble();</td></tr>
+      <tr><td><code>next()</code></td><td>one word (String)</td><td>String name = scan.next();</td></tr>
+      <tr><td><code>nextLine()</code></td><td>full line (String)</td><td>String sentence = scan.nextLine();</td></tr>
+    </table>
+
+    <div class="highlight">
+      <strong>Important:</strong> Always import Scanner with <code style="color:#c3e88d;">import java.util.Scanner;</code> or <code style="color:#c3e88d;">import java.util.*;</code>. The asterisk (*) imports all classes from the java.util package.
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 7: OOP Introduction ===================== -->
+<section id="oop-intro">
+  <h2>&#128106; OOP Introduction</h2>
+  <div class="card">
+    <h3>Procedural vs Object-Oriented Programming</h3>
+
+    <!-- SVG Comparison -->
+    <svg viewBox="0 0 700 220" width="100%" height="220" style="background:#12152a;border-radius:10px;display:block;margin:1rem 0;">
+      <!-- Procedural side -->
+      <rect x="10" y="10" width="320" height="200" rx="10" fill="#1a1d2e" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="170" y="35" fill="#f7c948" font-size="13" font-weight="bold" text-anchor="middle">Procedural Programming</text>
+
+      <rect x="30"  y="50" width="80" height="30" rx="5" fill="#2d3748"/>
+      <text x="70"  y="70" fill="#e2e8f0" font-size="9" text-anchor="middle">Data</text>
+      <rect x="130" y="50" width="80" height="30" rx="5" fill="#2d3748"/>
+      <text x="170" y="70" fill="#e2e8f0" font-size="9" text-anchor="middle">Function 1</text>
+      <rect x="220" y="50" width="80" height="30" rx="5" fill="#2d3748"/>
+      <text x="260" y="70" fill="#e2e8f0" font-size="9" text-anchor="middle">Function 2</text>
+
+      <line x1="110" y1="65" x2="128" y2="65" stroke="#f7c948" stroke-width="1.2" marker-end="url(#arr2)"/>
+      <line x1="210" y1="65" x2="218" y2="65" stroke="#f7c948" stroke-width="1.2" marker-end="url(#arr2)"/>
+
+      <text x="170" y="115" fill="#94a3b8" font-size="9" text-anchor="middle">Data and functions are separate</text>
+      <text x="170" y="130" fill="#94a3b8" font-size="9" text-anchor="middle">Functions operate on global/shared data</text>
+      <text x="170" y="155" fill="#ff6b6b" font-size="9" text-anchor="middle">Harder to maintain as programs grow large</text>
+      <text x="170" y="170" fill="#94a3b8" font-size="9" text-anchor="middle">e.g. C, Pascal, BASIC</text>
+
+      <!-- OOP side -->
+      <rect x="370" y="10" width="320" height="200" rx="10" fill="#1a1d2e" stroke="#00d4aa" stroke-width="1.5"/>
+      <text x="530" y="35" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">Object-Oriented Programming</text>
+
+      <rect x="390" y="50" width="120" height="70" rx="8" fill="#1e2a25" stroke="#00d4aa" stroke-width="1.5"/>
+      <text x="450" y="72" fill="#00d4aa" font-size="9.5" font-weight="bold" text-anchor="middle">Object: Car</text>
+      <text x="450" y="88" fill="#94a3b8" font-size="8.5" text-anchor="middle">data: speed, color</text>
+      <text x="450" y="102" fill="#94a3b8" font-size="8.5" text-anchor="middle">methods: drive()</text>
+
+      <rect x="548" y="50" width="120" height="70" rx="8" fill="#2a1e2a" stroke="#c792ea" stroke-width="1.5"/>
+      <text x="608" y="72" fill="#c792ea" font-size="9.5" font-weight="bold" text-anchor="middle">Object: Person</text>
+      <text x="608" y="88" fill="#94a3b8" font-size="8.5" text-anchor="middle">data: name, age</text>
+      <text x="608" y="102" fill="#94a3b8" font-size="8.5" text-anchor="middle">methods: talk()</text>
+
+      <text x="530" y="145" fill="#94a3b8" font-size="9" text-anchor="middle">Data and methods bundled together</text>
+      <text x="530" y="160" fill="#94a3b8" font-size="9" text-anchor="middle">Objects interact via well-defined interfaces</text>
+      <text x="530" y="178" fill="#00d4aa" font-size="9" text-anchor="middle">Scalable, maintainable, reusable code</text>
+    </svg>
+
+    <h3>Real-World Objects in Java</h3>
+    <div class="grid3">
+      <div class="card" style="margin-bottom:0;border-left:3px solid #6c63ff;">
+        <h4 style="margin-top:0;">Person</h4>
+        <p style="font-size:0.85rem;"><strong>Attributes (Data):</strong></p>
+        <ul style="font-size:0.85rem;">
+          <li>Name</li><li>Age</li><li>Gender</li>
+        </ul>
+        <p style="font-size:0.85rem;"><strong>Methods (Behaviour):</strong></p>
+        <ul style="font-size:0.85rem;">
+          <li>talk()</li><li>think()</li>
+        </ul>
+      </div>
+      <div class="card" style="margin-bottom:0;border-left:3px solid #00d4aa;">
+        <h4 style="margin-top:0;">TV</h4>
+        <p style="font-size:0.85rem;"><strong>Attributes (Data):</strong></p>
+        <ul style="font-size:0.85rem;">
+          <li>Brand</li><li>Model</li>
+        </ul>
+        <p style="font-size:0.85rem;"><strong>Methods (Behaviour):</strong></p>
+        <ul style="font-size:0.85rem;">
+          <li>changeChannel()</li><li>changeVolume()</li>
+        </ul>
+      </div>
+      <div class="card" style="margin-bottom:0;border-left:3px solid #f7c948;">
+        <h4 style="margin-top:0;">BankAccount</h4>
+        <p style="font-size:0.85rem;"><strong>Attributes (Data):</strong></p>
+        <ul style="font-size:0.85rem;">
+          <li>accno</li><li>balance</li>
+        </ul>
+        <p style="font-size:0.85rem;"><strong>Methods (Behaviour):</strong></p>
+        <ul style="font-size:0.85rem;">
+          <li>withdraw()</li><li>deposit()</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Class vs Object</h3>
+    <div class="two-col" style="margin:1rem 0;">
+      <div class="highlight">
+        <h4>Class = Blueprint</h4>
+        <p style="font-size:0.9rem;">A class is a template or blueprint that defines the structure and behaviour. It exists in your code but takes no memory by itself. Like an architectural drawing of a house.</p>
+        <div class="formula" style="font-size:0.85rem; padding:0.6rem 1rem;">class Person { name, age, talk() }</div>
+      </div>
+      <div class="highlight2">
+        <h4>Object = Instance</h4>
+        <p style="font-size:0.9rem;">An object is an actual instance of a class in memory. You can have many objects from one class, each with their own data. Like an actual house built from the blueprint.</p>
+        <div class="formula" style="font-size:0.85rem; padding:0.6rem 1rem;">Person p1 = new Person("Bob", 32);</div>
+      </div>
+    </div>
+
+    <!-- SVG: Class -> Objects -->
+    <svg viewBox="0 0 680 200" width="100%" height="200" style="background:#12152a;border-radius:10px;display:block;margin:1rem 0;">
+      <defs>
+        <marker id="arr4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#6c63ff"/>
+        </marker>
+      </defs>
+
+      <!-- Class box -->
+      <rect x="20" y="50" width="180" height="110" rx="10" fill="#1e2235" stroke="#6c63ff" stroke-width="2"/>
+      <rect x="20" y="50" width="180" height="30" rx="10" fill="#2d2a5e"/>
+      <text x="110" y="70" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">class Person</text>
+      <text x="110" y="75" fill="#6c63ff" font-size="8" text-anchor="middle">&#9650;</text>
+      <text x="35" y="100" fill="#c792ea" font-size="9.5">- String name</text>
+      <text x="35" y="115" fill="#c792ea" font-size="9.5">- int age</text>
+      <text x="35" y="133" fill="#82aaff" font-size="9.5">+ void talk()</text>
+      <text x="35" y="148" fill="#82aaff" font-size="9.5">+ void think()</text>
+      <text x="110" y="174" fill="#6c63ff" font-size="9" text-anchor="middle">Blueprint</text>
+
+      <!-- Arrows -->
+      <line x1="202" y1="85" x2="298" y2="85" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#arr4)" stroke-dasharray="5,3"/>
+      <line x1="202" y1="130" x2="298" y2="150" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#arr4)" stroke-dasharray="5,3"/>
+      <text x="250" y="108" fill="#94a3b8" font-size="9" text-anchor="middle">new Person()</text>
+
+      <!-- Object 1 -->
+      <rect x="300" y="30" width="160" height="100" rx="10" fill="#1e2235" stroke="#00d4aa" stroke-width="2"/>
+      <rect x="300" y="30" width="160" height="28" rx="10" fill="#1a2a25"/>
+      <text x="380" y="49" fill="#00d4aa" font-size="10" font-weight="bold" text-anchor="middle">person1 (Object)</text>
+      <text x="315" y="76" fill="#e2e8f0" font-size="9.5">name = "Bob"</text>
+      <text x="315" y="91" fill="#e2e8f0" font-size="9.5">age  = 32</text>
+      <text x="315" y="108" fill="#82aaff" font-size="9">talk(), think()</text>
+      <text x="380" y="145" fill="#00d4aa" font-size="8.5" text-anchor="middle">Instance 1</text>
+
+      <!-- Object 2 -->
+      <rect x="490" y="90" width="165" height="100" rx="10" fill="#1e2235" stroke="#c792ea" stroke-width="2"/>
+      <rect x="490" y="90" width="165" height="28" rx="10" fill="#2a1e2a"/>
+      <text x="572" y="109" fill="#c792ea" font-size="10" font-weight="bold" text-anchor="middle">person2 (Object)</text>
+      <text x="505" y="136" fill="#e2e8f0" font-size="9.5">name = "Diana"</text>
+      <text x="505" y="151" fill="#e2e8f0" font-size="9.5">age  = 28</text>
+      <text x="505" y="168" fill="#82aaff" font-size="9">talk(), think()</text>
+      <text x="572" y="203" fill="#c792ea" font-size="8.5" text-anchor="middle">Instance 2</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ===================== SECTION 8: OOP Pillars ===================== -->
+<section id="oop-pillars">
+  <h2>&#127963;&#65039; Four Pillars of OOP</h2>
+  <div class="card">
+
+    <!-- Abstraction -->
+    <div class="pillar-card" style="border-top-color:#6c63ff;">
+      <h3 style="margin-top:0;color:#6c63ff;">1. Abstraction — Hide Complexity</h3>
+      <p>Show only <strong>what</strong> an object does, hide <strong>how</strong> it does it. A TV remote lets you change channels without knowing the circuit board inside.</p>
+      <div class="two-col">
+        <div>
+          <p style="font-size:0.9rem;"><strong>Real-World Example:</strong> When you press the power button on a TV remote, you don't need to know about the infrared signal frequency, microcontrollers, or internal circuitry. You just see the interface — buttons.</p>
+          <p style="font-size:0.9rem;"><strong>In Java:</strong> Achieved using abstract classes and interfaces. You define <em>what</em> a method does (signature) without implementing <em>how</em>.</p>
+        </div>
+        <svg viewBox="0 0 280 160" width="100%" height="160" style="background:#12152a;border-radius:8px;">
+          <!-- TV -->
+          <rect x="150" y="20" width="110" height="120" rx="8" fill="#1e2235" stroke="#6c63ff" stroke-width="1.5"/>
+          <rect x="158" y="28" width="94" height="60" rx="4" fill="#0a0d1a"/>
+          <text x="205" y="62" fill="#00d4aa" font-size="9" text-anchor="middle">TV Screen</text>
+          <circle cx="170" cy="105" r="6" fill="#f7c948"/>
+          <circle cx="185" cy="105" r="6" fill="#2d3748"/>
+          <circle cx="200" cy="105" r="6" fill="#2d3748"/>
+          <circle cx="215" cy="105" r="6" fill="#2d3748"/>
+          <!-- Remote -->
+          <rect x="20" y="35" width="70" height="110" rx="10" fill="#1e2235" stroke="#00d4aa" stroke-width="1.5"/>
+          <text x="55" y="60" fill="#00d4aa" font-size="8.5" text-anchor="middle">Remote</text>
+          <rect x="28" y="68" width="25" height="14" rx="4" fill="#6c63ff"/>
+          <text x="40" y="79" fill="#fff" font-size="7" text-anchor="middle">PWR</text>
+          <rect x="58" y="68" width="25" height="14" rx="4" fill="#2d3748"/>
+          <text x="70" y="79" fill="#e2e8f0" font-size="7" text-anchor="middle">VOL</text>
+          <rect x="28" y="88" width="25" height="14" rx="4" fill="#2d3748"/>
+          <text x="40" y="99" fill="#e2e8f0" font-size="7" text-anchor="middle">CH+</text>
+          <rect x="58" y="88" width="25" height="14" rx="4" fill="#2d3748"/>
+          <text x="70" y="99" fill="#e2e8f0" font-size="7" text-anchor="middle">CH-</text>
+          <!-- Hidden circuit label -->
+          <rect x="158" y="94" width="94" height="36" rx="4" fill="#0d1a14" stroke="#2d3748" stroke-width="1"/>
+          <text x="205" y="110" fill="#546e7a" font-size="7.5" text-anchor="middle">Circuit Board</text>
+          <text x="205" y="122" fill="#546e7a" font-size="7" text-anchor="middle">(hidden from user)</text>
+          <!-- Arrow -->
+          <line x1="92" y1="85" x2="148" y2="85" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+          <text x="120" y="78" fill="#94a3b8" font-size="7.5" text-anchor="middle">abstracts</text>
+        </svg>
+      </div>
+      <div class="highlight" style="margin-top:0.8rem;">
+        <span class="tag">Note</span> Inheritance and Polymorphism are covered in Week 2 — they build on the foundation established here.
+      </div>
+    </div>
+
+    <!-- Encapsulation -->
+    <div class="pillar-card" style="border-top-color:#00d4aa;">
+      <h3 style="margin-top:0;color:#00d4aa;">2. Encapsulation — Protect Data</h3>
+      <p>Wrap data (variables) and methods that operate on the data into a single unit (class). Make fields <strong>private</strong> and provide <strong>public getter/setter</strong> methods to access them safely.</p>
+      <div class="two-col">
+        <div>
+          <p style="font-size:0.9rem;"><strong>Why Encapsulate?</strong></p>
+          <ul style="font-size:0.88rem;">
+            <li>Prevents direct modification of sensitive data</li>
+            <li>Validation can be added in setters</li>
+            <li>Internal implementation can change without breaking external code</li>
+            <li>Promotes modularity</li>
+          </ul>
+        </div>
+        <svg viewBox="0 0 260 160" width="100%" height="160" style="background:#12152a;border-radius:8px;">
+          <!-- Outer capsule -->
+          <ellipse cx="130" cy="80" rx="115" ry="65" fill="rgba(0,212,170,0.08)" stroke="#00d4aa" stroke-width="2"/>
+          <!-- Middle -->
+          <ellipse cx="130" cy="80" rx="80" ry="45" fill="rgba(108,99,255,0.1)" stroke="#6c63ff" stroke-width="1.5"/>
+          <!-- Inner data -->
+          <ellipse cx="130" cy="80" rx="45" ry="28" fill="rgba(247,201,72,0.15)" stroke="#f7c948" stroke-width="1.5"/>
+          <text x="130" y="85" fill="#f7c948" font-size="8.5" font-weight="bold" text-anchor="middle">private data</text>
+
+          <!-- Labels -->
+          <text x="200" y="48" fill="#6c63ff" font-size="7.5">public</text>
+          <text x="200" y="58" fill="#6c63ff" font-size="7.5">methods</text>
+          <text x="40"  y="105" fill="#00d4aa" font-size="7.5">class</text>
+          <text x="40"  y="115" fill="#00d4aa" font-size="7.5">boundary</text>
+        </svg>
+      </div>
+      <div class="code-cell" style="margin-top:0.8rem;">
+        <div class="code-cell-header"><span>Encapsulation Example</span></div>
+        <div class="code-body"><span class="kw">public</span> <span class="kw">class</span> <span class="cls">BankAccount</span> {
+    <span class="kw">private</span> <span class="kw2">double</span> balance;  <span class="cmt">// private — cannot access directly</span>
+
+    <span class="kw">public</span> <span class="kw2">void</span> <span class="mth">deposit</span>(<span class="kw2">double</span> amount) {
+        <span class="kw">if</span> (amount > <span class="num">0</span>) balance += amount;  <span class="cmt">// validated!</span>
+    }
+
+    <span class="kw">public</span> <span class="kw2">double</span> <span class="mth">getBalance</span>() {
+        <span class="kw">return</span> balance;  <span class="cmt">// controlled read access</span>
+    }
+}</div>
+      </div>
+    </div>
+
+    <!-- Inheritance (brief) -->
+    <div class="pillar-card" style="border-top-color:#f7c948;">
+      <h3 style="margin-top:0;color:#f7c948;">3. Inheritance — Reuse Code</h3>
+      <p>A child class inherits attributes and methods from a parent class using the <code style="color:#c792ea;">extends</code> keyword. This promotes code reuse and establishes an "is-a" relationship.</p>
+      <div class="highlight">
+        <strong>Example:</strong> A <code>Dog</code> class can extend <code>Animal</code> — it inherits eat(), sleep() from Animal and adds its own bark() method.
+        <br><strong>Covered in detail in Week 2.</strong>
+      </div>
+    </div>
+
+    <!-- Polymorphism (brief) -->
+    <div class="pillar-card" style="border-top-color:#ff6b6b;">
+      <h3 style="margin-top:0;color:#ff6b6b;">4. Polymorphism — Many Forms</h3>
+      <p>The ability of an object to take on many forms. One method name can behave differently based on the object type or arguments. Enables flexible, extensible code.</p>
+      <div class="highlight">
+        <strong>Example:</strong> A <code>draw()</code> method called on a <code>Circle</code> draws a circle, on a <code>Square</code> draws a square — same method name, different behaviour.
+        <br><strong>Covered in detail in Week 2.</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 9: Class Structure ===================== -->
+<section id="class-structure">
+  <h2>&#127963;&#65039; Class Structure in Java</h2>
+  <div class="card">
+    <p>A Java class can contain instance variables, static variables, and methods. Understanding the difference between instance and static members is crucial.</p>
+
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>Account.java</span>
+        <button class="run-btn" onclick="runCell('account-output', this)">&#9654; Run</button>
+      </div>
+      <div class="code-body"><span class="kw">public</span> <span class="kw">class</span> <span class="cls">Account</span> {
+    <span class="cmt">// Instance variables — each object gets its own copy</span>
+    <span class="kw">private</span> <span class="kw2">long</span>  accno;
+    <span class="kw">private</span> <span class="kw2">float</span> balance;
+
+    <span class="cmt">// Static variable — SHARED across ALL objects</span>
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw2">float</span> interestRate;
+
+    <span class="cmt">// Instance method — operates on a specific object's data</span>
+    <span class="kw">public</span> <span class="kw2">void</span> <span class="mth">withdraw</span>(<span class="kw2">float</span> amount) {
+        <span class="kw">if</span> (amount <= balance) balance -= amount;
+    }
+
+    <span class="kw">public</span> <span class="kw2">void</span> <span class="mth">deposit</span>(<span class="kw2">float</span> amount) {
+        balance += amount;
+    }
+
+    <span class="cmt">// Static method — belongs to the class, not any object</span>
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw2">void</span> <span class="mth">printInterestRate</span>() {
+        <span class="cls">System</span>.out.<span class="mth">println</span>(<span class="str">"Interest Rate: "</span> + interestRate + <span class="str">"%"</span>);
+    }
+}</div>
+      <div class="output-area" id="account-output">
+        <div class="output-label">Conceptual output (if Account.interestRate = 3.5f; Account.printInterestRate(); is called):</div>Interest Rate: 3.5%</div>
+    </div>
+
+    <!-- Diagram: static vs instance -->
+    <svg viewBox="0 0 700 230" width="100%" height="230" style="background:#12152a;border-radius:10px;display:block;margin:1rem 0;">
+      <!-- Class box at top -->
+      <rect x="250" y="10" width="200" height="50" rx="8" fill="#2d2a5e" stroke="#6c63ff" stroke-width="2"/>
+      <text x="350" y="32" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">class Account</text>
+      <text x="350" y="50" fill="#c792ea" font-size="9" text-anchor="middle">static: interestRate = 3.5%  (shared)</text>
+
+      <!-- Arrow to object 1 -->
+      <line x1="280" y1="62" x2="160" y2="130" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr3)"/>
+      <!-- Arrow to object 2 -->
+      <line x1="350" y1="62" x2="350" y2="130" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr3)"/>
+      <!-- Arrow to object 3 -->
+      <line x1="420" y1="62" x2="540" y2="130" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr3)"/>
+
+      <!-- Object 1 -->
+      <rect x="60"  y="132" width="190" height="80" rx="8" fill="#1a2235" stroke="#00d4aa" stroke-width="1.5"/>
+      <text x="155" y="151" fill="#00d4aa" font-size="10" font-weight="bold" text-anchor="middle">account1 (Object)</text>
+      <text x="75"  y="168" fill="#e2e8f0" font-size="9">accno  = 1001</text>
+      <text x="75"  y="183" fill="#e2e8f0" font-size="9">balance = 5000.00</text>
+      <text x="75"  y="200" fill="#94a3b8" font-size="8.5">instance variables (own copy)</text>
+
+      <!-- Object 2 -->
+      <rect x="265" y="132" width="170" height="80" rx="8" fill="#1a2235" stroke="#00d4aa" stroke-width="1.5"/>
+      <text x="350" y="151" fill="#00d4aa" font-size="10" font-weight="bold" text-anchor="middle">account2 (Object)</text>
+      <text x="275" y="168" fill="#e2e8f0" font-size="9">accno  = 1002</text>
+      <text x="275" y="183" fill="#e2e8f0" font-size="9">balance = 12000.00</text>
+      <text x="275" y="200" fill="#94a3b8" font-size="8.5">instance variables (own copy)</text>
+
+      <!-- Object 3 -->
+      <rect x="450" y="132" width="200" height="80" rx="8" fill="#1a2235" stroke="#00d4aa" stroke-width="1.5"/>
+      <text x="550" y="151" fill="#00d4aa" font-size="10" font-weight="bold" text-anchor="middle">account3 (Object)</text>
+      <text x="460" y="168" fill="#e2e8f0" font-size="9">accno  = 1003</text>
+      <text x="460" y="183" fill="#e2e8f0" font-size="9">balance = 750.00</text>
+      <text x="460" y="200" fill="#94a3b8" font-size="8.5">instance variables (own copy)</text>
+
+      <!-- Static shared annotation -->
+      <text x="350" y="222" fill="#f7c948" font-size="9" text-anchor="middle">All three objects share the SAME interestRate (3.5%) — that's what static means</text>
+    </svg>
+
+    <div class="two-col">
+      <div class="highlight">
+        <h4>Instance Variables</h4>
+        <ul style="font-size:0.88rem;">
+          <li>Each object gets its own copy</li>
+          <li>Created when object is created (with <code>new</code>)</li>
+          <li>Accessed via object reference: <code style="color:#c3e88d;">a1.accno</code></li>
+          <li>Destroyed when object is garbage collected</li>
+        </ul>
+      </div>
+      <div class="highlight2">
+        <h4>Static Variables</h4>
+        <ul style="font-size:0.88rem;">
+          <li>One copy shared by ALL objects</li>
+          <li>Created when class is loaded into memory</li>
+          <li>Accessed via class name: <code style="color:#c3e88d;">Account.interestRate</code></li>
+          <li>Destroyed when JVM terminates</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 10: Constructors ===================== -->
+<section id="constructors">
+  <h2>&#128736;&#65039; Constructors</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>What is a Constructor?</strong> A constructor is a special method that is <em>automatically called</em> when an object is created using <code style="color:#c3e88d;">new</code>. It initializes the object's state.
+    </div>
+
+    <h3>Rules for Constructors</h3>
+    <ul>
+      <li>The constructor name must be <strong>exactly the same as the class name</strong></li>
+      <li>Constructors have <strong>no return type</strong> (not even void)</li>
+      <li>Called automatically when <code style="color:#c3e88d;">new ClassName()</code> is used</li>
+      <li>A class can have multiple constructors (overloading)</li>
+      <li>If no constructor is defined, Java provides a default no-arg constructor</li>
+    </ul>
+
+    <h3>Three Types of Constructors</h3>
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>Circle.java — Default, Parameterized, and Copy Constructors</span>
+        <button class="run-btn" onclick="runCell('circle-code-output', this)">&#9654; Run</button>
+      </div>
+      <div class="code-body"><span class="kw">public</span> <span class="kw">class</span> <span class="cls">Circle</span> {
+    <span class="kw">private</span> <span class="kw2">float</span> radius, area;
+
+    <span class="cmt">// 1. Default Constructor — no parameters, sets default values</span>
+    <span class="kw">public</span> <span class="cls">Circle</span>() {
+        radius = <span class="num">10</span>;
+    }
+
+    <span class="cmt">// 2. Parameterized Constructor — accepts arguments</span>
+    <span class="kw">public</span> <span class="cls">Circle</span>(<span class="kw2">float</span> radius) {
+        <span class="kw">this</span>.radius = radius;  <span class="cmt">// 'this' refers to current object</span>
+    }
+
+    <span class="cmt">// 3. Copy Constructor — creates a copy of another object</span>
+    <span class="kw">public</span> <span class="cls">Circle</span>(<span class="cls">Circle</span> other) {
+        <span class="kw">this</span>.radius = other.radius;
+    }
+
+    <span class="kw">public</span> <span class="kw2">float</span> <span class="mth">findArea</span>() {
+        area = <span class="num">3.14f</span> * radius * radius;
+        <span class="kw">return</span> area;
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw2">void</span> <span class="mth">main</span>(<span class="cls">String</span> s[]) {
+        <span class="cls">Circle</span> c1 = <span class="kw">new</span> <span class="cls">Circle</span>();       <span class="cmt">// default: radius=10</span>
+        <span class="cls">Circle</span> c2 = <span class="kw">new</span> <span class="cls">Circle</span>(<span class="num">5.0f</span>);  <span class="cmt">// parameterized: radius=5</span>
+        <span class="cls">Circle</span> c3 = <span class="kw">new</span> <span class="cls">Circle</span>(c2);    <span class="cmt">// copy: copies c2's radius</span>
+
+        <span class="cls">System</span>.out.<span class="mth">println</span>(<span class="str">"c1 area: "</span> + c1.<span class="mth">findArea</span>());
+        <span class="cls">System</span>.out.<span class="mth">println</span>(<span class="str">"c2 area: "</span> + c2.<span class="mth">findArea</span>());
+        <span class="cls">System</span>.out.<span class="mth">println</span>(<span class="str">"c3 area: "</span> + c3.<span class="mth">findArea</span>());
+    }
+}</div>
+      <div class="output-area" id="circle-code-output">
+        <div class="output-label">Output:</div>c1 area: 314.0
+c2 area: 78.5
+c3 area: 78.5</div>
+    </div>
+
+    <h3>The <code style="color:#c792ea;">this</code> Keyword</h3>
+    <div class="two-col">
+      <div class="highlight">
+        <h4>What does <code>this</code> mean?</h4>
+        <p style="font-size:0.9rem;"><code style="color:#c792ea;">this</code> refers to the <strong>current object</strong>. In the parameterized constructor <code>Circle(float radius)</code>, there's a naming conflict: the parameter is called <code>radius</code> and the instance variable is also called <code>radius</code>. Writing <code>this.radius = radius</code> says: "Set the current object's radius field equal to the parameter radius."</p>
+      </div>
+      <div class="highlight2">
+        <h4>Constructor vs Method</h4>
+        <table style="font-size:0.85rem;margin:0;">
+          <tr><th>Constructor</th><th>Method</th></tr>
+          <tr><td>Same name as class</td><td>Any name</td></tr>
+          <tr><td>No return type</td><td>Has return type</td></tr>
+          <tr><td>Called by new</td><td>Called explicitly</td></tr>
+          <tr><td>Auto-called once</td><td>Can call many times</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Interactive Circle Area Calculator -->
+    <div class="interactive-box">
+      <h3 style="margin-top:0;">&#9711; Interactive: Circle Area Calculator</h3>
+      <p style="color:var(--muted);font-size:0.9rem;">Simulates <code>new Circle(radius)</code> then calls <code>findArea()</code>:</p>
+      <div style="display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;margin-bottom:0.8rem;">
+        <div>
+          <label style="font-size:0.85rem;color:var(--muted);display:block;margin-bottom:0.3rem;">Enter radius (float):</label>
+          <input type="number" id="circle-radius" value="7" step="0.5" style="width:160px;">
+        </div>
+        <div>
+          <button onclick="computeCircleArea()">Compute Area</button>
+        </div>
+      </div>
+      <div class="result-box" id="circle-result" style="display:none;"></div>
+    </div>
+
+    <!-- Constructor comparison table -->
+    <h3>Constructor Types Summary</h3>
+    <table>
+      <tr><th>Type</th><th>Parameters</th><th>Purpose</th><th>Called With</th></tr>
+      <tr><td>Default</td><td>None</td><td>Initialize with default values</td><td><code>new Circle()</code></td></tr>
+      <tr><td>Parameterized</td><td>One or more</td><td>Initialize with specific values</td><td><code>new Circle(5.0f)</code></td></tr>
+      <tr><td>Copy</td><td>Object of same class</td><td>Create duplicate of an object</td><td><code>new Circle(c2)</code></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== SECTION 11: Packages ===================== -->
+<section id="packages">
+  <h2>&#128230; Packages</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>What is a Package?</strong> A package is a namespace that organizes related classes and interfaces. Think of it like folders on a filesystem — they group related files and prevent naming conflicts.
+    </div>
+
+    <h3>Why Use Packages?</h3>
+    <ul>
+      <li><strong>Organization:</strong> Group related classes (e.g., all database classes in one package)</li>
+      <li><strong>Naming Conflicts:</strong> Two classes can have the same name if in different packages (e.g., <code>java.util.Date</code> vs <code>java.sql.Date</code>)</li>
+      <li><strong>Access Control:</strong> Package-private access allows classes in the same package to share internal details</li>
+      <li><strong>Reusability:</strong> Package a set of classes as a library for reuse across projects</li>
+    </ul>
+
+    <h3>Naming Convention</h3>
+    <div class="formula" style="font-size:0.92rem; line-height:2;">
+      Reverse domain + project + module:   <span style="color:#c3e88d;">com.oracle.jdbc.driver</span><br>
+      Company:                              <span style="color:#c3e88d;">com.google.android.app</span><br>
+      Organization:                         <span style="color:#c3e88d;">org.apache.commons.lang</span><br>
+      Your project:                         <span style="color:#c3e88d;">com.example.myapp.utils</span>
+    </div>
+
+    <h3>The <code style="color:#c792ea;">package</code> and <code style="color:#c792ea;">import</code> Keywords</h3>
+    <div class="code-cell">
+      <div class="code-cell-header">
+        <span>com/example/myapp/Hello.java</span>
+        <button class="run-btn" onclick="runCell('package-output', this)">&#9654; Run</button>
+      </div>
+      <div class="code-body"><span class="cmt">// package declaration — MUST be the first line in the file</span>
+<span class="kw">package</span> com.example.myapp;
+
+<span class="cmt">// import statement — brings in classes from other packages</span>
+<span class="kw">import</span> java.util.Scanner;    <span class="cmt">// specific class import</span>
+<span class="kw">import</span> java.io.*;             <span class="cmt">// wildcard — imports all classes in java.io</span>
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="cls">Hello</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw2">void</span> <span class="mth">main</span>(<span class="cls">String</span> s[]) {
+        <span class="cls">Scanner</span> scan = <span class="kw">new</span> <span class="cls">Scanner</span>(<span class="cls">System</span>.in);
+        <span class="cls">System</span>.out.<span class="mth">println</span>(<span class="str">"Package: com.example.myapp"</span>);
+    }
+}</div>
+      <div class="output-area" id="package-output">
+        <div class="output-label">Output:</div>Package: com.example.myapp</div>
+    </div>
+
+    <h3>Built-in Java Packages</h3>
+    <table>
+      <tr><th>Package</th><th>Contains</th><th>Auto-imported?</th></tr>
+      <tr><td><code>java.lang</code></td><td>String, Math, System, Integer, Object, Thread — core language classes</td><td><span class="tag2">Yes — always</span></td></tr>
+      <tr><td><code>java.util</code></td><td>Scanner, ArrayList, HashMap, Date, Collections, Arrays</td><td>No — must import</td></tr>
+      <tr><td><code>java.io</code></td><td>File, FileReader, FileWriter, BufferedReader, InputStream</td><td>No — must import</td></tr>
+      <tr><td><code>java.net</code></td><td>URL, Socket, ServerSocket, HttpURLConnection</td><td>No — must import</td></tr>
+      <tr><td><code>java.math</code></td><td>BigInteger, BigDecimal — for arbitrary precision arithmetic</td><td>No — must import</td></tr>
+      <tr><td><code>java.sql</code></td><td>Connection, Statement, ResultSet — for database access</td><td>No — must import</td></tr>
+    </table>
+
+    <div class="highlight2" style="margin-top:1rem;">
+      <strong>java.lang is always available</strong> — that's why you can use <code>System.out.println()</code>, <code>String</code>, <code>Math.sqrt()</code>, and <code>Integer.parseInt()</code> without any import statement.
+    </div>
+
+    <h3>Package Directory Structure</h3>
+    <div class="formula" style="font-size:0.87rem; text-align:left; line-height:2.2;">
+      Package:  <span style="color:#c3e88d;">com.example.myapp</span><br>
+      Directory: <span style="color:#f7c948;">com/example/myapp/Hello.java</span><br><br>
+      Compile:  <span style="color:#c792ea;">javac -d . com/example/myapp/Hello.java</span><br>
+      Run:      <span style="color:#c792ea;">java com.example.myapp.Hello</span>
+    </div>
+
+    <div class="highlight">
+      <strong>Key Rule:</strong> The package name must exactly match the directory structure. If your file says <code style="color:#c3e88d;">package com.example.myapp;</code>, the file <em>must</em> be located at <code style="color:#c3e88d;">com/example/myapp/</code> from your source root.
+    </div>
+  </div>
+</section>
+
+</div><!-- end container -->
+
+<!-- ============================================================ -->
+<!-- JavaScript -->
+<!-- ============================================================ -->
+<script>
+// ---- Run Button ----
+function runCell(outputId, btn) {
+  const outputEl = document.getElementById(outputId);
+  if (!outputEl) return;
+
+  // Toggle: if already visible, hide it
+  if (outputEl.classList.contains('visible')) {
+    outputEl.classList.remove('visible');
+    btn.textContent = '▶ Run';
+    btn.classList.remove('running');
+    return;
+  }
+
+  // Animate button
+  btn.textContent = '⏳ Running...';
+  btn.classList.add('running');
+  btn.disabled = true;
+
+  setTimeout(function() {
+    outputEl.classList.add('visible');
+    btn.innerHTML = '■ Hide Output';
+    btn.classList.remove('running');
+    btn.disabled = false;
+  }, 500);
+}
+
+// ---- Addition Interactive ----
+function runAddition() {
+  const n1 = parseFloat(document.getElementById('add-num1').value) || 0;
+  const n2 = parseFloat(document.getElementById('add-num2').value) || 0;
+  const result = n1 + n2;
+  const box = document.getElementById('addition-result');
+  box.style.display = 'block';
+  box.innerHTML =
+    '<span style="color:var(--muted);font-size:0.82rem;">Simulated JVM output:</span><br>' +
+    '<span style="font-family:monospace;font-size:1rem;">Result=' + result + '</span>';
+}
+
+// ---- Circle Area Calculator ----
+function computeCircleArea() {
+  const r = parseFloat(document.getElementById('circle-radius').value);
+  if (isNaN(r) || r <= 0) {
+    const box = document.getElementById('circle-result');
+    box.style.display = 'block';
+    box.style.borderColor = '#ff6b6b';
+    box.style.color = '#ff6b6b';
+    box.textContent = 'Please enter a positive radius value.';
+    return;
+  }
+  const area = (3.14 * r * r).toFixed(4);
+  const box = document.getElementById('circle-result');
+  box.style.display = 'block';
+  box.style.borderColor = 'var(--accent2)';
+  box.style.color = 'var(--accent2)';
+  box.innerHTML =
+    '<span style="color:var(--muted);font-size:0.82rem;">Simulated: new Circle(' + r + 'f).findArea()</span><br>' +
+    '<span style="font-family:monospace;font-size:1rem;">' +
+      'radius = ' + r + 'f<br>' +
+      'area   = 3.14 &times; ' + r + ' &times; ' + r + ' = <strong>' + area + '</strong>' +
+    '</span>';
+}
+
+// ---- Feature Card Toggle ----
+function toggleFeature(card) {
+  card.classList.toggle('open');
+}
+
+// ---- Nav active link on scroll ----
+document.querySelectorAll('nav a').forEach(function(link) {
+  link.addEventListener('click', function() {
+    document.querySelectorAll('nav a').forEach(function(l) { l.classList.remove('active'); });
+    this.classList.add('active');
+  });
+});
+
+window.addEventListener('scroll', function() {
+  var sections = document.querySelectorAll('section[id]');
+  var current = '';
+  sections.forEach(function(s) {
+    if (window.scrollY >= s.offsetTop - 160) current = s.id;
+  });
+  document.querySelectorAll('nav a').forEach(function(a) {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+});
+</script>
+
+<style>
+.xn-extra-wrap{max-width:1100px;margin:2.5rem auto;padding:0 1.5rem;}
+.xn-intro{background:rgba(108,99,255,.08);border-left:4px solid #6c63ff;border-radius:0 8px 8px 0;padding:1rem 1.2rem;margin:1rem 0 1.5rem;color:var(--muted);font-size:.92rem;}
+.xn-prob{background:var(--card);border:1px solid var(--border);border-left:4px solid #6c63ff;border-radius:10px;padding:1.1rem 1.2rem;margin:1rem 0;}
+.xn-q{margin-bottom:.75rem;color:var(--text);}
+.xn-tag{display:inline-block;background:#6c63ff;color:#fff;font-size:.72rem;font-weight:700;padding:.14rem .6rem;border-radius:20px;margin-right:.45rem;vertical-align:middle;}
+.xn-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.xn-in{background:#12152a;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.5rem .85rem;font-size:.95rem;min-width:180px;font-family:'Cascadia Code','Fira Code',monospace;}
+.xn-in:focus{outline:none;border-color:#6c63ff;}
+.xn-check,.xn-toggle{border:none;border-radius:8px;padding:.5rem 1.15rem;cursor:pointer;font-weight:700;font-size:.88rem;}
+.xn-check{background:#6c63ff;color:#fff;}
+.xn-check:hover{background:#574fd6;}
+.xn-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.xn-toggle:hover{border-color:#00d4aa;color:#00d4aa;}
+.xn-fb{margin-top:.65rem;font-weight:700;font-size:.9rem;min-height:1rem;}
+.xn-fb.xn-ok{color:#00d4aa;}
+.xn-fb.xn-no{color:#ff6b6b;}
+.xn-fb.xn-warn{color:#f7c948;}
+.xn-sol{display:none;margin-top:.85rem;padding:.95rem 1.05rem;background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.3);border-radius:8px;font-size:.9rem;color:var(--text);}
+.xn-sol.open{display:block;animation:xnfade .25s ease;}
+@keyframes xnfade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.xn-sol .xf{background:#12152a;color:#f7c948;font-family:'Cascadia Code','Fira Code',monospace;padding:.55rem .85rem;border-radius:6px;margin:.45rem 0;overflow-x:auto;white-space:pre-wrap;font-size:.86rem;}
+.xn-sol b{color:#00d4aa;}
+.xn-opts{display:flex;flex-direction:column;gap:.45rem;margin-top:.4rem;}
+.xn-opt{text-align:left;background:#12152a;border:1px solid var(--border);color:var(--text);padding:.55rem .85rem;border-radius:6px;cursor:pointer;font-size:.9rem;font-family:inherit;}
+.xn-opt:hover:not(:disabled){border-color:#6c63ff;}
+.xn-opt.xn-ok{background:rgba(0,212,170,.18);border-color:#00d4aa;color:#00d4aa;font-weight:700;}
+.xn-opt.xn-no{background:rgba(255,107,107,.15);border-color:#ff6b6b;color:#ff6b6b;}
+.xn-codeblock{background:#12152a;border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;font-family:'Cascadia Code','Fira Code',monospace;font-size:.85rem;line-height:1.6;white-space:pre;overflow-x:auto;margin:.5rem 0 .8rem;color:#e2e8f0;}
+</style>
+
+<section id="xn-extra" class="xn-extra-wrap">
+  <h2>🔢 Engineered Numerical Practice</h2>
+  <div class="xn-intro">
+    Fresh exam-style computational problems built from this week's concepts. Type your answer and hit
+    <b>Check</b> for instant feedback, or reveal the worked steps. <em>(Press Enter in any answer box to check.)</em>
+  </div>
+
+  <div class="xn-prob" data-ans="10" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP1</span><b>Operator precedence &amp; integer division.</b>
+      Evaluate the expression and give the <code>int</code> result:
+      <div class="xn-codeblock">int x = 7 + 4 % 3 * 5 - 8 / 3;</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="integer result">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>%</code>, <code>*</code>, <code>/</code> bind tighter than <code>+</code> / <code>-</code>, evaluated left to right.
+      <div class="xf">4 % 3      = 1
+1 * 5      = 5
+8 / 3      = 2     (integer division, truncates)
+7 + 5 - 2  = 10</div>
+      Result = <b>10</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="153.86" data-tol="0.05" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP2</span><b>Circle area.</b>
+      The <code>Circle</code> class computes area as <code>3.14f * radius * radius</code>. For a circle of
+      <code>radius = 7</code>, what value does <code>findArea()</code> return?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="decimal" placeholder="area">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Using π ≈ 3.14 as in the notes:
+      <div class="xf">area = 3.14 * 7 * 7
+     = 3.14 * 49
+     = 153.86</div>
+      Result = <b>153.86</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="-56" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP3</span><b>Narrowing cast / overflow.</b>
+      A <code>byte</code> is 8-bit signed (range −128..127). What is printed?
+      <div class="xn-codeblock">byte b = (byte) 200;
+System.out.println(b);</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="value of b">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      200 exceeds the byte max (127), so it wraps within the 256-value range:
+      <div class="xf">200 - 256 = -56</div>
+      (Equivalently 200 = 11001000₂; as signed 8-bit that is −56.) Result = <b>-56</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="25" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP4</span><b>Char / ASCII arithmetic.</b>
+      Characters use Unicode code points (<code>'A'</code> = 65). What integer is printed?
+      <div class="xn-codeblock">char a = 'A', z = 'Z';
+System.out.println(z - a);</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="integer">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>'Z'</code> = 90, <code>'A'</code> = 65. In arithmetic, chars promote to <code>int</code>:
+      <div class="xf">90 - 65 = 25</div>
+      Result = <b>25</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="3" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP5</span><b>Ternary operator.</b>
+      What value is assigned to <code>diff</code>?
+      <div class="xn-codeblock">int a = 8, b = 5;
+int diff = (a &gt; b) ? a - b : b - a;</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="diff">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>a &gt; b</code> is <code>8 &gt; 5</code> → <code>true</code>, so the first branch <code>a - b</code> is taken:
+      <div class="xf">8 - 5 = 3</div>
+      Result = <b>3</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="6" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP6</span><b>Integer division &amp; modulo.</b>
+      Evaluate the <code>int</code> result:
+      <div class="xn-codeblock">int r = 18 / 4 + 18 % 4;</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="r">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">18 / 4 = 4     (quotient, truncated)
+18 % 4 = 2     (remainder)
+4 + 2  = 6</div>
+      Result = <b>6</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="9" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP7</span><b>Post-increment evaluation.</b>
+      What value is assigned to <code>y</code>?
+      <div class="xn-codeblock">int x = 4;
+int y = x++ + x++;</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="y">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Each <code>x++</code> uses the current value, then increments. Evaluated left to right:
+      <div class="xf">first  x++ → uses 4, x becomes 5
+second x++ → uses 5, x becomes 6
+y = 4 + 5 = 9</div>
+      Result = <b>9</b> (and <code>x</code> ends at 6).
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="256" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP8</span><b>Data-type range.</b>
+      A <code>byte</code> in Java is an 8-bit signed integer. How many <i>distinct</i> values can a single
+      <code>byte</code> variable represent?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="count">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      8 bits → <code>2⁸</code> bit patterns:
+      <div class="xf">2^8 = 256     (range -128 .. 127, inclusive = 256 values)</div>
+      Result = <b>256</b>.
+    </div>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  if(window.__xnInit) return; window.__xnInit=true;
+  function num(s){
+    if(s==null) return NaN;
+    s=(''+s).replace(/−/g,'-').replace(/[^0-9.\-]/g,'');
+    if(s===''||s==='-'||s==='.') return NaN;
+    return parseFloat(s);
+  }
+  window.xnCheck=function(btn){
+    var p=btn.closest('.xn-prob'); if(!p) return;
+    var ans=parseFloat(p.getAttribute('data-ans'));
+    var tol=parseFloat(p.getAttribute('data-tol')||'0.05');
+    var unit=p.getAttribute('data-unit')||'';
+    var inp=p.querySelector('.xn-in'); var fb=p.querySelector('.xn-fb');
+    var v=num(inp.value);
+    if(isNaN(v)){ fb.className='xn-fb xn-warn'; fb.textContent='⚠ Enter a numeric answer first.'; return; }
+    if(Math.abs(v-ans)<=tol){ fb.className='xn-fb xn-ok'; fb.innerHTML='✓ Correct! Answer = '+ans+unit; }
+    else { fb.className='xn-fb xn-no'; fb.innerHTML='✗ Not quite — you entered '+v+'. Try again, or reveal the steps.'; }
+  };
+  window.xnToggle=function(btn){
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol');
+    var open=s.classList.toggle('open'); btn.textContent=open?'Hide steps':'Show steps';
+  };
+  window.xnPick=function(btn,ok){
+    var box=btn.parentElement;
+    box.querySelectorAll('.xn-opt').forEach(function(b){b.disabled=true; b.style.cursor='default';});
+    btn.classList.add(ok?'xn-ok':'xn-no');
+    if(!ok){ box.querySelectorAll('.xn-opt').forEach(function(b){ if(b.getAttribute('data-correct')==='1') b.classList.add('xn-ok'); }); }
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol'); if(s) s.classList.add('open');
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter' && e.target.classList && e.target.classList.contains('xn-in')){
+      var b=e.target.closest('.xn-prob').querySelector('.xn-check'); if(b) b.click();
+    }
+  });
+})();
+</script>
+
+<section id="xn-mcq" class="xn-extra-wrap">
+  <h2>📝 Exam-Style MCQs — 2 Marks Each</h2>
+  <p style="opacity:.85;font-size:.95em;margin-bottom:1rem;">Each question is worth 2 marks — a mix of applied numerical and conceptual items. Click an option to check it; the correct answer and explanation appear instantly.</p>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q1 · 2 marks</span> Applying Java operator precedence and integer division, what value is assigned to <code>z</code>?
+      <div class="xn-codeblock">int z = 6 + 8 / 2 * 3 - 4 % 3;</div>
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 2</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 13</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 17</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 5</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>*</code>, <code>/</code>, <code>%</code> bind tighter than <code>+</code>/<code>-</code> and are evaluated left to right.
+      <div class="xf">8 / 2      = 4
+4 * 3      = 12
+4 % 3      = 1
+6 + 12 - 1 = 17</div>
+      Reading strictly left-to-right (ignoring precedence) gives 2 — a common mistake. The answer is <b>17</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q2 · 2 marks</span> A <code>byte</code> is an 8-bit signed type (range −128..127). What is printed?
+      <div class="xn-codeblock">byte b = (byte) 300;
+System.out.println(b);</div>
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) 44</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 300</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 127</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) -44</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Narrowing to <code>byte</code> keeps only the low 8 bits, so the value wraps within the 256-value range.
+      <div class="xf">300 mod 256 = 300 - 256 = 44
+44 is within -128..127, so it stays 44</div>
+      Java does not clamp to 127 (that is the distractor), and 300 is not representable. The answer is <b>44</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q3 · 2 marks</span> Characters use Unicode code points (<code>'A'</code> = 65). What integer is printed?
+      <div class="xn-codeblock">char c = (char) ('A' + 25);
+System.out.println((int) c);</div>
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) 90</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 89</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 25</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 65</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      In arithmetic, <code>char</code> promotes to <code>int</code>; the cast back to <code>char</code> then to <code>int</code> preserves the code point.
+      <div class="xf">'A' + 25 = 65 + 25 = 90   (the character 'Z')
+(int) c = 90</div>
+      The answer is <b>90</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q4 · 2 marks</span> A developer compiles <code>Hello.java</code> on a Windows machine and ships only the resulting <code>Hello.class</code> file to a colleague running Linux, who executes it unchanged. Which statement best explains why this works?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) The <code>.class</code> file is native machine code recompiled automatically by Linux.</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Java source is interpreted directly, so no compilation step is involved.</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) The compiler emits platform-neutral bytecode that each platform's JVM interprets/JIT-compiles at runtime.</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) The JDK on Linux re-translates the Windows binary into Linux instructions.</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      "Write Once, Run Anywhere" works because <code>javac</code> produces <b>bytecode</b> — an intermediate format independent of any CPU/OS. Each platform ships its own JVM, which loads that same bytecode and executes it. The bytecode itself is not native code (rules out A and D), and Java is compiled, not directly source-interpreted (rules out B). The answer is <b>C</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q5 · 2 marks</span> A <code>BankAccount</code> class keeps its <code>balance</code> field <code>private</code> and exposes only <code>deposit()</code> and <code>withdraw()</code> methods that validate the amount before changing the balance. Which OOP pillar does this design primarily demonstrate?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Inheritance</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Polymorphism</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Abstraction</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">D) Encapsulation</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Hiding the data (<code>private balance</code>) and forcing all access through validated public methods is the definition of <b>encapsulation</b> — bundling state with the methods that guard it. Inheritance is about reuse via parent/child classes; polymorphism is "one interface, many forms"; abstraction is hiding implementation behind a simpler model. The pillar shown here is <b>Encapsulation</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q6 · 2 marks</span> Consider a class that declares <em>no</em> constructor at all, plus a second class that declares only a constructor taking parameters. Which statement is correct?
+      <div class="xn-codeblock">class A { int x; }                       // no constructor
+class B { B(int n) { /* ... */ } }       // only a parameterized one</div>
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Both <code>new A()</code> and <code>new B()</code> compile, because Java always adds a no-arg constructor.</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) <code>new A()</code> compiles (default constructor), but <code>new B()</code> fails — no no-arg constructor exists.</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Neither compiles, because every class must define an explicit constructor.</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) <code>new A()</code> fails because <code>A</code> has no constructor, but <code>new B()</code> compiles.</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The compiler supplies an implicit no-arg <b>default constructor</b> only when a class declares <em>no</em> constructor. <code>A</code> qualifies, so <code>new A()</code> works. Once you declare <em>any</em> constructor (as <code>B</code> does), the default is <em>not</em> generated, so <code>new B()</code> with no arguments fails to compile. The answer is <b>B</b>.
+    </div>
+  </div>
+</section>
+<script src="../claude-tutor.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 5 – Probabilistic Learning & Naive Bayes</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d2e; --accent:#6c63ff; --accent2:#00d4aa; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --code:#2d3748; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+  header { background:linear-gradient(135deg,#6c63ff,#00d4aa); padding:3rem 2rem; text-align:center; }
+  header h1 { font-size:2.5rem; font-weight:800; color:#fff; }
+  header p { font-size:1.1rem; color:rgba(255,255,255,0.85); margin-top:0.5rem; }
+  nav { background:var(--card); border-bottom:2px solid var(--accent); display:flex; flex-wrap:wrap; gap:0.25rem; padding:0.75rem 1rem; position:sticky; top:0; z-index:100; }
+  nav a { color:var(--muted); text-decoration:none; padding:0.4rem 1rem; border-radius:6px; font-size:0.9rem; transition:all 0.2s; }
+  nav a:hover, nav a.active { background:var(--accent); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:2rem 1.5rem; }
+  section { margin-bottom:3rem; }
+  h2 { font-size:1.8rem; color:var(--accent); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  h3 { font-size:1.2rem; color:var(--accent2); margin:1.2rem 0 0.6rem; }
+  h4 { font-size:1rem; color:#f7c948; margin:0.8rem 0 0.3rem; }
+  p { margin-bottom:0.8rem; color:var(--text); }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .highlight { border-left:4px solid var(--accent); padding-left:1rem; background:rgba(108,99,255,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight2 { border-left:4px solid var(--accent2); padding-left:1rem; background:rgba(0,212,170,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight3 { border-left:4px solid #f7c948; background:rgba(247,201,72,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .formula { background:var(--code); border-radius:8px; padding:1rem 1.5rem; font-family:monospace; font-size:1.1rem; color:#f7c948; text-align:center; margin:1rem 0; overflow-x:auto; }
+  .formula-sm { background:var(--code); border-radius:8px; padding:0.6rem 1rem; font-family:monospace; font-size:0.95rem; color:#f7c948; margin:0.6rem 0; overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+  th { background:var(--accent); color:#fff; padding:0.7rem 1rem; text-align:left; }
+  td { padding:0.6rem 1rem; border-bottom:1px solid var(--border); }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.03); }
+  ul,ol { padding-left:1.5rem; margin-bottom:0.8rem; }
+  li { margin-bottom:0.3rem; }
+  .tag { background:var(--accent); color:#fff; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag2 { background:var(--accent2); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag3 { background:#f7c948; color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  svg text { font-family:'Segoe UI',sans-serif; }
+  .step { display:flex; gap:1rem; align-items:flex-start; margin-bottom:0.8rem; }
+  .step-num { background:var(--accent); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:700px) { .two-col { grid-template-columns:1fr; } header h1 { font-size:1.8rem; } }
+  .interactive-box { background:var(--card); border:2px solid var(--accent); border-radius:12px; padding:1.5rem; margin:1.5rem 0; }
+  input[type=number],input[type=text],select { background:var(--code); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:0.4rem 0.8rem; font-size:0.95rem; width:100%; margin-bottom:0.5rem; }
+  button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:0.6rem 1.5rem; cursor:pointer; font-size:0.95rem; font-weight:600; transition:opacity 0.2s; }
+  button:hover { opacity:0.85; }
+  .result-box { background:rgba(0,212,170,0.1); border:1px solid var(--accent2); border-radius:8px; padding:1rem; margin-top:1rem; font-weight:600; color:var(--accent2); min-height:2rem; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+  @media(max-width:700px) { .grid3 { grid-template-columns:1fr; } }
+  .prob-bar { height:22px; border-radius:4px; display:flex; align-items:center; padding:0 8px; font-size:0.8rem; font-weight:700; color:#fff; margin:2px 0; transition:width 0.4s ease; }
+  .calc-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:0.8rem; }
+  @media(max-width:600px) { .calc-row { grid-template-columns:1fr; } }
+  code { background:var(--code); color:#00d4aa; padding:0.1rem 0.4rem; border-radius:4px; font-size:0.9rem; }
+  .worked-step { background:rgba(108,99,255,0.06); border:1px solid rgba(108,99,255,0.2); border-radius:8px; padding:1rem 1.2rem; margin:0.5rem 0; }
+  .big-result { background:rgba(0,212,170,0.12); border:2px solid var(--accent2); border-radius:10px; padding:1.2rem 1.5rem; margin:1rem 0; text-align:center; font-size:1.1rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>📊 Week 5: Probabilistic Learning</h1>
+  <p>Bayes' Theorem · MAP vs MLE · Naive Bayes · Laplace Smoothing · Gaussian NB · Text Classification</p>
+</header>
+<nav>
+  <a href="#prob" class="active">Probability</a>
+  <a href="#bayes">Bayes' Theorem</a>
+  <a href="#map-mle">MAP vs MLE</a>
+  <a href="#nb">Naive Bayes</a>
+  <a href="#laplace">Laplace Smoothing</a>
+  <a href="#gaussian">Gaussian NB</a>
+  <a href="#text">Text Classification</a>
+  <a href="#preprocess">Text Preprocessing</a>
+  <a href="#interactive">Interactive Tools</a>
+</nav>
+
+<div class="container">
+
+<!-- SECTION 1: Probability Fundamentals -->
+<section id="prob">
+  <h2>🎲 Probability Fundamentals Review</h2>
+  <div class="card">
+    <p>Before we can understand probabilistic classifiers, we need to be comfortable with three key probability concepts — prior, likelihood, and posterior.</p>
+
+    <div class="grid3">
+      <div class="card" style="border-top:4px solid #6c63ff; background:#1e1b3a;">
+        <h4 style="margin-top:0; font-size:1rem;">Prior Probability P(h)</h4>
+        <p>Your <strong>initial belief</strong> about hypothesis h <em>before</em> seeing any data.</p>
+        <p><strong>Example:</strong> Before any test, the probability someone has a disease is P(disease) = 0.001 (1 in 1000).</p>
+        <p style="color:#6c63ff; font-weight:700;">Reflects background knowledge.</p>
+      </div>
+      <div class="card" style="border-top:4px solid #00d4aa; background:#0d2b1e;">
+        <h4 style="margin-top:0; font-size:1rem;">Likelihood P(D|h)</h4>
+        <p>The probability of <strong>observing data D</strong> if hypothesis h is true.</p>
+        <p><strong>Example:</strong> P(positive test | disease) = 0.99 (the test is 99% sensitive).</p>
+        <p style="color:#00d4aa; font-weight:700;">How well the hypothesis explains the data.</p>
+      </div>
+      <div class="card" style="border-top:4px solid #f7c948; background:#1f1a00;">
+        <h4 style="margin-top:0; font-size:1rem;">Posterior Probability P(h|D)</h4>
+        <p>Your <strong>updated belief</strong> about h <em>after</em> seeing data D.</p>
+        <p><strong>Example:</strong> P(disease | positive test) = ? (what we want to compute)</p>
+        <p style="color:#f7c948; font-weight:700;">The goal of Bayesian inference.</p>
+      </div>
+    </div>
+
+    <h3>Bayesian Updating — Visual Flow</h3>
+    <svg viewBox="0 0 750 200" width="100%" height="200" style="background:#12152a;border-radius:10px;">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+        </marker>
+        <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#f7c948"/>
+        </marker>
+      </defs>
+      <!-- Prior box -->
+      <rect x="20" y="60" width="150" height="80" rx="10" fill="#1e1b3a" stroke="#6c63ff" stroke-width="2"/>
+      <text x="95" y="92" fill="#6c63ff" font-size="13" font-weight="bold" text-anchor="middle">Prior P(h)</text>
+      <text x="95" y="112" fill="#94a3b8" font-size="10" text-anchor="middle">Initial belief</text>
+      <text x="95" y="128" fill="#e2e8f0" font-size="11" text-anchor="middle">P(disease)=0.001</text>
+      <!-- Arrow 1 -->
+      <line x1="172" y1="100" x2="218" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+      <!-- Likelihood box -->
+      <rect x="220" y="60" width="160" height="80" rx="10" fill="#0d2b1e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="300" y="88" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">Likelihood P(D|h)</text>
+      <text x="300" y="108" fill="#94a3b8" font-size="10" text-anchor="middle">How data fits hypothesis</text>
+      <text x="300" y="128" fill="#e2e8f0" font-size="11" text-anchor="middle">P(+|disease)=0.99</text>
+      <!-- Arrow 2 -->
+      <line x1="382" y1="100" x2="428" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+      <!-- Bayes box -->
+      <rect x="430" y="40" width="130" height="50" rx="8" fill="#2d3748" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="495" y="62" fill="#f7c948" font-size="11" font-weight="bold" text-anchor="middle">Bayes' Theorem</text>
+      <text x="495" y="80" fill="#e2e8f0" font-size="9" text-anchor="middle">× prior / evidence</text>
+      <!-- Posterior box -->
+      <rect x="580" y="60" width="155" height="80" rx="10" fill="#1f1a00" stroke="#f7c948" stroke-width="2"/>
+      <text x="657" y="92" fill="#f7c948" font-size="13" font-weight="bold" text-anchor="middle">Posterior P(h|D)</text>
+      <text x="657" y="112" fill="#94a3b8" font-size="10" text-anchor="middle">Updated belief</text>
+      <text x="657" y="128" fill="#e2e8f0" font-size="11" text-anchor="middle">P(disease|+) ≈ 0.09</text>
+      <!-- Arrow 3 -->
+      <line x1="560" y1="100" x2="578" y2="100" stroke="#f7c948" stroke-width="2" marker-end="url(#arr2)"/>
+      <!-- Label -->
+      <text x="375" y="185" fill="#94a3b8" font-size="10" text-anchor="middle">Prior belief + New evidence → Updated belief</text>
+    </svg>
+
+    <h3>Medical Test Worked Example</h3>
+    <p>This is one of the most counter-intuitive results in probability — the <strong>base-rate fallacy</strong>.</p>
+    <div class="highlight3">
+      <strong>Given:</strong><br>
+      P(disease) = 0.001 &nbsp;(1 in 1000 people have the disease)<br>
+      P(+ | disease) = 0.99 &nbsp;(sensitivity: 99% — test correctly identifies sick people)<br>
+      P(+ | no disease) = 0.01 &nbsp;(1 − specificity: 1% false positive rate)<br>
+      <br>
+      <strong>Question:</strong> If you test positive, what is the probability you actually have the disease?
+    </div>
+
+    <h3>Step-by-Step Solution</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <strong>Compute P(D) — the total probability of testing positive (evidence):</strong><br>
+        P(+) = P(+|disease)×P(disease) + P(+|no disease)×P(no disease)<br>
+        P(+) = 0.99×0.001 + 0.01×0.999<br>
+        P(+) = 0.00099 + 0.00999 = <strong>0.01098</strong>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <strong>Apply Bayes' Theorem:</strong><br>
+        P(disease | +) = P(+ | disease) × P(disease) / P(+)<br>
+        P(disease | +) = (0.99 × 0.001) / 0.01098<br>
+        P(disease | +) = 0.00099 / 0.01098 ≈ <strong>0.0902 ≈ 9%</strong>
+      </div>
+    </div>
+    <div class="highlight2">
+      <strong>Surprising result!</strong> Even with a 99%-accurate test, a positive result only means ~9% chance of disease. Why? Because the disease is so rare (0.1%) that false positives (1% of the 99.9% healthy people) outnumber true positives. This is the <strong>base-rate fallacy</strong> — ignoring the prior can lead to massively incorrect intuitions.
+    </div>
+
+    <h3>Visualising the 1000 People</h3>
+    <svg viewBox="0 0 700 220" width="100%" height="220" style="background:#12152a;border-radius:10px;padding:8px;">
+      <!-- 1000 people total -->
+      <text x="350" y="22" fill="#e2e8f0" font-size="12" font-weight="bold" text-anchor="middle">1000 People Tested</text>
+      <!-- Split: sick vs healthy -->
+      <rect x="20" y="35" width="8" height="130" rx="3" fill="#ff6b6b"/>
+      <text x="32" y="70" fill="#ff6b6b" font-size="11">1 person with disease</text>
+      <text x="32" y="87" fill="#94a3b8" font-size="10">→ 0.99 × 1 ≈ 1 tests positive (TP)</text>
+      <text x="32" y="103" fill="#94a3b8" font-size="10">→ 0.01 × 1 ≈ 0 tests negative (FN)</text>
+      <rect x="20" y="175" width="680" height="8" rx="3" fill="#2d3748"/>
+      <rect x="20" y="175" width="8" height="8" rx="2" fill="#ff6b6b"/>
+      <rect x="30" y="175" width="672" height="8" rx="2" fill="#00d4aa" opacity="0.6"/>
+      <text x="350" y="200" fill="#e2e8f0" font-size="11" text-anchor="middle">999 healthy (teal) | 1 diseased (red)</text>
+      <!-- Healthy split -->
+      <rect x="420" y="35" width="260" height="130" rx="8" fill="rgba(0,212,170,0.07)" stroke="#00d4aa" stroke-width="1"/>
+      <text x="550" y="58" fill="#00d4aa" font-size="11" font-weight="bold" text-anchor="middle">999 Healthy People</text>
+      <rect x="430" y="65" width="105" height="40" rx="6" fill="rgba(255,107,107,0.2)" stroke="#ff6b6b" stroke-width="1"/>
+      <text x="482" y="84" fill="#ff6b6b" font-size="10" text-anchor="middle">~10 test positive</text>
+      <text x="482" y="98" fill="#94a3b8" font-size="9" text-anchor="middle">(False Positives)</text>
+      <rect x="545" y="65" width="120" height="40" rx="6" fill="rgba(0,212,170,0.15)" stroke="#00d4aa" stroke-width="1"/>
+      <text x="605" y="84" fill="#00d4aa" font-size="10" text-anchor="middle">~989 test negative</text>
+      <text x="605" y="98" fill="#94a3b8" font-size="9" text-anchor="middle">(True Negatives)</text>
+      <!-- Conclusion -->
+      <rect x="20" y="130" width="380" height="38" rx="8" fill="rgba(108,99,255,0.12)" stroke="#6c63ff" stroke-width="1"/>
+      <text x="210" y="148" fill="#6c63ff" font-size="11" font-weight="bold" text-anchor="middle">Among all positive tests: 1 TP + ~10 FP = ~11 positives</text>
+      <text x="210" y="163" fill="#e2e8f0" font-size="10" text-anchor="middle">P(disease | +) = 1/11 ≈ 9%</text>
+    </svg>
+  </div>
+</section>
+
+<!-- SECTION 2: Bayes Theorem -->
+<section id="bayes">
+  <h2>📐 Bayes' Theorem</h2>
+  <div class="card">
+    <p>Bayes' Theorem is the mathematical backbone of probabilistic machine learning. It tells us how to update our beliefs in light of new evidence.</p>
+
+    <div class="formula">P(h|D) = P(D|h) × P(h) / P(D)</div>
+
+    <div class="two-col">
+      <div>
+        <h4>Each Term Explained</h4>
+        <ul>
+          <li><strong style="color:#f7c948;">P(h|D)</strong> — <em>Posterior</em>: probability of hypothesis given data</li>
+          <li><strong style="color:#00d4aa;">P(D|h)</strong> — <em>Likelihood</em>: probability of data given hypothesis</li>
+          <li><strong style="color:#6c63ff;">P(h)</strong> — <em>Prior</em>: initial belief about hypothesis</li>
+          <li><strong style="color:#e2e8f0;">P(D)</strong> — <em>Evidence/Normaliser</em>: total probability of the data</li>
+        </ul>
+        <div class="highlight">
+          <p><strong>The normaliser P(D):</strong></p>
+          <p>P(D) = Σ P(D|hᵢ)×P(hᵢ) over all hypotheses hᵢ</p>
+          <p>For binary hypotheses: P(D) = P(D|h)P(h) + P(D|¬h)P(¬h)</p>
+          <p>This ensures P(h|D) is a valid probability (sums to 1).</p>
+        </div>
+      </div>
+      <div>
+        <h4>Intuition: Belief Update</h4>
+        <p>Think of Bayes' theorem as a <em>belief update machine</em>:</p>
+        <div class="formula-sm">Posterior ∝ Likelihood × Prior</div>
+        <p>The evidence P(D) is just a normalising constant — we can think of it as:</p>
+        <div class="formula-sm">New Belief = How well data fits × Old Belief</div>
+        <p>Each new observation updates our beliefs. With enough data, the prior becomes irrelevant — the likelihood dominates.</p>
+        <div class="highlight2">
+          <strong>Key insight:</strong> Bayesian learning is incremental. Today's posterior becomes tomorrow's prior as new evidence arrives.
+        </div>
+      </div>
+    </div>
+
+    <h3>Toy Example: Is a Coin Fair?</h3>
+    <p>Suppose we have a coin. We want to know: is it fair (P(H)=0.5) or biased (P(H)=0.9)?</p>
+    <table>
+      <tr><th>Observation</th><th>Prior P(fair)</th><th>Likelihood update</th><th>Posterior P(fair)</th></tr>
+      <tr><td>No flips yet</td><td>0.50</td><td>—</td><td>0.50</td></tr>
+      <tr><td>Flip 1: Heads</td><td>0.50</td><td>P(H|fair)=0.5, P(H|biased)=0.9</td><td>0.50×0.5 / [0.50×0.5+0.50×0.9] ≈ 0.36</td></tr>
+      <tr><td>Flip 2: Heads</td><td>0.36</td><td>Another heads update</td><td>≈ 0.25</td></tr>
+      <tr><td>Flip 3: Heads</td><td>0.25</td><td>Another heads update</td><td>≈ 0.16</td></tr>
+      <tr><td>Flip 4: Tails</td><td>0.16</td><td>P(T|fair)=0.5, P(T|biased)=0.1</td><td>≈ 0.44 (jumps back up)</td></tr>
+    </table>
+    <p>Each new observation updates our belief that the coin is fair.</p>
+  </div>
+</section>
+
+<!-- SECTION 3: MAP vs MLE -->
+<section id="map-mle">
+  <h2>🎯 MAP vs MLE</h2>
+  <div class="card">
+    <p>In machine learning, we often want to find the <em>best</em> hypothesis h given data D. There are two main approaches.</p>
+
+    <div class="two-col">
+      <div class="card" style="background:#1a1030; border-top:4px solid #6c63ff;">
+        <h3 style="margin-top:0;">Maximum Likelihood Estimation (MLE)</h3>
+        <div class="formula-sm">h_MLE = argmax P(D|h)</div>
+        <p>Find the hypothesis that makes the observed data <em>most probable</em>. Ignores the prior entirely — just maximises how well the hypothesis explains the data.</p>
+        <p><strong>Intuition:</strong> "Which coin bias makes these 10 flips most likely?"</p>
+        <p><strong>If you observe 7 heads in 10 flips:</strong><br>
+        MLE says θ = 7/10 = 0.7 (even if you think coins should be fair)</p>
+        <div class="highlight" style="margin-top:0.5rem;">
+          <strong>Equivalent to:</strong> Set prior P(h) = uniform (all hypotheses equally likely), then MAP = MLE.
+        </div>
+      </div>
+      <div class="card" style="background:#0a1f1f; border-top:4px solid #00d4aa;">
+        <h3 style="margin-top:0;">Maximum A Posteriori (MAP)</h3>
+        <div class="formula-sm">h_MAP = argmax P(D|h) × P(h)</div>
+        <p>Find the hypothesis with the highest posterior probability. Incorporates prior beliefs — balances the evidence with what you already know.</p>
+        <p><strong>Intuition:</strong> "Which coin bias is most likely given both the flips AND my prior belief that coins are usually fair?"</p>
+        <p><strong>Same 7 heads in 10 flips:</strong><br>
+        MAP (with strong fair-coin prior) might give θ ≈ 0.6 (pulled toward fair).</p>
+        <div class="highlight2" style="margin-top:0.5rem;">
+          <strong>Effect of prior:</strong> Acts as regularisation — prevents overfitting to small samples. With large data, MAP → MLE.
+        </div>
+      </div>
+    </div>
+
+    <h3>SVG: MLE vs MAP — The Effect of Prior</h3>
+    <svg viewBox="0 0 700 240" width="100%" height="240" style="background:#12152a;border-radius:10px;">
+      <defs>
+        <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+        </marker>
+      </defs>
+      <!-- Axes for theta (0 to 1) -->
+      <text x="350" y="20" fill="#e2e8f0" font-size="12" font-weight="bold" text-anchor="middle">Parameter θ (e.g., coin bias P(Heads))</text>
+      <!-- X axis -->
+      <line x1="60" y1="190" x2="660" y2="190" stroke="#2d3748" stroke-width="2" marker-end="url(#arr3)"/>
+      <text x="670" y="194" fill="#94a3b8" font-size="11">θ</text>
+      <text x="60" y="208" fill="#94a3b8" font-size="10" text-anchor="middle">0</text>
+      <text x="360" y="208" fill="#94a3b8" font-size="10" text-anchor="middle">0.5</text>
+      <text x="660" y="208" fill="#94a3b8" font-size="10" text-anchor="middle">1</text>
+      <!-- Y axis -->
+      <line x1="60" y1="190" x2="60" y2="30" stroke="#2d3748" stroke-width="2" marker-end="url(#arr3)"/>
+      <text x="35" y="110" fill="#94a3b8" font-size="10" text-anchor="middle" transform="rotate(-90,35,110)">Probability</text>
+
+      <!-- Prior curve (bell around 0.5) — simplified as polygon -->
+      <polyline points="60,188 120,185 180,170 240,145 300,115 360,100 420,115 480,145 540,170 600,185 660,188"
+        fill="none" stroke="#6c63ff" stroke-width="2" stroke-dasharray="6,3" opacity="0.7"/>
+      <text x="130" y="160" fill="#6c63ff" font-size="10">Prior P(θ)</text>
+      <text x="130" y="172" fill="#6c63ff" font-size="9">(belief: θ≈0.5)</text>
+
+      <!-- Likelihood peak at 0.7 (7/10 heads) -->
+      <polyline points="60,188 180,186 300,175 390,110 420,65 450,110 510,168 600,185 660,188"
+        fill="none" stroke="#00d4aa" stroke-width="2"/>
+      <!-- MLE marker -->
+      <line x1="420" y1="60" x2="420" y2="190" stroke="#00d4aa" stroke-width="2" stroke-dasharray="4,3"/>
+      <circle cx="420" cy="63" r="5" fill="#00d4aa"/>
+      <text x="420" y="50" fill="#00d4aa" font-size="10" text-anchor="middle">MLE = 0.7</text>
+      <text x="520" y="100" fill="#00d4aa" font-size="10">Likelihood P(D|θ)</text>
+
+      <!-- MAP peak (between 0.5 and 0.7, around 0.62) -->
+      <polyline points="60,188 180,186 300,170 360,118 390,78 420,82 450,100 510,160 600,185 660,188"
+        fill="none" stroke="#f7c948" stroke-width="2"/>
+      <!-- MAP marker -->
+      <line x1="395" y1="75" x2="395" y2="190" stroke="#f7c948" stroke-width="2" stroke-dasharray="4,3"/>
+      <circle cx="395" cy="75" r="5" fill="#f7c948"/>
+      <text x="360" y="50" fill="#f7c948" font-size="10" text-anchor="middle">MAP ≈ 0.62</text>
+      <text x="220" y="85" fill="#f7c948" font-size="10">Posterior ∝ L×Prior</text>
+
+      <text x="350" y="228" fill="#94a3b8" font-size="9" text-anchor="middle">MAP is pulled toward the prior compared to MLE — acts as regularisation</text>
+    </svg>
+
+    <h3>Key Relationship</h3>
+    <table>
+      <tr><th>Feature</th><th>MLE</th><th>MAP</th></tr>
+      <tr><td>Formula</td><td>argmax P(D|h)</td><td>argmax P(D|h)×P(h)</td></tr>
+      <tr><td>Prior</td><td>Ignored (uniform)</td><td>Explicitly incorporated</td></tr>
+      <tr><td>Small data</td><td>Overfits easily</td><td>Regularised by prior</td></tr>
+      <tr><td>Large data</td><td>Same as MAP</td><td>Same as MLE (prior washed out)</td></tr>
+      <tr><td>Regularisation equivalent</td><td>No regularisation</td><td>MAP with Gaussian prior = L2 (Ridge); Laplace prior = L1 (Lasso)</td></tr>
+    </table>
+    <div class="highlight3">
+      <strong>When uniform prior is used:</strong> MAP = MLE, because multiplying by a constant doesn't change the argmax. This is why MLE is a special case of MAP.
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: Naive Bayes -->
+<section id="nb">
+  <h2>🏷️ Naive Bayes Classifier</h2>
+  <div class="card">
+    <p>Naive Bayes is a probabilistic classifier based on Bayes' theorem. It is called "naive" because it makes a strong (and usually wrong, but surprisingly useful) assumption about features.</p>
+
+    <h3>The Core Idea</h3>
+    <p>We want to classify a new example x = (x₁, x₂, ..., xₙ) into one of the classes y ∈ {c₁, c₂, ...}. Using Bayes:</p>
+    <div class="formula">P(y | x₁,...,xₙ) = P(x₁,...,xₙ | y) × P(y) / P(x₁,...,xₙ)</div>
+    <p>The denominator P(x₁,...,xₙ) is constant for all classes, so we can ignore it for argmax:</p>
+    <div class="formula">ŷ = argmax_y  P(y) × P(x₁,x₂,...,xₙ | y)</div>
+
+    <h3>The Naive Independence Assumption</h3>
+    <p>Computing P(x₁,...,xₙ | y) is exponentially hard — for n binary features, you'd need 2ⁿ parameters! The key assumption:</p>
+    <div class="highlight">
+      <strong>Conditional Independence Assumption:</strong> Given the class y, all features are <em>independent</em> of each other.
+      <div class="formula-sm">P(x₁,x₂,...,xₙ | y) = P(x₁|y) × P(x₂|y) × ... × P(xₙ|y) = ∏ P(xᵢ|y)</div>
+    </div>
+    <p>This reduces 2ⁿ parameters to just n×|classes| parameters — a massive simplification!</p>
+
+    <h3>Full Naive Bayes Classifier</h3>
+    <div class="formula">ŷ = argmax_y  P(y) × ∏ᵢ P(xᵢ | y)</div>
+
+    <div class="two-col">
+      <div>
+        <h4>Why "Naive"?</h4>
+        <p>The independence assumption is almost always violated in practice:</p>
+        <ul>
+          <li>In emails, words co-occur ("free" and "offer" appear together)</li>
+          <li>Medical symptoms are correlated (fever and chills)</li>
+          <li>Pixels in images are spatially correlated</li>
+        </ul>
+        <p>Despite this, NB works surprisingly well in many real applications!</p>
+      </div>
+      <div>
+        <h4>Why it still works</h4>
+        <p>Naive Bayes often gives excellent <em>ranking</em> even if exact probabilities are wrong. The independence assumption is violated symmetrically — the errors partially cancel out. What matters is the argmax, not the exact value.</p>
+        <div class="highlight2" style="margin:0.5rem 0 0;">
+          <strong>Practical evidence:</strong> NB is still competitive with SVM on text classification despite the strong assumption.
+        </div>
+      </div>
+    </div>
+
+    <h3>Advantages and Limitations</h3>
+    <table>
+      <tr><th>Advantages</th><th>Limitations</th></tr>
+      <tr>
+        <td><strong>Fast:</strong> O(n) training and O(n) prediction</td>
+        <td><strong>Independence assumption:</strong> rarely true in practice</td>
+      </tr>
+      <tr>
+        <td><strong>Small data:</strong> works well even with few samples</td>
+        <td><strong>Zero probability:</strong> if any P(xᵢ|y)=0, whole product = 0</td>
+      </tr>
+      <tr>
+        <td><strong>High dimensions:</strong> handles many features gracefully</td>
+        <td><strong>Poor probability estimates:</strong> calibration can be off</td>
+      </tr>
+      <tr>
+        <td><strong>Incremental:</strong> easy to update with new data</td>
+        <td><strong>Correlated features:</strong> counted multiple times</td>
+      </tr>
+      <tr>
+        <td><strong>Interpretable:</strong> probabilities are human-readable</td>
+        <td><strong>Continuous features:</strong> require distribution assumption (e.g. Gaussian)</td>
+      </tr>
+    </table>
+
+    <h3>Log Trick — Avoiding Underflow</h3>
+    <p>Multiplying many small probabilities leads to numerical underflow (e.g., 0.001^100 → 0). Solution: take logs.</p>
+    <div class="formula">ŷ = argmax_y  log P(y) + Σᵢ log P(xᵢ | y)</div>
+    <p>Since log is monotonically increasing, argmax is preserved. This transforms products into sums — numerically stable and faster.</p>
+  </div>
+</section>
+
+<!-- SECTION 5: Laplace Smoothing -->
+<section id="laplace">
+  <h2>🧮 Laplace Smoothing</h2>
+  <div class="card">
+    <h3>The Zero Probability Problem</h3>
+    <p>If a word never appears in training documents of a given class, its estimated probability is 0. This causes the entire product to collapse to 0:</p>
+    <div class="formula-sm">P("unicorn" | spam) = 0   →   P(y=spam | document) = 0 regardless of other words</div>
+    <p>One unseen word completely kills the classification — clearly wrong!</p>
+
+    <div class="highlight">
+      <strong>Example without smoothing:</strong><br>
+      Training: 10 "sports" documents, word "cricket" appears in 0 of them.<br>
+      P("cricket" | sports) = 0/10 = 0<br>
+      A new document mentioning "cricket" once along with many sport words will be classified as NOT sports. Wrong!
+    </div>
+
+    <h3>Laplace (Add-k) Smoothing</h3>
+    <p>Add a small constant k (usually k=1) to every count before normalising. This ensures no probability is ever exactly zero.</p>
+    <div class="formula">P(xᵢ = v | y = c) = (count(xᵢ=v, y=c) + k) / (count(y=c) + k × |V|)</div>
+    <p>Where <strong>|V|</strong> is the vocabulary size (number of distinct values xᵢ can take).</p>
+
+    <div class="two-col">
+      <div class="card" style="background:#1a0f0f; border-top:4px solid #ff6b6b;">
+        <h4 style="margin-top:0; color:#ff6b6b;">Without Smoothing (k=0)</h4>
+        <p><strong>Vocabulary:</strong> {A, B, C, D} (|V| = 4)</p>
+        <p><strong>Class "positive"</strong> has 10 training samples:<br>
+        A appears 4 times, B appears 3 times, C appears 3 times, D appears 0 times.</p>
+        <div class="formula-sm" style="color:#ff6b6b;">
+          P(A|+) = 4/10 = 0.40<br>
+          P(B|+) = 3/10 = 0.30<br>
+          P(C|+) = 3/10 = 0.30<br>
+          P(D|+) = 0/10 = 0.00 ← PROBLEM
+        </div>
+        <p style="color:#ff6b6b;">Any test example with D → P(+) = 0!</p>
+      </div>
+      <div class="card" style="background:#0a1f0f; border-top:4px solid #00d4aa;">
+        <h4 style="margin-top:0;">With Laplace Smoothing (k=1)</h4>
+        <p><strong>Vocabulary:</strong> {A, B, C, D} (|V| = 4)</p>
+        <p><strong>Class "positive"</strong> has 10 training samples (same as left).</p>
+        <div class="formula-sm">
+          P(A|+) = (4+1)/(10+4) = 5/14 ≈ 0.357<br>
+          P(B|+) = (3+1)/(10+4) = 4/14 ≈ 0.286<br>
+          P(C|+) = (3+1)/(10+4) = 4/14 ≈ 0.286<br>
+          P(D|+) = (0+1)/(10+4) = 1/14 ≈ 0.071 ← Fixed!
+        </div>
+        <p style="color:#00d4aa;">No zero probabilities. D gets small but non-zero probability.</p>
+      </div>
+    </div>
+
+    <h3>Effect of k on Smoothing</h3>
+    <table>
+      <tr><th>k value</th><th>Effect</th><th>When to use</th></tr>
+      <tr><td>k = 0</td><td>No smoothing — zero probability possible</td><td>Never (unless very large dataset)</td></tr>
+      <tr><td>k = 1</td><td>Laplace smoothing — each value gets count of 1</td><td>Most common default</td></tr>
+      <tr><td>0 &lt; k &lt; 1</td><td>Lidstone smoothing — gentler than Laplace</td><td>When vocabulary is large</td></tr>
+      <tr><td>k → ∞</td><td>Uniform distribution — ignores training data</td><td>Never practical</td></tr>
+    </table>
+    <div class="highlight2">
+      <strong>Key insight:</strong> Laplace smoothing can be interpreted as adding |V| "hallucinated" training examples — one for each possible feature value. It's a form of regularisation that expresses prior belief that all values are possible.
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: Gaussian Naive Bayes -->
+<section id="gaussian">
+  <h2>📈 Gaussian Naive Bayes</h2>
+  <div class="card">
+    <p>When features are <strong>continuous</strong> (e.g., temperature, height, age), we can't count occurrences. Instead, we model each feature as a Gaussian (normal) distribution per class.</p>
+
+    <h3>Gaussian Probability Density Function</h3>
+    <div class="formula">P(xᵢ | y) = 1/√(2πσ²) × exp(−(xᵢ − μ)² / (2σ²))</div>
+    <p>For each class c and each feature i, we learn:</p>
+    <ul>
+      <li><strong>μ_{i,c}</strong> = mean of feature xᵢ among all training examples with class c</li>
+      <li><strong>σ²_{i,c}</strong> = variance of feature xᵢ among all training examples with class c</li>
+    </ul>
+
+    <h3>Gaussian Bell Curve Visualisation</h3>
+    <svg viewBox="0 0 700 220" width="100%" height="220" style="background:#12152a;border-radius:10px;">
+      <defs>
+        <marker id="arr4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+        </marker>
+      </defs>
+      <!-- Axes -->
+      <line x1="50" y1="180" x2="680" y2="180" stroke="#2d3748" stroke-width="2" marker-end="url(#arr4)"/>
+      <line x1="50" y1="180" x2="50" y2="20" stroke="#2d3748" stroke-width="2" marker-end="url(#arr4)"/>
+      <text x="690" y="184" fill="#94a3b8" font-size="11">x</text>
+      <text x="40" y="18" fill="#94a3b8" font-size="11">P</text>
+
+      <!-- Class Sick: μ=38.5, narrower curve — simulate bell peaking at x~200 -->
+      <!-- Sick class (red): peaks around x=200 (temperature ~38.5) -->
+      <polyline points="50,178 80,176 110,170 140,155 170,125 200,65 230,125 260,155 290,170 320,177 360,179 400,179"
+        fill="none" stroke="#ff6b6b" stroke-width="2.5"/>
+      <text x="200" y="55" fill="#ff6b6b" font-size="11" text-anchor="middle">Sick</text>
+      <text x="200" y="68" fill="#ff6b6b" font-size="9" text-anchor="middle">μ=38.5°C, σ²=0.3</text>
+      <!-- Healthy class (green): peaks around x=450 (temperature ~36.8) -->
+      <polyline points="200,179 260,178 310,174 360,160 410,125 450,65 490,125 540,160 580,174 620,178 660,179"
+        fill="none" stroke="#00d4aa" stroke-width="2.5"/>
+      <text x="450" y="55" fill="#00d4aa" font-size="11" text-anchor="middle">Healthy</text>
+      <text x="450" y="68" fill="#00d4aa" font-size="9" text-anchor="middle">μ=36.8°C, σ²=0.2</text>
+
+      <!-- X labels -->
+      <text x="200" y="196" fill="#94a3b8" font-size="10" text-anchor="middle">38.5</text>
+      <text x="450" y="196" fill="#94a3b8" font-size="10" text-anchor="middle">36.8</text>
+      <text x="350" y="212" fill="#e2e8f0" font-size="10" text-anchor="middle">Temperature (°C) — two classes modelled as separate Gaussians</text>
+
+      <!-- μ lines -->
+      <line x1="200" y1="65" x2="200" y2="180" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
+      <line x1="450" y1="65" x2="450" y2="180" stroke="#00d4aa" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
+    </svg>
+
+    <h3>Illness Classification Example</h3>
+    <p>A clinic records patient temperature and headache intensity (scale 1–10). We want to classify a new patient as <strong>Sick</strong> or <strong>Healthy</strong>.</p>
+
+    <h4>Training Data</h4>
+    <table>
+      <tr><th>Patient</th><th>Temperature (°C)</th><th>Headache (1–10)</th><th>Class</th></tr>
+      <tr><td>1</td><td>38.8</td><td>8</td><td style="color:#ff6b6b;">Sick</td></tr>
+      <tr><td>2</td><td>38.2</td><td>7</td><td style="color:#ff6b6b;">Sick</td></tr>
+      <tr><td>3</td><td>38.6</td><td>9</td><td style="color:#ff6b6b;">Sick</td></tr>
+      <tr><td>4</td><td>38.4</td><td>6</td><td style="color:#ff6b6b;">Sick</td></tr>
+      <tr><td>5</td><td>36.6</td><td>2</td><td style="color:#00d4aa;">Healthy</td></tr>
+      <tr><td>6</td><td>36.9</td><td>3</td><td style="color:#00d4aa;">Healthy</td></tr>
+      <tr><td>7</td><td>37.1</td><td>1</td><td style="color:#00d4aa;">Healthy</td></tr>
+      <tr><td>8</td><td>36.8</td><td>2</td><td style="color:#00d4aa;">Healthy</td></tr>
+    </table>
+
+    <h4>Step 1: Parameter Estimation</h4>
+    <div class="two-col">
+      <div class="worked-step">
+        <p><strong style="color:#ff6b6b;">Class: Sick (4 patients)</strong></p>
+        <p>Temperature: {38.8, 38.2, 38.6, 38.4}</p>
+        <p>μ_temp,sick = (38.8+38.2+38.6+38.4)/4 = <strong>38.5°C</strong></p>
+        <p>σ²_temp,sick = Var = [(38.8−38.5)²+(38.2−38.5)²+(38.6−38.5)²+(38.4−38.5)²]/4</p>
+        <p>= [0.09+0.09+0.01+0.01]/4 = <strong>0.05</strong></p>
+        <p>Headache: {8, 7, 9, 6} → μ = <strong>7.5</strong>, σ² = <strong>1.25</strong></p>
+        <p>P(Sick) = 4/8 = <strong>0.5</strong></p>
+      </div>
+      <div class="worked-step">
+        <p><strong style="color:#00d4aa;">Class: Healthy (4 patients)</strong></p>
+        <p>Temperature: {36.6, 36.9, 37.1, 36.8}</p>
+        <p>μ_temp,healthy = (36.6+36.9+37.1+36.8)/4 = <strong>36.85°C</strong></p>
+        <p>σ²_temp,healthy = [(36.6−36.85)²+(36.9−36.85)²+(37.1−36.85)²+(36.8−36.85)²]/4</p>
+        <p>= [0.0625+0.0025+0.0625+0.0025]/4 = <strong>0.0325</strong></p>
+        <p>Headache: {2, 3, 1, 2} → μ = <strong>2.0</strong>, σ² = <strong>0.5</strong></p>
+        <p>P(Healthy) = 4/8 = <strong>0.5</strong></p>
+      </div>
+    </div>
+
+    <h4>Step 2: Classify New Patient</h4>
+    <div class="highlight3">
+      <strong>New patient:</strong> Temperature = 38.3°C, Headache = 7
+    </div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <strong>Compute Gaussian likelihoods for "Sick":</strong><br>
+        P(38.3 | Sick) = 1/√(2π×0.05) × exp(−(38.3−38.5)²/(2×0.05))<br>
+        = 1/√(0.3142) × exp(−0.04/0.1)<br>
+        = 1.784 × exp(−0.4) = 1.784 × 0.6703 ≈ <strong>1.196</strong><br><br>
+        P(7 | Sick) = 1/√(2π×1.25) × exp(−(7−7.5)²/(2×1.25))<br>
+        = 0.3568 × exp(−0.1) = 0.3568 × 0.9048 ≈ <strong>0.3228</strong>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <strong>Compute Gaussian likelihoods for "Healthy":</strong><br>
+        P(38.3 | Healthy) = 1/√(2π×0.0325) × exp(−(38.3−36.85)²/(2×0.0325))<br>
+        = 2.211 × exp(−32.1) ≈ <strong>≈ 0 (essentially zero)</strong><br><br>
+        P(7 | Healthy) = 1/√(2π×0.5) × exp(−(7−2.0)²/(2×0.5))<br>
+        = 0.5642 × exp(−12.5) ≈ <strong>≈ 0 (essentially zero)</strong>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <strong>Compare posteriors (∝ prior × likelihood):</strong><br>
+        Score(Sick) = P(Sick) × P(38.3|Sick) × P(7|Sick) = 0.5 × 1.196 × 0.3228 ≈ <strong>0.193</strong><br>
+        Score(Healthy) = P(Healthy) × P(38.3|Healthy) × P(7|Healthy) ≈ 0.5 × 0 × 0 ≈ <strong>≈ 0</strong>
+      </div>
+    </div>
+    <div class="big-result">
+      Prediction: <strong style="color:#ff6b6b;">SICK</strong> — the patient's 38.3°C temperature and headache intensity of 7 strongly match the Sick class parameters.
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7: Text Classification / Multinomial NB -->
+<section id="text">
+  <h2>📄 Multinomial Naive Bayes — Text Classification</h2>
+  <div class="card">
+    <p>For text (discrete word counts), we use <strong>Multinomial Naive Bayes</strong>. Each document is represented as a bag of words — we count how many times each word appears.</p>
+
+    <h3>China Document Classification Example</h3>
+    <p>This is the classic NB text classification example. We have documents labelled "China" or "not-China" based on their content.</p>
+
+    <h4>Training Corpus</h4>
+    <table>
+      <tr><th>Doc</th><th>Content</th><th>Class</th></tr>
+      <tr><td>D1</td><td>Chinese Beijing Chinese</td><td style="color:#00d4aa;">China</td></tr>
+      <tr><td>D2</td><td>Chinese Chinese Shanghai</td><td style="color:#00d4aa;">China</td></tr>
+      <tr><td>D3</td><td>Chinese Macao</td><td style="color:#00d4aa;">China</td></tr>
+      <tr><td>D4</td><td>Tokyo Japan Chinese</td><td style="color:#ff6b6b;">not-China</td></tr>
+      <tr><td>D5</td><td>Chinese Chinese Chinese Tokyo Japan</td><td style="color:#ff6b6b;">not-China</td></tr>
+    </table>
+    <p><strong>Vocabulary V</strong> = {Chinese, Beijing, Shanghai, Macao, Tokyo, Japan} → |V| = 6</p>
+
+    <h4>Step 1: Class Priors</h4>
+    <div class="two-col">
+      <div class="worked-step">
+        P(China) = 3/5 = <strong>0.6</strong><br>
+        (3 out of 5 training documents are "China")
+      </div>
+      <div class="worked-step">
+        P(not-China) = 2/5 = <strong>0.4</strong><br>
+        (2 out of 5 training documents are "not-China")
+      </div>
+    </div>
+
+    <h4>Step 2: Word Counts per Class</h4>
+    <p>Count total word occurrences in each class (not per document, but across all documents of that class):</p>
+    <table>
+      <tr><th>Word</th><th>Count in China docs</th><th>Count in not-China docs</th></tr>
+      <tr><td>Chinese</td><td>5 &nbsp;(2+2+1)</td><td>3 &nbsp;(1+2) [D4 has 1, D5 has 2]</td></tr>
+      <tr><td>Beijing</td><td>1</td><td>0</td></tr>
+      <tr><td>Shanghai</td><td>1</td><td>0</td></tr>
+      <tr><td>Macao</td><td>1</td><td>0</td></tr>
+      <tr><td>Tokyo</td><td>0</td><td>2 &nbsp;(1+1)</td></tr>
+      <tr><td>Japan</td><td>0</td><td>2 &nbsp;(1+1)</td></tr>
+      <tr style="background:rgba(247,201,72,0.1);"><td><strong>Total words</strong></td><td><strong>8</strong></td><td><strong>7 &nbsp;(3+2+2)</strong></td></tr>
+    </table>
+
+    <h4>Step 3: Conditional Probabilities with Laplace Smoothing (k=1)</h4>
+    <p>Formula: P(w | class) = (count(w, class) + 1) / (total words in class + |V|)</p>
+    <p>|V| = 6, so denominator for China = 8+6 = 14, for not-China = 7+6 = 13</p>
+    <table>
+      <tr><th>Word</th><th>P(word | China)</th><th>P(word | not-China)</th></tr>
+      <tr><td>Chinese</td><td>(5+1)/14 = 6/14 ≈ 0.4286</td><td>(3+1)/13 = 4/13 ≈ 0.3077</td></tr>
+      <tr><td>Beijing</td><td>(1+1)/14 = 2/14 ≈ 0.1429</td><td>(0+1)/13 = 1/13 ≈ 0.0769</td></tr>
+      <tr><td>Shanghai</td><td>(1+1)/14 = 2/14 ≈ 0.1429</td><td>(0+1)/13 = 1/13 ≈ 0.0769</td></tr>
+      <tr><td>Macao</td><td>(1+1)/14 = 2/14 ≈ 0.1429</td><td>(0+1)/13 = 1/13 ≈ 0.0769</td></tr>
+      <tr><td>Tokyo</td><td>(0+1)/14 = 1/14 ≈ 0.0714</td><td>(2+1)/13 = 3/13 ≈ 0.2308</td></tr>
+      <tr><td>Japan</td><td>(0+1)/14 = 1/14 ≈ 0.0714</td><td>(2+1)/13 = 3/13 ≈ 0.2308</td></tr>
+    </table>
+
+    <h4>Step 4: Classify Test Document</h4>
+    <div class="highlight3">
+      <strong>Test document:</strong> "Chinese Chinese Chinese Tokyo Japan"<br>
+      Words: Chinese (×3), Tokyo (×1), Japan (×1)
+    </div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <strong>Score for China (using log probabilities to avoid underflow):</strong><br>
+        log P(China) + 3×log P(Chinese|China) + 1×log P(Tokyo|China) + 1×log P(Japan|China)<br>
+        = log(3/5) + 3×log(6/14) + 1×log(1/14) + 1×log(1/14)<br>
+        = log(0.6) + 3×log(0.4286) + log(0.0714) + log(0.0714)<br>
+        = −0.5108 + 3×(−0.8473) + (−2.639) + (−2.639)<br>
+        = −0.5108 − 2.5419 − 2.639 − 2.639<br>
+        = <strong>−8.330</strong>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <strong>Score for not-China:</strong><br>
+        log P(not-China) + 3×log P(Chinese|not-China) + 1×log P(Tokyo|not-China) + 1×log P(Japan|not-China)<br>
+        = log(2/5) + 3×log(4/13) + 1×log(3/13) + 1×log(3/13)<br>
+        = log(0.4) + 3×log(0.3077) + log(0.2308) + log(0.2308)<br>
+        = −0.9163 + 3×(−1.1787) + (−1.4663) + (−1.4663)<br>
+        = −0.9163 − 3.5361 − 1.4663 − 1.4663<br>
+        = <strong>−7.385</strong>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <strong>Compare scores:</strong><br>
+        Score(China) = −8.330<br>
+        Score(not-China) = −7.385<br>
+        <em>Higher score wins (less negative = more probable).</em>
+      </div>
+    </div>
+    <div class="big-result">
+      Prediction: <strong style="color:#ff6b6b;">not-China</strong> — Despite three mentions of "Chinese", the strong signals from "Tokyo" and "Japan" pull it to not-China. Score: −7.385 > −8.330
+    </div>
+    <div class="highlight2">
+      <strong>Why not-China wins?</strong> Without Laplace smoothing, P(Tokyo|China) = 0 and P(Japan|China) = 0, making P(China|doc) = 0. With smoothing, these words get small but non-zero probability for China. But the not-China class still wins because Tokyo and Japan are much more probable given not-China (3/13 ≈ 0.23 vs 1/14 ≈ 0.07).
+    </div>
+
+    <h3>Multinomial vs Bernoulli NB</h3>
+    <table>
+      <tr><th>Feature</th><th>Multinomial NB</th><th>Bernoulli NB</th></tr>
+      <tr><td>Feature representation</td><td>Word counts (how many times)</td><td>Word presence (0/1)</td></tr>
+      <tr><td>Best for</td><td>Longer documents, frequency matters</td><td>Short texts, binary signals</td></tr>
+      <tr><td>Missing words</td><td>Ignored in calculation</td><td>Counted as P(word absent | class)</td></tr>
+      <tr><td>Common use</td><td>News categorisation, spam</td><td>Sentiment analysis, short texts</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 8: Text Preprocessing -->
+<section id="preprocess">
+  <h2>🔤 Text Preprocessing for Naive Bayes</h2>
+  <div class="card">
+    <p>Raw text must be transformed before NB can process it. Good preprocessing dramatically improves accuracy.</p>
+
+    <div class="grid3">
+      <div class="card" style="border-top:4px solid #6c63ff; background:#1e1b3a;">
+        <h4 style="margin-top:0;">1. Tokenisation</h4>
+        <p>Split text into individual tokens (words/subwords).</p>
+        <div class="formula-sm" style="font-size:0.8rem;">"Hello, World! It's great."<br>→ ["Hello", "World", "It", "s", "great"]</div>
+        <p>Considerations: punctuation, apostrophes, numbers, case.</p>
+      </div>
+      <div class="card" style="border-top:4px solid #00d4aa; background:#0d2b1e;">
+        <h4 style="margin-top:0;">2. Stop Word Removal</h4>
+        <p>Remove high-frequency words that carry little semantic meaning.</p>
+        <div class="formula-sm" style="font-size:0.8rem;">["the", "is", "at", "which", "on", "a", "an", "the"]<br>→ removed from document</div>
+        <p>Reduces noise and computation. Domain-specific stop words may differ.</p>
+      </div>
+      <div class="card" style="border-top:4px solid #f7c948; background:#1f1a00;">
+        <h4 style="margin-top:0;">3. Stemming / Lemmatisation</h4>
+        <p>Reduce words to their base/root form to consolidate vocabulary.</p>
+        <div class="formula-sm" style="font-size:0.8rem;">running → run<br>better → good (lemma)<br>studies → studi (stem)</div>
+        <p>Stemming is fast but crude; lemmatisation is accurate but slower.</p>
+      </div>
+    </div>
+
+    <h3>Bag of Words Representation</h3>
+    <p>After preprocessing, each document becomes a vector of word counts (order ignored):</p>
+    <table>
+      <tr><th>Document</th><th>Chinese</th><th>Beijing</th><th>Shanghai</th><th>Macao</th><th>Tokyo</th><th>Japan</th></tr>
+      <tr><td>D1 "Chinese Beijing Chinese"</td><td>2</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      <tr><td>D2 "Chinese Chinese Shanghai"</td><td>2</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+      <tr><td>D3 "Chinese Macao"</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+      <tr><td>D4 "Tokyo Japan Chinese"</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+      <tr><td>Test "Chinese×3 Tokyo Japan"</td><td>3</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+    </table>
+
+    <h3>TF-IDF: A Better Feature Representation</h3>
+    <p>Bag of Words treats all words equally. TF-IDF (Term Frequency–Inverse Document Frequency) down-weights common words and up-weights rare but informative ones.</p>
+    <div class="formula">TF-IDF(w, d) = TF(w, d) × IDF(w)
+    TF(w, d) = count(w in d) / total words in d
+    IDF(w) = log(N / df(w))   where df(w) = documents containing w</div>
+    <div class="two-col">
+      <div class="highlight">
+        <strong>Intuition for IDF:</strong> If "the" appears in all 1000 docs, IDF = log(1000/1000) = 0 — "the" is useless. If "algorithm" appears in only 10 docs, IDF = log(1000/10) = log(100) ≈ 4.6 — "algorithm" is highly informative.
+      </div>
+      <div class="highlight2">
+        <strong>When to use TF-IDF over raw counts:</strong> When documents are of varying lengths, when common domain words dominate (e.g., "patient" in medical NB), or when you want better feature discrimination. Note: standard Naive Bayes uses raw counts with Laplace smoothing.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 9: Interactive Tools -->
+<section id="interactive">
+  <h2>🧪 Interactive Tools</h2>
+
+  <!-- Bayes Calculator -->
+  <div class="interactive-box">
+    <h3 style="margin-top:0; color:#f7c948;">Bayes' Theorem Calculator</h3>
+    <p>Enter the three probabilities and compute the posterior P(h|D).</p>
+    <div class="calc-row">
+      <div>
+        <label style="color:#6c63ff; font-weight:600;">P(h) — Prior probability of hypothesis:</label>
+        <input type="number" id="b_prior" value="0.001" min="0.001" max="0.999" step="0.001">
+        <small style="color:#94a3b8;">e.g. 0.001 = 1 in 1000 people have disease</small>
+      </div>
+      <div>
+        <label style="color:#00d4aa; font-weight:600;">P(D|h) — Likelihood (sensitivity):</label>
+        <input type="number" id="b_likelihood" value="0.99" min="0.001" max="0.999" step="0.001">
+        <small style="color:#94a3b8;">e.g. 0.99 = test correctly identifies 99% of sick</small>
+      </div>
+      <div>
+        <label style="color:#f7c948; font-weight:600;">P(D|¬h) — False positive rate:</label>
+        <input type="number" id="b_fp" value="0.01" min="0.001" max="0.999" step="0.001">
+        <small style="color:#94a3b8;">e.g. 0.01 = test falsely flags 1% of healthy</small>
+      </div>
+    </div>
+    <button onclick="computeBayes()">Compute Posterior P(h|D)</button>
+    <div class="result-box" id="bayes-result">Results will appear here...</div>
+  </div>
+
+  <!-- NB Text Classifier -->
+  <div class="interactive-box" style="border-color:#00d4aa;">
+    <h3 style="margin-top:0; color:#00d4aa;">Naive Bayes Text Classifier</h3>
+    <p>Enter a document using words from the vocabulary: <code>Chinese</code>, <code>Beijing</code>, <code>Shanghai</code>, <code>Macao</code>, <code>Tokyo</code>, <code>Japan</code>. The classifier uses the trained model from the China example above (with Laplace smoothing).</p>
+    <label style="font-weight:600;">Your document (type words separated by spaces):</label>
+    <input type="text" id="nb_doc" value="Chinese Chinese Chinese Tokyo Japan" placeholder="e.g. Chinese Beijing Shanghai">
+    <button onclick="classifyDocument()">Classify Document</button>
+    <div class="result-box" id="nb-result" style="font-size:0.9rem; font-weight:400;">Results will appear here...</div>
+  </div>
+
+  <!-- Gaussian NB Calculator -->
+  <div class="interactive-box" style="border-color:#f7c948;">
+    <h3 style="margin-top:0; color:#f7c948;">Gaussian Naive Bayes — Patient Classifier</h3>
+    <p>Enter patient features to classify as Sick or Healthy using the trained Gaussian NB model.</p>
+    <div class="two-col">
+      <div>
+        <label style="font-weight:600;">Temperature (°C):</label>
+        <input type="number" id="g_temp" value="38.3" min="35" max="42" step="0.1">
+      </div>
+      <div>
+        <label style="font-weight:600;">Headache Intensity (1–10):</label>
+        <input type="number" id="g_head" value="7" min="1" max="10" step="1">
+      </div>
+    </div>
+    <button onclick="gaussianClassify()">Classify Patient</button>
+    <div class="result-box" id="gnb-result">Results will appear here...</div>
+  </div>
+</section>
+
+</div><!-- end container -->
+
+<script>
+// =====================================================================
+// Bayes' Theorem Calculator
+// =====================================================================
+function computeBayes() {
+  const prior = parseFloat(document.getElementById('b_prior').value);
+  const likelihood = parseFloat(document.getElementById('b_likelihood').value);
+  const fp = parseFloat(document.getElementById('b_fp').value);
+
+  if (isNaN(prior)||isNaN(likelihood)||isNaN(fp)||
+      prior<=0||prior>=1||likelihood<=0||likelihood>=1||fp<=0||fp>=1) {
+    document.getElementById('bayes-result').innerHTML =
+      '<span style="color:#ff6b6b;">Please enter valid probabilities between 0 and 1 (exclusive).</span>';
+    return;
+  }
+
+  const notPrior = 1 - prior;
+  const truePos = likelihood * prior;
+  const falsePos = fp * notPrior;
+  const evidence = truePos + falsePos;
+  const posterior = truePos / evidence;
+
+  // Visualise with simple bar
+  const pctPost = Math.round(posterior * 100);
+  const pctPrior = Math.round(prior * 100 * 10) / 10;
+
+  let barColor = posterior < 0.2 ? '#00d4aa' : posterior < 0.6 ? '#f7c948' : '#ff6b6b';
+  let barWidth = Math.max(4, Math.round(posterior * 100));
+
+  let html = `<strong>Bayes' Theorem Calculation:</strong><br><br>`;
+  html += `<span style="color:#6c63ff;">P(h) = ${prior.toFixed(4)}</span> &nbsp;|&nbsp; `;
+  html += `<span style="color:#00d4aa;">P(D|h) = ${likelihood.toFixed(4)}</span> &nbsp;|&nbsp; `;
+  html += `<span style="color:#f7c948;">P(D|¬h) = ${fp.toFixed(4)}</span><br><br>`;
+  html += `P(D) = P(D|h)×P(h) + P(D|¬h)×P(¬h)<br>`;
+  html += `&nbsp;&nbsp;&nbsp;= ${likelihood.toFixed(4)}×${prior.toFixed(4)} + ${fp.toFixed(4)}×${notPrior.toFixed(4)}<br>`;
+  html += `&nbsp;&nbsp;&nbsp;= ${truePos.toFixed(6)} + ${falsePos.toFixed(6)} = <strong>${evidence.toFixed(6)}</strong><br><br>`;
+  html += `P(h|D) = P(D|h)×P(h) / P(D) = ${truePos.toFixed(6)} / ${evidence.toFixed(6)}<br><br>`;
+  html += `<span style="font-size:1.1rem;"><strong style="color:${barColor};">Posterior P(h|D) = ${(posterior*100).toFixed(2)}%</strong></span><br>`;
+  html += `<div style="background:#2d3748;border-radius:6px;height:24px;margin:8px 0;overflow:hidden;">`;
+  html += `<div style="background:${barColor};width:${barWidth}%;height:100%;border-radius:6px;transition:width 0.4s;"></div></div>`;
+  html += `<span style="color:#94a3b8;">Prior was ${pctPrior}% → Posterior is ${(posterior*100).toFixed(2)}% after observing positive evidence.<br>`;
+  const ratio = (posterior / prior).toFixed(1);
+  html += `The evidence updated your belief by a factor of ${ratio}×.</span>`;
+
+  document.getElementById('bayes-result').innerHTML = html;
+}
+
+// =====================================================================
+// Multinomial Naive Bayes Classifier (China example)
+// =====================================================================
+const VOCAB = ['chinese','beijing','shanghai','macao','tokyo','japan'];
+const WORD_COUNTS_CHINA    = {chinese:5, beijing:1, shanghai:1, macao:1, tokyo:0, japan:0};
+const WORD_COUNTS_NOTCHINA = {chinese:3, beijing:0, shanghai:0, macao:0, tokyo:2, japan:2};
+const TOTAL_CHINA = 8;
+const TOTAL_NOTCHINA = 7;
+const VOCAB_SIZE = 6;
+const PRIOR_CHINA = 3/5;
+const PRIOR_NOTCHINA = 2/5;
+
+function pWord(word, cls) {
+  const w = word.toLowerCase();
+  if (cls === 'china') {
+    const cnt = WORD_COUNTS_CHINA[w] !== undefined ? WORD_COUNTS_CHINA[w] : 0;
+    return (cnt + 1) / (TOTAL_CHINA + VOCAB_SIZE);
+  } else {
+    const cnt = WORD_COUNTS_NOTCHINA[w] !== undefined ? WORD_COUNTS_NOTCHINA[w] : 0;
+    return (cnt + 1) / (TOTAL_NOTCHINA + VOCAB_SIZE);
+  }
+}
+
+function classifyDocument() {
+  const raw = document.getElementById('nb_doc').value.trim();
+  if (!raw) {
+    document.getElementById('nb-result').innerHTML = '<span style="color:#ff6b6b;">Please enter some text.</span>';
+    return;
+  }
+
+  const tokens = raw.toLowerCase().split(/\s+/);
+  const known = tokens.filter(t => VOCAB.includes(t));
+  const unknown = tokens.filter(t => !VOCAB.includes(t));
+
+  if (known.length === 0) {
+    document.getElementById('nb-result').innerHTML =
+      `<span style="color:#ff6b6b;">No known vocabulary words found. Use: ${VOCAB.join(', ')}</span>`;
+    return;
+  }
+
+  // Count tokens
+  const counts = {};
+  known.forEach(t => { counts[t] = (counts[t] || 0) + 1; });
+
+  let logChina = Math.log(PRIOR_CHINA);
+  let logNotChina = Math.log(PRIOR_NOTCHINA);
+
+  let breakdown = `<strong>Document tokens (known):</strong> ${known.join(', ')}<br>`;
+  if (unknown.length > 0) breakdown += `<span style="color:#f7c948;">Unknown words (ignored): ${unknown.join(', ')}</span><br>`;
+  breakdown += `<br><strong>Log-probability calculation:</strong><br>`;
+  breakdown += `log P(China) = log(3/5) = ${Math.log(PRIOR_CHINA).toFixed(4)}<br>`;
+  breakdown += `log P(not-China) = log(2/5) = ${Math.log(PRIOR_NOTCHINA).toFixed(4)}<br><br>`;
+
+  Object.keys(counts).forEach(word => {
+    const n = counts[word];
+    const pc = pWord(word, 'china');
+    const pnc = pWord(word, 'notchina');
+    logChina += n * Math.log(pc);
+    logNotChina += n * Math.log(pnc);
+    breakdown += `${word} (×${n}): log P(${word}|China)=${Math.log(pc).toFixed(4)} × ${n} = ${(n*Math.log(pc)).toFixed(4)} &nbsp;|&nbsp; `;
+    breakdown += `log P(${word}|not-China)=${Math.log(pnc).toFixed(4)} × ${n} = ${(n*Math.log(pnc)).toFixed(4)}<br>`;
+  });
+
+  breakdown += `<br><strong>Final log-scores:</strong><br>`;
+  breakdown += `log P(China | doc) ∝ ${logChina.toFixed(4)}<br>`;
+  breakdown += `log P(not-China | doc) ∝ ${logNotChina.toFixed(4)}<br><br>`;
+
+  const winner = logChina > logNotChina ? 'China' : 'not-China';
+  const winColor = winner === 'China' ? '#00d4aa' : '#ff6b6b';
+  const margin = Math.abs(logChina - logNotChina).toFixed(3);
+  breakdown += `<span style="font-size:1.1rem;"><strong>Prediction: <span style="color:${winColor};">${winner}</span></strong> (margin: ${margin} log units)</span>`;
+
+  document.getElementById('nb-result').innerHTML = breakdown;
+}
+
+// =====================================================================
+// Gaussian Naive Bayes — Patient Classifier
+// =====================================================================
+const GNB_PARAMS = {
+  sick: {
+    temp: { mu: 38.5, sigma2: 0.05 },
+    head: { mu: 7.5, sigma2: 1.25 },
+    prior: 0.5
+  },
+  healthy: {
+    temp: { mu: 36.85, sigma2: 0.0325 },
+    head: { mu: 2.0, sigma2: 0.5 },
+    prior: 0.5
+  }
+};
+
+function gaussianPDF(x, mu, sigma2) {
+  return (1 / Math.sqrt(2 * Math.PI * sigma2)) * Math.exp(-Math.pow(x - mu, 2) / (2 * sigma2));
+}
+
+function gaussianClassify() {
+  const temp = parseFloat(document.getElementById('g_temp').value);
+  const head = parseFloat(document.getElementById('g_head').value);
+
+  if (isNaN(temp) || isNaN(head)) {
+    document.getElementById('gnb-result').innerHTML = '<span style="color:#ff6b6b;">Please enter valid numbers.</span>';
+    return;
+  }
+
+  const classes = ['sick','healthy'];
+  const labels = { sick:'Sick', healthy:'Healthy' };
+  const colors = { sick:'#ff6b6b', healthy:'#00d4aa' };
+  let scores = {};
+  let html = `<strong>New patient: Temperature=${temp}°C, Headache=${head}</strong><br><br>`;
+
+  classes.forEach(cls => {
+    const p = GNB_PARAMS[cls];
+    const pTemp = gaussianPDF(temp, p.temp.mu, p.temp.sigma2);
+    const pHead = gaussianPDF(head, p.head.mu, p.head.sigma2);
+    const logScore = Math.log(p.prior) + Math.log(pTemp) + Math.log(pHead);
+    scores[cls] = logScore;
+
+    html += `<span style="color:${colors[cls]};font-weight:700;">${labels[cls]}:</span><br>`;
+    html += `&nbsp;P(temp=${temp}|${labels[cls]}) ~ N(μ=${p.temp.mu},σ²=${p.temp.sigma2}) = ${pTemp.toExponential(4)}<br>`;
+    html += `&nbsp;P(head=${head}|${labels[cls]}) ~ N(μ=${p.head.mu},σ²=${p.head.sigma2}) = ${pHead.toExponential(4)}<br>`;
+    html += `&nbsp;Log-score = log(${p.prior}) + log(${pTemp.toExponential(3)}) + log(${pHead.toExponential(3)}) = <strong>${logScore.toFixed(4)}</strong><br><br>`;
+  });
+
+  const winner = scores.sick > scores.healthy ? 'sick' : 'healthy';
+  const winLabel = labels[winner];
+  const winColor = colors[winner];
+  const margin = Math.abs(scores.sick - scores.healthy).toFixed(3);
+  html += `<span style="font-size:1.1rem;"><strong>Prediction: <span style="color:${winColor};">${winLabel}</span></strong> (log-score margin: ${margin})</span>`;
+
+  document.getElementById('gnb-result').innerHTML = html;
+}
+
+// =====================================================================
+// Nav highlighting on scroll
+// =====================================================================
+document.querySelectorAll('nav a').forEach(link => {
+  link.addEventListener('click', function() {
+    document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+window.addEventListener('scroll', () => {
+  const sections = document.querySelectorAll('section[id]');
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 150) current = s.id;
+  });
+  document.querySelectorAll('nav a').forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+});
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

@@ -3,573 +3,173 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Programming in Java — Module Index</title>
+<title>Study Hub — Course Modules</title>
 <style>
-:root{--bg:#0f1117;--card:#1a1d2e;--accent:#6c63ff;--accent2:#00d4aa;--accent3:#f7c948;--text:#e2e8f0;--muted:#94a3b8;--border:rgba(108,99,255,0.2)}
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
-header{background:linear-gradient(135deg,#12141f 0%,#0f1117 50%,rgba(108,99,255,.12) 100%);padding:4rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
-header::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(108,99,255,.08) 0%,transparent 70%);pointer-events:none}
-.course-badge{background:rgba(108,99,255,.15);color:var(--accent);border:1px solid rgba(108,99,255,.4);padding:.4rem 1.2rem;border-radius:20px;font-size:.85rem;display:inline-block;margin-bottom:1.2rem}
-header h1{font-size:3rem;font-weight:800;background:linear-gradient(135deg,#a78bfa,#6c63ff,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.6rem;line-height:1.2}
-header p{color:var(--muted);font-size:1.1rem;max-width:580px;margin:0 auto 2rem}
-.stats-row{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;margin-top:1.5rem}
-.stat{text-align:center}
-.stat-num{font-size:2rem;font-weight:700;color:var(--accent);display:block}
-.stat-label{font-size:.8rem;color:var(--muted)}
-/* Search */
-.search-wrap{max-width:540px;margin:2.5rem auto 0;position:relative}
-.search-wrap input{width:100%;background:#1a1d2e;border:1px solid rgba(108,99,255,.4);color:var(--text);padding:.9rem 1rem .9rem 3rem;border-radius:10px;font-size:1rem;outline:none;transition:border-color .2s}
-.search-wrap input:focus{border-color:var(--accent)}
-.search-icon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:1.1rem}
-/* Filters */
-.filters{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin:1.5rem 0}
-.filter-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:.4rem 1rem;border-radius:20px;cursor:pointer;font-size:.82rem;transition:all .2s}
-.filter-btn:hover,.filter-btn.active{background:rgba(108,99,255,.15);border-color:var(--accent);color:var(--accent)}
-/* Grid */
-main{max-width:1200px;margin:0 auto;padding:2rem}
-.section-label{color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.08em;margin:2rem 0 1rem;display:flex;align-items:center;gap:.6rem}
-.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem}
-/* Card */
-.week-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s;text-decoration:none;color:inherit;display:flex;flex-direction:column}
-.week-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.4);border-color:rgba(108,99,255,.4)}
-.card-banner{height:5px}
-.card-body{padding:1.4rem 1.4rem 1rem;flex:1}
-.card-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem}
-.week-num{font-size:.78rem;color:var(--muted);font-weight:600;letter-spacing:.05em}
-.difficulty{font-size:.72rem;padding:.2rem .55rem;border-radius:10px;font-weight:600}
-.diff-beginner{background:rgba(74,222,128,.12);color:#4ade80}
-.diff-intermediate{background:rgba(251,146,60,.12);color:#fb923f}
-.diff-advanced{background:rgba(248,113,113,.12);color:#f87171}
-.card-title{font-size:1.1rem;font-weight:700;margin-bottom:.5rem;line-height:1.3}
-.card-desc{font-size:.87rem;color:var(--muted);line-height:1.6;margin-bottom:1rem}
-.topics{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1rem}
-.topic-tag{background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.2);color:#a78bfa;font-size:.72rem;padding:.2rem .55rem;border-radius:5px}
-.card-highlights{border-top:1px solid var(--border);padding:1rem 1.4rem;background:rgba(0,0,0,.15)}
-.highlights-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem}
-.highlight-item{font-size:.8rem;color:var(--muted);display:flex;align-items:flex-start;gap:.4rem;margin-bottom:.25rem}
-.highlight-item::before{content:'▸';color:var(--accent2);flex-shrink:0;margin-top:.1rem}
-.card-footer{padding:.75rem 1.4rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.card-footer span{font-size:.78rem;color:var(--muted)}
-.open-link{font-size:.8rem;color:var(--accent);font-weight:600;display:flex;align-items:center;gap:.3rem}
-/* MCQ banks */
-.mcq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.5rem}
-.mcq-card{background:linear-gradient(135deg,rgba(108,99,255,.12),var(--card));border:1px solid rgba(108,99,255,.35);border-radius:14px;padding:1.6rem;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:.9rem;transition:transform .2s,box-shadow .2s,border-color .2s}
-.mcq-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.4);border-color:var(--accent)}
-.mcq-card-exam{background:linear-gradient(135deg,rgba(0,212,170,.12),var(--card));border-color:rgba(0,212,170,.35)}
-.mcq-card-exam:hover{border-color:var(--accent2)}
-.mcq-icon{font-size:2rem}
-.mcq-title{font-size:1.25rem;font-weight:700;display:flex;align-items:center;gap:.6rem}
-.mcq-mark{font-size:.7rem;font-weight:700;background:rgba(108,99,255,.25);color:#a78bfa;padding:.2rem .6rem;border-radius:20px}
-.mcq-mark-exam{background:rgba(0,212,170,.2);color:var(--accent2)}
-.mcq-desc{font-size:.88rem;color:var(--muted);line-height:1.6}
-.mcq-stats{display:flex;gap:1.4rem;flex-wrap:wrap;font-size:.82rem;color:var(--muted)}
-.mcq-stats b{color:var(--text);font-size:1.05rem}
-.mcq-go{margin-top:auto;font-size:.85rem;font-weight:600;color:var(--accent)}
-.mcq-card-exam .mcq-go{color:var(--accent2)}
-.mcq-keys{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:1rem;font-size:.85rem;color:var(--muted)}
-.mcq-keys a{color:var(--accent3);text-decoration:none;border:1px solid var(--border);padding:.35rem .9rem;border-radius:20px;transition:all .2s}
-.mcq-keys a:hover{border-color:var(--accent3);color:#fff}
-/* Quick Reference */
-.quickref{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-top:3rem}
-.quickref h2{font-size:1.2rem;color:var(--accent2);margin-bottom:1.2rem}
-.ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
-.ref-item{background:#12141f;border-radius:8px;padding:.9rem 1rem}
-.ref-item h4{font-size:.85rem;color:var(--accent3);margin-bottom:.4rem}
-.ref-item code{font-size:.78rem;color:#94a3b8;display:block;margin:.15rem 0;font-family:'Fira Code',monospace}
-/* hidden */
-.week-card.hidden{display:none}
-@media(max-width:600px){header h1{font-size:2rem}.grid{grid-template-columns:1fr}}
+  :root {
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    background-attachment: fixed;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: fadeDown 0.8s ease;
+  }
+  header h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    background: linear-gradient(90deg, #818cf8, #c084fc, #f472b6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+  }
+  header p {
+    color: var(--muted);
+    font-size: 1.1rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 26px;
+    width: 100%;
+    max-width: 1100px;
+  }
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 18px;
+    padding: 30px 28px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    animation: fadeUp 0.6s ease backwards;
+  }
+  .card:nth-child(1) { animation-delay: 0.05s; }
+  .card:nth-child(2) { animation-delay: 0.15s; }
+  .card:nth-child(3) { animation-delay: 0.25s; }
+  .card:nth-child(4) { animation-delay: 0.35s; }
+  .card:nth-child(5) { animation-delay: 0.45s; }
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+  }
+  .card:hover {
+    transform: translateY(-8px);
+    border-color: transparent;
+    box-shadow: 0 20px 40px -12px var(--glow);
+  }
+  .card:hover::before { opacity: 0.12; }
+  .card > * { position: relative; z-index: 1; }
+  .icon {
+    font-size: 2.6rem;
+    margin-bottom: 16px;
+  }
+  .card h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .card .sub {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+  .go {
+    margin-top: auto;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.25s ease, color 0.25s ease;
+  }
+  .card:hover .go { gap: 12px; color: var(--text); }
+  footer {
+    margin-top: 60px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 </style>
 </head>
 <body>
+  <header>
+    <h1>📚 Study Hub</h1>
+    <p>Choose a subject to start studying</p>
+  </header>
 
-<header>
-  <div class="course-badge">Programming in Java — CS Subject</div>
-  <h1>Programming in Java</h1>
-  <p>12 comprehensive modules covering Java from basics to enterprise — OOP, GUI, networking, web, and distributed computing</p>
-  <div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Search topics, concepts, keywords..." oninput="filterCards()">
-  </div>
-  <div class="stats-row">
-    <div class="stat"><span class="stat-num">12</span><span class="stat-label">Modules</span></div>
-    <div class="stat"><span class="stat-num">540</span><span class="stat-label">MCQs</span></div>
-    <div class="stat"><span class="stat-num">100+</span><span class="stat-label">Code Examples</span></div>
-    <div class="stat"><span class="stat-num">50+</span><span class="stat-label">Interactive Demos</span></div>
-    <div class="stat"><span class="stat-num">30+</span><span class="stat-label">SVG Diagrams</span></div>
-  </div>
-</header>
-
-<main>
-  <div class="filters">
-    <button class="filter-btn active" onclick="filterByTag('all',this)">All Modules</button>
-    <button class="filter-btn" onclick="filterByTag('fundamentals',this)">Fundamentals</button>
-    <button class="filter-btn" onclick="filterByTag('gui',this)">GUI</button>
-    <button class="filter-btn" onclick="filterByTag('web',this)">Web / Enterprise</button>
-    <button class="filter-btn" onclick="filterByTag('advanced',this)">Advanced</button>
-  </div>
-
-  <div class="section-label">Core Java Foundations — Weeks 1–4</div>
-  <div class="grid" id="cardGrid">
-
-    <!-- Week 1 -->
-    <a href="week1.html" class="week-card" data-tags="fundamentals" data-keywords="java history jdk jre jvm oop constructors packages scanner wora bytecode objects classes static">
-      <div class="card-banner" style="background:linear-gradient(90deg,#6c63ff,#a78bfa)"></div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="week-num">WEEK 01</span>
-          <span class="difficulty diff-beginner">Beginner</span>
-        </div>
-        <div class="card-title">Java Foundations &amp; OOP Introduction</div>
-        <div class="card-desc">The origin story of Java, its key architecture (JVM/JRE/JDK), Write Once Run Anywhere, and the four pillars of Object-Oriented Programming.</div>
-        <div class="topics">
-          <span class="topic-tag">Java History</span><span class="topic-tag">JVM/JRE/JDK</span><span class="topic-tag">WORA</span>
-          <span class="topic-tag">OOP Pillars</span><span class="topic-tag">Constructors</span><span class="topic-tag">Packages</span>
-        </div>
-      </div>
-      <div class="card-highlights">
-        <div class="highlights-label">Highlights</div>
-        <div class="highlight-item">Interactive JDK/JRE/JVM nested diagram</div>
-        <div class="highlight-item">WORA SVG: .java → bytecode → 4 platforms</div>
-        <div class="highlight-item">Live Circle area calculator (radius input)</div>
-        <div class="highlight-item">11 Java features with click-to-expand cards</div>
-      </div>
-      <div class="card-footer"><span>11 sections</span><span class="open-link">Open →</span></div>
+  <main class="grid">
+    <a class="card" href="ML_Modules/index.html" style="--accent:linear-gradient(135deg,#6366f1,#818cf8); --glow:rgba(99,102,241,0.5);">
+      <div class="icon">🤖</div>
+      <h2>Machine Learning</h2>
+      <p class="sub">Core ML concepts, algorithms, and weekly modules with numerical practice.</p>
+      <span class="go">Open course →</span>
     </a>
 
-    <!-- Week 2 -->
-    <a href="week2.html" class="week-card" data-tags="fundamentals" data-keywords="polymorphism inheritance overloading overriding abstract interface final super access modifiers dynamic dispatch upcasting bankaccount">
-      <div class="card-banner" style="background:linear-gradient(90deg,#00d4aa,#06b6d4)"></div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="week-num">WEEK 02</span>
-          <span class="difficulty diff-beginner">Beginner</span>
-        </div>
-        <div class="card-title">Polymorphism, Inheritance &amp; Interfaces</div>
-        <div class="card-desc">Deep dive into runtime and compile-time polymorphism, class hierarchies, abstract classes vs interfaces, and Java access control.</div>
-        <div class="topics">
-          <span class="topic-tag">Overloading</span><span class="topic-tag">Overriding</span><span class="topic-tag">Inheritance</span>
-          <span class="topic-tag">Abstract Class</span><span class="topic-tag">Interface</span><span class="topic-tag">final</span>
-        </div>
-      </div>
-      <div class="card-highlights">
-        <div class="highlights-label">Highlights</div>
-        <div class="highlight-item">UML SVG diagrams: Circle/Cylinder, BankAccount tree</div>
-        <div class="highlight-item">Interactive bank simulator with deposit &amp; transfer</div>
-        <div class="highlight-item">Stack/heap SVG for dynamic dispatch</div>
-        <div class="highlight-item">Interactive tax calculator using interface</div>
-      </div>
-      <div class="card-footer"><span>12 sections</span><span class="open-link">Open →</span></div>
+    <a class="card" href="FDA_Weekly_Modules/index.html" style="--accent:linear-gradient(135deg,#10b981,#34d399); --glow:rgba(16,185,129,0.5);">
+      <div class="icon">📈</div>
+      <h2>Financial Data Analytics</h2>
+      <p class="sub">Financial statements, time series, risk, algo trading, and ethics.</p>
+      <span class="go">Open course →</span>
     </a>
 
-    <!-- Week 3 -->
-    <a href="week3.html" class="week-card" data-tags="fundamentals" data-keywords="exceptions try catch finally throw throws custom exception hierarchy runtime compile-time error voting pan regex user defined">
-      <div class="card-banner" style="background:linear-gradient(90deg,#f87171,#fb923c)"></div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="week-num">WEEK 03</span>
-          <span class="difficulty diff-beginner">Beginner</span>
-        </div>
-        <div class="card-title">Exception Handling</div>
-        <div class="card-desc">Java's error taxonomy, the full exception hierarchy (Throwable → Error / Exception → RuntimeException), and user-defined exceptions with real validation examples.</div>
-        <div class="topics">
-          <span class="topic-tag">try-catch-finally</span><span class="topic-tag">throw / throws</span><span class="topic-tag">Hierarchy SVG</span>
-          <span class="topic-tag">Custom Exceptions</span><span class="topic-tag">Regex Validation</span>
-        </div>
-      </div>
-      <div class="card-highlights">
-        <div class="highlights-label">Highlights</div>
-        <div class="highlight-item">SVG Throwable hierarchy tree with all exception types</div>
-        <div class="highlight-item">Interactive age validator (VotingException demo)</div>
-        <div class="highlight-item">PAN card validator with regex [A-Z]{5}[0-9]{4}[A-Z]</div>
-        <div class="highlight-item">4-tab Average program (progressive exception handling)</div>
-      </div>
-      <div class="card-footer"><span>11 sections</span><span class="open-link">Open →</span></div>
+    <a class="card" href="BigData_Weekly_Modules/index.html" style="--accent:linear-gradient(135deg,#f59e0b,#fbbf24); --glow:rgba(245,158,11,0.5);">
+      <div class="icon">🗄️</div>
+      <h2>Big Data Analytics</h2>
+      <p class="sub">Hadoop, MapReduce, NoSQL, MongoDB, Cassandra, and streaming.</p>
+      <span class="go">Open course →</span>
     </a>
 
-    <!-- Week 4 -->
-    <a href="week4.html" class="week-card" data-tags="fundamentals" data-keywords="multithreading thread runnable synchronization wait notify io streams file byte character bufferedreader printwriter lifecycle">
-      <div class="card-banner" style="background:linear-gradient(90deg,#a78bfa,#8b5cf6)"></div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="week-num">WEEK 04</span>
-          <span class="difficulty diff-intermediate">Intermediate</span>
-        </div>
-        <div class="card-title">Multithreading &amp; I/O Streams</div>
-        <div class="card-desc">Concurrent programming with threads, the 5-state lifecycle, synchronization for shared resources, inter-thread communication, and Java I/O stream hierarchy.</div>
-        <div class="topics">
-          <span class="topic-tag">Thread Lifecycle</span><span class="topic-tag">Synchronization</span><span class="topic-tag">wait/notify</span>
-          <span class="topic-tag">Byte Streams</span><span class="topic-tag">Char Streams</span><span class="topic-tag">BufferedReader</span>
-        </div>
-      </div>
-      <div class="card-highlights">
-        <div class="highlights-label">Highlights</div>
-        <div class="highlight-item">Thread lifecycle SVG (5-state machine with transitions)</div>
-        <div class="highlight-item">Runnable interleaving simulator (randomised output)</div>
-        <div class="highlight-item">Auction synchronization demo (Bidder threads)</div>
-        <div class="highlight-item">Virtual file system (localStorage read/write/delete)</div>
-      </div>
-      <div class="card-footer"><span>11 sections</span><span class="open-link">Open →</span></div>
+    <a class="card" href="MA_Weekly_Modules/index.html" style="--accent:linear-gradient(135deg,#ec4899,#f472b6); --glow:rgba(236,72,153,0.5);">
+      <div class="icon">📊</div>
+      <h2>Marketing Analytics</h2>
+      <p class="sub">Research tools, customer analytics, metrics, Tableau, and Python labs.</p>
+      <span class="go">Open course →</span>
     </a>
 
-    <div class="section-label" style="grid-column:1/-1">GUI Programming — Weeks 5–6</div>
-
-    <!-- Week 5 -->
-    <a href="week5.html" class="week-card" data-tags="gui" data-keywords="awt abstract window toolkit frame flowlayout gridlayout borderlayout delegation event model actionlistener keylistener windowadapter calculator gui heavyweight">
-      <div class="card-banner" style="background:linear-gradient(90deg,#f7c948,#f59e0b)"></div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="week-num">WEEK 05</span>
-          <span class="difficulty diff-intermediate">Intermediate</span>
-        </div>
-        <div class="card-title">AWT GUI Programming</div>
-        <div class="card-desc">Building native GUI applications with Java's Abstract Window Toolkit — layout managers, the Delegation Event Model, and interactive component-based UIs.</div>
-        <div class="topics">
-          <span class="topic-tag">AWT Hierarchy</span><span class="topic-tag">FlowLayout</span><span class="topic-tag">GridLayout</span>
-          <span class="topic-tag">BorderLayout</span><span class="topic-tag">ActionListener</span><span class="topic-tag">KeyListener</span>
-        </div>
-      </div>
-      <div class="card-highlights">
-        <div class="highlights-label">Highlights</div>
-        <div class="highlight-item">SVG window mockups for every GUI program</div>
-        <div class="highlight-item">Fully working in-browser calculator</div>
-        <div class="highlight-item">Live keypress detector (keyCode + keyChar)</div>
-        <div class="highlight-item">Complete AWT form simulator with all components</div>
-      </div>
-      <div class="card-footer"><span>11 sections</span><span class="open-link">Open →</span></div>
+    <a class="card" href="Java_Modules/index.html" style="--accent:linear-gradient(135deg,#ef4444,#f87171); --glow:rgba(239,68,68,0.5);">
+      <div class="icon">☕</div>
+      <h2>Java</h2>
+      <p class="sub">Twelve weekly Java programming modules from fundamentals onward.</p>
+      <span class="go">Open course →</span>
     </a>
+  </main>
 
-    <!-- Week 6 -->
-    <a href="week6.html" class="week-card" data-tags="gui" data-keywords="swing javafx joptionpane jfilechooser lightweight mvc look feel swingutilities stage scene vbox hbox gridpane eventhandler lambda">
-      <div class="card-banner" style="background:linear-gradient(90deg,#34d399,#059669)"></div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="week-num">WEEK 06</span>
-          <span class="difficulty diff-intermediate">Intermediate</span>
-        </div>
-        <div class="card-title">Swing &amp; JavaFX</div>
-        <div class="card-desc">Modern Java GUI frameworks — Swing's pluggable L&amp;F with MVC architecture, JavaFX scene graph, FXML, CSS styling, and event-driven programming with lambdas.</div>
-        <div class="topics">
-          <span class="topic-tag">Swing MVC</span><span class="topic-tag">JOptionPane</span><span class="topic-tag">JFileChooser</span>
-          <span class="topic-tag">JavaFX Stage/Scene</span><span class="topic-tag">EventHandler</span><span class="topic-tag">Lambda</span>
-        </div>
-      </div>
-      <div class="card-highlights">
-        <div class="highlights-label">Highlights</div>
-        <div class="highlight-item">Interactive JOptionPane simulation (browser prompt/confirm)</div>
-        <div class="highlight-item">Swing component hierarchy SVG tree</div>
-        <div class="highlight-item">JavaFX login screen with error/success states</div>
-        <div class="highlight-item">AWT vs Swing vs JavaFX 14-row comparison table</div>
-      </div>
-      <div class="card-footer"><span>13 sections</span><span class="open-link">Open →</span></div>
-    </a>
-
-    <div class="section-label" style="grid-column:1/-1">Database &amp; Web — Weeks 7–9</div>
-
-    <!-- Week 7 -->
-    <a href="week7.html" class="week-card" data-tags="web" data-keywords="jdbc database connection drivermanager statement preparedstatement resultset crud sql injection mysql 2tier 3tier login">
-      <div class="card-banner" style="background:linear-gradient(90deg,#60a5fa,#3b82f6)"></div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="week-num">WEEK 07</span>
-          <span class="difficulty diff-intermediate">Intermediate</span>
-        </div>
-        <div class="card-title">JDBC — Database Connectivity</div>
-        <div class="card-desc">Connecting Java applications to relational databases. Covers the 6-step JDBC process, all API components, full CRUD operations, and SQL injection prevention.</div>
-        <div class="topics">
-          <span class="topic-tag">DriverManager</span><span class="topic-tag">PreparedStatement</span><span class="topic-tag">ResultSet</span>
-          <span class="topic-tag">CRUD</span><span class="topic-tag">SQL Injection</span><span class="topic-tag">2-Tier/3-Tier</span>
-        </div>
-      </div>
-      <div class="card-highlights">
-        <div class="highlights-label">Highlights</div>
-        <div class="highlight-item">Interactive in-browser database simulator (INSERT/SELECT/UPDATE/DELETE)</div>
-        <div class="highlight-item">SQL injection demonstrator (vulnerable vs safe query)</div>
-        <div class="highlight-item">2-tier vs 3-tier SVG architecture diagrams</div>
-        <div class="highlight-item">TabView: 4 CRUD operations with live table rendering</div>
-      </div>
-      <div class="card-footer"><span>12 sections</span><span class="open-link">Open →</span></div>
-    </a>
-
-    <!-- Week 8 -->
-    <a href="week8.html" class="week-card" data-tags="web" data-keywords="servlet mvc httpservlet lifecycle web.xml doget dopost requestdispatcher session cookies hidden url rewriting httpsession forward include">
-      <div class="card-banner" style="background:linear-gradient(90deg,#f472b6,#ec4899)"></div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="week-num">WEEK 08</span>
-          <span class="difficulty diff-intermediate">Intermediate</span>
-        </div>
-        <div class="card-title">Servlets &amp; MVC Architecture</div>
-        <div class="card-desc">Server-side Java web programming — Servlet lifecycle, request processing, MVC pattern implementation, RequestDispatcher, and all four session tracking techniques.</div>
-        <div class="topics">
-          <span class="topic-tag">Servlet Lifecycle</span><span class="topic-tag">MVC Pattern</span><span class="topic-tag">web.xml</span>
-          <span class="topic-tag">RequestDispatcher</span><span class="topic-tag">Session Tracking</span><span class="topic-tag">Cookies</span>
-        </div>
-      </div>
-      <div class="card-highlights">
-        <div class="highlights-label">Highlights</div>
-        <div class="highlight-item">SVG MVC data-flow diagram (6 steps numbered)</div>
-        <div class="highlight-item">Servlet lifecycle SVG (Load → Init → Service → Destroy)</div>
-        <div class="highlight-item">Live form that shows getParameter() output</div>
-        <div class="highlight-item">All 4 session techniques with runnable code cells</div>
-      </div>
-      <div class="card-footer"><span>10 sections</span><span class="open-link">Open →</span></div>
-    </a>
-
-    <!-- Week 9 -->
-    <a href="week9.html" class="week-card" data-tags="web" data-keywords="jsp javaserver pages scriptlet expression declaration directive implicit objects el expression language jstl mvc login welcome error session">
-      <div class="card-banner" style="background:linear-gradient(90deg,#00d4aa,#6c63ff)"></div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="week-num">WEEK 09</span>
-          <span class="difficulty diff-intermediate">Intermediate</span>
-        </div>
-        <div class="card-title">JSP — JavaServer Pages</div>
-        <div class="card-desc">Creating dynamic web pages with JSP — 7-step lifecycle, three scripting elements, directives, all 9 implicit objects, Expression Language, and a complete MVC login application.</div>
-        <div class="topics">
-          <span class="topic-tag">JSP Lifecycle</span><span class="topic-tag">Scriptlets</span><span class="topic-tag">EL ${}</span>
-          <span class="topic-tag">Implicit Objects</span><span class="topic-tag">JSTL</span><span class="topic-tag">MVC Login App</span>
-        </div>
-      </div>
-      <div class="card-highlights">
-        <div class="highlights-label">Highlights</div>
-        <div class="highlight-item">7-step lifecycle SVG with translation/compilation flow</div>
-        <div class="highlight-item">Tabbed MVC app: User.java / login.jsp / Servlet / welcome.jsp</div>
-        <div class="highlight-item">Interactive login simulator (step-by-step trace log)</div>
-        <div class="highlight-item">Scriptlet vs EL side-by-side comparison</div>
-      </div>
-      <div class="card-footer"><span>12 sections</span><span class="open-link">Open →</span></div>
-    </a>
-
-    <div class="section-label" style="grid-column:1/-1">Enterprise &amp; Advanced — Weeks 10–12</div>
-
-    <!-- Week 10 -->
-    <a href="week10.html" class="week-card" data-tags="advanced" data-keywords="spring framework beans autowiring ioc dependency injection spring mvc dispatcherservlet controller requestmapping loose coupling tight coupling configuration">
-      <div class="card-banner" style="background:linear-gradient(90deg,#86efac,#16a34a)"></div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="week-num">WEEK 10</span>
-          <span class="difficulty diff-advanced">Advanced</span>
-        </div>
-        <div class="card-title">Spring Framework</div>
-        <div class="card-desc">Java's most popular framework — IoC container, Spring Beans, dependency injection, autowiring, and the Spring MVC DispatcherServlet pattern for building web applications.</div>
-        <div class="topics">
-          <span class="topic-tag">IoC Container</span><span class="topic-tag">Spring Beans</span><span class="topic-tag">@Autowired</span>
-          <span class="topic-tag">Spring MVC</span><span class="topic-tag">DispatcherServlet</span><span class="topic-tag">Loose Coupling</span>
-        </div>
-      </div>
-      <div class="card-highlights">
-        <div class="highlights-label">Highlights</div>
-        <div class="highlight-item">Spring Architecture layered SVG diagram</div>
-        <div class="highlight-item">Tight vs loose coupling code comparison</div>
-        <div class="highlight-item">Interactive team selector (CSK/MI/RCB/KKR)</div>
-        <div class="highlight-item">Complete Spring MVC example with JSP views</div>
-      </div>
-      <div class="card-footer"><span>11 sections</span><span class="open-link">Open →</span></div>
-    </a>
-
-    <!-- Week 11 -->
-    <a href="week11.html" class="week-card" data-tags="advanced" data-keywords="networking tcp udp socket serversocket url datagram ip port protocol time server echo reverse client server tcp ip model">
-      <div class="card-banner" style="background:linear-gradient(90deg,#fb923c,#f97316)"></div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="week-num">WEEK 11</span>
-          <span class="difficulty diff-advanced">Advanced</span>
-        </div>
-        <div class="card-title">Java Networking</div>
-        <div class="card-desc">Building networked applications — TCP/IP model, TCP vs UDP differences, Java Socket API for client-server communication, URL class, and DatagramPacket for UDP.</div>
-        <div class="topics">
-          <span class="topic-tag">TCP/IP Model</span><span class="topic-tag">Socket/ServerSocket</span><span class="topic-tag">URL Class</span>
-          <span class="topic-tag">DatagramSocket</span><span class="topic-tag">TCP vs UDP</span><span class="topic-tag">Ports</span>
-        </div>
-      </div>
-      <div class="card-highlights">
-        <div class="highlights-label">Highlights</div>
-        <div class="highlight-item">TCP/IP 4-layer SVG with directional arrows</div>
-        <div class="highlight-item">Interactive URL parser (protocol/host/port/path/query)</div>
-        <div class="highlight-item">TCP Echo-Reverse simulator (client ↔ server)</div>
-        <div class="highlight-item">UDP simulator with 5% packet loss simulation</div>
-      </div>
-      <div class="card-footer"><span>11 sections</span><span class="open-link">Open →</span></div>
-    </a>
-
-    <!-- Week 12 -->
-    <a href="week12.html" class="week-card" data-tags="advanced" data-keywords="rmi remote method invocation stub skeleton registry naming bind lookup hello calculator interface distributed computing marshal unmarshal">
-      <div class="card-banner" style="background:linear-gradient(90deg,#c084fc,#9333ea)"></div>
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="week-num">WEEK 12</span>
-          <span class="difficulty diff-advanced">Advanced</span>
-        </div>
-        <div class="card-title">RMI — Remote Method Invocation</div>
-        <div class="card-desc">Java's distributed computing mechanism — calling methods on objects in a different JVM. Covers the Stub/Skeleton/Registry architecture with fully working Hello and Calculator RMI examples.</div>
-        <div class="topics">
-          <span class="topic-tag">Stub/Skeleton</span><span class="topic-tag">RMI Registry</span><span class="topic-tag">Naming class</span>
-          <span class="topic-tag">Hello RMI</span><span class="topic-tag">Calculator RMI</span><span class="topic-tag">Marshalling</span>
-        </div>
-      </div>
-      <div class="card-highlights">
-        <div class="highlights-label">Highlights</div>
-        <div class="highlight-item">RMI architecture SVG (Application → Stub → Transport layers)</div>
-        <div class="highlight-item">Hello RMI animated step-by-step simulator</div>
-        <div class="highlight-item">Calculator RMI with animated packet SVG (Client→Stub→Network→Server)</div>
-        <div class="highlight-item">Marshalling byte-sequence visualization</div>
-      </div>
-      <div class="card-footer"><span>11 sections</span><span class="open-link">Open →</span></div>
-    </a>
-
-  </div>
-
-  <!-- Self-Assessment / MCQ Banks -->
-  <div class="section-label">Test Yourself — MCQ Question Banks</div>
-  <div class="mcq-grid">
-
-    <a href="mcqs-1mark.html" class="mcq-card">
-      <div class="mcq-icon">📝</div>
-      <div class="mcq-body">
-        <div class="mcq-title">Practice MCQs <span class="mcq-mark">1 mark</span></div>
-        <div class="mcq-desc">Quick recall &amp; concept-check questions across all 12 weeks. Click an option to instantly see if you're right, with the correct answer revealed.</div>
-        <div class="mcq-stats"><span><b>300</b> questions</span><span><b>25</b> / week</span><span><b>12</b> weeks</span></div>
-      </div>
-      <div class="mcq-go">Start practising →</div>
-    </a>
-
-    <a href="mcqs-2mark.html" class="mcq-card mcq-card-exam">
-      <div class="mcq-icon">🎓</div>
-      <div class="mcq-body">
-        <div class="mcq-title">Exam MCQs <span class="mcq-mark mcq-mark-exam">2 marks</span></div>
-        <div class="mcq-desc">Applied, exam-style questions — code tracing, output prediction, and scenario reasoning. Options shuffle on load so answers aren't memorised by position.</div>
-        <div class="mcq-stats"><span><b>240</b> questions</span><span><b>20</b> / week</span><span><b>12</b> weeks</span></div>
-      </div>
-      <div class="mcq-go">Take the exam set →</div>
-    </a>
-
-  </div>
-
-  <div class="mcq-keys">
-    <span>🔑 Answer keys (correct answers marked):</span>
-    <a href="mcqs-1mark-with-answer.html">1-mark answers</a>
-    <a href="mcqs-2mark-with-answer.html">2-mark answers</a>
-  </div>
-
-  <!-- Quick Reference -->
-  <div class="quickref">
-    <h2>Quick API Reference</h2>
-    <div class="ref-grid">
-      <div class="ref-item">
-        <h4>Thread API</h4>
-        <code>new Thread(runnable).start()</code>
-        <code>Thread.sleep(ms)</code>
-        <code>t.join() / t.interrupt()</code>
-        <code>synchronized(obj) { ... }</code>
-        <code>wait() / notify() / notifyAll()</code>
-      </div>
-      <div class="ref-item">
-        <h4>Collections (core)</h4>
-        <code>List&lt;T&gt; list = new ArrayList&lt;&gt;()</code>
-        <code>Map&lt;K,V&gt; m = new HashMap&lt;&gt;()</code>
-        <code>Collections.sort(list)</code>
-        <code>Iterator&lt;T&gt; it = list.iterator()</code>
-        <code>for (T x : list) { ... }</code>
-      </div>
-      <div class="ref-item">
-        <h4>JDBC</h4>
-        <code>Connection c = DriverManager.getConnection(url,u,p)</code>
-        <code>PreparedStatement ps = c.prepareStatement(sql)</code>
-        <code>ps.setString(1, value)</code>
-        <code>ResultSet rs = ps.executeQuery()</code>
-        <code>while(rs.next()) rs.getString("col")</code>
-      </div>
-      <div class="ref-item">
-        <h4>Servlet</h4>
-        <code>request.getParameter("name")</code>
-        <code>session.setAttribute("k", v)</code>
-        <code>session.getAttribute("k")</code>
-        <code>rd = req.getRequestDispatcher("p.jsp")</code>
-        <code>rd.forward(req, res)</code>
-      </div>
-      <div class="ref-item">
-        <h4>JSP Scripting</h4>
-        <code>&lt;% Java code %&gt;</code>
-        <code>&lt;%= expression %&gt;</code>
-        <code>&lt;%! declaration %&gt;</code>
-        <code>${sessionScope.user.name}</code>
-        <code>&lt;%@ page import="java.util.*" %&gt;</code>
-      </div>
-      <div class="ref-item">
-        <h4>Socket API</h4>
-        <code>ServerSocket ss = new ServerSocket(port)</code>
-        <code>Socket s = ss.accept()</code>
-        <code>Socket s = new Socket(host, port)</code>
-        <code>s.getInputStream() / getOutputStream()</code>
-        <code>DatagramSocket / DatagramPacket</code>
-      </div>
-      <div class="ref-item">
-        <h4>Exception Handling</h4>
-        <code>try { } catch(ExType e) { } finally { }</code>
-        <code>throw new CustomException("msg")</code>
-        <code>void m() throws IOException { }</code>
-        <code>class MyEx extends RuntimeException</code>
-        <code>e.getMessage() / e.printStackTrace()</code>
-      </div>
-      <div class="ref-item">
-        <h4>Spring Beans</h4>
-        <code>@Configuration @Bean</code>
-        <code>@Autowired (field/setter/constructor)</code>
-        <code>@Primary @Qualifier("name")</code>
-        <code>ApplicationContext ctx = new AnnotationConfigApplicationContext(Cfg.class)</code>
-      </div>
-      <div class="ref-item">
-        <h4>RMI</h4>
-        <code>interface extends Remote</code>
-        <code>class extends UnicastRemoteObject</code>
-        <code>LocateRegistry.createRegistry(1099)</code>
-        <code>Naming.rebind("rmi://host/name", obj)</code>
-        <code>Naming.lookup("rmi://host/name")</code>
-      </div>
-    </div>
-  </div>
-
-  <div style="text-align:center;margin-top:3rem;padding:2rem;color:var(--muted);font-size:.85rem;border-top:1px solid var(--border)">
-    Programming in Java — 12 Interactive Modules &nbsp;•&nbsp; All code examples runnable in browser &nbsp;•&nbsp; No external dependencies
-  </div>
-</main>
-
-<script>
-let activeTag='all';
-
-function filterCards(){
-  const q=document.getElementById('searchInput').value.toLowerCase().trim();
-  document.querySelectorAll('.week-card').forEach(card=>{
-    const text=(card.textContent+' '+(card.dataset.keywords||'')).toLowerCase();
-    const tagMatch=activeTag==='all'||(card.dataset.tags||'').includes(activeTag);
-    const qMatch=!q||text.includes(q);
-    card.classList.toggle('hidden',!(tagMatch&&qMatch));
-  });
-  // hide/show section labels
-  document.querySelectorAll('.section-label').forEach(label=>{
-    const next=label.nextElementSibling;
-    if(next&&next.classList.contains('section-label'))return;
-  });
-}
-
-function filterByTag(tag,btn){
-  activeTag=tag;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  filterCards();
-}
-
-// Animate cards on load
-document.querySelectorAll('.week-card').forEach((card,i)=>{
-  card.style.opacity='0';
-  card.style.transform='translateY(20px)';
-  card.style.transition='opacity .4s ease, transform .4s ease, box-shadow .2s, border-color .2s';
-  setTimeout(()=>{card.style.opacity='1';card.style.transform='translateY(0)';},80+i*60);
-});
-</script>
-<script src="../claude-tutor.js"></script>
+  <footer>
+    Study Hub · Click any subject to jump into its modules
+  </footer>
 </body>
 </html>

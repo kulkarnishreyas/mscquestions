@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 7 – Reinforcement Learning</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d2e; --accent:#6c63ff; --accent2:#00d4aa; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --code:#2d3748; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+  header { background:linear-gradient(135deg,#f7c948,#6c63ff); padding:3rem 2rem; text-align:center; }
+  header h1 { font-size:2.5rem; font-weight:800; color:#fff; }
+  header p { font-size:1.1rem; color:rgba(255,255,255,0.85); margin-top:0.5rem; }
+  nav { background:var(--card); border-bottom:2px solid var(--accent); display:flex; flex-wrap:wrap; gap:0.25rem; padding:0.75rem 1rem; position:sticky; top:0; z-index:100; }
+  nav a { color:var(--muted); text-decoration:none; padding:0.4rem 1rem; border-radius:6px; font-size:0.9rem; transition:all 0.2s; }
+  nav a:hover, nav a.active { background:var(--accent); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:2rem 1.5rem; }
+  section { margin-bottom:3rem; }
+  h2 { font-size:1.8rem; color:var(--accent); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  h3 { font-size:1.2rem; color:var(--accent2); margin:1.2rem 0 0.6rem; }
+  h4 { font-size:1rem; color:#f7c948; margin:0.8rem 0 0.3rem; }
+  p { margin-bottom:0.8rem; color:var(--text); }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .highlight { border-left:4px solid var(--accent); padding-left:1rem; background:rgba(108,99,255,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight2 { border-left:4px solid var(--accent2); padding-left:1rem; background:rgba(0,212,170,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight3 { border-left:4px solid #f7c948; background:rgba(247,201,72,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .formula { background:var(--code); border-radius:8px; padding:1rem 1.5rem; font-family:monospace; font-size:1.1rem; color:#f7c948; text-align:center; margin:1rem 0; overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+  th { background:var(--accent); color:#fff; padding:0.7rem 1rem; text-align:left; }
+  td { padding:0.6rem 1rem; border-bottom:1px solid var(--border); }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.03); }
+  ul,ol { padding-left:1.5rem; margin-bottom:0.8rem; }
+  li { margin-bottom:0.3rem; }
+  .tag { background:var(--accent); color:#fff; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag2 { background:var(--accent2); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  svg text { font-family:'Segoe UI',sans-serif; }
+  .step { display:flex; gap:1rem; align-items:flex-start; margin-bottom:0.8rem; }
+  .step-num { background:var(--accent); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:700px) { .two-col { grid-template-columns:1fr; } header h1 { font-size:1.8rem; } }
+  .interactive-box { background:var(--card); border:2px solid var(--accent); border-radius:12px; padding:1.5rem; margin:1.5rem 0; }
+  input[type=number],select { background:var(--code); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:0.4rem 0.8rem; font-size:0.95rem; width:100%; margin-bottom:0.5rem; }
+  button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:0.6rem 1.5rem; cursor:pointer; font-size:0.95rem; font-weight:600; transition:opacity 0.2s; }
+  button:hover { opacity:0.85; }
+  button.btn2 { background:var(--accent2); color:#000; }
+  button.btn3 { background:#f7c948; color:#000; }
+  .result-box { background:rgba(0,212,170,0.1); border:1px solid var(--accent2); border-radius:8px; padding:1rem; margin-top:1rem; font-weight:600; color:var(--accent2); min-height:2rem; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+  @media(max-width:700px) { .grid3 { grid-template-columns:1fr; } }
+  .qtable { border-collapse:collapse; width:100%; font-size:0.82rem; font-family:monospace; }
+  .qtable th { background:#2d3748; color:#f7c948; padding:6px 10px; text-align:center; border:1px solid #3d4a5f; }
+  .qtable td { padding:5px 10px; border:1px solid #2d3748; text-align:center; transition:background 0.4s; }
+  .qtable td.best { background:rgba(0,212,170,0.25); color:#00d4aa; font-weight:700; }
+  .qtable td.updated { background:rgba(247,201,72,0.2); color:#f7c948; }
+  .episode-log { background:#12152a; border-radius:8px; padding:1rem; font-family:monospace; font-size:0.82rem; max-height:200px; overflow-y:auto; color:#94a3b8; }
+  .episode-log span.good { color:#00d4aa; }
+  .episode-log span.bad { color:#ff6b6b; }
+  .episode-log span.goal { color:#f7c948; font-weight:700; }
+  #gw-canvas-wrap { display:flex; justify-content:center; }
+  .btn-row { display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1rem; }
+  .badge { display:inline-block; background:#2d3748; color:#f7c948; border-radius:6px; padding:0.15rem 0.6rem; font-size:0.8rem; font-family:monospace; margin:0 2px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🎮 Week 7: Reinforcement Learning</h1>
+  <p>MDPs · Value Functions · Q-Learning · Grid World · Deep Q-Networks</p>
+</header>
+<nav>
+  <a href="#overview" class="active">RL Overview</a>
+  <a href="#concepts">Key Concepts</a>
+  <a href="#mdp">MDP</a>
+  <a href="#value">Value Functions</a>
+  <a href="#qlearn">Q-Learning</a>
+  <a href="#gridworld">Grid World</a>
+  <a href="#dqn">DQN</a>
+  <a href="#compare">Comparison</a>
+</nav>
+
+<div class="container">
+
+<!-- SECTION 1: RL Overview -->
+<section id="overview">
+  <h2>🎮 Reinforcement Learning Overview</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>Core Idea:</strong> An <em>agent</em> learns to make decisions by interacting with an <em>environment</em>. Instead of being given correct answers (supervised) or finding hidden structure (unsupervised), the agent receives <em>reward signals</em> and must figure out, through trial and error, which actions lead to the best long-term outcome.
+    </div>
+    <p>Think of it like training a dog: you don't tell the dog exactly what to do step-by-step. You reward good behaviour (+treat) and discourage bad behaviour (no treat). Over time the dog learns which actions produce rewards.</p>
+
+    <h3>How RL Differs from Other Paradigms</h3>
+    <div class="grid3">
+      <div class="card" style="border-top:4px solid #6c63ff;">
+        <h4>Supervised Learning</h4>
+        <p>Given labeled (input, correct answer) pairs.</p>
+        <p>A teacher tells you: "this photo is a cat."</p>
+        <p><strong>RL does NOT have labels.</strong></p>
+      </div>
+      <div class="card" style="border-top:4px solid #00d4aa;">
+        <h4>Unsupervised Learning</h4>
+        <p>No labels, discovers hidden patterns.</p>
+        <p>No feedback signal at all — just find structure.</p>
+        <p><strong>RL DOES have rewards.</strong></p>
+      </div>
+      <div class="card" style="border-top:4px solid #f7c948;">
+        <h4>Reinforcement Learning</h4>
+        <p>No labels, but gets scalar reward signals.</p>
+        <p>Feedback is delayed, noisy, and sparse.</p>
+        <p><strong>Goal: maximise cumulative reward.</strong></p>
+      </div>
+    </div>
+
+    <h3>The Agent–Environment Loop</h3>
+    <!-- Agent-Environment cycle SVG -->
+    <svg viewBox="0 0 700 260" width="100%" height="260" style="background:#12152a;border-radius:12px;">
+      <defs>
+        <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="#94a3b8"/>
+        </marker>
+        <marker id="arr-acc" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="#6c63ff"/>
+        </marker>
+        <marker id="arr-green" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="#00d4aa"/>
+        </marker>
+        <marker id="arr-yellow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="#f7c948"/>
+        </marker>
+      </defs>
+
+      <!-- Agent box -->
+      <rect x="60" y="90" width="160" height="80" rx="14" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2.5"/>
+      <text x="140" y="126" fill="#6c63ff" font-size="15" font-weight="bold" text-anchor="middle">AGENT</text>
+      <text x="140" y="148" fill="#94a3b8" font-size="10" text-anchor="middle">learner / decision maker</text>
+
+      <!-- Environment box -->
+      <rect x="480" y="90" width="165" height="80" rx="14" fill="#1a1d2e" stroke="#f7c948" stroke-width="2.5"/>
+      <text x="562" y="126" fill="#f7c948" font-size="15" font-weight="bold" text-anchor="middle">ENVIRONMENT</text>
+      <text x="562" y="148" fill="#94a3b8" font-size="10" text-anchor="middle">world the agent lives in</text>
+
+      <!-- Action arrow: Agent → Env (top) -->
+      <path d="M220,110 Q350,55 478,110" stroke="#6c63ff" stroke-width="2.5" fill="none" marker-end="url(#arr-acc)"/>
+      <rect x="290" y="42" width="120" height="26" rx="8" fill="#1a1d2e" stroke="#6c63ff" stroke-width="1.2"/>
+      <text x="350" y="60" fill="#6c63ff" font-size="12" font-weight="bold" text-anchor="middle">Action (Aₜ)</text>
+
+      <!-- State arrow: Env → Agent (bottom) -->
+      <path d="M480,160 Q350,215 222,160" stroke="#00d4aa" stroke-width="2.5" fill="none" marker-end="url(#arr-green)"/>
+      <rect x="254" y="178" width="120" height="26" rx="8" fill="#1a1d2e" stroke="#00d4aa" stroke-width="1.2"/>
+      <text x="314" y="196" fill="#00d4aa" font-size="12" font-weight="bold" text-anchor="middle">State (Sₜ₊₁)</text>
+
+      <!-- Reward arrow: below state arrow -->
+      <path d="M480,175 Q350,238 222,175" stroke="#f7c948" stroke-width="2" fill="none" marker-end="url(#arr-yellow)" stroke-dasharray="7,3"/>
+      <rect x="303" y="215" width="120" height="26" rx="8" fill="#1a1d2e" stroke="#f7c948" stroke-width="1.2"/>
+      <text x="363" y="233" fill="#f7c948" font-size="12" font-weight="bold" text-anchor="middle">Reward (Rₜ₊₁)</text>
+
+      <!-- Time step label -->
+      <text x="350" y="18" fill="#94a3b8" font-size="11" text-anchor="middle">At each time step t: agent observes state, picks action, env returns new state + reward</text>
+    </svg>
+
+    <h3>Real-World Applications</h3>
+    <div class="two-col">
+      <ul>
+        <li><strong>Game Playing:</strong> AlphaGo (2016) beat world champion Lee Sedol at Go — a game with more board positions than atoms in the universe</li>
+        <li><strong>Robotics:</strong> Teaching robots to walk, grasp objects, and navigate without hard-coded motion planning</li>
+        <li><strong>Self-Driving Cars:</strong> Learning driving policies from interactions with simulated and real environments</li>
+      </ul>
+      <ul>
+        <li><strong>Algorithmic Trading:</strong> Agents learn optimal buy/sell strategies by interacting with market simulators</li>
+        <li><strong>Recommender Systems:</strong> Optimise for long-term user engagement rather than just next-click CTR</li>
+        <li><strong>Drug Discovery:</strong> RL agents design molecules by sequentially adding atoms and receiving feedback on desired properties</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: Key Concepts -->
+<section id="concepts">
+  <h2>🔑 Key Concepts</h2>
+  <div class="card">
+    <div class="two-col">
+      <div>
+        <h3>Core Components</h3>
+        <div class="highlight">
+          <h4>Agent</h4>
+          <p>The learner and decision-maker. The agent perceives its environment through states, chooses actions, and aims to maximise cumulative reward. Examples: a chess program, a robot arm, a stock-trading bot.</p>
+        </div>
+        <div class="highlight">
+          <h4>Environment</h4>
+          <p>Everything the agent interacts with. It receives actions from the agent and emits the next state and reward. The environment can be fully observable (agent sees everything) or partially observable (agent has limited view).</p>
+        </div>
+        <div class="highlight">
+          <h4>State (S)</h4>
+          <p>A representation of the current situation. In chess: the board position. In a robot: joint angles + camera image. A good state captures all information needed to make the best decision (Markov property).</p>
+        </div>
+        <div class="highlight">
+          <h4>Action (A)</h4>
+          <p>What the agent can do. Can be <em>discrete</em> (move Up/Down/Left/Right) or <em>continuous</em> (steering angle ∈ [−30°, +30°]). The set of all valid actions in state s is the <em>action space</em>.</p>
+        </div>
+      </div>
+      <div>
+        <div class="highlight3">
+          <h4>Reward (R)</h4>
+          <p>A scalar feedback signal received after each action. Can be positive (good) or negative (bad). It is the agent's only feedback about whether its actions are working. <strong>Designing good reward functions is an art.</strong></p>
+          <ul>
+            <li>Chess: +1 win, −1 loss, 0 draw</li>
+            <li>Grid world: −1 per step, +10 at goal</li>
+            <li>Robot: +distance moved forward, −energy used</li>
+          </ul>
+        </div>
+        <div class="highlight3">
+          <h4>Policy (π)</h4>
+          <p>The agent's strategy — a mapping from states to actions.</p>
+          <p><strong>Deterministic:</strong> <code class="badge">a = π(s)</code> — for every state, one fixed action.</p>
+          <p><strong>Stochastic:</strong> <code class="badge">π(a|s) = P(a|s)</code> — a probability distribution over actions given a state. More flexible; better for environments with uncertainty.</p>
+        </div>
+        <div class="highlight2">
+          <h4>Episode</h4>
+          <p>A complete sequence from the starting state to a terminal state (e.g., winning/losing a game). Each episode: (s₀,a₀,r₁), (s₁,a₁,r₂), …, (s_T). Not all tasks are episodic — some are <em>continuing</em> (no terminal state).</p>
+        </div>
+        <div class="highlight2">
+          <h4>Return (G) — Cumulative Discounted Reward</h4>
+          <p>The total reward the agent collects from time t to end of episode, with later rewards discounted:</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="formula">Gₜ = rₜ₊₁ + γ·rₜ₊₂ + γ²·rₜ₊₃ + … = Σₖ₌₀^∞ γᵏ · rₜ₊ₖ₊₁</div>
+    <div class="two-col">
+      <div class="highlight">
+        <h4>Why Discount (γ)?</h4>
+        <ul>
+          <li>γ ∈ [0, 1]: controls how much future rewards matter</li>
+          <li>γ = 0: agent only cares about immediate reward (greedy)</li>
+          <li>γ = 1: agent weighs all future rewards equally (only works for episodic tasks)</li>
+          <li>γ = 0.9: typical value — rewards 10 steps away are worth 0.9¹⁰ ≈ 35% of immediate reward</li>
+        </ul>
+      </div>
+      <div class="highlight2">
+        <h4>Return Example</h4>
+        <p>Rewards: r₁=−1, r₂=−1, r₃=−1, r₄=+10, γ=0.9</p>
+        <p>G₀ = −1 + 0.9·(−1) + 0.81·(−1) + 0.729·10</p>
+        <p>G₀ = −1 − 0.9 − 0.81 + 7.29 = <strong>+4.58</strong></p>
+        <p>A positive return means reaching the goal was worthwhile despite the step penalties.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: MDP -->
+<section id="mdp">
+  <h2>🔢 Markov Decision Process (MDP)</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>Markov Property:</strong> "The future is independent of the past given the present." Formally: P(Sₜ₊₁ | Sₜ, Aₜ, Sₜ₋₁, Aₜ₋₁, …) = P(Sₜ₊₁ | Sₜ, Aₜ). The current state captures everything needed to predict the future.
+    </div>
+    <p>A <strong>Markov Decision Process (MDP)</strong> is the mathematical framework for RL. Almost all RL problems are formulated as MDPs.</p>
+
+    <h3>MDP = (S, A, P, R, γ)</h3>
+    <table>
+      <tr><th>Symbol</th><th>Name</th><th>Description</th><th>Example (grid world)</th></tr>
+      <tr><td><strong>S</strong></td><td>State Space</td><td>Set of all possible states</td><td>16 cells in a 4×4 grid</td></tr>
+      <tr><td><strong>A</strong></td><td>Action Space</td><td>Set of all possible actions</td><td>{Up, Down, Left, Right}</td></tr>
+      <tr><td><strong>P(s'|s,a)</strong></td><td>Transition Probability</td><td>Probability of reaching state s' from s with action a</td><td>P(s₁|s₀, Right)=1.0 (deterministic)</td></tr>
+      <tr><td><strong>R(s,a,s')</strong></td><td>Reward Function</td><td>Expected reward for transition s→a→s'</td><td>R=+10 at goal, −1 otherwise</td></tr>
+      <tr><td><strong>γ</strong></td><td>Discount Factor</td><td>How much future rewards are discounted</td><td>γ = 0.9</td></tr>
+    </table>
+
+    <h3>Simple MDP Diagram — Weather Example</h3>
+    <p>A 3-state MDP: Sunny (S), Cloudy (C), Rainy (R). Action: Take Umbrella or Not. Rewards depend on state + action.</p>
+
+    <svg viewBox="0 0 680 260" width="100%" height="260" style="background:#12152a;border-radius:12px;">
+      <defs>
+        <marker id="m1" markerWidth="9" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 z" fill="#6c63ff"/></marker>
+        <marker id="m2" markerWidth="9" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 z" fill="#00d4aa"/></marker>
+        <marker id="m3" markerWidth="9" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 z" fill="#f7c948"/></marker>
+      </defs>
+
+      <!-- State nodes -->
+      <circle cx="130" cy="130" r="45" fill="#1a1d2e" stroke="#f7c948" stroke-width="2.5"/>
+      <text x="130" y="124" fill="#f7c948" font-size="20" text-anchor="middle">☀️</text>
+      <text x="130" y="145" fill="#f7c948" font-size="12" font-weight="bold" text-anchor="middle">Sunny</text>
+      <text x="130" y="162" fill="#94a3b8" font-size="9" text-anchor="middle">s₀</text>
+
+      <circle cx="350" cy="70" r="45" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2.5"/>
+      <text x="350" y="64" fill="#6c63ff" font-size="20" text-anchor="middle">⛅</text>
+      <text x="350" y="85" fill="#6c63ff" font-size="12" font-weight="bold" text-anchor="middle">Cloudy</text>
+      <text x="350" y="102" fill="#94a3b8" font-size="9" text-anchor="middle">s₁</text>
+
+      <circle cx="350" cy="200" r="45" fill="#1a1d2e" stroke="#00d4aa" stroke-width="2.5"/>
+      <text x="350" y="194" fill="#00d4aa" font-size="20" text-anchor="middle">🌧️</text>
+      <text x="350" y="215" fill="#00d4aa" font-size="12" font-weight="bold" text-anchor="middle">Rainy</text>
+      <text x="350" y="232" fill="#94a3b8" font-size="9" text-anchor="middle">s₂</text>
+
+      <circle cx="570" cy="130" r="45" fill="#1a1d2e" stroke="#f7c948" stroke-width="2.5"/>
+      <text x="570" y="124" fill="#f7c948" font-size="20" text-anchor="middle">🏆</text>
+      <text x="570" y="145" fill="#f7c948" font-size="12" font-weight="bold" text-anchor="middle">Goal</text>
+      <text x="570" y="162" fill="#94a3b8" font-size="9" text-anchor="middle">terminal</text>
+
+      <!-- Transitions -->
+      <path d="M172,105 L307,82" stroke="#6c63ff" stroke-width="2" fill="none" marker-end="url(#m1)"/>
+      <text x="225" y="82" fill="#6c63ff" font-size="9" text-anchor="middle">P=0.7 R=−1</text>
+
+      <path d="M172,155 L307,188" stroke="#00d4aa" stroke-width="2" fill="none" marker-end="url(#m2)"/>
+      <text x="225" y="185" fill="#00d4aa" font-size="9" text-anchor="middle">P=0.3 R=−1</text>
+
+      <path d="M395,75 L527,112" stroke="#f7c948" stroke-width="2" fill="none" marker-end="url(#m3)"/>
+      <text x="465" y="82" fill="#f7c948" font-size="9" text-anchor="middle">P=0.6 R=+10</text>
+
+      <path d="M395,195 L527,148" stroke="#f7c948" stroke-width="2" fill="none" marker-end="url(#m3)"/>
+      <text x="460" y="183" fill="#f7c948" font-size="9" text-anchor="middle">P=0.4 R=+10</text>
+
+      <!-- Self loops -->
+      <path d="M308,55 Q280,20 320,42" stroke="#6c63ff" stroke-width="1.5" fill="none" marker-end="url(#m1)" stroke-dasharray="5,3"/>
+      <text x="284" y="28" fill="#94a3b8" font-size="9">P=0.4</text>
+
+      <path d="M308,215 Q280,250 320,228" stroke="#00d4aa" stroke-width="1.5" fill="none" marker-end="url(#m2)" stroke-dasharray="5,3"/>
+      <text x="280" y="256" fill="#94a3b8" font-size="9">P=0.6</text>
+
+      <text x="10" y="20" fill="#94a3b8" font-size="10">Arrows show transitions P(s'|s,a) with rewards R.</text>
+    </svg>
+
+    <h3>Why MDP?</h3>
+    <p>The MDP framework lets us formally state RL problems. Once we have an MDP, we can apply algorithms to find the <strong>optimal policy</strong> — the policy that maximises expected return from every starting state. Methods that use P(s'|s,a) are called <em>model-based</em>; those that don't (like Q-learning) are <em>model-free</em>.</p>
+  </div>
+</section>
+
+<!-- SECTION 4: Value Functions -->
+<section id="value">
+  <h2>📈 Value Functions & the Bellman Equation</h2>
+  <div class="card">
+    <p>Value functions answer: <em>"How good is it to be in state s?"</em> or <em>"How good is it to take action a in state s?"</em> These functions are central to most RL algorithms.</p>
+
+    <h3>State-Value Function V(s)</h3>
+    <div class="formula">V^π(s) = E_π[Gₜ | Sₜ = s] = E_π[ Σₖ₌₀^∞ γᵏ · rₜ₊ₖ₊₁ | Sₜ = s ]</div>
+    <p>V^π(s) is the expected cumulative discounted reward starting from state s and following policy π thereafter. A higher V(s) means state s is a "better" place to be.</p>
+
+    <h3>Action-Value Function Q(s, a) — the Q-function</h3>
+    <div class="formula">Q^π(s, a) = E_π[Gₜ | Sₜ = s, Aₜ = a]</div>
+    <p>Q^π(s,a) is the expected return from state s, taking action a first, then following policy π. <strong>Q-functions directly tell you which action to take.</strong></p>
+
+    <div class="highlight2">
+      <strong>Relationship:</strong> V^π(s) = Σ_a π(a|s) · Q^π(s,a) &nbsp;—&nbsp; V is the average of Q weighted by the policy.
+    </div>
+
+    <h3>The Bellman Equation — Recursive Definition</h3>
+    <p>The key insight: the value of a state equals the immediate reward plus the discounted value of the next state.</p>
+    <div class="formula">V^π(s) = Σ_a π(a|s) · Σ_{s'} P(s'|s,a) · [ R(s,a,s') + γ · V^π(s') ]</div>
+    <div class="formula">Q^π(s,a) = Σ_{s'} P(s'|s,a) · [ R(s,a,s') + γ · Σ_{a'} π(a'|s') · Q^π(s',a') ]</div>
+
+    <h3>Optimal Value Functions</h3>
+    <p>The <em>optimal</em> value functions represent the best possible performance:</p>
+    <div class="formula">V*(s) = max_a Σ_{s'} P(s'|s,a) · [ R(s,a,s') + γ · V*(s') ]</div>
+    <div class="formula">Q*(s,a) = Σ_{s'} P(s'|s,a) · [ R(s,a,s') + γ · max_{a'} Q*(s',a') ]</div>
+
+    <div class="highlight3">
+      <strong>Optimal Policy:</strong> Once we have Q*(s,a), the optimal policy is trivial:
+      <div style="text-align:center;font-family:monospace;font-size:1.1rem;color:#f7c948;margin-top:0.5rem;">π*(s) = argmax_a Q*(s, a)</div>
+      <p style="margin-top:0.5rem;">Just pick the action with the highest Q-value in each state!</p>
+    </div>
+
+    <h3>Worked Example: Bellman Backup</h3>
+    <div class="highlight">
+      <p>A simple 2-state chain: s₀ → s₁ → terminal. γ=0.9.</p>
+      <p>R(s₁→terminal) = +10, R(s₀→s₁) = −1</p>
+      <p><strong>Step 1:</strong> V*(terminal) = 0 (no future rewards)</p>
+      <p><strong>Step 2:</strong> V*(s₁) = R(s₁,a,terminal) + γ·V*(terminal) = 10 + 0.9·0 = <strong>10</strong></p>
+      <p><strong>Step 3:</strong> V*(s₀) = R(s₀,a,s₁) + γ·V*(s₁) = −1 + 0.9·10 = −1 + 9 = <strong>8</strong></p>
+      <p>So even though taking the first step costs −1, state s₀ is still worth 8 because of the future +10 reward.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: Q-Learning -->
+<section id="qlearn">
+  <h2>⚡ Q-Learning Algorithm</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>Q-Learning is model-free:</strong> it does NOT need to know the transition probabilities P(s'|s,a). It learns Q* directly from experience by interacting with the environment.
+    </div>
+
+    <h3>Q-Table</h3>
+    <p>For small state/action spaces, we store Q(s,a) in a table: rows = states, columns = actions. Initially all zeros. We update entries as the agent explores.</p>
+
+    <h3>The Q-Learning Update Rule</h3>
+    <div class="formula">Q(s,a) ← Q(s,a) + α · [ r + γ · max_{a'} Q(s',a') − Q(s,a) ]</div>
+
+    <table>
+      <tr><th>Term</th><th>Name</th><th>Role</th></tr>
+      <tr><td><span class="badge">Q(s,a)</span></td><td>Current estimate</td><td>What we currently think action a in state s is worth</td></tr>
+      <tr><td><span class="badge">r + γ·max Q(s',a')</span></td><td>TD Target</td><td>Better estimate using actual reward + discounted future value</td></tr>
+      <tr><td><span class="badge">TD Target − Q(s,a)</span></td><td>TD Error (δ)</td><td>How wrong our current estimate is — the "surprise"</td></tr>
+      <tr><td><span class="badge">α</span></td><td>Learning rate</td><td>How fast to update (0.1–0.5 typical). Small α = slow but stable.</td></tr>
+      <tr><td><span class="badge">γ</span></td><td>Discount factor</td><td>How much future rewards matter</td></tr>
+    </table>
+
+    <h3>Intuition: Temporal Difference Learning</h3>
+    <p>Q-Learning is a <em>Temporal Difference (TD)</em> method. It updates estimates based on the difference between consecutive predictions — like adjusting a weather forecast as new information arrives, rather than waiting until the end of the week to see if it rained.</p>
+
+    <div class="highlight2">
+      <strong>Worked Update:</strong> Suppose Q(s=0, a=Right) = 0 (initial). Agent takes Right from s=0, lands in s=1, gets reward r=−1. max Q(s=1, a') = 0 (all zeros initially). α=0.5, γ=0.9.
+      <p style="margin-top:0.5rem;">Q(0,Right) ← 0 + 0.5·[−1 + 0.9·0 − 0] = 0 + 0.5·(−1) = <strong>−0.5</strong></p>
+      <p>Now Q(0,Right) = −0.5. The agent has learned that going Right from s=0 is slightly bad (costs a step).</p>
+    </div>
+
+    <h3>Epsilon-Greedy Exploration</h3>
+    <p>The agent faces the <strong>exploration vs. exploitation dilemma</strong>: should it use what it knows (exploit) or try something new (explore)?</p>
+
+    <div class="two-col">
+      <div class="highlight">
+        <h4>With probability ε — Explore</h4>
+        <p>Pick a <em>random</em> action from the action space. This ensures the agent discovers new paths and doesn't get stuck in local optima.</p>
+        <p>Early in training: ε should be high (lots of exploration).</p>
+      </div>
+      <div class="highlight2">
+        <h4>With probability 1−ε — Exploit</h4>
+        <p>Pick the <em>greedy</em> action: a* = argmax_a Q(s,a). Use current knowledge to get the best known reward.</p>
+        <p>Late in training: ε should be low (mostly exploit).</p>
+      </div>
+    </div>
+
+    <div class="formula">ε decay: εₜ = ε_min + (ε_max − ε_min) · exp(−λ · t)</div>
+    <p>Common values: ε_max=1.0, ε_min=0.01, λ=0.001. After ~5000 steps ε ≈ 0.07 — the agent exploits 93% of the time.</p>
+
+    <h3>Q-Learning Algorithm Pseudocode</h3>
+    <div style="background:#12152a;border-radius:8px;padding:1.2rem;font-family:monospace;font-size:0.88rem;color:#e2e8f0;line-height:1.9;">
+      <span style="color:#6c63ff;font-weight:bold;">Initialize</span> Q(s,a) = 0 for all s, a<br>
+      <span style="color:#f7c948;">for</span> episode = 1 to N_episodes:<br>
+      &nbsp;&nbsp;s ← initial state<br>
+      &nbsp;&nbsp;<span style="color:#f7c948;">while</span> s is not terminal:<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;ε-greedy: <span style="color:#00d4aa;">with prob ε → a = random action</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6c63ff;">with prob 1-ε → a = argmax_a Q(s,a)</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Execute action a → observe r, s'<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Q(s,a) ← Q(s,a) + α · [r + γ · max_{a'} Q(s',a') − Q(s,a)]<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;s ← s'<br>
+      &nbsp;&nbsp;Decay ε<br>
+      <span style="color:#00d4aa;font-weight:bold;">Return</span> Q-table (optimal policy: π*(s) = argmax_a Q(s,a))
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: Grid World -->
+<section id="gridworld">
+  <h2>🗺️ Grid World — Detailed Worked Example</h2>
+  <div class="card">
+    <h3>Problem Setup</h3>
+    <div class="two-col">
+      <div>
+        <p>A 4×4 grid with 16 cells numbered 0–15 (left-to-right, top-to-bottom). The agent starts at cell <span class="badge" style="background:#6c63ff;color:#fff;">0</span> (top-left).</p>
+        <ul>
+          <li><strong>Goal:</strong> Reach cell <span class="badge" style="background:#f7c948;color:#000;">15</span> (bottom-right) → reward <strong>+10</strong></li>
+          <li><strong>Holes:</strong> Cells <span class="badge" style="background:#ff6b6b;color:#fff;">5</span> and <span class="badge" style="background:#ff6b6b;color:#fff;">11</span> → reward <strong>−10</strong> (episode ends)</li>
+          <li><strong>Every step:</strong> reward <strong>−1</strong> (encourages efficiency)</li>
+          <li><strong>Actions:</strong> Up (↑), Down (↓), Left (←), Right (→)</li>
+          <li><strong>Hitting a wall:</strong> stay in same cell, still get −1</li>
+        </ul>
+      </div>
+      <div>
+        <p><strong>MDP Parameters:</strong></p>
+        <ul>
+          <li>α (learning rate) = 0.5</li>
+          <li>γ (discount) = 0.9</li>
+          <li>ε (start) = 1.0, decays to 0.1</li>
+          <li>S = {0, 1, …, 15}</li>
+          <li>A = {Up, Down, Left, Right}</li>
+        </ul>
+        <div class="highlight3">
+          <strong>Grid Layout:</strong><br>
+          S: start (cell 0) &nbsp; G: goal (cell 15)<br>
+          H: hole (cells 5, 11) &nbsp; .: safe cell
+        </div>
+      </div>
+    </div>
+
+    <!-- Static grid diagram -->
+    <h3>Grid Diagram</h3>
+    <svg viewBox="0 0 420 420" width="100%" height="300" style="background:#12152a;border-radius:12px;display:block;margin:0 auto;max-width:420px;">
+      <!-- Grid cells -->
+      <defs>
+        <filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Row 0 -->
+      <rect x="10" y="10" width="90" height="90" rx="8" fill="#1e2240" stroke="#6c63ff" stroke-width="2.5"/>
+      <text x="55" y="52" fill="#6c63ff" font-size="22" font-weight="bold" text-anchor="middle">S</text>
+      <text x="55" y="76" fill="#94a3b8" font-size="11" text-anchor="middle">cell 0</text>
+
+      <rect x="110" y="10" width="90" height="90" rx="8" fill="#1a1d2e" stroke="#2d3748" stroke-width="1.5"/>
+      <text x="155" y="52" fill="#e2e8f0" font-size="16" text-anchor="middle">·</text>
+      <text x="155" y="76" fill="#94a3b8" font-size="11" text-anchor="middle">cell 1</text>
+
+      <rect x="210" y="10" width="90" height="90" rx="8" fill="#1a1d2e" stroke="#2d3748" stroke-width="1.5"/>
+      <text x="255" y="52" fill="#e2e8f0" font-size="16" text-anchor="middle">·</text>
+      <text x="255" y="76" fill="#94a3b8" font-size="11" text-anchor="middle">cell 2</text>
+
+      <rect x="310" y="10" width="90" height="90" rx="8" fill="#1a1d2e" stroke="#2d3748" stroke-width="1.5"/>
+      <text x="355" y="52" fill="#e2e8f0" font-size="16" text-anchor="middle">·</text>
+      <text x="355" y="76" fill="#94a3b8" font-size="11" text-anchor="middle">cell 3</text>
+
+      <!-- Row 1 -->
+      <rect x="10" y="110" width="90" height="90" rx="8" fill="#1a1d2e" stroke="#2d3748" stroke-width="1.5"/>
+      <text x="55" y="152" fill="#e2e8f0" font-size="16" text-anchor="middle">·</text>
+      <text x="55" y="176" fill="#94a3b8" font-size="11" text-anchor="middle">cell 4</text>
+
+      <rect x="110" y="110" width="90" height="90" rx="8" fill="#3d1515" stroke="#ff6b6b" stroke-width="2.5"/>
+      <text x="155" y="152" fill="#ff6b6b" font-size="26" font-weight="bold" text-anchor="middle">H</text>
+      <text x="155" y="176" fill="#ff6b6b" font-size="11" text-anchor="middle">cell 5</text>
+
+      <rect x="210" y="110" width="90" height="90" rx="8" fill="#1a1d2e" stroke="#2d3748" stroke-width="1.5"/>
+      <text x="255" y="152" fill="#e2e8f0" font-size="16" text-anchor="middle">·</text>
+      <text x="255" y="176" fill="#94a3b8" font-size="11" text-anchor="middle">cell 6</text>
+
+      <rect x="310" y="110" width="90" height="90" rx="8" fill="#1a1d2e" stroke="#2d3748" stroke-width="1.5"/>
+      <text x="355" y="152" fill="#e2e8f0" font-size="16" text-anchor="middle">·</text>
+      <text x="355" y="176" fill="#94a3b8" font-size="11" text-anchor="middle">cell 7</text>
+
+      <!-- Row 2 -->
+      <rect x="10" y="210" width="90" height="90" rx="8" fill="#1a1d2e" stroke="#2d3748" stroke-width="1.5"/>
+      <text x="55" y="252" fill="#e2e8f0" font-size="16" text-anchor="middle">·</text>
+      <text x="55" y="276" fill="#94a3b8" font-size="11" text-anchor="middle">cell 8</text>
+
+      <rect x="110" y="210" width="90" height="90" rx="8" fill="#1a1d2e" stroke="#2d3748" stroke-width="1.5"/>
+      <text x="155" y="252" fill="#e2e8f0" font-size="16" text-anchor="middle">·</text>
+      <text x="155" y="276" fill="#94a3b8" font-size="11" text-anchor="middle">cell 9</text>
+
+      <rect x="210" y="210" width="90" height="90" rx="8" fill="#1a1d2e" stroke="#2d3748" stroke-width="1.5"/>
+      <text x="255" y="252" fill="#e2e8f0" font-size="16" text-anchor="middle">·</text>
+      <text x="255" y="276" fill="#94a3b8" font-size="11" text-anchor="middle">cell 10</text>
+
+      <rect x="310" y="210" width="90" height="90" rx="8" fill="#3d1515" stroke="#ff6b6b" stroke-width="2.5"/>
+      <text x="355" y="252" fill="#ff6b6b" font-size="26" font-weight="bold" text-anchor="middle">H</text>
+      <text x="355" y="276" fill="#ff6b6b" font-size="11" text-anchor="middle">cell 11</text>
+
+      <!-- Row 3 -->
+      <rect x="10" y="310" width="90" height="90" rx="8" fill="#1a1d2e" stroke="#2d3748" stroke-width="1.5"/>
+      <text x="55" y="352" fill="#e2e8f0" font-size="16" text-anchor="middle">·</text>
+      <text x="55" y="376" fill="#94a3b8" font-size="11" text-anchor="middle">cell 12</text>
+
+      <rect x="110" y="310" width="90" height="90" rx="8" fill="#1a1d2e" stroke="#2d3748" stroke-width="1.5"/>
+      <text x="155" y="352" fill="#e2e8f0" font-size="16" text-anchor="middle">·</text>
+      <text x="155" y="376" fill="#94a3b8" font-size="11" text-anchor="middle">cell 13</text>
+
+      <rect x="210" y="310" width="90" height="90" rx="8" fill="#1a1d2e" stroke="#2d3748" stroke-width="1.5"/>
+      <text x="255" y="352" fill="#e2e8f0" font-size="16" text-anchor="middle">·</text>
+      <text x="255" y="376" fill="#94a3b8" font-size="11" text-anchor="middle">cell 14</text>
+
+      <rect x="310" y="310" width="90" height="90" rx="8" fill="#1e3320" stroke="#f7c948" stroke-width="2.5"/>
+      <text x="355" y="352" fill="#f7c948" font-size="22" font-weight="bold" text-anchor="middle">G</text>
+      <text x="355" y="376" fill="#f7c948" font-size="11" text-anchor="middle">cell 15</text>
+    </svg>
+
+    <!-- Episode Walkthroughs -->
+    <h3>Episode 1 — Pure Random Exploration (ε = 1.0)</h3>
+    <p>All Q-values = 0. Agent picks random actions.</p>
+    <div class="highlight">
+      <p><strong>Path:</strong> 0 →(Right)→ 1 →(Down)→ 5 [HOLE! r=−10, episode ends]</p>
+      <p><strong>Updates:</strong></p>
+      <p>Q(1, Down) ← 0 + 0.5·[−10 + 0.9·max Q(5,·) − 0] = 0.5·(−10+0) = <strong>−5.0</strong></p>
+      <p>Q(0, Right) ← 0 + 0.5·[−1 + 0.9·max Q(1,·) − 0] = 0.5·(−1+0) = <strong>−0.5</strong></p>
+      <p><em>Agent learns: going Down from cell 1 is very bad.</em></p>
+    </div>
+
+    <h3>Episode 2 — Some Learning (ε = 0.8)</h3>
+    <p>Q-table now has some non-zero entries. Agent avoids some bad moves.</p>
+    <div class="highlight">
+      <p><strong>Path:</strong> 0 →(Down)→ 4 →(Down)→ 8 →(Right)→ 9 →(Right)→ 10 →(Right)→ 11 [HOLE! r=−10]</p>
+      <p><strong>Key update:</strong></p>
+      <p>Q(10, Right) ← 0 + 0.5·[−10 + 0.9·0 − 0] = <strong>−5.0</strong></p>
+      <p>Q(9, Right) ← 0 + 0.5·[−1 + 0.9·(−5) − 0] = 0.5·(−1−4.5) = <strong>−2.75</strong></p>
+      <p><em>Agent learns to avoid going Right from cells 10 and 9.</em></p>
+    </div>
+
+    <h3>Episode 3 — Near-Optimal Path (ε = 0.5)</h3>
+    <p>Q-table has learned to avoid holes. Agent finds a near-optimal route.</p>
+    <div class="highlight2">
+      <p><strong>Path:</strong> 0 →(Down)→ 4 →(Down)→ 8 →(Down)→ 12 →(Right)→ 13 →(Right)→ 14 →(Right)→ 15 [GOAL! r=+10]</p>
+      <p><strong>Return:</strong> G = −1 − 0.9 − 0.81 − 0.729 − 0.656 − 0.590 + 0.9⁶·10 ≈ −4.69 + 5.31 ≈ <strong>+0.62</strong></p>
+      <p><strong>Q updates propagate back:</strong></p>
+      <p>Q(14,Right) ← 0 + 0.5·[+10 + 0.9·0 − 0] = <strong>+5.0</strong></p>
+      <p>Q(13,Right) ← 0 + 0.5·[−1 + 0.9·5.0 − 0] = 0.5·3.5 = <strong>+1.75</strong></p>
+      <p>Q(12,Right) ← 0 + 0.5·[−1 + 0.9·1.75 − 0] = 0.5·0.575 = <strong>+0.29</strong></p>
+    </div>
+
+    <h3>Q-Table Evolution</h3>
+    <p>Showing Q-values for key states and actions after each episode (selected rows):</p>
+    <div style="overflow-x:auto;">
+      <table class="qtable">
+        <tr>
+          <th>State</th><th>Up</th><th>Down</th><th>Left</th><th>Right</th><th>After Episode</th>
+        </tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>0</td><td class="updated">−0.5</td><td style="color:#6c63ff;">Ep 1</td></tr>
+        <tr><td>1</td><td>0</td><td class="updated">−5.0</td><td>0</td><td>0</td><td style="color:#6c63ff;">Ep 1</td></tr>
+        <tr><td>9</td><td>0</td><td>0</td><td>0</td><td class="updated">−2.75</td><td style="color:#00d4aa;">Ep 2</td></tr>
+        <tr><td>10</td><td>0</td><td>0</td><td>0</td><td class="updated">−5.0</td><td style="color:#00d4aa;">Ep 2</td></tr>
+        <tr><td>12</td><td>0</td><td>0</td><td>0</td><td class="updated">+0.29</td><td style="color:#f7c948;">Ep 3</td></tr>
+        <tr><td>13</td><td>0</td><td>0</td><td>0</td><td class="updated">+1.75</td><td style="color:#f7c948;">Ep 3</td></tr>
+        <tr><td>14</td><td>0</td><td>0</td><td>0</td><td class="best">+5.0</td><td style="color:#f7c948;">Ep 3</td></tr>
+      </table>
+    </div>
+    <p style="margin-top:0.5rem;font-size:0.85rem;color:#94a3b8;">Green = best action in that state. Yellow = recently updated value.</p>
+  </div>
+
+  <!-- Interactive Grid World Simulator -->
+  <div class="interactive-box">
+    <h3 style="margin-top:0;color:#f7c948;">Interactive Grid World Simulator</h3>
+    <p>Watch the agent learn to navigate the 4×4 grid. The Q-table updates in real time. After enough episodes the agent finds the optimal path.</p>
+
+    <div class="btn-row">
+      <button onclick="runEpisode()">Run 1 Episode</button>
+      <button class="btn2" onclick="runMany(10)">Run 10 Episodes</button>
+      <button class="btn3" onclick="runMany(50)">Run 50 Episodes</button>
+      <button onclick="resetAll()" style="background:#2d3748;">Reset</button>
+      <button class="btn2" onclick="togglePolicy()" id="policy-btn">Show Optimal Policy</button>
+    </div>
+
+    <div class="two-col" style="gap:1rem;">
+      <div>
+        <p style="font-size:0.85rem;color:#94a3b8;margin-bottom:0.5rem;">Grid World (click Run Episode)</p>
+        <div id="gw-canvas-wrap">
+          <canvas id="gw-canvas" width="260" height="260" style="border-radius:10px;cursor:pointer;"></canvas>
+        </div>
+        <div style="margin-top:0.5rem;font-size:0.82rem;">
+          <span style="color:#6c63ff;">■ Start</span> &nbsp;
+          <span style="color:#f7c948;">■ Goal</span> &nbsp;
+          <span style="color:#ff6b6b;">■ Hole</span> &nbsp;
+          <span style="color:#00d4aa;">● Agent</span>
+        </div>
+        <div class="result-box" id="gw-stats" style="margin-top:0.75rem;">Episodes: 0 &nbsp;|&nbsp; ε: 1.00 &nbsp;|&nbsp; Last return: —</div>
+      </div>
+      <div>
+        <p style="font-size:0.85rem;color:#94a3b8;margin-bottom:0.5rem;">Episode Log</p>
+        <div class="episode-log" id="gw-log">Waiting for first episode...</div>
+      </div>
+    </div>
+
+    <h4 style="margin-top:1.2rem;">Q-Table (showing max Q per state)</h4>
+    <div style="overflow-x:auto;">
+      <table class="qtable" id="qtable-display"></table>
+    </div>
+    <p style="font-size:0.78rem;color:#94a3b8;margin-top:0.3rem;">Each cell shows max Q-value. Green background = best action direction. H=Hole, G=Goal.</p>
+  </div>
+</section>
+
+<!-- SECTION 7: DQN -->
+<section id="dqn">
+  <h2>🧠 Deep Q-Network (DQN)</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>The Scaling Problem:</strong> Q-tables work for small state spaces (16 cells, 4 actions = 64 values). But for Atari games, the state is a raw 84×84 pixel image — that's 84×84×3 ≈ 21,168 dimensions. The Q-table would be astronomically large and impossible to fill.
+    </div>
+
+    <h3>Solution: Neural Network as Q-Function Approximator</h3>
+    <p>Instead of a table, use a neural network: <strong>Input = state s, Output = Q(s, a) for every action a</strong>. The network learns to generalize across similar states — just like how humans recognize similar situations without memorizing every pixel.</p>
+
+    <div class="formula">Q(s, a; θ) ≈ Q*(s, a) &nbsp;&nbsp;&nbsp; θ = neural network weights</div>
+
+    <div class="two-col">
+      <div>
+        <h3>Key DQN Innovation 1: Experience Replay</h3>
+        <p>Problem: consecutive experience samples (sₜ, aₜ, rₜ, sₜ₊₁) are highly correlated → unstable training.</p>
+        <p><strong>Fix:</strong> Store transitions in a <em>replay buffer</em> of size N (e.g., 10,000). Sample random mini-batches to train on. This breaks correlations and allows reuse of experience.</p>
+        <div class="highlight">
+          <p>1. Agent generates (s, a, r, s') → push to replay buffer</p>
+          <p>2. Sample random batch of 32 transitions</p>
+          <p>3. Compute TD targets: y = r + γ·max_{a'} Q̂(s',a'; θ⁻)</p>
+          <p>4. Gradient descent on loss: L = (y − Q(s,a; θ))²</p>
+        </div>
+      </div>
+      <div>
+        <h3>Key DQN Innovation 2: Target Network</h3>
+        <p>Problem: the TD target r + γ·max Q(s',a'; θ) uses the same network θ that we're updating → moving target → divergence.</p>
+        <p><strong>Fix:</strong> Use a separate <em>target network</em> θ⁻ (frozen copy). Update θ⁻ ← θ every C steps (e.g., C=1000).</p>
+        <div class="highlight2">
+          <p><strong>Online network θ:</strong> updated every step</p>
+          <p><strong>Target network θ⁻:</strong> updated every C steps</p>
+          <p>TD target uses θ⁻, gradient uses θ</p>
+          <p>This stabilises training dramatically.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>DQN Architecture (Atari)</h3>
+    <svg viewBox="0 0 700 180" width="100%" height="180" style="background:#12152a;border-radius:12px;">
+      <defs>
+        <marker id="marr" markerWidth="8" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 z" fill="#94a3b8"/></marker>
+      </defs>
+
+      <!-- Input -->
+      <rect x="10" y="30" width="90" height="120" rx="8" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2"/>
+      <text x="55" y="55" fill="#6c63ff" font-size="10" text-anchor="middle" font-weight="bold">INPUT</text>
+      <text x="55" y="72" fill="#94a3b8" font-size="9" text-anchor="middle">84×84×4</text>
+      <text x="55" y="88" fill="#94a3b8" font-size="9" text-anchor="middle">grayscale</text>
+      <text x="55" y="104" fill="#94a3b8" font-size="9" text-anchor="middle">frames</text>
+      <text x="55" y="120" fill="#94a3b8" font-size="8" text-anchor="middle">(stacked)</text>
+
+      <line x1="100" y1="90" x2="120" y2="90" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#marr)"/>
+
+      <!-- Conv1 -->
+      <rect x="120" y="40" width="90" height="100" rx="8" fill="#1a1d2e" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="165" y="65" fill="#f7c948" font-size="10" text-anchor="middle" font-weight="bold">CONV1</text>
+      <text x="165" y="82" fill="#94a3b8" font-size="9" text-anchor="middle">32 filters</text>
+      <text x="165" y="97" fill="#94a3b8" font-size="9" text-anchor="middle">8×8, stride 4</text>
+      <text x="165" y="112" fill="#00d4aa" font-size="9" text-anchor="middle">ReLU</text>
+      <text x="165" y="127" fill="#94a3b8" font-size="8" text-anchor="middle">→ 20×20×32</text>
+
+      <line x1="210" y1="90" x2="230" y2="90" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#marr)"/>
+
+      <!-- Conv2 -->
+      <rect x="230" y="40" width="90" height="100" rx="8" fill="#1a1d2e" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="275" y="65" fill="#f7c948" font-size="10" text-anchor="middle" font-weight="bold">CONV2</text>
+      <text x="275" y="82" fill="#94a3b8" font-size="9" text-anchor="middle">64 filters</text>
+      <text x="275" y="97" fill="#94a3b8" font-size="9" text-anchor="middle">4×4, stride 2</text>
+      <text x="275" y="112" fill="#00d4aa" font-size="9" text-anchor="middle">ReLU</text>
+      <text x="275" y="127" fill="#94a3b8" font-size="8" text-anchor="middle">→ 9×9×64</text>
+
+      <line x1="320" y1="90" x2="340" y2="90" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#marr)"/>
+
+      <!-- FC -->
+      <rect x="340" y="40" width="90" height="100" rx="8" fill="#1a1d2e" stroke="#00d4aa" stroke-width="1.5"/>
+      <text x="385" y="65" fill="#00d4aa" font-size="10" text-anchor="middle" font-weight="bold">FC LAYER</text>
+      <text x="385" y="82" fill="#94a3b8" font-size="9" text-anchor="middle">Flatten</text>
+      <text x="385" y="97" fill="#94a3b8" font-size="9" text-anchor="middle">512 units</text>
+      <text x="385" y="112" fill="#00d4aa" font-size="9" text-anchor="middle">ReLU</text>
+
+      <line x1="430" y1="90" x2="450" y2="90" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#marr)"/>
+
+      <!-- Output -->
+      <rect x="450" y="30" width="110" height="120" rx="8" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2"/>
+      <text x="505" y="55" fill="#6c63ff" font-size="10" text-anchor="middle" font-weight="bold">OUTPUT</text>
+      <text x="505" y="72" fill="#f7c948" font-size="9" text-anchor="middle">Q(s, a₁)</text>
+      <text x="505" y="88" fill="#f7c948" font-size="9" text-anchor="middle">Q(s, a₂)</text>
+      <text x="505" y="104" fill="#f7c948" font-size="9" text-anchor="middle">Q(s, a₃)</text>
+      <text x="505" y="120" fill="#94a3b8" font-size="8" text-anchor="middle">N_actions outputs</text>
+      <text x="505" y="136" fill="#94a3b8" font-size="8" text-anchor="middle">(e.g. 18 for Atari)</text>
+
+      <!-- Replay buffer note -->
+      <rect x="580" y="50" width="110" height="60" rx="8" fill="#1a1d2e" stroke="#00d4aa" stroke-width="1.5" stroke-dasharray="6,3"/>
+      <text x="635" y="75" fill="#00d4aa" font-size="9" text-anchor="middle" font-weight="bold">Replay Buffer</text>
+      <text x="635" y="90" fill="#94a3b8" font-size="8" text-anchor="middle">(s, a, r, s') × N</text>
+      <text x="635" y="104" fill="#94a3b8" font-size="8" text-anchor="middle">random sample</text>
+
+      <text x="350" y="168" fill="#94a3b8" font-size="9" text-anchor="middle">DeepMind DQN (2015) — first to beat human-level Atari with raw pixels as input</text>
+    </svg>
+
+    <h3>DQN vs Q-Learning Comparison</h3>
+    <table>
+      <tr><th>Feature</th><th>Q-Learning (tabular)</th><th>DQN</th></tr>
+      <tr><td>State representation</td><td>Discrete, small</td><td>Continuous, high-dimensional</td></tr>
+      <tr><td>Q-function storage</td><td>Table (rows × cols)</td><td>Neural network weights</td></tr>
+      <tr><td>Generalization</td><td>None (memorization)</td><td>Yes (interpolates similar states)</td></tr>
+      <tr><td>Experience replay</td><td>No</td><td>Yes (replay buffer)</td></tr>
+      <tr><td>Target network</td><td>No</td><td>Yes (stabilizes training)</td></tr>
+      <tr><td>Scale</td><td>Dozens of states</td><td>Millions of states</td></tr>
+      <tr><td>Example</td><td>Grid World, FrozenLake</td><td>Atari, Go (extended), robotics</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 8: Comparison Table -->
+<section id="compare">
+  <h2>📊 RL vs Supervised vs Unsupervised</h2>
+  <div class="card">
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th style="color:#6c63ff;">Supervised Learning</th>
+        <th style="color:#00d4aa;">Unsupervised Learning</th>
+        <th style="color:#f7c948;">Reinforcement Learning</th>
+      </tr>
+      <tr>
+        <td><strong>Input</strong></td>
+        <td>Labeled (x, y) pairs</td>
+        <td>Unlabeled data x</td>
+        <td>State s, reward r from environment</td>
+      </tr>
+      <tr>
+        <td><strong>Feedback</strong></td>
+        <td>Correct answer provided immediately</td>
+        <td>No feedback at all</td>
+        <td>Delayed scalar reward (may be sparse)</td>
+      </tr>
+      <tr>
+        <td><strong>Goal</strong></td>
+        <td>Learn f(x) → y</td>
+        <td>Discover structure/clusters</td>
+        <td>Maximise cumulative reward</td>
+      </tr>
+      <tr>
+        <td><strong>Output</strong></td>
+        <td>Prediction (class / value)</td>
+        <td>Cluster assignments / embeddings</td>
+        <td>Policy π: s → a</td>
+      </tr>
+      <tr>
+        <td><strong>Learning signal</strong></td>
+        <td>Prediction error vs. ground truth</td>
+        <td>Intrinsic measure (reconstruction, distance)</td>
+        <td>TD error: r + γV(s') − V(s)</td>
+      </tr>
+      <tr>
+        <td><strong>Sequential decisions</strong></td>
+        <td>No (i.i.d. samples)</td>
+        <td>No</td>
+        <td>Yes — actions affect future states</td>
+      </tr>
+      <tr>
+        <td><strong>Key challenge</strong></td>
+        <td>Overfitting, data quality</td>
+        <td>Choosing meaningful structure</td>
+        <td>Exploration vs. exploitation, credit assignment</td>
+      </tr>
+      <tr>
+        <td><strong>Algorithms</strong></td>
+        <td>Linear Reg, KNN, SVM, Neural Nets</td>
+        <td>K-Means, PCA, Autoencoders</td>
+        <td>Q-Learning, Policy Gradient, Actor-Critic, DQN</td>
+      </tr>
+      <tr>
+        <td><strong>Examples</strong></td>
+        <td>Spam filter, image classification</td>
+        <td>Customer segmentation, anomaly detection</td>
+        <td>AlphaGo, robot navigation, game playing</td>
+      </tr>
+    </table>
+
+    <h3>When to Use RL?</h3>
+    <div class="grid3">
+      <div class="card" style="border-top:4px solid #00d4aa;">
+        <h4>Use RL when:</h4>
+        <ul>
+          <li>You have a sequential decision problem</li>
+          <li>Actions have long-term consequences</li>
+          <li>No labeled data / supervisor available</li>
+          <li>Can simulate the environment cheaply</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:4px solid #6c63ff;">
+        <h4>Challenges of RL:</h4>
+        <ul>
+          <li>Reward function design is hard</li>
+          <li>Requires millions of interactions</li>
+          <li>Very sensitive to hyperparameters</li>
+          <li>Sim-to-real gap in robotics</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:4px solid #f7c948;">
+        <h4>Recent Advances:</h4>
+        <ul>
+          <li>AlphaGo / AlphaZero (2016–2017)</li>
+          <li>OpenAI Five — Dota 2 (2019)</li>
+          <li>ChatGPT uses RLHF (2022)</li>
+          <li>RT-2 robot control (2023)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- end container -->
+
+<script>
+// ============================================================
+// GRID WORLD Q-LEARNING SIMULATOR
+// ============================================================
+const GRID_SIZE = 4;
+const N_STATES = 16;
+const N_ACTIONS = 4; // 0=Up, 1=Down, 2=Left, 3=Right
+const START = 0;
+const GOAL = 15;
+const HOLES = [5, 11];
+const ACTION_NAMES = ['↑', '↓', '←', '→'];
+const ACTION_LABELS = ['Up', 'Down', 'Left', 'Right'];
+
+let Q = Array.from({length: N_STATES}, () => new Array(N_ACTIONS).fill(0));
+let alpha = 0.5;
+let gamma = 0.9;
+let epsilon = 1.0;
+let epsilon_min = 0.05;
+let epsilon_decay = 0.97;
+let episodeCount = 0;
+let lastReturn = null;
+let showPolicy = false;
+let agentPos = START;
+let episodePath = [];
+
+const canvas = document.getElementById('gw-canvas');
+const ctx = canvas.getContext('2d');
+const CELL = 65;
+
+function stateToRow(s) { return Math.floor(s / GRID_SIZE); }
+function stateToCol(s) { return s % GRID_SIZE; }
+
+function step(s, a) {
+  let row = stateToRow(s), col = stateToCol(s);
+  if (a === 0) row = Math.max(0, row - 1);
+  else if (a === 1) row = Math.min(3, row + 1);
+  else if (a === 2) col = Math.max(0, col - 1);
+  else if (a === 3) col = Math.min(3, col + 1);
+  const ns = row * GRID_SIZE + col;
+  let reward = -1;
+  let done = false;
+  if (ns === GOAL) { reward = 10; done = true; }
+  else if (HOLES.includes(ns)) { reward = -10; done = true; }
+  return { ns, reward, done };
+}
+
+function chooseAction(s) {
+  if (Math.random() < epsilon) {
+    return Math.floor(Math.random() * N_ACTIONS);
+  }
+  return Q[s].indexOf(Math.max(...Q[s]));
+}
+
+function runEpisode() {
+  let s = START;
+  let totalReturn = 0;
+  let discount = 1;
+  let path = [s];
+  let logEntries = [];
+  let maxSteps = 80;
+  let steps = 0;
+  let done = false;
+
+  while (!done && steps < maxSteps) {
+    const a = chooseAction(s);
+    const { ns, reward, done: d } = step(s, a);
+    totalReturn += discount * reward;
+    discount *= gamma;
+    done = d;
+
+    // Q update
+    const target = reward + (done ? 0 : gamma * Math.max(...Q[ns]));
+    const oldQ = Q[s][a];
+    Q[s][a] = oldQ + alpha * (target - oldQ);
+
+    logEntries.push({ s, a, r: reward, ns, done });
+    path.push(ns);
+    s = ns;
+    steps++;
+  }
+
+  lastReturn = totalReturn;
+  episodeCount++;
+  if (epsilon > epsilon_min) epsilon = Math.max(epsilon_min, epsilon * epsilon_decay);
+  episodePath = path;
+
+  updateLog(logEntries, totalReturn);
+  updateStats();
+  updateQTable();
+  drawGrid(path[path.length - 2] !== undefined ? path : [START]);
+}
+
+function runMany(n) {
+  for (let i = 0; i < n; i++) runEpisode();
+}
+
+function resetAll() {
+  Q = Array.from({length: N_STATES}, () => new Array(N_ACTIONS).fill(0));
+  epsilon = 1.0;
+  episodeCount = 0;
+  lastReturn = null;
+  episodePath = [];
+  document.getElementById('gw-log').innerHTML = 'Reset. Run an episode to begin.';
+  updateStats();
+  updateQTable();
+  drawGrid([START]);
+}
+
+function togglePolicy() {
+  showPolicy = !showPolicy;
+  document.getElementById('policy-btn').textContent = showPolicy ? 'Hide Policy' : 'Show Optimal Policy';
+  drawGrid(episodePath.length ? episodePath : [START]);
+}
+
+function updateLog(entries, ret) {
+  const log = document.getElementById('gw-log');
+  const maxShow = Math.min(entries.length, 15);
+  let html = `<span class="goal">Episode ${episodeCount} (ε=${epsilon.toFixed(2)}, return=${ret.toFixed(2)})</span><br>`;
+  for (let i = 0; i < maxShow; i++) {
+    const e = entries[i];
+    const rColor = e.r > 0 ? 'good' : (e.r < -1 ? 'bad' : '');
+    html += `s${e.s} ${ACTION_LABELS[e.a]} → s${e.ns} `;
+    html += `<span class="${rColor}">r=${e.r}</span>`;
+    if (e.done) {
+      if (e.ns === GOAL) html += ' <span class="goal">★ GOAL!</span>';
+      else html += ' <span class="bad">☠ HOLE</span>';
+    }
+    html += '<br>';
+  }
+  if (entries.length > maxShow) html += `<span style="color:#94a3b8;">... +${entries.length - maxShow} more steps</span>`;
+  log.innerHTML = html;
+  log.scrollTop = log.scrollHeight;
+}
+
+function updateStats() {
+  const retStr = lastReturn !== null ? lastReturn.toFixed(2) : '—';
+  document.getElementById('gw-stats').innerHTML =
+    `Episodes: <strong>${episodeCount}</strong> &nbsp;|&nbsp; ε: <strong>${epsilon.toFixed(3)}</strong> &nbsp;|&nbsp; Last return: <strong>${retStr}</strong>`;
+}
+
+function updateQTable() {
+  const tbl = document.getElementById('qtable-display');
+  // Show a 4×4 grid of best actions and max Q
+  let html = '<tr><th>↖ row\\col →</th><th>Col 0</th><th>Col 1</th><th>Col 2</th><th>Col 3</th></tr>';
+  for (let r = 0; r < 4; r++) {
+    html += `<tr><th>Row ${r}</th>`;
+    for (let c = 0; c < 4; c++) {
+      const s = r * 4 + c;
+      if (s === GOAL) { html += '<td style="background:rgba(247,201,72,0.2);color:#f7c948;">G</td>'; continue; }
+      if (HOLES.includes(s)) { html += '<td style="background:rgba(255,107,107,0.2);color:#ff6b6b;">H</td>'; continue; }
+      const maxQ = Math.max(...Q[s]);
+      const bestA = Q[s].indexOf(maxQ);
+      const allZero = Q[s].every(v => v === 0);
+      const bg = allZero ? '' : (maxQ > 0 ? 'background:rgba(0,212,170,0.15);' : 'background:rgba(255,107,107,0.1);');
+      const col = allZero ? '#94a3b8' : (maxQ > 0 ? '#00d4aa' : '#ff6b6b');
+      html += `<td style="${bg}color:${col};">${ACTION_NAMES[bestA]} ${maxQ.toFixed(1)}</td>`;
+    }
+    html += '</tr>';
+  }
+  tbl.innerHTML = html;
+}
+
+function drawGrid(path) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const PAD = 5;
+
+  for (let s = 0; s < N_STATES; s++) {
+    const r = stateToRow(s), c = stateToCol(s);
+    const x = c * CELL + PAD, y = r * CELL + PAD;
+    const w = CELL - PAD, h = CELL - PAD;
+
+    // Cell background
+    if (s === GOAL) ctx.fillStyle = '#1e3320';
+    else if (HOLES.includes(s)) ctx.fillStyle = '#2a1010';
+    else if (s === START) ctx.fillStyle = '#1e1b3a';
+    else ctx.fillStyle = '#1a1d2e';
+    ctx.beginPath(); ctx.roundRect(x, y, w, h, 6); ctx.fill();
+
+    // Border
+    ctx.strokeStyle = s === GOAL ? '#f7c948' : HOLES.includes(s) ? '#ff6b6b' : s === START ? '#6c63ff' : '#2d3748';
+    ctx.lineWidth = s === GOAL || HOLES.includes(s) || s === START ? 2.5 : 1;
+    ctx.stroke();
+
+    // Labels
+    ctx.textAlign = 'center';
+    if (s === GOAL) {
+      ctx.fillStyle = '#f7c948'; ctx.font = 'bold 18px Segoe UI';
+      ctx.fillText('G', x + w/2, y + h/2 - 4);
+    } else if (HOLES.includes(s)) {
+      ctx.fillStyle = '#ff6b6b'; ctx.font = 'bold 18px Segoe UI';
+      ctx.fillText('H', x + w/2, y + h/2 - 4);
+    } else if (s === START) {
+      ctx.fillStyle = '#6c63ff'; ctx.font = 'bold 14px Segoe UI';
+      ctx.fillText('S', x + w/2, y + h/2 - 4);
+    }
+
+    // State number
+    ctx.fillStyle = '#4a5568'; ctx.font = '9px Segoe UI';
+    ctx.fillText(s, x + w/2, y + h - 6);
+
+    // Policy arrows
+    if (showPolicy && s !== GOAL && !HOLES.includes(s)) {
+      const maxQ = Math.max(...Q[s]);
+      const bestA = Q[s].indexOf(maxQ);
+      if (!Q[s].every(v => v === 0)) {
+        ctx.fillStyle = '#00d4aa'; ctx.font = 'bold 18px Segoe UI';
+        ctx.fillText(ACTION_NAMES[bestA], x + w/2, y + h/2 + 8);
+      }
+    }
+  }
+
+  // Draw path
+  if (path && path.length > 1) {
+    ctx.strokeStyle = 'rgba(108,99,255,0.6)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 2]);
+    ctx.beginPath();
+    for (let i = 0; i < path.length; i++) {
+      const pr = stateToRow(path[i]), pc = stateToCol(path[i]);
+      const px = pc * CELL + PAD + (CELL - PAD) / 2;
+      const py = pr * CELL + PAD + (CELL - PAD) / 2;
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Draw agent at last position
+  if (path && path.length > 0) {
+    const lastS = path[path.length - 1];
+    const pr = stateToRow(lastS), pc = stateToCol(lastS);
+    const px = pc * CELL + PAD + (CELL - PAD) / 2;
+    const py = pr * CELL + PAD + (CELL - PAD) / 2;
+    ctx.beginPath();
+    ctx.arc(px, py - 4, 10, 0, Math.PI * 2);
+    ctx.fillStyle = '#00d4aa';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+}
+
+// Init
+updateStats();
+updateQTable();
+drawGrid([START]);
+
+// ============================================================
+// Nav highlighting
+// ============================================================
+document.querySelectorAll('nav a').forEach(link => {
+  link.addEventListener('click', function() {
+    document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+window.addEventListener('scroll', () => {
+  const sections = document.querySelectorAll('section[id]');
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 150) current = s.id;
+  });
+  document.querySelectorAll('nav a').forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+});
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

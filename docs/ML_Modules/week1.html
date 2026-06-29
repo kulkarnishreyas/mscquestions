@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 1 – ML Foundations & KNN</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d2e; --accent:#6c63ff; --accent2:#00d4aa; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --code:#2d3748; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+  header { background:linear-gradient(135deg,#6c63ff,#00d4aa); padding:3rem 2rem; text-align:center; }
+  header h1 { font-size:2.5rem; font-weight:800; color:#fff; }
+  header p { font-size:1.1rem; color:rgba(255,255,255,0.85); margin-top:0.5rem; }
+  nav { background:var(--card); border-bottom:2px solid var(--accent); display:flex; flex-wrap:wrap; gap:0.25rem; padding:0.75rem 1rem; position:sticky; top:0; z-index:100; }
+  nav a { color:var(--muted); text-decoration:none; padding:0.4rem 1rem; border-radius:6px; font-size:0.9rem; transition:all 0.2s; }
+  nav a:hover, nav a.active { background:var(--accent); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:2rem 1.5rem; }
+  section { margin-bottom:3rem; }
+  h2 { font-size:1.8rem; color:var(--accent); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  h3 { font-size:1.2rem; color:var(--accent2); margin:1.2rem 0 0.6rem; }
+  h4 { font-size:1rem; color:#f7c948; margin:0.8rem 0 0.3rem; }
+  p { margin-bottom:0.8rem; color:var(--text); }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .highlight { border-left:4px solid var(--accent); padding-left:1rem; background:rgba(108,99,255,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight2 { border-left:4px solid var(--accent2); padding-left:1rem; background:rgba(0,212,170,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .formula { background:var(--code); border-radius:8px; padding:1rem 1.5rem; font-family:monospace; font-size:1.1rem; color:#f7c948; text-align:center; margin:1rem 0; overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+  th { background:var(--accent); color:#fff; padding:0.7rem 1rem; text-align:left; }
+  td { padding:0.6rem 1rem; border-bottom:1px solid var(--border); }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.03); }
+  ul,ol { padding-left:1.5rem; margin-bottom:0.8rem; }
+  li { margin-bottom:0.3rem; }
+  .tag { background:var(--accent); color:#fff; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag2 { background:var(--accent2); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  svg text { font-family:'Segoe UI',sans-serif; }
+  .step { display:flex; gap:1rem; align-items:flex-start; margin-bottom:0.8rem; }
+  .step-num { background:var(--accent); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:700px) { .two-col { grid-template-columns:1fr; } header h1 { font-size:1.8rem; } }
+  .interactive-box { background:var(--card); border:2px solid var(--accent); border-radius:12px; padding:1.5rem; margin:1.5rem 0; }
+  input[type=number],select { background:var(--code); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:0.4rem 0.8rem; font-size:0.95rem; width:100%; margin-bottom:0.5rem; }
+  button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:0.6rem 1.5rem; cursor:pointer; font-size:0.95rem; font-weight:600; transition:opacity 0.2s; }
+  button:hover { opacity:0.85; }
+  .result-box { background:rgba(0,212,170,0.1); border:1px solid var(--accent2); border-radius:8px; padding:1rem; margin-top:1rem; font-weight:600; color:var(--accent2); min-height:2rem; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+  @media(max-width:700px) { .grid3 { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>🤖 Week 1: Machine Learning Foundations</h1>
+  <p>KNN Algorithm · Distances · Paradigms · Parametric vs Non-parametric · Normalization</p>
+</header>
+<nav>
+  <a href="#intro" class="active">What is ML?</a>
+  <a href="#paradigms">Paradigms</a>
+  <a href="#knn">KNN Algorithm</a>
+  <a href="#distance">Distance Metrics</a>
+  <a href="#worked">Worked Example</a>
+  <a href="#normalize">Normalization</a>
+  <a href="#parametric">Param vs Non-param</a>
+</nav>
+
+<div class="container">
+
+<!-- SECTION 1: What is ML -->
+<section id="intro">
+  <h2>🧠 What is Machine Learning?</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>Tom Mitchell's Definition (1997):</strong> "A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E."
+    </div>
+    <p>Think of it this way: a spam filter (task T) improves at recognising spam (P) the more emails it processes (E). The machine "learns" patterns from data rather than being explicitly programmed with rules.</p>
+    <h3>Traditional Programming vs. Machine Learning</h3>
+    <div class="two-col">
+      <div class="card" style="background:#1e1b3a;">
+        <h4>🖥️ Traditional Programming</h4>
+        <p><strong>Input:</strong> Data + Rules → <strong>Output:</strong> Answers</p>
+        <p>You tell the computer exactly what to do step-by-step. If the rules are wrong or incomplete, the program fails.</p>
+      </div>
+      <div class="card" style="background:#0d2b1e;">
+        <h4>🤖 Machine Learning</h4>
+        <p><strong>Input:</strong> Data + Answers → <strong>Output:</strong> Rules</p>
+        <p>You feed the computer data and expected outcomes; it figures out the rules itself.</p>
+      </div>
+    </div>
+    <h3>Why ML? Real-World Examples</h3>
+    <ul>
+      <li>📧 <strong>Email filtering</strong> – Classify spam vs. not spam</li>
+      <li>🏦 <strong>Loan approval</strong> – Predict creditworthiness from financial history</li>
+      <li>🩺 <strong>Medical diagnosis</strong> – Detect cancer from X-ray images</li>
+      <li>🎵 <strong>Recommendation</strong> – Spotify suggests songs you'll love</li>
+      <li>🚗 <strong>Self-driving cars</strong> – Navigate using sensor data</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SECTION 2: Paradigms -->
+<section id="paradigms">
+  <h2>🗂️ Learning Paradigms</h2>
+  <div class="grid3">
+    <div class="card" style="border-top:4px solid #6c63ff;">
+      <h3 style="margin-top:0;">👩‍🏫 Supervised Learning</h3>
+      <p>Learning with a <strong>teacher</strong> — the algorithm trains on labeled data (input-output pairs).</p>
+      <p><strong>Goal:</strong> Learn a mapping f(x)→y.</p>
+      <p><strong>Examples:</strong></p>
+      <ul>
+        <li>Classification: Is email spam? (Yes/No)</li>
+        <li>Regression: Predict house price (₹12L)</li>
+      </ul>
+      <p><strong>Algorithms:</strong> KNN, Linear Regression, SVM, Decision Trees, Neural Networks</p>
+    </div>
+    <div class="card" style="border-top:4px solid #00d4aa;">
+      <h3 style="margin-top:0;">🔍 Unsupervised Learning</h3>
+      <p>Learning <strong>without labels</strong> — discover hidden patterns or structure in data.</p>
+      <p><strong>Goal:</strong> Find structure, clusters, or compressed representations.</p>
+      <p><strong>Examples:</strong></p>
+      <ul>
+        <li>Clustering: Group customers by buying habits</li>
+        <li>Dimensionality reduction: PCA</li>
+      </ul>
+      <p><strong>Algorithms:</strong> K-Means, DBSCAN, PCA, Autoencoders</p>
+    </div>
+    <div class="card" style="border-top:4px solid #f7c948;">
+      <h3 style="margin-top:0;">🎮 Reinforcement Learning</h3>
+      <p>Learning through <strong>trial and error</strong> — an agent takes actions in an environment and receives rewards/penalties.</p>
+      <p><strong>Goal:</strong> Maximise cumulative reward over time.</p>
+      <p><strong>Examples:</strong></p>
+      <ul>
+        <li>Game playing (AlphaGo beat world champion Go player)</li>
+        <li>Robot navigation</li>
+        <li>Dynamic pricing</li>
+      </ul>
+      <p><strong>Algorithms:</strong> Q-Learning, Policy Gradient, Actor-Critic</p>
+    </div>
+  </div>
+
+  <!-- Visual -->
+  <div class="card">
+    <h3>Visual Overview</h3>
+    <svg viewBox="0 0 700 200" width="100%" height="200">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+        </marker>
+      </defs>
+      <!-- Supervised -->
+      <rect x="10" y="20" width="200" height="160" rx="12" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2"/>
+      <text x="110" y="48" fill="#6c63ff" font-size="13" font-weight="bold" text-anchor="middle">Supervised</text>
+      <rect x="30" y="60" width="80" height="30" rx="6" fill="#2d3748"/>
+      <text x="70" y="80" fill="#e2e8f0" font-size="10" text-anchor="middle">Labeled Data</text>
+      <rect x="125" y="60" width="70" height="30" rx="6" fill="#2d3748"/>
+      <text x="160" y="80" fill="#e2e8f0" font-size="10" text-anchor="middle">Model</text>
+      <line x1="112" y1="75" x2="123" y2="75" stroke="#94a3b8" marker-end="url(#arr)"/>
+      <text x="110" y="120" fill="#94a3b8" font-size="9" text-anchor="middle">Classification · Regression</text>
+      <text x="110" y="145" fill="#00d4aa" font-size="10" text-anchor="middle">f(input) → label</text>
+      <!-- Unsupervised -->
+      <rect x="250" y="20" width="200" height="160" rx="12" fill="#1a1d2e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="350" y="48" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">Unsupervised</text>
+      <rect x="270" y="60" width="80" height="30" rx="6" fill="#2d3748"/>
+      <text x="310" y="80" fill="#e2e8f0" font-size="10" text-anchor="middle">Unlabeled Data</text>
+      <rect x="365" y="60" width="70" height="30" rx="6" fill="#2d3748"/>
+      <text x="400" y="80" fill="#e2e8f0" font-size="10" text-anchor="middle">Patterns</text>
+      <line x1="352" y1="75" x2="363" y2="75" stroke="#94a3b8" marker-end="url(#arr)"/>
+      <text x="350" y="120" fill="#94a3b8" font-size="9" text-anchor="middle">Clustering · Reduction</text>
+      <text x="350" y="145" fill="#00d4aa" font-size="10" text-anchor="middle">Find hidden structure</text>
+      <!-- Reinforcement -->
+      <rect x="490" y="20" width="200" height="160" rx="12" fill="#1a1d2e" stroke="#f7c948" stroke-width="2"/>
+      <text x="590" y="48" fill="#f7c948" font-size="13" font-weight="bold" text-anchor="middle">Reinforcement</text>
+      <ellipse cx="540" cy="110" rx="30" ry="20" fill="#2d3748"/>
+      <text x="540" y="114" fill="#e2e8f0" font-size="9" text-anchor="middle">Agent</text>
+      <ellipse cx="640" cy="110" rx="30" ry="20" fill="#2d3748"/>
+      <text x="640" y="114" fill="#e2e8f0" font-size="9" text-anchor="middle">Env</text>
+      <path d="M570,100 Q590,80 610,100" stroke="#f7c948" fill="none" stroke-width="1.5" marker-end="url(#arr)"/>
+      <path d="M610,120 Q590,140 570,120" stroke="#6c63ff" fill="none" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="590" y="78" fill="#f7c948" font-size="8" text-anchor="middle">action</text>
+      <text x="590" y="148" fill="#6c63ff" font-size="8" text-anchor="middle">reward</text>
+    </svg>
+  </div>
+</section>
+
+<!-- SECTION 3: KNN -->
+<section id="knn">
+  <h2>🔵 K-Nearest Neighbours (KNN)</h2>
+  <div class="card">
+    <p>KNN is the simplest and most intuitive ML algorithm. The idea: <em>"You are like your neighbours."</em> To classify a new point, find its K nearest neighbours in the training data and take a majority vote.</p>
+
+    <h3>How KNN Works — Step by Step</h3>
+    <div class="step"><div class="step-num">1</div><div>Store all training data (lazy learner — no training phase)</div></div>
+    <div class="step"><div class="step-num">2</div><div>For a new query point, calculate distance to every training point</div></div>
+    <div class="step"><div class="step-num">3</div><div>Select K nearest neighbours (smallest distances)</div></div>
+    <div class="step"><div class="step-num">4</div><div>For classification: majority class wins. For regression: average the K values.</div></div>
+
+    <h3>Choosing K</h3>
+    <div class="two-col">
+      <div class="highlight">
+        <strong>Small K (e.g., K=1):</strong> Very sensitive to noise. A single outlier can change the prediction. High variance, low bias → <em>overfitting</em>.
+      </div>
+      <div class="highlight2">
+        <strong>Large K (e.g., K=N):</strong> Very smooth decision boundary. Ignores local patterns. Low variance, high bias → <em>underfitting</em>.
+      </div>
+    </div>
+    <p><strong>Rule of thumb:</strong> Try K = √N where N is the number of training samples. Use odd K to avoid ties in binary classification. Always validate with cross-validation.</p>
+
+    <!-- Visual KNN diagram -->
+    <h3>KNN Visualisation (K=3)</h3>
+    <svg viewBox="0 0 500 300" width="100%" height="300" style="background:#12152a;border-radius:10px;">
+      <!-- Grid -->
+      <defs>
+        <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#6c63ff" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#6c63ff" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- Class A points (circles) -->
+      <circle cx="100" cy="80" r="10" fill="#6c63ff" opacity="0.9"/>
+      <circle cx="130" cy="120" r="10" fill="#6c63ff" opacity="0.9"/>
+      <circle cx="80" cy="150" r="10" fill="#6c63ff" opacity="0.9"/>
+      <circle cx="160" cy="90" r="10" fill="#6c63ff" opacity="0.9"/>
+      <circle cx="60" cy="100" r="10" fill="#6c63ff" opacity="0.9"/>
+      <!-- Class B points (squares) -->
+      <rect x="290" y="80" width="20" height="20" fill="#f7c948" opacity="0.9" rx="3"/>
+      <rect x="320" y="130" width="20" height="20" fill="#f7c948" opacity="0.9" rx="3"/>
+      <rect x="360" y="90" width="20" height="20" fill="#f7c948" opacity="0.9" rx="3"/>
+      <rect x="400" y="140" width="20" height="20" fill="#f7c948" opacity="0.9" rx="3"/>
+      <rect x="340" y="60" width="20" height="20" fill="#f7c948" opacity="0.9" rx="3"/>
+      <!-- Query point -->
+      <circle cx="230" cy="140" r="12" fill="#00d4aa" stroke="#fff" stroke-width="2"/>
+      <text x="230" y="144" fill="#000" font-size="11" font-weight="bold" text-anchor="middle">?</text>
+      <!-- Distance lines to 3 nearest -->
+      <line x1="230" y1="140" x2="130" y2="120" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <line x1="230" y1="140" x2="160" y2="90" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <line x1="230" y1="140" x2="300" y2="90" stroke="#f7c948" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <!-- Circle showing K radius -->
+      <circle cx="230" cy="130" r="90" fill="none" stroke="#00d4aa" stroke-width="1" stroke-dasharray="8,4" opacity="0.5"/>
+      <!-- Labels -->
+      <text x="90" y="200" fill="#6c63ff" font-size="13" font-weight="bold">Class A (●)</text>
+      <text x="280" y="200" fill="#f7c948" font-size="13" font-weight="bold">Class B (■)</text>
+      <text x="190" y="250" fill="#00d4aa" font-size="12" text-anchor="middle">Query point → K=3: 2 purple, 1 yellow → Class A wins!</text>
+      <text x="420" y="30" fill="#94a3b8" font-size="11">K=3 radius</text>
+    </svg>
+  </div>
+</section>
+
+<!-- SECTION 4: Distance Metrics -->
+<section id="distance">
+  <h2>📏 Distance Metrics</h2>
+  <div class="card">
+    <p>KNN relies entirely on distance. Choosing the right distance metric matters enormously.</p>
+
+    <h3>Euclidean Distance (L2 Norm)</h3>
+    <p>The straight-line distance — like measuring with a ruler.</p>
+    <div class="formula">d(x,y) = √[(x₁−y₁)² + (x₂−y₂)² + ... + (xₙ−yₙ)²]</div>
+    <p>For 2D: d = √[(x₁−y₁)² + (x₂−y₂)²]</p>
+    <p><strong>Best for:</strong> Continuous numeric features, when all features have the same scale.</p>
+
+    <h3>Manhattan Distance (L1 Norm / City-block Distance)</h3>
+    <p>Distance along axes only — like a taxi navigating city blocks.</p>
+    <div class="formula">d(x,y) = |x₁−y₁| + |x₂−y₂| + ... + |xₙ−yₙ|</div>
+    <p><strong>Best for:</strong> When features have different units/scales, high-dimensional data, robust to outliers.</p>
+
+    <h3>Visual Comparison</h3>
+    <svg viewBox="0 0 420 200" width="100%" height="200" style="background:#12152a;border-radius:10px;">
+      <!-- Point A -->
+      <circle cx="80" cy="150" r="6" fill="#6c63ff"/>
+      <text x="80" y="170" fill="#6c63ff" font-size="10" text-anchor="middle">A(1,1)</text>
+      <!-- Point B -->
+      <circle cx="320" cy="50" r="6" fill="#f7c948"/>
+      <text x="320" y="40" fill="#f7c948" font-size="10" text-anchor="middle">B(4,4)</text>
+      <!-- Euclidean -->
+      <line x1="80" y1="150" x2="320" y2="50" stroke="#00d4aa" stroke-width="2"/>
+      <text x="200" y="90" fill="#00d4aa" font-size="11">Euclidean ≈ 4.24</text>
+      <!-- Manhattan -->
+      <polyline points="80,150 320,150 320,50" stroke="#f7c948" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
+      <text x="200" y="165" fill="#f7c948" font-size="11">Manhattan = 6</text>
+      <text x="200" y="25" fill="#94a3b8" font-size="10" text-anchor="middle">Green=straight line (Euclidean) | Yellow=along axes (Manhattan)</text>
+    </svg>
+
+    <h3>Comparison Table</h3>
+    <table>
+      <tr><th>Feature</th><th>Euclidean</th><th>Manhattan</th></tr>
+      <tr><td>Formula</td><td>√Σ(xᵢ−yᵢ)²</td><td>Σ|xᵢ−yᵢ|</td></tr>
+      <tr><td>Intuition</td><td>Straight-line distance</td><td>City-block distance</td></tr>
+      <tr><td>Sensitivity to outliers</td><td>High (squared term amplifies)</td><td>Lower (absolute values)</td></tr>
+      <tr><td>Best for</td><td>Low-dimensional, uniform scale</td><td>High-dimensional, mixed units</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 5: Worked Example -->
+<section id="worked">
+  <h2>📊 Worked Example: Loan Approval</h2>
+  <div class="card">
+    <p>Predict if a new applicant (Income: 48, Assets: 142) should get a loan approved, using KNN with K=3.</p>
+    <h3>Training Data</h3>
+    <table>
+      <tr><th>ID</th><th>Income (x₁)</th><th>Assets (x₂)</th><th>Class</th></tr>
+      <tr><td>1</td><td>51</td><td>130</td><td style="color:#00d4aa;">Approved ✓</td></tr>
+      <tr><td>2</td><td>38</td><td>115</td><td style="color:#ff6b6b;">Denied ✗</td></tr>
+      <tr><td>3</td><td>62</td><td>175</td><td style="color:#00d4aa;">Approved ✓</td></tr>
+      <tr><td>4</td><td>45</td><td>160</td><td style="color:#00d4aa;">Approved ✓</td></tr>
+      <tr><td>5</td><td>29</td><td>95</td><td style="color:#ff6b6b;">Denied ✗</td></tr>
+      <tr><td>6</td><td>55</td><td>88</td><td style="color:#ff6b6b;">Denied ✗</td></tr>
+      <tr style="background:rgba(108,99,255,0.2);"><td><strong>?</strong></td><td><strong>48</strong></td><td><strong>142</strong></td><td><strong>???</strong></td></tr>
+    </table>
+
+    <h3>Step-by-Step: Euclidean Distance Calculation</h3>
+    <div class="highlight">
+      <p><strong>Query point Q = (48, 142)</strong></p>
+      <p>d(Q,1) = √[(48−51)² + (142−130)²] = √[9+144] = √153 ≈ <strong>12.37</strong></p>
+      <p>d(Q,2) = √[(48−38)² + (142−115)²] = √[100+729] = √829 ≈ <strong>28.79</strong></p>
+      <p>d(Q,3) = √[(48−62)² + (142−175)²] = √[196+1089] = √1285 ≈ <strong>35.85</strong></p>
+      <p>d(Q,4) = √[(48−45)² + (142−160)²] = √[9+324] = √333 ≈ <strong>18.25</strong></p>
+      <p>d(Q,5) = √[(48−29)² + (142−95)²] = √[361+2209] = √2570 ≈ <strong>50.69</strong></p>
+      <p>d(Q,6) = √[(48−55)² + (142−88)²] = √[49+2916] = √2965 ≈ <strong>54.45</strong></p>
+    </div>
+
+    <h3>K=3 Nearest Neighbours</h3>
+    <table>
+      <tr><th>Rank</th><th>Neighbour</th><th>Distance</th><th>Class</th></tr>
+      <tr><td>1st</td><td>ID 1</td><td>12.37</td><td style="color:#00d4aa;">Approved ✓</td></tr>
+      <tr><td>2nd</td><td>ID 4</td><td>18.25</td><td style="color:#00d4aa;">Approved ✓</td></tr>
+      <tr><td>3rd</td><td>ID 2</td><td>28.79</td><td style="color:#ff6b6b;">Denied ✗</td></tr>
+    </table>
+    <div class="highlight2">
+      <strong>Result:</strong> 2 Approved vs 1 Denied → Majority vote = <strong>APPROVED ✓</strong>
+    </div>
+
+    <!-- Interactive KNN Calculator -->
+    <div class="interactive-box">
+      <h3 style="margin-top:0;">🧮 Interactive KNN Calculator</h3>
+      <p>Try your own query point:</p>
+      <div class="two-col">
+        <div>
+          <label>Query Income (x₁):</label>
+          <input type="number" id="qx1" value="48" min="0" max="100">
+          <label>Query Assets (x₂):</label>
+          <input type="number" id="qx2" value="142" min="0" max="200">
+        </div>
+        <div>
+          <label>K (number of neighbours):</label>
+          <input type="number" id="kval" value="3" min="1" max="6">
+          <button onclick="runKNN()">Calculate KNN</button>
+        </div>
+      </div>
+      <div class="result-box" id="knn-result">Results will appear here...</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: Normalization -->
+<section id="normalize">
+  <h2>⚖️ Data Normalization</h2>
+  <div class="card">
+    <p>When features have different scales (e.g., Income in thousands, Age in years), large-scale features dominate the distance calculation. Normalization fixes this.</p>
+
+    <h3>Min-Max Normalization</h3>
+    <div class="formula">x_norm = (x − x_min) / (x_max − x_min)  →  range [0, 1]</div>
+
+    <h3>Why It Matters — Example</h3>
+    <p>Without normalization: Income (50,000) vs Age (30). The distance would be dominated entirely by income, making age irrelevant!</p>
+    <p>With normalization: Both features contribute equally to the distance calculation.</p>
+
+    <h3>Normalized Loan Example</h3>
+    <table>
+      <tr><th>ID</th><th>Income (raw)</th><th>Income (norm)</th><th>Assets (raw)</th><th>Assets (norm)</th></tr>
+      <tr><td>1</td><td>51</td><td>0.67</td><td>130</td><td>0.44</td></tr>
+      <tr><td>2</td><td>38</td><td>0.27</td><td>115</td><td>0.25</td></tr>
+      <tr><td>3</td><td>62</td><td>1.00</td><td>175</td><td>1.00</td></tr>
+      <tr><td>4</td><td>45</td><td>0.48</td><td>160</td><td>0.81</td></tr>
+      <tr><td>5</td><td>29</td><td>0.00</td><td>95</td><td>0.00</td></tr>
+      <tr><td>6</td><td>55</td><td>0.79</td><td>88</td><td>?</td></tr>
+    </table>
+    <p>Formula: Income norm for ID 1 = (51−29)/(62−29) = 22/33 ≈ 0.67</p>
+  </div>
+</section>
+
+<!-- SECTION 7: Parametric vs Non-parametric -->
+<section id="parametric">
+  <h2>📐 Parametric vs Non-Parametric Models</h2>
+  <div class="card">
+    <div class="two-col">
+      <div>
+        <h3>Parametric Models</h3>
+        <p>Make assumptions about the form of the mapping function. Have a fixed number of parameters regardless of training size.</p>
+        <div class="highlight">
+          <p><strong>Linear Regression:</strong> y = w₀ + w₁x₁ + w₂x₂</p>
+          <p>Parameters: w₀, w₁, w₂ — fixed at 3 regardless of whether you have 10 or 10M training points.</p>
+        </div>
+        <p><strong>Advantages:</strong></p>
+        <ul>
+          <li>Fast to learn and predict</li>
+          <li>Require less data</li>
+          <li>Highly interpretable</li>
+        </ul>
+        <p><strong>Disadvantages:</strong></p>
+        <ul>
+          <li>Strong assumptions may not fit the data</li>
+          <li>Limited model complexity</li>
+        </ul>
+        <p><strong>Examples:</strong> Linear Regression, Logistic Regression, Naive Bayes, Perceptron</p>
+      </div>
+      <div>
+        <h3>Non-Parametric Models</h3>
+        <p>Make no strong assumptions about the mapping function. The number of "parameters" grows with training data.</p>
+        <div class="highlight2">
+          <p><strong>KNN:</strong> Stores all training data. With 1000 samples, it "has" 1000 parameters (all the data points).</p>
+        </div>
+        <p><strong>Advantages:</strong></p>
+        <ul>
+          <li>More flexible — can fit complex patterns</li>
+          <li>No assumptions about data distribution</li>
+          <li>Works well with enough data</li>
+        </ul>
+        <p><strong>Disadvantages:</strong></p>
+        <ul>
+          <li>Slow to predict (especially KNN)</li>
+          <li>Require more data</li>
+          <li>Can overfit if not regularised</li>
+        </ul>
+        <p><strong>Examples:</strong> KNN, Decision Trees, SVMs, Random Forests, Neural Networks</p>
+      </div>
+    </div>
+
+    <h3>Key Insight: KNN is a "Lazy Learner"</h3>
+    <p>KNN does NO work during training — it just memorises the dataset. All computation happens at prediction time. This makes training instant but prediction slow for large datasets (O(N) per query). This is why it's called a <strong>lazy learner</strong> (vs. eager learners like Logistic Regression that build a model upfront).</p>
+  </div>
+</section>
+
+</div><!-- end container -->
+
+<script>
+const trainingData = [
+  {id:1, x1:51, x2:130, label:'Approved'},
+  {id:2, x1:38, x2:115, label:'Denied'},
+  {id:3, x1:62, x2:175, label:'Approved'},
+  {id:4, x1:45, x2:160, label:'Approved'},
+  {id:5, x1:29, x2:95,  label:'Denied'},
+  {id:6, x1:55, x2:88,  label:'Denied'},
+];
+
+function runKNN() {
+  const qx1 = parseFloat(document.getElementById('qx1').value);
+  const qx2 = parseFloat(document.getElementById('qx2').value);
+  const k   = parseInt(document.getElementById('kval').value);
+
+  const distances = trainingData.map(d => ({
+    id: d.id, label: d.label,
+    dist: Math.sqrt(Math.pow(qx1-d.x1,2)+Math.pow(qx2-d.x2,2))
+  })).sort((a,b)=>a.dist-b.dist);
+
+  const kNearest = distances.slice(0,k);
+  const votes = {};
+  kNearest.forEach(n=>{ votes[n.label]=(votes[n.label]||0)+1; });
+  const winner = Object.keys(votes).reduce((a,b)=>votes[a]>votes[b]?a:b);
+
+  let html = `<strong>Query: (${qx1}, ${qx2})</strong><br><br>`;
+  html += `<strong>K=${k} nearest neighbours:</strong><br>`;
+  kNearest.forEach((n,i)=>{
+    const col = n.label==='Approved'?'#00d4aa':'#ff6b6b';
+    html += `&nbsp;&nbsp;${i+1}. ID ${n.id}: dist=${n.dist.toFixed(2)} → <span style="color:${col}">${n.label}</span><br>`;
+  });
+  html += `<br><strong>Votes:</strong> `;
+  Object.keys(votes).forEach(v=>{ html+=`${v}: ${votes[v]} `; });
+  const col2 = winner==='Approved'?'#00d4aa':'#ff6b6b';
+  html += `<br><br>🏆 <strong>Prediction: <span style="color:${col2}">${winner}</span></strong>`;
+
+  document.getElementById('knn-result').innerHTML = html;
+}
+
+// Nav highlighting
+document.querySelectorAll('nav a').forEach(link => {
+  link.addEventListener('click', function() {
+    document.querySelectorAll('nav a').forEach(l=>l.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+window.addEventListener('scroll', () => {
+  const sections = document.querySelectorAll('section[id]');
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 150) current = s.id;
+  });
+  document.querySelectorAll('nav a').forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#'+current) a.classList.add('active');
+  });
+});
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

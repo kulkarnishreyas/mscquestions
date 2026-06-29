@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Big Data Analytics — Complete Interactive Course (Weeks 1–10)</title>
+<style>
+  :root {
+    --primary: #667eea;
+    --primary-dark: #764ba2;
+    --accent: #f39c12;
+    --success: #27ae60;
+    --danger: #e74c3c;
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --text: #2c3e50;
+    --muted: #6c7a89;
+    --border: #e1e8ed;
+  }
+  body.dark {
+    --bg: #1a1a2e;
+    --card: #252541;
+    --text: #e8e8f0;
+    --muted: #a0a0b8;
+    --border: #3a3a5c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ===== Header ===== */
+  header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white; padding: 50px 20px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  header::before {
+    content: ''; position: absolute; top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+    animation: pulse 8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(180deg); }
+  }
+  header h1 { font-size: 2.6em; margin-bottom: 8px; position: relative; }
+  header p { opacity: 0.95; font-size: 1.15em; position: relative; }
+  .header-stats {
+    display: flex; justify-content: center; gap: 30px; margin-top: 20px;
+    flex-wrap: wrap; position: relative;
+  }
+  .stat { background: rgba(255,255,255,0.15); padding: 8px 18px; border-radius: 20px; }
+  .stat b { font-size: 1.3em; }
+
+  /* ===== Navigation ===== */
+  nav {
+    position: sticky; top: 0; background: var(--card); z-index: 100;
+    padding: 12px; overflow-x: auto; white-space: nowrap;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border-bottom: 1px solid var(--border);
+  }
+  nav button {
+    background: transparent; color: var(--text);
+    border: 2px solid var(--border); padding: 8px 16px; margin: 3px;
+    border-radius: 20px; cursor: pointer; font-size: 0.85em;
+    font-weight: 600; transition: all 0.2s;
+  }
+  nav button:hover { border-color: var(--primary); color: var(--primary); }
+  nav button.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white; border-color: transparent;
+  }
+  .nav-controls {
+    display: inline-flex; gap: 6px; margin-left: 12px;
+    border-left: 2px solid var(--border); padding-left: 12px;
+  }
+  .icon-btn {
+    background: var(--bg); border: 1px solid var(--border);
+    width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+    font-size: 1.1em; display: inline-flex; align-items: center; justify-content: center;
+  }
+
+  main { max-width: 1180px; margin: 30px auto; padding: 0 20px; }
+
+  /* ===== Sections ===== */
+  section {
+    background: var(--card); margin: 30px 0; padding: 35px;
+    border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    scroll-margin-top: 90px;
+  }
+  section h2 {
+    color: var(--primary-dark); border-bottom: 3px solid var(--primary);
+    padding-bottom: 10px; margin-bottom: 20px; font-size: 1.85em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  body.dark section h2 { color: #b8a8ff; }
+  section h3 { color: var(--text); margin: 22px 0 12px; font-size: 1.3em; }
+  section h4 { color: var(--primary-dark); margin: 14px 0 8px; }
+  body.dark section h4 { color: #c4b5ff; }
+  p { margin-bottom: 12px; }
+  ul, ol { margin: 10px 0 14px 28px; }
+  li { margin-bottom: 6px; }
+
+  .week-badge {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white; padding: 4px 14px; border-radius: 20px;
+    font-size: 0.55em; font-weight: 700; vertical-align: middle;
+  }
+
+  /* ===== Cards ===== */
+  .card-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px; margin: 18px 0;
+  }
+  .card {
+    background: linear-gradient(135deg, #f6f9fc, #eef2f7);
+    border-left: 4px solid var(--primary-dark);
+    padding: 18px; border-radius: 10px; transition: all 0.25s;
+  }
+  body.dark .card {
+    background: linear-gradient(135deg, #2a2a4a, #353560);
+    color: var(--text);
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.12); }
+  .card h4 { color: var(--primary-dark); margin-bottom: 8px; }
+  body.dark .card h4 { color: #c4b5ff; }
+  .card p { font-size: 0.93em; margin: 0; color: var(--muted); }
+
+  /* ===== Flow diagrams ===== */
+  .flow {
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 8px; margin: 24px 0;
+  }
+  .flow-box {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white; padding: 14px 22px; border-radius: 12px;
+    font-weight: 600; text-align: center; min-width: 130px;
+    box-shadow: 0 4px 12px rgba(102,126,234,0.35);
+  }
+  .flow-box small { display: block; font-size: 0.78em; opacity: 0.85; margin-top: 3px; }
+  .arrow { color: var(--primary-dark); font-size: 1.8em; font-weight: bold; }
+
+  /* ===== Tabs ===== */
+  .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin: 14px 0 0; }
+  .tab-btn {
+    padding: 10px 18px; background: var(--bg); border: none;
+    border-radius: 10px 10px 0 0; cursor: pointer; font-weight: 600;
+    color: var(--text); transition: background 0.2s;
+  }
+  .tab-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+  }
+  .tab-content {
+    display: none; padding: 20px; background: var(--bg);
+    border-radius: 0 12px 12px 12px; margin-bottom: 14px;
+  }
+  .tab-content.active { display: block; }
+
+  /* ===== Tables ===== */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; min-width: 500px; }
+  th, td { padding: 10px 12px; border: 1px solid var(--border); text-align: left; }
+  th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
+  tr:nth-child(even) td { background: var(--bg); }
+
+  /* ===== Interactive ===== */
+  .interactive {
+    background: linear-gradient(135deg, #fff5e6, #ffe4cc);
+    border: 2px dashed var(--accent); padding: 22px; border-radius: 12px;
+    margin: 18px 0;
+  }
+  body.dark .interactive {
+    background: linear-gradient(135deg, #3a2a1a, #4a3525);
+    color: var(--text);
+  }
+  .interactive h4 { color: #d35400; margin-bottom: 12px; }
+  body.dark .interactive h4 { color: #ffb55a; }
+  .interactive input, .interactive select, .interactive textarea {
+    padding: 9px 12px; margin: 5px; border: 1px solid #ccc; border-radius: 6px;
+    font-size: 0.95em; font-family: inherit;
+  }
+  body.dark .interactive input, body.dark .interactive textarea {
+    background: #2a2a4a; color: var(--text); border-color: #4a4a6a;
+  }
+  .interactive button {
+    background: var(--accent); color: white; border: none; padding: 10px 20px;
+    border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.95em;
+  }
+  .interactive button:hover { background: #d35400; }
+  .result {
+    margin-top: 14px; padding: 14px; background: white;
+    border-left: 4px solid var(--success); border-radius: 6px;
+    font-family: 'Courier New', monospace; font-size: 0.92em;
+  }
+  body.dark .result { background: #1a1a2e; color: var(--text); }
+
+  /* ===== Formula/Code ===== */
+  .formula, code, .code-block {
+    background: #2c3e50; color: #ecf0f1;
+    padding: 12px 16px; border-radius: 8px;
+    font-family: 'Courier New', monospace; font-size: 0.92em;
+    overflow-x: auto; display: block; margin: 12px 0;
+    white-space: pre-wrap; line-height: 1.5;
+  }
+  code { display: inline; padding: 2px 8px; background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+
+  /* ===== Quiz ===== */
+  .quiz {
+    background: linear-gradient(135deg, #e8f5e9, #dcedc8);
+    border-left: 4px solid var(--success);
+    padding: 18px; border-radius: 10px; margin: 14px 0;
+  }
+  body.dark .quiz {
+    background: linear-gradient(135deg, #1a3a2e, #2a4a3e);
+  }
+  .quiz p strong { color: var(--success); }
+  .quiz-option {
+    display: block; margin: 7px 0; padding: 11px 14px;
+    background: var(--card); border: 2px solid var(--border);
+    border-radius: 8px; cursor: pointer; transition: all 0.2s;
+  }
+  .quiz-option:hover { border-color: var(--success); transform: translateX(4px); }
+  .quiz-option.correct {
+    background: #c8e6c9 !important; border-color: var(--success);
+    color: #1b5e20;
+  }
+  .quiz-option.wrong {
+    background: #ffcdd2 !important; border-color: var(--danger);
+    color: #b71c1c;
+  }
+
+  /* ===== Diagrams (SVG-based) ===== */
+  .svg-diagram {
+    background: var(--bg); padding: 18px; border-radius: 12px;
+    margin: 18px 0; text-align: center;
+  }
+  .svg-diagram svg { max-width: 100%; height: auto; }
+
+  /* ===== Pills/Tags ===== */
+  .pill {
+    display: inline-block; padding: 4px 12px; border-radius: 14px;
+    font-size: 0.78em; font-weight: 600; margin: 2px;
+  }
+  .pill-blue { background: #d4e6f1; color: #1e5f8e; }
+  .pill-green { background: #d5f5e3; color: #1d7a3e; }
+  .pill-orange { background: #fde3cf; color: #b35900; }
+  .pill-red { background: #f5d3d3; color: #9c2c2c; }
+  .pill-purple { background: #e8d4f5; color: #5a2c8e; }
+
+  /* ===== Final quiz progress ===== */
+  .progress-bar {
+    background: var(--bg); height: 10px; border-radius: 5px;
+    overflow: hidden; margin: 10px 0;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--success), #2ecc71);
+    height: 100%; transition: width 0.4s; width: 0%;
+  }
+
+  /* ===== Cheatsheet ===== */
+  .cheat-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .cheat-card {
+    background: var(--bg); padding: 16px; border-radius: 10px;
+    border-top: 4px solid var(--primary);
+  }
+  .cheat-card h4 { color: var(--primary-dark); margin-bottom: 8px; }
+  body.dark .cheat-card h4 { color: #c4b5ff; }
+  .cheat-card code { display: block; margin: 4px 0; font-size: 0.85em; padding: 6px 8px; }
+
+  /* ===== Animations ===== */
+  .fade-in { animation: fadeIn 0.6s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  footer {
+    text-align: center; padding: 30px 20px; color: var(--muted);
+    font-size: 0.9em; border-top: 1px solid var(--border); margin-top: 40px;
+  }
+
+  /* ===== Architecture diagrams (HBase / MongoDB / Cassandra) ===== */
+  .arch {
+    display: grid; gap: 14px; margin: 20px 0;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+  .arch-node {
+    background: linear-gradient(135deg, #fff, #f0f4f8);
+    border: 2px solid var(--primary); border-radius: 12px;
+    padding: 16px; text-align: center; position: relative;
+  }
+  body.dark .arch-node {
+    background: linear-gradient(135deg, #2a2a4a, #353560);
+    color: var(--text);
+  }
+  .arch-node.master {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white; border-color: #a02020;
+  }
+  .arch-node.worker {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white; border-color: #1f5a82;
+  }
+  .arch-node.coord {
+    background: linear-gradient(135deg, #f39c12, #d35400);
+    color: white; border-color: #a04004;
+  }
+  .arch-node h5 { font-size: 1.1em; margin-bottom: 6px; }
+  .arch-node small { font-size: 0.82em; opacity: 0.95; }
+
+  /* ===== Highlights ===== */
+  .highlight {
+    background: linear-gradient(120deg, #fbf3a3 0%, #fbf3a3 100%);
+    background-repeat: no-repeat; background-size: 100% 40%;
+    background-position: 0 88%; padding: 0 4px;
+  }
+  body.dark .highlight { background: rgba(243, 156, 18, 0.3); }
+
+  /* ===== Insight callouts ===== */
+  .insight {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border-left: 4px solid #1976d2;
+    padding: 14px 18px; border-radius: 8px; margin: 14px 0;
+  }
+  body.dark .insight {
+    background: linear-gradient(135deg, #1a2a4a, #253560);
+    color: var(--text);
+  }
+  .insight strong { color: #1565c0; }
+  body.dark .insight strong { color: #82b1ff; }
+  .warning {
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+    border-left: 4px solid #f57c00;
+    padding: 14px 18px; border-radius: 8px; margin: 14px 0;
+  }
+  body.dark .warning {
+    background: linear-gradient(135deg, #3a2a1a, #4a3525);
+    color: var(--text);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎓 Big Data Analytics</h1>
+  <p>Complete Interactive Study Course — Weeks 1 to 10</p>
+  <div class="header-stats">
+    <div class="stat"><b>10</b> Weeks</div>
+    <div class="stat"><b>60+</b> Topics</div>
+    <div class="stat"><b>50+</b> Quiz Questions</div>
+    <div class="stat"><b>10+</b> Diagrams</div>
+  </div>
+</header>
+
+<nav>
+  <button onclick="goTo('overview', this)" class="active">📚 Overview</button>
+  <button onclick="goTo('week1', this)">W1: Big Data Intro</button>
+  <button onclick="goTo('week2', this)">W2: Hadoop/HDFS</button>
+  <button onclick="goTo('week3', this)">W3: MapReduce</button>
+  <button onclick="goTo('week4', this)">W4: MR Examples</button>
+  <button onclick="goTo('week5', this)">W5: NoSQL/HBase</button>
+  <button onclick="goTo('week6', this)">W6: Hive/HBase</button>
+  <button onclick="goTo('week7', this)">W7: MongoDB</button>
+  <button onclick="goTo('week8', this)">W8: Mongo CRUD</button>
+  <button onclick="goTo('week9', this)">W9: Cassandra</button>
+  <button onclick="goTo('week10', this)">W10: Streaming</button>
+  <button onclick="goTo('finalquiz', this)">🎯 Mega Quiz</button>
+  <button onclick="goTo('cheatsheet', this)">📋 Cheatsheet</button>
+  <span class="nav-controls">
+    <button class="icon-btn" onclick="toggleDark()" title="Toggle dark mode">🌓</button>
+  </span>
+</nav>
+
+<main>
+
+<!-- ============ OVERVIEW ============ -->
+<section id="overview" class="fade-in">
+  <h2>📚 Course Overview</h2>
+  <p>This is a complete interactive companion for the <strong>Big Data Analytics</strong> course covering the Big Data lifecycle and the modern Big Data stack — Hadoop, MapReduce, NoSQL databases (HBase, MongoDB, Cassandra), Hive, and streaming analytics.</p>
+
+  <h3>What You'll Learn</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📊 Week 1 — Big Data Cycle: Introduction</h4><p>What Big Data is, the 5 Vs, types & sources, challenges, applications, 6-phase analytics cycle, roles, analytics methods spectrum, Hadoop overview.</p></div>
+    <div class="card"><h4>🐘 Week 2 — Hadoop & HDFS</h4><p>Distributed storage, NameNode/DataNodes, blocks & replication, ecosystem (YARN, Spark, Hive, HBase).</p></div>
+    <div class="card"><h4>🔀 Week 3 — MapReduce</h4><p>Map/Shuffle/Reduce, Combiner, Partitioner, YARN, Classic vs YARN frameworks.</p></div>
+    <div class="card"><h4>📊 Week 4 — MR Examples</h4><p>Word count, matrix multiplication, SQL joins via MapReduce.</p></div>
+    <div class="card"><h4>📂 Week 5 — NoSQL & HBase</h4><p>NoSQL types, SQL vs NoSQL, HBase architecture (HMaster, RegionServers, ZooKeeper).</p></div>
+    <div class="card"><h4>🐝 Week 6 — Hive & HBase</h4><p>HiveQL, file formats (ORC, Parquet), HBase shell DDL/DML.</p></div>
+    <div class="card"><h4>🍃 Week 7 — MongoDB</h4><p>Documents, BSON, replica sets, sharding for unstructured data.</p></div>
+    <div class="card"><h4>⚙️ Week 8 — Mongo Ops</h4><p>JSON import/export, CRUD, aggregation pipeline, indexes.</p></div>
+    <div class="card"><h4>🌊 Week 9 — Cassandra</h4><p>Streaming analytics, peer-to-peer cluster, CQL, replication factor.</p></div>
+    <div class="card"><h4>📡 Week 10 — Streaming Ops</h4><p>CSV import/export, keyspaces, collections (SET/LIST/MAP), IoT use cases.</p></div>
+  </div>
+
+  <div class="insight">
+    <strong>💡 Study tip:</strong> Each week has a mini-quiz at the end. After finishing all weeks, take the <a href="#finalquiz" onclick="goTo('finalquiz')">Mega Quiz</a> to test your overall understanding. The <a href="#cheatsheet" onclick="goTo('cheatsheet')">Cheatsheet</a> consolidates all formulas and commands for quick revision.
+  </div>
+</section>
+
+<!-- ============ WEEK 1: BIG DATA CYCLE: INTRODUCTION ============ -->
+<section id="week1" class="fade-in">
+  <h2><span class="week-badge">Week 1</span> 📊 Big Data Cycle: Introduction</h2>
+
+  <h3>1. Big Data — Introduction</h3>
+  <p><strong>Big Data</strong> = vast, complex datasets that exceed traditional tools — characterised by high <strong>volume, velocity, and variety</strong>.</p>
+
+  <h3>2. Types of Data</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🗂️ Structured</h4><p>Tables, fixed schema (RDBMS)</p></div>
+    <div class="card"><h4>📄 Semi-structured</h4><p>JSON, XML, logs</p></div>
+    <div class="card"><h4>🖼️ Unstructured</h4><p>Text, images, video</p></div>
+  </div>
+
+  <h3>3. The Vs of Big Data</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📦 Volume</h4><p>TB → PB → EB scale</p></div>
+    <div class="card"><h4>⚡ Velocity</h4><p>Real-time / streaming</p></div>
+    <div class="card"><h4>🎭 Variety</h4><p>Structured/semi/unstructured</p></div>
+    <div class="card"><h4>✓ Veracity</h4><p>Trustworthiness / noise</p></div>
+    <div class="card"><h4>💎 Value</h4><p>Insights extracted</p></div>
+  </div>
+
+  <h3>4. Big Data Challenges</h3>
+  <ul>
+    <li>Storage, processing, analysis, visualisation</li>
+    <li>Data variety, veracity, security & privacy</li>
+  </ul>
+
+  <h3>5. Applications Across Industries</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🛒 Retail</h4><p>Recommendations, churn, supply chain</p></div>
+    <div class="card"><h4>🏥 Healthcare</h4><p>Disease prediction, drug discovery</p></div>
+    <div class="card"><h4>💰 Finance</h4><p>Risk, fraud, algo trading</p></div>
+    <div class="card"><h4>🏭 Manufacturing</h4><p>Predictive maintenance</p></div>
+    <div class="card"><h4>📡 Telecom</h4><p>Network opt., churn</p></div>
+    <div class="card"><h4>🏛️ Government</h4><p>Crime, traffic, disaster</p></div>
+  </div>
+
+  <h3>6. Analytics Cycle (6 phases)</h3>
+  <div class="flow">
+    <div class="flow-box">① Discovery</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">② Data Prep</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">③ Model Planning</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">④ Model Building</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">⑤ Communicate</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">⑥ Operationalize</div>
+  </div>
+
+  <h3>7. Roles in Analytic Projects</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🧪 Data Scientist</h4><p>Models, insights</p></div>
+    <div class="card"><h4>🔧 Data Engineer</h4><p>Pipelines, infra</p></div>
+    <div class="card"><h4>📊 Data Analyst</h4><p>Cleaning, dashboards</p></div>
+    <div class="card"><h4>💼 Business Analyst</h4><p>Business ↔ analytics bridge</p></div>
+    <div class="card"><h4>👔 Project Manager</h4><p>Lifecycle, budget</p></div>
+  </div>
+
+  <h3>8. Analytics Methods Spectrum</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📊 Descriptive</h4><p>What happened?</p></div>
+    <div class="card"><h4>🔍 Diagnostic</h4><p>Why?</p></div>
+    <div class="card"><h4>🔮 Predictive</h4><p>What's likely?</p></div>
+    <div class="card"><h4>🎯 Prescriptive</h4><p>What to do?</p></div>
+    <div class="card"><h4>🧠 Cognitive</h4><p>Human-like reasoning over unstructured data</p></div>
+  </div>
+
+  <h3>9. Hadoop (Brief Overview — full deep dive in Week 2)</h3>
+  <p>Open-source framework for distributed storage (<strong>HDFS</strong>) and processing (<strong>MapReduce/Spark</strong>) of large datasets across commodity hardware. Inspired by Google's GFS + MapReduce papers (2003–2004); created by Doug Cutting in 2005.</p>
+
+</section>
+
+<!-- ============ WEEK 2: HADOOP / HDFS ============ -->
+<section id="week2" class="fade-in">
+  <h2><span class="week-badge">Week 2</span> 🐘 Hadoop & HDFS</h2>
+
+  <h3>1. Hadoop Features</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🌐 Distributed Processing</h4><p>Splits work across many nodes</p></div>
+    <div class="card"><h4>📈 Scalability</h4><p>Add more nodes as data grows</p></div>
+    <div class="card"><h4>🛡️ Fault Tolerance</h4><p>Data replication handles failures</p></div>
+    <div class="card"><h4>💰 Cost-Effective</h4><p>Commodity hardware</p></div>
+    <div class="card"><h4>🚀 High Throughput</h4><p>Processes large data fast</p></div>
+    <div class="card"><h4>📍 Data Locality</h4><p>Compute moves TO data</p></div>
+  </div>
+
+  <h3>2. HDFS Architecture — Master/Slave</h3>
+  <p>HDFS uses a <strong>master-slave architecture</strong>. The NameNode stores metadata; DataNodes store the actual blocks.</p>
+
+  <div class="arch">
+    <div class="arch-node master">
+      <h5>👑 NameNode</h5>
+      <small>Master • Stores metadata (filenames, permissions, block locations) • Does NOT store data</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🔧 DataNode 1</h5>
+      <small>Stores actual blocks • Serves R/W requests • Reports to NameNode</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🔧 DataNode 2</h5>
+      <small>Stores replicas • Block creation/deletion under NameNode commands</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🔧 DataNode 3</h5>
+      <small>3rd replica (default replication factor = 3)</small>
+    </div>
+  </div>
+
+  <h3>3. Blocks & Replication</h3>
+  <ul>
+    <li>Default block size: <strong>128 MB</strong> (or 256 MB)</li>
+    <li>Default replication factor: <strong>3</strong></li>
+    <li>Replication ensures: if 1 DataNode fails, data still available on 2 others</li>
+  </ul>
+
+  <h3>4. HDFS Write Operation (6 steps)</h3>
+  <ol>
+    <li>Client → write request → <strong>NameNode</strong></li>
+    <li>NameNode checks if file exists & permissions</li>
+    <li>NameNode → list of DataNodes → Client</li>
+    <li>Client streams data to first DataNode → pipelined to other DataNodes</li>
+    <li>DataNodes send ACKs back</li>
+    <li>NameNode updates metadata</li>
+  </ol>
+
+  <h3>5. HDFS Read Operation (4 steps)</h3>
+  <ol>
+    <li>Client → read request → NameNode</li>
+    <li>NameNode returns DataNode locations</li>
+    <li>Client reads blocks <strong>directly from DataNodes</strong> (parallel, closest first)</li>
+    <li>Client assembles blocks in order</li>
+  </ol>
+
+  <h3>6. HDFS Commands</h3>
+  <div class="formula">hdfs dfs &lt;command&gt; &lt;options&gt; &lt;arguments&gt;</div>
+  <div class="card-grid">
+    <div class="card"><h4>File Mgmt</h4><p><code>ls</code>, <code>mkdir</code>, <code>rm</code>, <code>rmdir</code></p></div>
+    <div class="card"><h4>Transfer</h4><p><code>put</code>, <code>get</code></p></div>
+    <div class="card"><h4>View</h4><p><code>cat</code>, <code>tail</code></p></div>
+    <div class="card"><h4>Stats</h4><p><code>du</code>, <code>chgrp</code></p></div>
+  </div>
+
+  <h3>7. Hadoop Ecosystem</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🗄️ HDFS</h4><p>Storage layer (base)</p></div>
+    <div class="card"><h4>⚙️ YARN</h4><p>Resource manager (CPU, memory)</p></div>
+    <div class="card"><h4>🔀 MapReduce</h4><p>Original processing model</p></div>
+    <div class="card"><h4>⚡ Spark</h4><p>Fast in-memory processing</p></div>
+    <div class="card"><h4>🐝 Hive</h4><p>SQL-like queries (HiveQL)</p></div>
+    <div class="card"><h4>🐷 Pig</h4><p>Pig Latin scripting language</p></div>
+    <div class="card"><h4>📊 HBase</h4><p>NoSQL column store on HDFS</p></div>
+    <div class="card"><h4>🌊 Flume</h4><p>Log data ingestion</p></div>
+    <div class="card"><h4>🔄 Sqoop</h4><p>RDBMS ↔ Hadoop transfer</p></div>
+    <div class="card"><h4>🐘 ZooKeeper</h4><p>Coordination service</p></div>
+  </div>
+
+  <h3>8. Applications of Hadoop</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🏛️ Data Warehousing</h4><p>Large-scale warehouses for historical analytics</p></div>
+    <div class="card"><h4>🔄 ETL</h4><p>Extract, Transform, Load on big data</p></div>
+    <div class="card"><h4>🤖 Machine Learning</h4><p>Train/deploy ML over massive datasets</p></div>
+    <div class="card"><h4>📜 Log Processing</h4><p>Server/app/network log analysis</p></div>
+    <div class="card"><h4>📱 Social Media Analytics</h4><p>User behavior & sentiment at scale</p></div>
+  </div>
+
+  <h3>🎯 Quiz — Week 2</h3>
+  <div class="quiz">
+    <p><strong>Q1.</strong> What is the default HDFS block size and replication factor?</p>
+    <div class="quiz-option" onclick="qa(this,0)">64MB / 2</div>
+    <div class="quiz-option" onclick="qa(this,1)">128MB / 3 ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">256MB / 5</div>
+  </div>
+  <div class="quiz">
+    <p><strong>Q2.</strong> Where does the actual data reside in HDFS?</p>
+    <div class="quiz-option" onclick="qa(this,0)">NameNode</div>
+    <div class="quiz-option" onclick="qa(this,1)">DataNodes ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">ZooKeeper</div>
+  </div>
+</section>
+
+<!-- ============ WEEK 3: MAPREDUCE ============ -->
+<section id="week3" class="fade-in">
+  <h2><span class="week-badge">Week 3</span> 🔀 MapReduce Programming</h2>
+
+  <h3>1. Three Stages of MapReduce</h3>
+  <div class="flow">
+    <div class="flow-box" style="background:linear-gradient(135deg,#3498db,#2980b9)">① Map<br><small>process each chunk</small></div>
+    <span class="arrow">→</span>
+    <div class="flow-box" style="background:linear-gradient(135deg,#9b59b6,#8e44ad)">② Shuffle & Sort<br><small>group by key</small></div>
+    <span class="arrow">→</span>
+    <div class="flow-box" style="background:linear-gradient(135deg,#27ae60,#16a085)">③ Reduce<br><small>aggregate values</small></div>
+  </div>
+
+  <h3>2. Key Components</h3>
+  <table>
+    <tr><th>Component</th><th>Role</th></tr>
+    <tr><td><strong>Mapper</strong></td><td>Processes input → emits intermediate (key, value) pairs</td></tr>
+    <tr><td><strong>Combiner</strong> (optional)</td><td>Local reduce — reduces data transferred across network</td></tr>
+    <tr><td><strong>Partitioner</strong></td><td>Decides which Reducer gets which key (default: hash function)</td></tr>
+    <tr><td><strong>Reducer</strong></td><td>Aggregates values for each key → final output</td></tr>
+  </table>
+
+  <h3>3. Classic vs YARN Framework</h3>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab(event,'mr1')">Classic (Hadoop 1.x)</button>
+    <button class="tab-btn" onclick="showTab(event,'mr2')">YARN (Hadoop 2.x+)</button>
+  </div>
+  <div id="mr1" class="tab-content active">
+    <h4>Classic MapReduce</h4>
+    <ul>
+      <li><strong>JobTracker</strong> (master): job scheduling + resource management (single point of failure)</li>
+      <li><strong>TaskTrackers</strong>: execute map/reduce tasks on workers</li>
+    </ul>
+    <p><strong>Limitations:</strong> Tight coupling, scalability issues, only batch processing.</p>
+  </div>
+  <div id="mr2" class="tab-content">
+    <h4>YARN (Yet Another Resource Negotiator)</h4>
+    <ul>
+      <li><strong>ResourceManager</strong> (master): cluster-wide resource scheduling</li>
+      <li><strong>NodeManager</strong> (per node): manages local resources, launches containers</li>
+      <li><strong>ApplicationMaster</strong> (per app): negotiates resources, manages app lifecycle</li>
+      <li><strong>Container</strong>: unit of resource (CPU + memory)</li>
+    </ul>
+    <p><strong>Benefit:</strong> Decouples resource mgmt from processing → Spark, Tez, etc. can also run on Hadoop.</p>
+  </div>
+
+  <h3>4. Word Count Example</h3>
+  <p><strong>Problem:</strong> Count frequency of each word in a text.</p>
+  <div class="code-block">// Map: each word → (word, 1)
+"deer bear river" → ("deer",1), ("bear",1), ("river",1)
+"car car river"   → ("car",1), ("car",1), ("river",1)
+
+// Shuffle/Sort groups same keys:
+deer → [1]
+bear → [1]
+river → [1,1]
+car → [1,1]
+
+// Reduce: sum values for each key
+deer → 1
+bear → 1
+river → 2
+car → 2</div>
+
+  <h3>5. Matrix Multiplication via MapReduce</h3>
+  <ul>
+    <li><strong>Map:</strong> For each element of A & B, emit (result_position, [matrix, coord, value])</li>
+    <li><strong>Reduce:</strong> For each result position, multiply corresponding elements and sum</li>
+  </ul>
+
+  <h3>🎯 Quiz — Week 3</h3>
+  <div class="quiz">
+    <p><strong>Q1.</strong> What stage handles grouping intermediate key-value pairs?</p>
+    <div class="quiz-option" onclick="qa(this,0)">Map</div>
+    <div class="quiz-option" onclick="qa(this,1)">Shuffle and Sort ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Reduce</div>
+  </div>
+  <div class="quiz">
+    <p><strong>Q2.</strong> What is a Combiner's purpose?</p>
+    <div class="quiz-option" onclick="qa(this,0)">Replaces the Reducer</div>
+    <div class="quiz-option" onclick="qa(this,1)">Local aggregation to reduce network traffic ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Decides which Reducer to use</div>
+  </div>
+  <div class="quiz">
+    <p><strong>Q3.</strong> In YARN, which component manages a single application's lifecycle?</p>
+    <div class="quiz-option" onclick="qa(this,0)">NodeManager</div>
+    <div class="quiz-option" onclick="qa(this,0)">ResourceManager</div>
+    <div class="quiz-option" onclick="qa(this,1)">ApplicationMaster ✓</div>
+  </div>
+</section>
+
+<!-- ============ WEEK 4: MR EXAMPLES ============ -->
+<section id="week4" class="fade-in">
+  <h2><span class="week-badge">Week 4</span> 📊 MapReduce — Worked Examples</h2>
+
+  <h3>Visual MapReduce Flow</h3>
+  <div class="svg-diagram">
+    <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg">
+      <!-- Input -->
+      <rect x="10" y="20" width="100" height="40" rx="6" fill="#3498db"/>
+      <text x="60" y="44" fill="white" text-anchor="middle" font-weight="bold">Input Split</text>
+      <!-- Map -->
+      <rect x="160" y="20" width="100" height="40" rx="6" fill="#9b59b6"/>
+      <text x="210" y="44" fill="white" text-anchor="middle" font-weight="bold">Map</text>
+      <rect x="160" y="80" width="100" height="40" rx="6" fill="#9b59b6"/>
+      <text x="210" y="104" fill="white" text-anchor="middle" font-weight="bold">Map</text>
+      <rect x="160" y="140" width="100" height="40" rx="6" fill="#9b59b6"/>
+      <text x="210" y="164" fill="white" text-anchor="middle" font-weight="bold">Map</text>
+      <!-- Shuffle -->
+      <rect x="310" y="60" width="100" height="120" rx="6" fill="#e67e22"/>
+      <text x="360" y="120" fill="white" text-anchor="middle" font-weight="bold">Shuffle</text>
+      <text x="360" y="138" fill="white" text-anchor="middle" font-size="11">+ Sort</text>
+      <!-- Reduce -->
+      <rect x="460" y="40" width="100" height="40" rx="6" fill="#27ae60"/>
+      <text x="510" y="64" fill="white" text-anchor="middle" font-weight="bold">Reduce</text>
+      <rect x="460" y="140" width="100" height="40" rx="6" fill="#27ae60"/>
+      <text x="510" y="164" fill="white" text-anchor="middle" font-weight="bold">Reduce</text>
+      <!-- Output -->
+      <rect x="610" y="80" width="80" height="40" rx="6" fill="#34495e"/>
+      <text x="650" y="104" fill="white" text-anchor="middle" font-weight="bold">Output</text>
+      <!-- Arrows -->
+      <line x1="110" y1="40" x2="160" y2="40" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+      <line x1="110" y1="40" x2="160" y2="100" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+      <line x1="110" y1="40" x2="160" y2="160" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+      <line x1="260" y1="40" x2="310" y2="120" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+      <line x1="260" y1="100" x2="310" y2="120" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+      <line x1="260" y1="160" x2="310" y2="120" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+      <line x1="410" y1="100" x2="460" y2="60" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+      <line x1="410" y1="140" x2="460" y2="160" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+      <line x1="560" y1="60" x2="610" y2="100" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+      <line x1="560" y1="160" x2="610" y2="100" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+      <defs>
+        <marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+          <polygon points="0 0, 10 3, 0 6" fill="#666"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <h3>Example 1: Word Count (Deer/Bear/River)</h3>
+  <div class="code-block">Input: "Deer Bear River | Car Car River | Deer Car Bear"
+
+Split → Map → Shuffle → Reduce
+=================================
+"Deer Bear River" → (Deer,1)(Bear,1)(River,1)
+"Car Car River"   → (Car,1)(Car,1)(River,1)
+"Deer Car Bear"   → (Deer,1)(Car,1)(Bear,1)
+
+After Shuffle:
+Bear  → [1,1]      Car   → [1,1,1]
+Deer  → [1,1]      River → [1,1]
+
+Final Output:
+Bear=2, Car=3, Deer=2, River=2</div>
+
+  <h3>Example 2: Matrix Multiplication</h3>
+  <p>Compute C = A × B where C[i][j] = Σₖ A[i][k] × B[k][j]</p>
+  <div class="code-block">// Map phase: for each A[i][k] and B[k][j]
+A[i][k] emits: ((i,j), ("A", k, value))  for all j
+B[k][j] emits: ((i,j), ("B", k, value))  for all i
+
+// Reduce phase: for each (i,j), sort by k, multiply pairs, sum
+C[i][j] = sum of A[i][k] × B[k][j]</div>
+
+  <h3>Example 3: SQL Join via MapReduce</h3>
+  <p>Joining two tables on a common key:</p>
+  <div class="code-block">// Map: tag each record with source
+Customers row → emit (customer_id, ("C", name, ...))
+Orders row    → emit (customer_id, ("O", order_id, amount))
+
+// Shuffle groups records by customer_id
+
+// Reduce: combine C and O records for each customer_id
+For each key, produce joined row by cross-multiplying C × O records</div>
+
+  <h3>🎯 Quiz — Week 4</h3>
+  <div class="quiz">
+    <p><strong>Q.</strong> For word count, what does the Mapper emit per word?</p>
+    <div class="quiz-option" onclick="qa(this,0)">(word, total_count)</div>
+    <div class="quiz-option" onclick="qa(this,1)">(word, 1) ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">(line_number, word)</div>
+  </div>
+</section>
+
+<!-- ============ WEEK 5: NoSQL & HBase ============ -->
+<section id="week5" class="fade-in">
+  <h2><span class="week-badge">Week 5</span> 📂 NoSQL & HBase</h2>
+
+  <h3>1. What is NoSQL?</h3>
+  <p><strong>"Not Only SQL"</strong> — flexible, schema-less databases for handling large volumes of varied (unstructured/semi-structured) data.</p>
+
+  <h3>2. Four Types of NoSQL</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📄 Document</h4><p>JSON/BSON docs — MongoDB. Good for content mgmt, varying structures.</p></div>
+    <div class="card"><h4>🔑 Key-Value</h4><p>Simple key→value — Redis. Caching, sessions, fast lookups.</p></div>
+    <div class="card"><h4>📊 Column-Oriented</h4><p>Wide columns — HBase, Cassandra. Time-series, analytics on specific cols.</p></div>
+    <div class="card"><h4>🕸️ Graph</h4><p>Nodes & edges — Neo4j. Social networks, recommendations, fraud.</p></div>
+  </div>
+
+  <h3>3. SQL vs NoSQL</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Feature</th><th>SQL (Relational)</th><th>NoSQL</th></tr>
+      <tr><td>Data Model</td><td>Tables (rows/cols)</td><td>Document/Key-Value/Column/Graph</td></tr>
+      <tr><td>Schema</td><td>Predefined, rigid</td><td>Dynamic, flexible</td></tr>
+      <tr><td>Scaling</td><td>Vertical (scale-up)</td><td>Horizontal (scale-out)</td></tr>
+      <tr><td>Consistency</td><td>Strong (ACID)</td><td>Often tunable (CAP theorem)</td></tr>
+      <tr><td>Use Cases</td><td>Transactions, complex queries</td><td>Big data, real-time apps</td></tr>
+    </table>
+  </div>
+
+  <h3>4. CAP Theorem</h3>
+  <div class="flow">
+    <div class="flow-box" style="background:linear-gradient(135deg,#e74c3c,#c0392b)">C — Consistency</div>
+    <div class="flow-box" style="background:linear-gradient(135deg,#27ae60,#16a085)">A — Availability</div>
+    <div class="flow-box" style="background:linear-gradient(135deg,#3498db,#2980b9)">P — Partition Tolerance</div>
+  </div>
+  <p>You can have <strong>only 2 of 3</strong>. NoSQL DBs typically choose AP, while SQL chooses CP.</p>
+
+  <h3>5. HBase vs Hive</h3>
+  <div class="card-grid">
+    <div class="card" style="border-color:#e74c3c"><h4>HBase</h4><p>NoSQL <strong>database</strong> on HDFS. Real-time random R/W. Column-oriented. No SQL.</p></div>
+    <div class="card" style="border-color:#27ae60"><h4>Hive</h4><p>Data <strong>warehouse</strong> on Hadoop. SQL-like (HiveQL) for batch analytics. Translates to MapReduce/Tez/Spark.</p></div>
+  </div>
+
+  <h3>6. HBase Architecture</h3>
+  <div class="arch">
+    <div class="arch-node master">
+      <h5>👑 HMaster</h5>
+      <small>Assigns regions to RegionServers, schema changes, load balancing</small>
+    </div>
+    <div class="arch-node coord">
+      <h5>🦓 ZooKeeper</h5>
+      <small>Cluster coordination, tracks active/failed nodes</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🔧 RegionServer 1</h5>
+      <small>Serves regions • MemStore (RAM) + BlockCache + HFile (HDFS) + WAL</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🔧 RegionServer 2</h5>
+      <small>Handles R/W requests for its regions</small>
+    </div>
+  </div>
+
+  <h3>7. HBase Data Model</h3>
+  <table>
+    <tr><th>Concept</th><th>Description</th></tr>
+    <tr><td>Table</td><td>Column-oriented collection of rows</td></tr>
+    <tr><td>RowKey</td><td>Unique identifier (primary index, lexicographic order)</td></tr>
+    <tr><td>Column Family</td><td>Group of related columns, defined at table creation</td></tr>
+    <tr><td>Column Qualifier</td><td>Specific column within a family (dynamic)</td></tr>
+    <tr><td>Cell</td><td>(RowKey, Family:Qualifier) → value</td></tr>
+    <tr><td>Timestamp</td><td>Versioning per cell (multiple versions stored)</td></tr>
+  </table>
+
+  <h3>🎯 Quiz — Week 5</h3>
+  <div class="quiz">
+    <p><strong>Q1.</strong> NoSQL stands for:</p>
+    <div class="quiz-option" onclick="qa(this,0)">No SQL allowed</div>
+    <div class="quiz-option" onclick="qa(this,1)">Not Only SQL ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Network SQL</div>
+  </div>
+  <div class="quiz">
+    <p><strong>Q2.</strong> HBase's HMaster monitors RegionServers via:</p>
+    <div class="quiz-option" onclick="qa(this,0)">HDFS</div>
+    <div class="quiz-option" onclick="qa(this,1)">ZooKeeper ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">YARN</div>
+  </div>
+  <div class="quiz">
+    <p><strong>Q3.</strong> Which is best for fast random reads on massive sparse tables?</p>
+    <div class="quiz-option" onclick="qa(this,1)">HBase ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Hive</div>
+    <div class="quiz-option" onclick="qa(this,0)">HDFS directly</div>
+  </div>
+</section>
+
+<!-- ============ WEEK 6: Hive & HBase ============ -->
+<section id="week6" class="fade-in">
+  <h2><span class="week-badge">Week 6</span> 🐝 Hive & HBase Deep Dive</h2>
+
+  <h3>1. Apache Hive Architecture</h3>
+  <div class="arch">
+    <div class="arch-node"><h5>🖥️ User Interface</h5><small>CLI / JDBC / ODBC / Web</small></div>
+    <div class="arch-node coord"><h5>🚦 Driver</h5><small>Session & query lifecycle</small></div>
+    <div class="arch-node"><h5>⚙️ Compiler</h5><small>Parse + Plan (AST→DAG)</small></div>
+    <div class="arch-node master"><h5>📚 Metastore</h5><small>Schema, partitions, locations (Derby/MySQL)</small></div>
+    <div class="arch-node worker"><h5>🏃 Executor</h5><small>Runs jobs (MR/Tez/Spark)</small></div>
+  </div>
+
+  <h3>2. Hive File Formats</h3>
+  <div class="card-grid">
+    <div class="card"><h4>TextFile</h4><p>Default, plain text, no compression — slow</p></div>
+    <div class="card"><h4>SequenceFile</h4><p>Binary K/V, block-compressible, splittable</p></div>
+    <div class="card"><h4>RCFile</h4><p>Row Columnar — column-major storage</p></div>
+    <div class="card" style="border-color:#27ae60"><h4>ORC ⭐</h4><p>Optimized RCFile — best for Hive (Zlib/Snappy, indexes)</p></div>
+    <div class="card"><h4>Parquet</h4><p>Popular columnar — Spark/Impala</p></div>
+    <div class="card"><h4>Avro</h4><p>Row-based, schema evolution friendly</p></div>
+  </div>
+
+  <h3>3. HiveQL — DDL & DML</h3>
+  <div class="code-block">-- DDL
+CREATE DATABASE sales;
+USE sales;
+CREATE TABLE orders (
+  order_id INT,
+  customer STRING,
+  amount DOUBLE
+) STORED AS ORC;
+
+ALTER TABLE orders ADD COLUMNS (region STRING);
+DROP TABLE orders;
+
+-- DML
+LOAD DATA INPATH '/data/orders.csv' INTO TABLE orders;
+INSERT INTO orders SELECT * FROM staging;
+SELECT customer, SUM(amount) FROM orders GROUP BY customer;</div>
+
+  <h3>4. HBase Shell — DDL Commands</h3>
+  <div class="code-block">create 'users', 'profile', 'activity'   # table with 2 column families
+list                                      # list all tables
+describe 'users'                          # show schema
+alter 'users', {NAME=>'new_cf'}           # add column family
+disable 'users'                           # disable before drop
+drop 'users'                              # delete table
+exists 'users'                            # check exists</div>
+
+  <h3>5. HBase Shell — DML Commands</h3>
+  <div class="code-block">put 'users', 'user123', 'profile:name', 'John Doe'
+get 'users', 'user123'
+get 'users', 'user123', {COLUMN => 'profile:email'}
+scan 'users', {LIMIT => 10}
+scan 'users', {STARTROW=>'user100', STOPROW=>'user200'}
+delete 'users', 'user123', 'profile:name'
+deleteall 'users', 'user123'
+incr 'counters', 'page_views', 'stats:count', 1</div>
+
+  <h3>6. HBase vs RDBMS Quick Comparison</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Aspect</th><th>HBase</th><th>RDBMS</th></tr>
+      <tr><td>Data Model</td><td>Column-family (wide-column)</td><td>Row-oriented (tables)</td></tr>
+      <tr><td>Schema</td><td>Schema-on-read (flexible)</td><td>Schema-on-write (fixed)</td></tr>
+      <tr><td>Scaling</td><td>Horizontal (add nodes)</td><td>Vertical (bigger server)</td></tr>
+      <tr><td>Query</td><td>Java API, Shell, REST (no SQL)</td><td>SQL</td></tr>
+      <tr><td>Joins</td><td>Limited / Not native</td><td>Fully supported</td></tr>
+      <tr><td>ACID</td><td>Row-level atomicity</td><td>Full ACID</td></tr>
+      <tr><td>Use Case</td><td>Sparse data, real-time access</td><td>Complex queries, transactions</td></tr>
+    </table>
+  </div>
+
+  <h3>🎯 Quiz — Week 6</h3>
+  <div class="quiz">
+    <p><strong>Q1.</strong> Which is the most optimized columnar format for Hive?</p>
+    <div class="quiz-option" onclick="qa(this,0)">TextFile</div>
+    <div class="quiz-option" onclick="qa(this,1)">ORC ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">SequenceFile</div>
+  </div>
+  <div class="quiz">
+    <p><strong>Q2.</strong> Before dropping an HBase table, you must:</p>
+    <div class="quiz-option" onclick="qa(this,0)">Truncate it</div>
+    <div class="quiz-option" onclick="qa(this,1)">Disable it ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Backup metadata</div>
+  </div>
+</section>
+
+<!-- ============ WEEK 7: MongoDB ============ -->
+<section id="week7" class="fade-in">
+  <h2><span class="week-badge">Week 7</span> 🍃 MongoDB — Unstructured Data</h2>
+
+  <h3>1. Big Data Vs (and beyond)</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📦 Volume</h4><p>TB / PB / EB scale</p></div>
+    <div class="card"><h4>⚡ Velocity</h4><p>Real-time streams</p></div>
+    <div class="card"><h4>🎭 Variety</h4><p>Structured / Semi / Unstructured</p></div>
+    <div class="card"><h4>✓ Veracity</h4><p>Trustworthiness</p></div>
+    <div class="card"><h4>💎 Value</h4><p>Insights extracted</p></div>
+    <div class="card"><h4>📊 Variability</h4><p>Changing formats</p></div>
+  </div>
+
+  <h3>2. The Analytics Cycle</h3>
+  <div class="flow">
+    <div class="flow-box">① Business Understanding</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">② Data Acquisition</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">③ Preparation</div>
+  </div>
+  <div class="flow">
+    <div class="flow-box">④ EDA</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">⑤ Modeling</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">⑥ Evaluation</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">⑦ Deployment</div>
+  </div>
+
+  <h3>2B. Analytics Methods Spectrum</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📊 Descriptive</h4><p>What happened? — reports, dashboards</p></div>
+    <div class="card"><h4>🔍 Diagnostic</h4><p>Why? — drill-down, root cause</p></div>
+    <div class="card"><h4>🔮 Predictive</h4><p>What's likely? — statistical models & ML on historical data</p></div>
+    <div class="card"><h4>🎯 Prescriptive</h4><p>What to do? — optimization, recommendations</p></div>
+    <div class="card"><h4>🧠 Cognitive</h4><p>Human-like reasoning over unstructured data (NLP, vision)</p></div>
+  </div>
+
+  <h3>2C. Classical 6-Phase Data Science Lifecycle</h3>
+  <div class="flow">
+    <div class="flow-box">① Discovery</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">② Data Preparation</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">③ Model Planning</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">④ Model Building</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">⑤ Communicate</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">⑥ Operationalize</div>
+  </div>
+
+  <h3>3. MongoDB Hierarchy</h3>
+  <div class="flow">
+    <div class="flow-box" style="background:linear-gradient(135deg,#27ae60,#16a085)">📁 Database</div>
+    <span class="arrow">contains</span>
+    <div class="flow-box" style="background:linear-gradient(135deg,#3498db,#2980b9)">📂 Collection</div>
+    <span class="arrow">contains</span>
+    <div class="flow-box" style="background:linear-gradient(135deg,#9b59b6,#8e44ad)">📄 Document<br><small>(BSON)</small></div>
+  </div>
+
+  <h3>4. BSON vs JSON</h3>
+  <table>
+    <tr><th>Aspect</th><th>JSON</th><th>BSON (Binary JSON)</th></tr>
+    <tr><td>Format</td><td>Text</td><td>Binary</td></tr>
+    <tr><td>Storage</td><td>External use</td><td>Internal MongoDB storage</td></tr>
+    <tr><td>Types</td><td>String, Number, Array, Object, Bool, null</td><td>+ ObjectId, Date, BinData, Decimal128</td></tr>
+    <tr><td>Speed</td><td>Slower to parse</td><td>Optimized for fast traversal</td></tr>
+  </table>
+
+  <h3>5. MongoDB Replication — Replica Sets</h3>
+  <div class="arch">
+    <div class="arch-node master">
+      <h5>👑 Primary</h5>
+      <small>Handles ALL writes • Records to oplog</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🔄 Secondary 1</h5>
+      <small>Async replicates from primary's oplog • Can serve reads</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🔄 Secondary 2</h5>
+      <small>Replica copy • Vote in elections</small>
+    </div>
+  </div>
+  <div class="insight">
+    <strong>💡 Failover:</strong> If primary fails (no heartbeat ~10-12s), eligible secondaries hold an election. A secondary with majority votes becomes the new primary. The old primary rejoins as a secondary when it recovers.
+  </div>
+
+  <h3>6. MongoDB Sharding</h3>
+  <p>For datasets too large for a single replica set.</p>
+  <div class="arch">
+    <div class="arch-node coord">
+      <h5>🚦 mongos</h5>
+      <small>Query router • Clients connect here, NOT directly to shards</small>
+    </div>
+    <div class="arch-node master">
+      <h5>📚 Config Servers</h5>
+      <small>(Replica set) Holds metadata: chunk→shard mapping</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🗄️ Shard 1</h5>
+      <small>Replica set holding part of data</small>
+    </div>
+    <div class="arch-node worker">
+      <h5>🗄️ Shard 2</h5>
+      <small>Replica set holding another part</small>
+    </div>
+  </div>
+
+  <h3>🎯 Quiz — Week 7</h3>
+  <div class="quiz">
+    <p><strong>Q1.</strong> In a MongoDB replica set, who handles writes?</p>
+    <div class="quiz-option" onclick="qa(this,0)">Any secondary</div>
+    <div class="quiz-option" onclick="qa(this,1)">Only the primary ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">The arbiter</div>
+  </div>
+  <div class="quiz">
+    <p><strong>Q2.</strong> In a sharded cluster, clients connect to:</p>
+    <div class="quiz-option" onclick="qa(this,0)">A shard directly</div>
+    <div class="quiz-option" onclick="qa(this,1)">mongos (query router) ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">The config server</div>
+  </div>
+  <div class="quiz">
+    <p><strong>Q3.</strong> Why is BSON used instead of JSON internally?</p>
+    <div class="quiz-option" onclick="qa(this,1)">Faster traversal + richer types (e.g., Date, ObjectId) ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Smaller in every case</div>
+    <div class="quiz-option" onclick="qa(this,0)">Human-readable</div>
+  </div>
+</section>
+
+<!-- ============ WEEK 8: Mongo CRUD ============ -->
+<section id="week8" class="fade-in">
+  <h2><span class="week-badge">Week 8</span> ⚙️ MongoDB CRUD & Aggregation</h2>
+
+  <h3>1. JSON Structure Refresher</h3>
+  <div class="code-block">{
+  "name": "Alice",
+  "age": 30,
+  "active": true,
+  "tags": ["admin", "developer"],
+  "address": {
+    "city": "Vellore",
+    "country": "India"
+  }
+}</div>
+
+  <h3>2. Import / Export</h3>
+  <div class="code-block">mongoimport --db mydb --collection users --file users.json
+mongoexport --db mydb --collection users --out users.json
+mongoexport --db mydb --collection users --type=csv --fields name,age --out users.csv</div>
+
+  <h3>3. CRUD Operations</h3>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab(event,'c1')">CREATE</button>
+    <button class="tab-btn" onclick="showTab(event,'c2')">READ</button>
+    <button class="tab-btn" onclick="showTab(event,'c3')">UPDATE</button>
+    <button class="tab-btn" onclick="showTab(event,'c4')">DELETE</button>
+  </div>
+  <div id="c1" class="tab-content active">
+    <div class="code-block">db.users.insertOne({ name: "Bob", age: 25 })
+db.users.insertMany([
+  { name: "Carol", age: 30 },
+  { name: "Dan", age: 22 }
+])</div>
+  </div>
+  <div id="c2" class="tab-content">
+    <div class="code-block">db.users.find()                              // all
+db.users.find({ age: { $gt: 25 } })          // age > 25
+db.users.find({ status: "active", age: { $lt: 30 } })
+db.users.findOne({ name: "Bob" })
+db.users.find({}, { name: 1, _id: 0 })       // projection</div>
+  </div>
+  <div id="c3" class="tab-content">
+    <div class="code-block">db.users.updateOne(
+  { name: "Bob" },
+  { $set: { age: 26 } }
+)
+db.users.updateMany(
+  { status: "active" },
+  { $inc: { points: 10 } }
+)
+db.users.replaceOne({ name: "Bob" }, { name: "Bob", age: 27 })</div>
+  </div>
+  <div id="c4" class="tab-content">
+    <div class="code-block">db.users.deleteOne({ name: "Bob" })
+db.users.deleteMany({ status: "inactive" })</div>
+  </div>
+
+  <h3>4. Aggregation Pipeline</h3>
+  <p>A multi-stage data processing framework. Documents flow through stages.</p>
+  <div class="flow">
+    <div class="flow-box">$match</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">$group</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">$sort</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">$project</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">$limit</div>
+  </div>
+  <div class="code-block">db.orders.aggregate([
+  { $match: { status: "completed" } },           // filter
+  { $group: {
+      _id: "$itemType",
+      totalQty: { $sum: "$quantity" },
+      avgPrice: { $avg: "$price" }
+  }},
+  { $sort: { totalQty: -1 } },
+  { $limit: 5 }
+])</div>
+
+  <h3>5. Accumulator Operators (in $group)</h3>
+  <table>
+    <tr><th>Operator</th><th>Purpose</th></tr>
+    <tr><td>$sum</td><td>Sum of values (use $sum: 1 to count)</td></tr>
+    <tr><td>$avg</td><td>Average</td></tr>
+    <tr><td>$min / $max</td><td>Min/Max value</td></tr>
+    <tr><td>$push</td><td>Array of all values</td></tr>
+    <tr><td>$addToSet</td><td>Array of unique values</td></tr>
+  </table>
+
+  <h3>6. Indexes</h3>
+  <div class="code-block">db.users.createIndex({ email: 1 })                    // ascending single
+db.users.createIndex({ city: 1, age: -1 })            // compound
+db.products.createIndex({ name: "text" })             // text search
+db.places.createIndex({ location: "2dsphere" })       // geospatial</div>
+  <div class="warning">
+    <strong>⚠️ Trade-off:</strong> Indexes speed up reads but slow down writes (insert/update/delete must also update the index). They also consume disk space. Index based on actual query patterns.
+  </div>
+
+  <h3>🎯 Quiz — Week 8</h3>
+  <div class="quiz">
+    <p><strong>Q1.</strong> Which aggregation stage groups documents?</p>
+    <div class="quiz-option" onclick="qa(this,0)">$match</div>
+    <div class="quiz-option" onclick="qa(this,1)">$group ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">$sort</div>
+  </div>
+  <div class="quiz">
+    <p><strong>Q2.</strong> To count documents in a group, use:</p>
+    <div class="quiz-option" onclick="qa(this,0)">{ $avg: 1 }</div>
+    <div class="quiz-option" onclick="qa(this,1)">{ $sum: 1 } ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">{ $count: 0 }</div>
+  </div>
+</section>
+
+<!-- ============ WEEK 9: Cassandra ============ -->
+<section id="week9" class="fade-in">
+  <h2><span class="week-badge">Week 9</span> 🌊 Cassandra & Streaming Analytics</h2>
+
+  <h3>1. Streaming vs Batch Analytics</h3>
+  <table>
+    <tr><th>Aspect</th><th>Streaming</th><th>Batch</th></tr>
+    <tr><td>Data</td><td>In motion (continuous)</td><td>Static blocks</td></tr>
+    <tr><td>Latency</td><td>Real-time / near real-time</td><td>Minutes to hours</td></tr>
+    <tr><td>Tools</td><td>Kafka, Flink, Spark Streaming</td><td>Hadoop MapReduce</td></tr>
+    <tr><td>Use Case</td><td>Fraud detection, live dashboards</td><td>Reports, ETL</td></tr>
+  </table>
+
+  <h3>2. Cassandra — Key Concepts</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🌐 Peer-to-Peer</h4><p>No master — every node identical. No single point of failure.</p></div>
+    <div class="card"><h4>📈 Linear Scalability</h4><p>Add nodes → throughput grows linearly</p></div>
+    <div class="card"><h4>⚡ High Write Throughput</h4><p>Optimized for fast writes — perfect for streaming</p></div>
+    <div class="card"><h4>🛡️ Fault Tolerance</h4><p>Data replicated across nodes</p></div>
+    <div class="card"><h4>🎛️ Tunable Consistency</h4><p>Per-query trade-off: consistency vs availability</p></div>
+    <div class="card"><h4>⏰ Time-Series</h4><p>Ideal for IoT, sensor data, logs</p></div>
+  </div>
+
+  <h3>3. Cassandra Architecture (Ring)</h3>
+  <div class="svg-diagram">
+    <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="150" cy="150" r="100" fill="none" stroke="#764ba2" stroke-width="3" stroke-dasharray="5,5"/>
+      <circle cx="150" cy="50" r="22" fill="#3498db"/><text x="150" y="55" fill="white" text-anchor="middle" font-weight="bold">N1</text>
+      <circle cx="237" cy="100" r="22" fill="#3498db"/><text x="237" y="105" fill="white" text-anchor="middle" font-weight="bold">N2</text>
+      <circle cx="237" cy="200" r="22" fill="#3498db"/><text x="237" y="205" fill="white" text-anchor="middle" font-weight="bold">N3</text>
+      <circle cx="150" cy="250" r="22" fill="#3498db"/><text x="150" y="255" fill="white" text-anchor="middle" font-weight="bold">N4</text>
+      <circle cx="63" cy="200" r="22" fill="#3498db"/><text x="63" y="205" fill="white" text-anchor="middle" font-weight="bold">N5</text>
+      <circle cx="63" cy="100" r="22" fill="#3498db"/><text x="63" y="105" fill="white" text-anchor="middle" font-weight="bold">N6</text>
+      <text x="150" y="155" text-anchor="middle" font-weight="bold" fill="#764ba2">Cassandra Ring</text>
+      <text x="150" y="175" text-anchor="middle" font-size="11" fill="#666">Every node is equal (peer-to-peer)</text>
+    </svg>
+  </div>
+
+  <h3>4. Replication Factor</h3>
+  <ul>
+    <li>Set at <strong>keyspace level</strong></li>
+    <li>RF = 3 means: 3 copies of every piece of data across nodes</li>
+    <li>If one node fails → data still readable from other replicas</li>
+  </ul>
+
+  <h3>5. Indexes</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🔑 Primary Key</h4><p>= Partition Key + Clustering Columns. Drives distribution & sorting.</p></div>
+    <div class="card"><h4>📑 Secondary Index</h4><p>Query non-key columns. Best for low-medium cardinality. Slow on big data!</p></div>
+  </div>
+
+  <h3>6. CQL — Cassandra Query Language</h3>
+  <p>SQL-like syntax for Cassandra.</p>
+  <div class="code-block">-- DDL
+CREATE KEYSPACE mykeyspace
+WITH replication = { 'class':'SimpleStrategy', 'replication_factor':3 };
+
+USE mykeyspace;
+
+CREATE TABLE users (
+  userid UUID PRIMARY KEY,
+  first_name TEXT,
+  last_name TEXT
+);
+
+-- DML
+INSERT INTO users (userid, first_name, last_name)
+VALUES (uuid(), 'John', 'Doe');
+
+SELECT first_name, last_name FROM users WHERE userid = <some_uuid>;
+UPDATE users SET last_name = 'Smith' WHERE userid = <some_uuid>;
+DELETE FROM users WHERE userid = <some_uuid>;</div>
+
+  <h3>7. Cassandra Data Types</h3>
+  <div class="card-grid">
+    <div class="card"><h4>Numeric</h4><p><code>int</code>, <code>bigint</code>, <code>float</code>, <code>double</code>, <code>decimal</code>, <code>varint</code></p></div>
+    <div class="card"><h4>Text</h4><p><code>text</code>, <code>varchar</code>, <code>ascii</code></p></div>
+    <div class="card"><h4>Time/Date</h4><p><code>timestamp</code>, <code>date</code>, <code>time</code></p></div>
+    <div class="card"><h4>UUID</h4><p><code>uuid</code>, <code>timeuuid</code> (for time-series)</p></div>
+    <div class="card"><h4>Boolean</h4><p><code>boolean</code></p></div>
+    <div class="card"><h4>Collections</h4><p><code>list&lt;T&gt;</code>, <code>set&lt;T&gt;</code>, <code>map&lt;K,V&gt;</code></p></div>
+  </div>
+
+  <h3>🎯 Quiz — Week 9</h3>
+  <div class="quiz">
+    <p><strong>Q1.</strong> Cassandra's architecture is best described as:</p>
+    <div class="quiz-option" onclick="qa(this,0)">Master-slave</div>
+    <div class="quiz-option" onclick="qa(this,1)">Peer-to-peer (no master) ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Client-server</div>
+  </div>
+  <div class="quiz">
+    <p><strong>Q2.</strong> Replication factor in Cassandra is set at the level of:</p>
+    <div class="quiz-option" onclick="qa(this,0)">Each row</div>
+    <div class="quiz-option" onclick="qa(this,0)">Each table</div>
+    <div class="quiz-option" onclick="qa(this,1)">Keyspace ✓</div>
+  </div>
+  <div class="quiz">
+    <p><strong>Q3.</strong> Which data type is best for time-series row keys in Cassandra?</p>
+    <div class="quiz-option" onclick="qa(this,0)">int</div>
+    <div class="quiz-option" onclick="qa(this,0)">text</div>
+    <div class="quiz-option" onclick="qa(this,1)">timeuuid ✓</div>
+  </div>
+</section>
+
+<!-- ============ WEEK 10: Streaming Ops ============ -->
+<section id="week10" class="fade-in">
+  <h2><span class="week-badge">Week 10</span> 📡 Cassandra — Collections & Streaming</h2>
+
+  <h3>1. Cassandra Collection Types</h3>
+  <table>
+    <tr><th>Type</th><th>Description</th><th>Use Case</th></tr>
+    <tr><td><code>SET&lt;type&gt;</code></td><td>Unique, unordered</td><td>Tags, categories</td></tr>
+    <tr><td><code>LIST&lt;type&gt;</code></td><td>Ordered, allows duplicates</td><td>Activity logs, history</td></tr>
+    <tr><td><code>MAP&lt;K,V&gt;</code></td><td>Key-value pairs</td><td>Settings, attributes</td></tr>
+  </table>
+
+  <h3>2. Defining & Using Collections</h3>
+  <div class="code-block">CREATE TABLE user_profiles (
+  user_id UUID PRIMARY KEY,
+  emails SET&lt;TEXT&gt;,
+  login_history LIST&lt;TIMESTAMP&gt;,
+  settings MAP&lt;TEXT, TEXT&gt;
+);
+
+-- Insert into SET
+INSERT INTO user_profiles (user_id, emails)
+VALUES (uuid(), {'a@example.com', 'b@example.com'});
+
+-- Append to LIST
+UPDATE user_profiles
+SET login_history = login_history + [toTimestamp(now())]
+WHERE user_id = ?;
+
+-- Insert MAP
+INSERT INTO user_profiles (user_id, settings)
+VALUES (uuid(), {'theme':'dark','language':'en'});
+
+-- Modify
+UPDATE user_profiles SET emails = emails + {'new@example.com'} WHERE user_id = ?;
+UPDATE user_profiles SET emails = emails - {'a@example.com'} WHERE user_id = ?;
+DELETE settings['theme'] FROM user_profiles WHERE user_id = ?;</div>
+
+  <h3>3. CSV Import / Export</h3>
+  <div class="code-block">-- Import
+COPY sensor_data (device_id, event_time, temperature)
+FROM 'sensor_readings.csv' WITH HEADER = TRUE;
+
+-- Export all
+COPY sensor_data TO 'all_sensor_data.csv' WITH HEADER = TRUE;
+
+-- Export filtered with custom delimiter
+COPY (SELECT device_id, temperature FROM sensor_data
+      WHERE event_time > '2024-05-15T00:00:00Z')
+TO 'recent_temps.csv' WITH HEADER = TRUE AND DELIMITER = '|';</div>
+
+  <h3>4. Keyspaces & Tables</h3>
+  <div class="code-block">-- Create keyspace
+CREATE KEYSPACE my_app WITH REPLICATION = {
+  'class': 'SimpleStrategy',
+  'replication_factor': 3
+};
+
+-- Multi-datacenter
+CREATE KEYSPACE retail WITH REPLICATION = {
+  'class': 'NetworkTopologyStrategy',
+  'DC1': 3,
+  'DC2': 2
+} AND DURABLE_WRITES = TRUE;
+
+-- Composite primary key (partition + clustering)
+CREATE TABLE temperature_readings (
+  device_id UUID,
+  event_time TIMESTAMP,
+  temperature FLOAT,
+  PRIMARY KEY ((device_id), event_time)
+) WITH CLUSTERING ORDER BY (event_time DESC);</div>
+
+  <h3>5. Streaming Data Patterns</h3>
+  <div class="card-grid">
+    <div class="card"><h4>🌐 IoT Sensors</h4><p>Time-series readings, RF=3, partition by device_id</p></div>
+    <div class="card"><h4>📰 News Feed</h4><p>User activities + popularity counters</p></div>
+    <div class="card"><h4>💬 Messaging</h4><p>Chat history, partition by conversation_id</p></div>
+    <div class="card"><h4>📊 Monitoring</h4><p>Application metrics & logs</p></div>
+  </div>
+
+  <h3>6. Time-Series Best Practices</h3>
+  <ul>
+    <li>Use <code>(device_id, event_time)</code> as composite PK</li>
+    <li>Add <code>WITH CLUSTERING ORDER BY (event_time DESC)</code> for fast "recent N" queries</li>
+    <li>Use COUNTER columns for fast atomic counters (likes/views)</li>
+    <li>Apply TTL (Time To Live) to automatically delete old data</li>
+  </ul>
+
+  <h3>7. Counters Example (News Feed)</h3>
+  <div class="code-block">CREATE TABLE article_popularity (
+  article_id UUID,
+  event_date TEXT,
+  views   COUNTER,
+  likes   COUNTER,
+  shares  COUNTER,
+  PRIMARY KEY ((article_id, event_date))
+);
+
+-- Increment counters
+UPDATE article_popularity SET views = views + 1
+WHERE article_id = ? AND event_date = '2024-05-15';</div>
+
+  <div class="warning">
+    <strong>⚠️ Tombstones:</strong> Cassandra deletes are "soft" — they leave tombstone markers. Too many can slow queries. Use TTL or design data model to avoid excessive deletes.
+  </div>
+
+  <h3>🎯 Quiz — Week 10</h3>
+  <div class="quiz">
+    <p><strong>Q1.</strong> Which Cassandra collection allows duplicates and preserves order?</p>
+    <div class="quiz-option" onclick="qa(this,0)">SET</div>
+    <div class="quiz-option" onclick="qa(this,1)">LIST ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">MAP</div>
+  </div>
+  <div class="quiz">
+    <p><strong>Q2.</strong> What does CQL command <code>COPY ... FROM 'file.csv'</code> do?</p>
+    <div class="quiz-option" onclick="qa(this,1)">Bulk import from CSV ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">Export to CSV</div>
+    <div class="quiz-option" onclick="qa(this,0)">Copy a table</div>
+  </div>
+  <div class="quiz">
+    <p><strong>Q3.</strong> For storing "likes" count that increments frequently, which type is ideal?</p>
+    <div class="quiz-option" onclick="qa(this,0)">INT</div>
+    <div class="quiz-option" onclick="qa(this,1)">COUNTER ✓</div>
+    <div class="quiz-option" onclick="qa(this,0)">BIGINT</div>
+  </div>
+</section>
+
+<!-- ============ MEGA QUIZ ============ -->
+<section id="finalquiz" class="fade-in">
+  <h2>🎯 Mega Final Quiz — Test Everything</h2>
+  <p>Score yourself across all 10 weeks. Click your answer to see if it's correct. Track your progress below:</p>
+
+  <div class="progress-bar"><div class="progress-fill" id="quizProgress"></div></div>
+  <p id="quizScore" style="text-align:center; font-weight:bold; color:var(--primary-dark)">0 / 30 questions answered</p>
+
+  <div id="megaQuiz"></div>
+
+  <button onclick="resetMega()" style="margin-top:20px; padding:10px 24px; background:var(--danger); color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600;">🔄 Reset Quiz</button>
+</section>
+
+<!-- ============ CHEATSHEET ============ -->
+<section id="cheatsheet" class="fade-in">
+  <h2>📋 Master Cheatsheet — All 10 Weeks</h2>
+
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h4>📊 W1 — Big Data Essentials</h4>
+      <code>5 Vs: Volume, Velocity, Variety, Veracity, Value</code>
+      <code>Types: Structured, Semi-structured, Unstructured</code>
+      <code>Cycle (6): Discovery → DataPrep → ModelPlan → ModelBuild → Communicate → Operationalize</code>
+      <code>Methods: Descriptive, Diagnostic, Predictive, Prescriptive, Cognitive</code>
+      <code>Hadoop = HDFS + MapReduce / YARN</code>
+    </div>
+
+    <div class="cheat-card">
+      <h4>🐘 W2 — HDFS Commands</h4>
+      <code>hdfs dfs -ls /</code>
+      <code>hdfs dfs -mkdir /data</code>
+      <code>hdfs dfs -put local.txt /data/</code>
+      <code>hdfs dfs -get /data/file.txt</code>
+      <code>hdfs dfs -cat /data/file.txt</code>
+      <code>hdfs dfs -rm /data/file.txt</code>
+    </div>
+
+    <div class="cheat-card">
+      <h4>🔀 W3 — MapReduce</h4>
+      <code>① Map → (k,v) pairs</code>
+      <code>② Shuffle/Sort → group by k</code>
+      <code>③ Reduce → aggregate</code>
+      <code>Combiner: local reduce</code>
+      <code>Partitioner: k → Reducer</code>
+    </div>
+
+    <div class="cheat-card">
+      <h4>🐝 W6 — Hive DDL</h4>
+      <code>CREATE DATABASE db;</code>
+      <code>USE db;</code>
+      <code>CREATE TABLE t (id INT) STORED AS ORC;</code>
+      <code>LOAD DATA INPATH '/x' INTO TABLE t;</code>
+      <code>SELECT col, SUM(x) FROM t GROUP BY col;</code>
+    </div>
+
+    <div class="cheat-card">
+      <h4>📊 W5/W6 — HBase Shell</h4>
+      <code>create 'tbl','cf1','cf2'</code>
+      <code>put 'tbl','row1','cf1:col','val'</code>
+      <code>get 'tbl','row1'</code>
+      <code>scan 'tbl', {LIMIT=>10}</code>
+      <code>delete 'tbl','row1','cf1:col'</code>
+      <code>disable 'tbl'; drop 'tbl'</code>
+    </div>
+
+    <div class="cheat-card">
+      <h4>🍃 W7/W8 — MongoDB</h4>
+      <code>db.users.insertOne({...})</code>
+      <code>db.users.find({age:{$gt:25}})</code>
+      <code>db.users.updateOne(q,{$set:{...}})</code>
+      <code>db.users.deleteOne({...})</code>
+      <code>db.users.createIndex({name:1})</code>
+    </div>
+
+    <div class="cheat-card">
+      <h4>🍃 W8 — Aggregation</h4>
+      <code>db.t.aggregate([</code>
+      <code>  {$match: {...}},</code>
+      <code>  {$group: {_id:"$k", n:{$sum:1}}},</code>
+      <code>  {$sort: {n:-1}},</code>
+      <code>  {$limit: 10}</code>
+      <code>])</code>
+    </div>
+
+    <div class="cheat-card">
+      <h4>🌊 W9/W10 — CQL</h4>
+      <code>CREATE KEYSPACE k WITH REPLICATION = {...}</code>
+      <code>CREATE TABLE t (id UUID PRIMARY KEY, ...)</code>
+      <code>INSERT INTO t (...) VALUES (...);</code>
+      <code>SELECT * FROM t WHERE id = ?;</code>
+      <code>COPY t FROM 'file.csv' WITH HEADER=TRUE;</code>
+    </div>
+
+    <div class="cheat-card">
+      <h4>🧮 Big O Reference</h4>
+      <code>HDFS block = 128 MB (default)</code>
+      <code>HDFS RF = 3 (default)</code>
+      <code>Cassandra RF: set at keyspace</code>
+      <code>MongoDB doc max = 16 MB</code>
+      <code>BSON adds: ObjectId, Date, BinData</code>
+    </div>
+
+    <div class="cheat-card">
+      <h4>📂 NoSQL Types</h4>
+      <code>Document → MongoDB</code>
+      <code>Key-Value → Redis</code>
+      <code>Column → HBase, Cassandra</code>
+      <code>Graph → Neo4j</code>
+    </div>
+
+    <div class="cheat-card">
+      <h4>⚙️ YARN Components</h4>
+      <code>ResourceManager (master)</code>
+      <code>NodeManager (per worker)</code>
+      <code>ApplicationMaster (per job)</code>
+      <code>Container (CPU + memory)</code>
+    </div>
+
+    <div class="cheat-card">
+      <h4>🎯 CAP Theorem</h4>
+      <code>C = Consistency</code>
+      <code>A = Availability</code>
+      <code>P = Partition Tolerance</code>
+      <code>Pick 2 of 3 (NoSQL → AP)</code>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>📚 <strong>Big Data Analytics</strong> Complete Course • Weeks 1–10 • VIT</p>
+  <p>Built as an interactive study companion 🎓 • Save this file for offline reference</p>
+</footer>
+
+<script>
+// ============ Navigation ============
+function goTo(id, btn) {
+  document.getElementById(id).scrollIntoView({behavior:'smooth', block:'start'});
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else {
+    // find the button matching this id
+    document.querySelectorAll('nav button').forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${id}'`)) {
+        b.classList.add('active');
+      }
+    });
+  }
+}
+
+// ============ Dark mode ============
+function toggleDark() {
+  document.body.classList.toggle('dark');
+  try { localStorage.setItem('bda_dark', document.body.classList.contains('dark') ? '1' : '0'); } catch(e){}
+}
+if (localStorage.getItem('bda_dark') === '1') document.body.classList.add('dark');
+
+// ============ Tabs ============
+function showTab(e, id) {
+  const parent = e.target.parentElement.parentElement;
+  parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+// ============ Per-week quiz ============
+function qa(el, correct) {
+  el.parentElement.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('correct','wrong'));
+  el.classList.add(correct ? 'correct' : 'wrong');
+}
+
+// ============ Mega Quiz ============
+const megaQuestions = [
+  {q:"Big Data is most commonly characterised by which 3 Vs?", o:["Volume, Velocity, Variety","Value, Veracity, Volume","Variety, Value, Variability"], a:0, w:1},
+  {q:"JSON and XML files are classified as:", o:["Structured","Semi-structured","Unstructured"], a:1, w:1},
+  {q:"The first phase of the Big Data analytics cycle is:", o:["Model Building","Discovery","Operationalize"], a:1, w:1},
+  {q:"Which analytics method applies human-like reasoning to unstructured data?", o:["Predictive","Prescriptive","Cognitive"], a:2, w:1},
+  {q:"HDFS stores metadata in:", o:["DataNodes","NameNode","ZooKeeper"], a:1, w:2},
+  {q:"Default HDFS block size is:", o:["64MB","128MB","256MB"], a:1, w:2},
+  {q:"Hadoop's resource manager (Hadoop 2.x):", o:["JobTracker","YARN","Spark"], a:1, w:2},
+  {q:"In MapReduce, sorting happens during:", o:["Map","Shuffle/Sort","Reduce"], a:1, w:3},
+  {q:"Combiner is essentially a:", o:["Pre-mapper","Local reducer","Partitioner"], a:1, w:3},
+  {q:"YARN's ApplicationMaster runs:", o:["Once per cluster","Once per app","Once per node"], a:1, w:3},
+  {q:"For word count, Mapper output is:", o:["(line, count)","(word, 1)","(file, words)"], a:1, w:4},
+  {q:"NoSQL stands for:", o:["No SQL","Not Only SQL","New SQL"], a:1, w:5},
+  {q:"HBase is best categorized as:", o:["Document","Key-Value","Column-oriented"], a:2, w:5},
+  {q:"CAP theorem: NoSQL usually picks:", o:["CP","AP","CA"], a:1, w:5},
+  {q:"HBase's coordination service:", o:["HDFS","ZooKeeper","Hive"], a:1, w:5},
+  {q:"Optimal Hive storage format:", o:["TextFile","ORC","CSV"], a:1, w:6},
+  {q:"HBase command to delete table requires first:", o:["truncate","disable","compact"], a:1, w:6},
+  {q:"MongoDB stores documents internally as:", o:["JSON","BSON","XML"], a:1, w:7},
+  {q:"In a Replica Set, writes go to:", o:["Primary","Any node","Arbiter"], a:0, w:7},
+  {q:"MongoDB sharding clients connect through:", o:["Shard directly","mongos","Config server"], a:1, w:7},
+  {q:"To find docs where age > 25 in MongoDB:", o:["{age > 25}","{age:{$gt:25}}","{age:25+}"], a:1, w:8},
+  {q:"To group by field in aggregation:", o:["$match","$group","$sort"], a:1, w:8},
+  {q:"Index trade-off: faster reads but...", o:["Faster writes","Slower writes","Lower storage"], a:1, w:8},
+  {q:"Cassandra's architecture is:", o:["Master-slave","Peer-to-peer","Client-only"], a:1, w:9},
+  {q:"Replication factor in Cassandra is set at:", o:["Row level","Table level","Keyspace level"], a:2, w:9},
+  {q:"Best for time-series unique IDs in Cassandra:", o:["int","timeuuid","text"], a:1, w:9},
+  {q:"CQL to import CSV:", o:["LOAD DATA","COPY ... FROM","IMPORT"], a:1, w:10},
+  {q:"Cassandra collection allowing duplicates + order:", o:["SET","LIST","MAP"], a:1, w:10},
+  {q:"For atomic counter (e.g. likes), use:", o:["INT","BIGINT","COUNTER"], a:2, w:10},
+  {q:"Soft deletes in Cassandra leave:", o:["Backups","Tombstones","Snapshots"], a:1, w:10}
+];
+
+function renderMega() {
+  const c = document.getElementById('megaQuiz');
+  c.innerHTML = megaQuestions.map((q,i) => `
+    <div class="quiz" data-i="${i}">
+      <p><strong>Q${i+1}.</strong> <span class="pill pill-purple">W${q.w}</span> ${q.q}</p>
+      ${q.o.map((opt,j) => `<div class="quiz-option" onclick="megaAns(${i},${j})">${opt}</div>`).join('')}
+    </div>
+  `).join('');
+}
+const megaState = {};
+function megaAns(qi, oi) {
+  const correct = megaQuestions[qi].a === oi;
+  megaState[qi] = correct;
+  const opts = document.querySelectorAll(`[data-i="${qi}"] .quiz-option`);
+  opts.forEach((o,j) => {
+    o.classList.remove('correct','wrong');
+    if (j === oi) o.classList.add(correct ? 'correct' : 'wrong');
+    if (j === megaQuestions[qi].a && !correct) o.classList.add('correct');
+  });
+  updateProgress();
+}
+function updateProgress() {
+  const answered = Object.keys(megaState).length;
+  const correct = Object.values(megaState).filter(v=>v).length;
+  const pct = (answered / megaQuestions.length) * 100;
+  document.getElementById('quizProgress').style.width = pct + '%';
+  document.getElementById('quizScore').textContent =
+    `${answered} / ${megaQuestions.length} answered  •  ${correct} correct  (${answered ? Math.round(correct/answered*100) : 0}%)`;
+}
+function resetMega() {
+  for (let k in megaState) delete megaState[k];
+  renderMega();
+  updateProgress();
+}
+renderMega();
+
+</script>
+
+</body>
+</html>

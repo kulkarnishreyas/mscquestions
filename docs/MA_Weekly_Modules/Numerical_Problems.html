@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Numerical Problems — Marketing Analytics</title>
+<style>
+  :root { --primary:#e74c3c; --primary-dark:#922b21; --success:#27ae60; --danger:#e53935; --bg:#f5f7fa; --card:#fff; --text:#2c3e50; --muted:#6c7a89; --border:#e1e8ed; }
+  body.dark { --bg:#1a1a2e; --card:#252541; --text:#e8e8f0; --muted:#a0a0b8; --border:#3a3a5c; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
+  header { background:linear-gradient(135deg,#e74c3c,#922b21); color:white; padding:40px 20px; text-align:center; }
+  header h1 { font-size:2.2em; margin-bottom:6px; }
+  header .breadcrumb { font-size:0.95em; opacity:0.9; }
+  header .breadcrumb a { color:#ffd700; text-decoration:none; }
+  main { max-width:1100px; margin:25px auto; padding:0 18px; }
+  section { background:var(--card); margin:25px 0; padding:28px; border-radius:14px; box-shadow:0 4px 16px rgba(0,0,0,0.06); }
+  section h2 { color:var(--primary-dark); border-bottom:3px solid var(--primary); padding-bottom:8px; margin-bottom:18px; font-size:1.6em; }
+  body.dark section h2 { color:#f5b7b1; }
+  section h3 { margin:18px 0 10px; font-size:1.2em; color:var(--primary-dark); }
+  body.dark section h3 { color:#f5b7b1; }
+  p { margin-bottom:10px; }
+  ul, ol { margin:8px 0 12px 26px; }
+  li { margin-bottom:5px; }
+  table { width:100%; border-collapse:collapse; margin:12px 0; }
+  th, td { padding:8px 10px; border:1px solid var(--border); text-align:left; font-size:0.92em; }
+  th { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; }
+  tr:nth-child(even) td { background:var(--bg); }
+  .problem { background:linear-gradient(135deg,#fff8e1,#ffecb3); border-left:4px solid #ff9800; padding:14px; border-radius:8px; margin:14px 0; }
+  body.dark .problem { background:linear-gradient(135deg,#3a2a1a,#4a3525); }
+  .problem h4 { color:#bf360c; margin-bottom:6px; }
+  body.dark .problem h4 { color:#ffb55a; }
+  .solution { background:linear-gradient(135deg,#e8f5e9,#c8e6c9); border-left:4px solid var(--success); padding:14px; border-radius:8px; margin:8px 0 14px; }
+  body.dark .solution { background:linear-gradient(135deg,#1a3a2e,#2a4a3e); }
+  .solution h4 { color:#1b5e20; margin-bottom:6px; }
+  body.dark .solution h4 { color:#a5d6a7; }
+  .formula { background:#2c3e50; color:#ecf0f1; padding:12px 14px; border-radius:8px; font-family:'Courier New',monospace; margin:10px 0; }
+  footer { text-align:center; padding:24px; color:var(--muted); font-size:0.9em; border-top:1px solid var(--border); margin-top:30px; }
+  nav.toc { background:var(--card); padding:18px; border-radius:10px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+  nav.toc h3 { color:var(--primary-dark); margin-bottom:8px; }
+  body.dark nav.toc h3 { color:#f5b7b1; }
+  nav.toc a { color:var(--primary); margin-right:12px; display:inline-block; margin-bottom:4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="index.html">← Weekly Modules</a></div>
+  <h1>🔢 Numerical Problems — Marketing Analytics</h1>
+  <p style="opacity:0.95;">Step-by-step worked numerical examples from the MA course PDFs</p>
+</header>
+
+<main>
+
+<nav class="toc">
+  <h3>📑 Contents</h3>
+  <a href="#w2-anova">W2 — ANOVA</a>
+  <a href="#w4-conjoint">W4 — Conjoint / Part-Worth</a>
+  <a href="#w4-ma">W4 — Moving Averages</a>
+  <a href="#w8-channel">W8 — Channel ROI / Retention</a>
+  <a href="#w8-ads">W8 — Advertising Effectiveness</a>
+  <a href="#w8-channels-eval">W8 — Multi-Channel Comparison</a>
+  <a href="#w9-romi">W9 — ROMI</a>
+  <a href="#w12-zscore">W12 — Z-Score Outliers</a>
+  <a href="#w12-iqr">W12 — IQR Outliers</a>
+</nav>
+
+<!-- ============ W2 ANOVA ============ -->
+<section id="w2-anova">
+  <h2>Week 2 — One-Way ANOVA on Online Ad Channels</h2>
+
+  <div class="problem">
+    <h4>Setup</h4>
+    <p>Compare mean conversions across 3 advertising channels. PDF reports the following calculated values:</p>
+    <ul>
+      <li><strong>SSB</strong> (Between-Group Sum of Squares) = 1616.67</li>
+      <li>df<sub>between</sub> = 2 (k − 1, with k = 3 groups)</li>
+      <li><strong>MSW</strong> (Within-Group Mean Square) = 329.39</li>
+      <li>df<sub>within</sub> = 12 (so total n = 15)</li>
+    </ul>
+  </div>
+
+  <div class="solution">
+    <h4>Step-by-step Solution</h4>
+    <p><strong>1. Mean Square Between (MSB):</strong></p>
+    <div class="formula">MSB = SSB / df<sub>between</sub> = 1616.67 / 2 = <strong>808.34</strong></div>
+
+    <p><strong>2. F-statistic:</strong></p>
+    <div class="formula">F = MSB / MSW = 808.34 / 329.39 ≈ <strong>2.45</strong></div>
+
+    <p><strong>3. Decision:</strong> Compare F = 2.45 to the critical value of F(2, 12) at α = 0.05. The associated <strong>p-value = 0.12 &gt; 0.05</strong>, so we <strong>fail to reject H<sub>0</sub></strong> — there is no statistically significant difference between channel means.</p>
+
+    <p><strong>4. Tukey's HSD:</strong> Post-hoc test used to identify which specific pairs of means differ — only applied if F is significant.</p>
+  </div>
+</section>
+
+<!-- ============ W4 CONJOINT ============ -->
+<section id="w4-conjoint">
+  <h2>Week 4 — Conjoint Analysis: Part-Worth Utility (Smartphones)</h2>
+
+  <div class="problem">
+    <h4>Attributes &amp; Sample Utility Scores</h4>
+    <ul>
+      <li><strong>Brand:</strong> Apple +1.5, Samsung +0.8, Google −0.3</li>
+      <li><strong>Screen Size:</strong> 5.5″ −0.5, 6.1″ (highest), 6.7″ (next)</li>
+      <li><strong>Storage:</strong> 64GB, 128GB, 256GB</li>
+      <li><strong>Camera Quality:</strong> Standard, Pro, Ultra</li>
+    </ul>
+    <p>Interpret the utilities.</p>
+  </div>
+
+  <div class="solution">
+    <h4>Interpretation</h4>
+    <ul>
+      <li><strong>Apple has the highest brand utility (+1.5)</strong> — most preferred brand among Apple/Samsung/Google.</li>
+      <li>Samsung (+0.8) is the second preference; Google (−0.3) is a <em>lower preference</em> (not a dislike — relative).</li>
+      <li>For screen size, <strong>5.5″ has the lowest preference (−0.5)</strong> → larger screens are more desirable.</li>
+      <li><strong>Range comparison:</strong> Brand utility range (+1.5 to −0.3) = 1.8; if this is wider than the screen-size range, brand plays a more significant role than screen size in consumer choice.</li>
+      <li>Rule: compare utilities <em>within</em> an attribute, not <em>across</em> attributes.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ W4 MA ============ -->
+<section id="w4-ma">
+  <h2>Week 4 — Moving Averages in Test Marketing</h2>
+
+  <div class="problem">
+    <h4>Steps to Calculate a Simple Moving Average (PDF §4.6.1)</h4>
+    <ol>
+      <li>Sum the values for the chosen period (e.g., 7 days, 14 days).</li>
+      <li>Divide by the number of periods to get the average.</li>
+      <li>As new data arrives, drop the oldest and include the newest — the "moving window".</li>
+    </ol>
+  </div>
+
+  <div class="solution">
+    <h4>Types of Moving Averages</h4>
+    <ul>
+      <li><strong>Simple Moving Average (SMA):</strong> equal weight to all points in the window.</li>
+      <li><strong>Weighted Moving Average (WMA):</strong> heavier weight on more recent points.</li>
+      <li><strong>Exponential Moving Average (EMA):</strong> exponentially decreasing weight for older points.</li>
+    </ul>
+
+    <p><strong>Worked toy example (7-day SMA of daily sales):</strong></p>
+    <table>
+      <tr><th>Day</th><th>Sales</th><th>Running Sum (last 7)</th><th>7-day SMA</th></tr>
+      <tr><td>1–7</td><td>10, 12, 14, 13, 15, 16, 14</td><td>94</td><td>94/7 ≈ <strong>13.43</strong></td></tr>
+      <tr><td>Day 8 = 18</td><td>—</td><td>drop 10, add 18 → 102</td><td>102/7 ≈ <strong>14.57</strong></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ W8 CHANNEL ROI ============ -->
+<section id="w8-channel">
+  <h2>Week 8 — Channel Management Numerical Problems</h2>
+
+  <div class="problem">
+    <h4>Problem 1 — Sales-Channel ROI</h4>
+    <p>A company invests <strong>$150,000</strong> in a new sales channel. The channel generates <strong>$250,000 in revenue</strong> and incurs <strong>$50,000 in operational costs</strong>. Find ROI.</p>
+  </div>
+  <div class="solution">
+    <h4>Solution</h4>
+    <div class="formula">Net Profit = Revenue − (Investment + Operational Cost)
+            = 250,000 − (150,000 + 50,000)
+            = $50,000
+
+ROI = (Net Profit / Investment) × 100
+    = (50,000 / 150,000) × 100
+    = <strong>33.3%</strong></div>
+  </div>
+
+  <div class="problem">
+    <h4>Problem 2 — Customer Retention Rate (CRR)</h4>
+    <p>A company starts the year with <strong>1,200 customers</strong>, acquires <strong>300 new customers</strong>, and ends with <strong>1,100 active customers</strong>. Find CRR.</p>
+  </div>
+  <div class="solution">
+    <h4>Solution</h4>
+    <div class="formula">CRR = (End − New) / Start × 100
+    = (1,100 − 300) / 1,200 × 100
+    = 800 / 1,200 × 100
+    = <strong>66.67%</strong></div>
+  </div>
+
+  <div class="problem">
+    <h4>Problem 3 — Sales Conversion Rate</h4>
+    <p>A channel attracts <strong>5,000 potential customers</strong>; <strong>1,250 make a purchase</strong>.</p>
+  </div>
+  <div class="solution">
+    <h4>Solution</h4>
+    <div class="formula">Conversion Rate = (Sales / Potential Customers) × 100
+                = (1,250 / 5,000) × 100
+                = <strong>25%</strong></div>
+  </div>
+
+  <div class="problem">
+    <h4>Problem 4 — Market Penetration Rate</h4>
+    <p>A new product reaches <strong>40,000 customers</strong> out of <strong>200,000 potential customers</strong>.</p>
+  </div>
+  <div class="solution">
+    <h4>Solution</h4>
+    <div class="formula">Market Penetration = (Reached / Potential) × 100
+                    = (40,000 / 200,000) × 100
+                    = <strong>20%</strong></div>
+  </div>
+</section>
+
+<!-- ============ W8 ADS ============ -->
+<section id="w8-ads">
+  <h2>Week 8 — Advertising Effectiveness Numerical Problems</h2>
+
+  <div class="problem"><h4>Problem 1 — Click-Through Rate (CTR)</h4>
+    <p>Impressions = 50,000; Clicks = 2,000.</p>
+  </div>
+  <div class="solution"><h4>Solution</h4>
+    <div class="formula">CTR = (Clicks / Impressions) × 100 = (2,000 / 50,000) × 100 = <strong>4%</strong></div>
+  </div>
+
+  <div class="problem"><h4>Problem 2 — Cost Per Acquisition (CPA)</h4>
+    <p>Total Ad Spend = $10,000; Conversions = 500 customers.</p>
+  </div>
+  <div class="solution"><h4>Solution</h4>
+    <div class="formula">CPA = Ad Spend / Conversions = 10,000 / 500 = <strong>$20 per customer</strong></div>
+  </div>
+
+  <div class="problem"><h4>Problem 3 — Return on Investment (ROI)</h4>
+    <p>Revenue = $25,000; Ad Spend = $10,000.</p>
+  </div>
+  <div class="solution"><h4>Solution</h4>
+    <div class="formula">ROI = (Revenue − Cost) / Cost × 100
+    = (25,000 − 10,000) / 10,000 × 100
+    = <strong>150%</strong></div>
+  </div>
+
+  <div class="problem"><h4>Problem 4 — Conversion Rate</h4>
+    <p>Total Visitors = 5,000; Conversions = 250.</p>
+  </div>
+  <div class="solution"><h4>Solution</h4>
+    <div class="formula">Conversion Rate = (250 / 5,000) × 100 = <strong>5%</strong></div>
+  </div>
+
+  <div class="problem"><h4>Problem 5 — Cost Per Click (CPC)</h4>
+    <p>Total Ad Spend = $3,000; Clicks = 6,000.</p>
+  </div>
+  <div class="solution"><h4>Solution</h4>
+    <div class="formula">CPC = Ad Spend / Clicks = 3,000 / 6,000 = <strong>$0.50 per click</strong></div>
+  </div>
+
+  <div class="problem"><h4>Problem 6 — Cost Per Mille (CPM) Across Channels</h4>
+    <table>
+      <tr><th>Channel</th><th>Cost ($)</th><th>Impressions</th></tr>
+      <tr><td>TV Ads</td><td>50,000</td><td>500,000</td></tr>
+      <tr><td>Social Media</td><td>30,000</td><td>1,000,000</td></tr>
+      <tr><td>Google Ads</td><td>20,000</td><td>750,000</td></tr>
+    </table>
+    <p>Compute CPM and identify the most cost-effective channel.</p>
+  </div>
+  <div class="solution"><h4>Solution</h4>
+    <div class="formula">CPM = (Cost / Impressions) × 1,000</div>
+    <table>
+      <tr><th>Channel</th><th>CPM ($)</th></tr>
+      <tr><td>TV Ads</td><td>(50,000 / 500,000) × 1,000 = 100.00</td></tr>
+      <tr><td>Social Media</td><td>(30,000 / 1,000,000) × 1,000 = 30.00</td></tr>
+      <tr><td>Google Ads</td><td>(20,000 / 750,000) × 1,000 ≈ <strong>26.67</strong> ✓</td></tr>
+    </table>
+    <p><strong>Google Ads is the most cost-effective channel</strong> based on CPM.</p>
+  </div>
+</section>
+
+<!-- ============ W8 MULTI ============ -->
+<section id="w8-channels-eval">
+  <h2>Week 8 — Evaluating Multiple Sales Channels (A, B, C)</h2>
+
+  <div class="problem">
+    <h4>Given Data</h4>
+    <table>
+      <tr><th>Metric</th><th>Channel A</th><th>Channel B</th><th>Channel C</th></tr>
+      <tr><td>Revenue ($)</td><td>1,500,000</td><td>2,000,000</td><td>1,200,000</td></tr>
+      <tr><td>Total Cost ($)</td><td>900,000</td><td>1,400,000</td><td>1,200,000</td></tr>
+      <tr><td>Customers Reached</td><td>5,000</td><td>8,000</td><td>4,000</td></tr>
+      <tr><td>Number of Sales</td><td>1,200</td><td>1,800</td><td>1,000</td></tr>
+      <tr><td>New Customers</td><td>2,000</td><td>3,000</td><td>1,500</td></tr>
+    </table>
+  </div>
+
+  <div class="solution">
+    <h4>Profit Margin = (Revenue − Total Cost) / Revenue × 100</h4>
+    <ul>
+      <li>Channel A: (1,500,000 − 900,000) / 1,500,000 = <strong>40%</strong></li>
+      <li>Channel B: (2,000,000 − 1,400,000) / 2,000,000 = <strong>30%</strong></li>
+      <li>Channel C: (1,200,000 − 1,200,000) / 1,200,000 = <strong>0%</strong></li>
+    </ul>
+
+    <h4>ROI = (Net Profit / Investment) × 100</h4>
+    <ul>
+      <li>Channel A: 600,000 / 1,500,000 = <strong>40%</strong></li>
+      <li>Channel B: 600,000 / 2,000,000 = <strong>30%</strong></li>
+      <li>Channel C: 400,000 / 1,200,000 ≈ <strong>33.3%</strong></li>
+    </ul>
+
+    <h4>Sales Conversion Rate = (Sales / Customers Reached) × 100</h4>
+    <ul>
+      <li>Channel A: 1,200/5,000 = <strong>24%</strong></li>
+      <li>Channel B: 1,800/8,000 = <strong>22.5%</strong></li>
+      <li>Channel C: 1,000/4,000 = <strong>25%</strong></li>
+    </ul>
+
+    <h4>Customer Retention = (Reached − New) / Reached × 100</h4>
+    <ul>
+      <li>Channel A: (5,000 − 2,000)/5,000 = <strong>60%</strong></li>
+      <li>Channel B: (8,000 − 3,000)/8,000 = <strong>62.5%</strong></li>
+      <li>Channel C: (4,000 − 1,500)/4,000 = <strong>62.5%</strong></li>
+    </ul>
+
+    <p><strong>Conclusion:</strong> Channel A is the most efficient (highest profit margin and ROI) — preferred over B and C.</p>
+  </div>
+</section>
+
+<!-- ============ W9 ROMI ============ -->
+<section id="w9-romi">
+  <h2>Week 9 — Return on Marketing Investment (ROMI)</h2>
+
+  <div class="problem">
+    <h4>Problem</h4>
+    <p>A marketing campaign generates <strong>$500,000 in revenue</strong>. Compute ROMI given typical formula.</p>
+  </div>
+  <div class="solution">
+    <h4>ROMI Formula</h4>
+    <div class="formula">ROMI = (Incremental Revenue from Marketing − Marketing Cost) / Marketing Cost × 100</div>
+    <p>A positive ROMI means the campaign generated more value than its cost; a higher ROMI = more efficient marketing spend.</p>
+  </div>
+</section>
+
+<!-- ============ W12 Z-SCORE ============ -->
+<section id="w12-zscore">
+  <h2>Week 12 — Z-Score Outlier Detection</h2>
+
+  <div class="problem">
+    <h4>Method</h4>
+    <p>The Z-score measures how far each data point lies from the mean in standard-deviation units.</p>
+    <div class="formula">Z = (x − μ) / σ</div>
+  </div>
+
+  <div class="solution">
+    <h4>Steps</h4>
+    <ol>
+      <li>Compute mean μ and standard deviation σ of the dataset.</li>
+      <li>For each point, compute Z.</li>
+      <li>Apply threshold:
+        <ul>
+          <li>|Z| &gt; 2 → moderate outlier</li>
+          <li>|Z| &gt; 3 → extreme outlier</li>
+        </ul>
+      </li>
+      <li>Flag any point exceeding the threshold.</li>
+    </ol>
+
+    <h4>Python Snippet (from PDF)</h4>
+    <div class="formula">threshold = 3
+mean_y = np.mean(variable)
+std_y  = np.std(variable)
+z_scores = np.abs((variable − mean_y) / std_y)
+outliers_z = variable[z_scores > threshold]</div>
+  </div>
+</section>
+
+<!-- ============ W12 IQR ============ -->
+<section id="w12-iqr">
+  <h2>Week 12 — IQR Outlier Detection</h2>
+
+  <div class="problem">
+    <h4>Method</h4>
+    <div class="formula">IQR = Q3 − Q1
+Lower Bound = Q1 − 1.5 × IQR
+Upper Bound = Q3 + 1.5 × IQR</div>
+    <p>Data points outside <em>[Lower, Upper]</em> are outliers.</p>
+  </div>
+
+  <div class="solution">
+    <h4>Worked toy example</h4>
+    <p>Suppose Q1 = 20, Q3 = 60 → IQR = 40.</p>
+    <ul>
+      <li>Lower Bound = 20 − 1.5 × 40 = 20 − 60 = <strong>−40</strong></li>
+      <li>Upper Bound = 60 + 1.5 × 40 = 60 + 60 = <strong>120</strong></li>
+      <li>A data point of 130 → 130 &gt; 120 → <strong>outlier</strong>.</li>
+      <li>A data point of 0 → within [−40, 120] → not an outlier.</li>
+    </ul>
+
+    <h4>Python Snippet (from PDF)</h4>
+    <div class="formula">Q1 = np.percentile(variable, 25)
+Q3 = np.percentile(variable, 75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+outliers = variable[(variable < lower_bound) | (variable > upper_bound)]</div>
+    <p>Box plots visualise this directly — the box is the IQR, whiskers extend 1.5×IQR, and points outside are outliers.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  📈 Marketing Analytics • Numerical Problems Companion
+</footer>
+<script src="../claude-tutor.js"></script>
+
+</body>
+</html>

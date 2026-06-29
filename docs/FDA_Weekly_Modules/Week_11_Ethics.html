@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 11 — Ethics &amp; Regulation</title>
+<style>
+:root{--primary:#1e88e5;--primary-dark:#0d47a1;--accent:#ff9800;--success:#43a047;--danger:#e53935;--bg:#f5f8fb;--card:#fff;--text:#1a2332;--muted:#5a6a7a;--border:#dde5ec}
+body.dark{--bg:#0f1721;--card:#1a2535;--text:#e0e8f0;--muted:#a0b0c0;--border:#2a3545}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;transition:all .3s}
+header{background:linear-gradient(135deg,#1e88e5,#0d47a1);color:white;padding:40px 20px;text-align:center}
+header h1{font-size:2.2em;margin-bottom:6px}header .breadcrumb{font-size:.95em;opacity:.95}header .breadcrumb a{color:#ffd54f;text-decoration:none}
+nav{position:sticky;top:0;background:var(--card);z-index:100;padding:10px;overflow-x:auto;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.08);border-bottom:1px solid var(--border)}
+nav button{background:transparent;color:var(--text);border:2px solid var(--border);padding:6px 14px;margin:2px;border-radius:18px;cursor:pointer;font-size:.82em;font-weight:600}
+nav button:hover{border-color:var(--primary);color:var(--primary)}nav button.active{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-color:transparent}
+.icon-btn{background:var(--bg);width:32px;height:32px;border-radius:50%;padding:0}
+main{max-width:1100px;margin:25px auto;padding:0 18px}
+section{background:var(--card);margin:25px 0;padding:28px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.06);scroll-margin-top:80px}
+section h2{color:var(--primary-dark);border-bottom:3px solid var(--primary);padding-bottom:8px;margin-bottom:18px;font-size:1.7em}
+body.dark section h2{color:#82b1ff}section h3{margin:18px 0 10px;font-size:1.25em}
+section h4{color:var(--primary-dark);margin:12px 0 8px}body.dark section h4{color:#90caf9}
+p{margin-bottom:10px}ul,ol{margin:8px 0 12px 26px}li{margin-bottom:5px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.card{background:linear-gradient(135deg,#f0f6fc,#e8f0f8);border-left:4px solid var(--primary-dark);padding:14px;border-radius:8px}
+body.dark .card{background:linear-gradient(135deg,#1f2a3a,#2a3545)}
+.card h4{color:var(--primary-dark);margin-bottom:6px;font-size:1em}body.dark .card h4{color:#90caf9}
+.card p{font-size:.9em;margin:0;color:var(--muted)}
+table{width:100%;border-collapse:collapse;margin:12px 0}th,td{padding:9px 12px;border:1px solid var(--border);text-align:left}
+th{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white}tr:nth-child(even) td{background:var(--bg)}
+.quiz{background:linear-gradient(135deg,#e8f5e9,#dcedc8);border-left:4px solid var(--success);padding:16px;border-radius:10px;margin:12px 0}
+body.dark .quiz{background:linear-gradient(135deg,#1a3a2e,#2a4a3e)}
+.quiz-option{display:block;margin:6px 0;padding:10px 12px;background:var(--card);border:2px solid var(--border);border-radius:8px;cursor:pointer}
+.quiz-option:hover{border-color:var(--success);transform:translateX(3px)}
+.quiz-option.correct{background:#c8e6c9!important;border-color:var(--success);color:#1b5e20}
+.quiz-option.wrong{background:#ffcdd2!important;border-color:var(--danger);color:#b71c1c}
+.insight{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-left:4px solid #1976d2;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .insight{background:linear-gradient(135deg,#1a2a4a,#253560)}
+.warning{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-left:4px solid #f57c00;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .warning{background:linear-gradient(135deg,#3a2a1a,#4a3525)}
+.example{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left:4px solid #8e24aa;padding:14px 16px;border-radius:8px;margin:12px 0}
+body.dark .example{background:linear-gradient(135deg,#2a1a3a,#3a253f)}
+.summary{background:linear-gradient(135deg,#fff9c4,#fff59d);border-left:4px solid #fbc02d;padding:16px;border-radius:10px;margin:14px 0}
+body.dark .summary{background:linear-gradient(135deg,#3a3a1a,#4a4a25);color:var(--text)}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.9em;border-top:1px solid var(--border);margin-top:30px}
+.toc{background:var(--bg);padding:16px 20px;border-radius:10px;margin-bottom:20px}
+.toc h3{margin-bottom:8px;color:var(--primary-dark)}body.dark .toc h3{color:#90caf9}.toc ol{columns:2;column-gap:30px}
+</style>
+</head>
+<body>
+
+<header><div class="breadcrumb"><a href="index.html">📚 FDA Modules</a> › Week 11</div><h1>⚖️ Week 11 — Ethics &amp; Regulation</h1></header>
+
+<nav>
+<button onclick="g('ethics',this)" class="active">1. Ethical Issues</button>
+<button onclick="g('regulation',this)">2. Regulation</button>
+<button onclick="g('privacy',this)">3. Data Privacy</button>
+<button onclick="g('ai',this)">4. Responsible AI</button>
+<button onclick="g('compliance',this)">5. Compliance</button>
+<button onclick="g('cases',this)">6. Case Studies</button>
+<button onclick="g('quiz',this)">🎯 Quiz</button>
+<button onclick="g('summary',this)">📝 Summary</button>
+<button class="icon-btn" onclick="dark()">🌓</button>
+</nav>
+
+<main>
+
+<section class="toc"><h3>📑 Contents</h3><ol>
+<li><a href="#ethics">Ethical Issues in FDA</a></li>
+<li><a href="#regulation">Regulatory Frameworks</a></li>
+<li><a href="#privacy">Data Privacy in Finance</a></li>
+<li><a href="#ai">Responsible AI in Finance</a></li>
+<li><a href="#compliance">Compliance in Financial Analytics</a></li>
+<li><a href="#cases">Case Studies — Ethical Failures</a></li>
+<li><a href="#quiz">14-Question Quiz</a></li>
+<li><a href="#summary">Summary</a></li>
+</ol></section>
+
+<section id="ethics">
+<h2>1️⃣ Ethical Issues in Financial Data Analytics</h2>
+
+<div class="card-grid">
+<div class="card"><h4>🔐 Data Privacy</h4><p>Vast personal/transactional data — breaches lead to identity theft &amp; loss</p></div>
+<div class="card"><h4>⚖️ Algorithmic Bias</h4><p>Models inherit historical biases — unfair credit, lending decisions</p></div>
+<div class="card"><h4>🔍 Transparency</h4><p>"Black-box" models erode trust — explainability needed</p></div>
+<div class="card"><h4>📊 Data Integrity</h4><p>Manipulated/inaccurate data misleads markets, investors</p></div>
+</div>
+
+<h3>Key Case Studies</h3>
+<ul>
+<li><strong>Satyam Scandal (2009)</strong>: $1.5B inflated revenue → 77% stock collapse</li>
+<li><strong>Yes Bank Crisis (2020)</strong>: NPA misrepresentation → 80% price drop, regulatory intervention</li>
+</ul>
+
+<h3>Implications of Data Manipulation</h3>
+<div class="card-grid">
+<div class="card"><h4>👥 Investors</h4><p>Mislead investments, market trust erodes</p></div>
+<div class="card"><h4>👨‍💼 Workforce</h4><p>Layoffs, closures from false reports</p></div>
+<div class="card"><h4>⚖️ Regulators</h4><p>Legal actions, fines, restrictions</p></div>
+</div>
+
+<h3>Ethical Responsibilities</h3>
+<ul>
+<li><strong>Data integrity</strong> — verify accuracy</li>
+<li><strong>Transparency</strong> — interpretable models</li>
+<li><strong>Confidentiality</strong> — secure sensitive data</li>
+<li><strong>Objectivity</strong> — no conflicts of interest</li>
+<li><strong>Societal impact</strong> — long-term, fair outcomes</li>
+</ul>
+
+<h3>Mitigation Strategies</h3>
+<ul>
+<li>Data validation protocols, automated checks</li>
+<li>Continuous ethical training</li>
+<li>Independent oversight, external audits</li>
+<li>Diverse analytical teams</li>
+<li>Real-world: <strong>JPMorgan</strong> post-2008 instituted rigorous validation</li>
+</ul>
+</section>
+
+<section id="regulation">
+<h2>2️⃣ Regulatory Frameworks</h2>
+
+<h3>Major Frameworks Globally</h3>
+<table>
+<tr><th>Regulation</th><th>Region</th><th>Purpose</th></tr>
+<tr><td>Sarbanes-Oxley (SOX)</td><td>USA</td><td>Corporate financial transparency</td></tr>
+<tr><td>Dodd-Frank</td><td>USA</td><td>Consumer protection, market stability</td></tr>
+<tr><td>GDPR</td><td>EU</td><td>Data privacy</td></tr>
+<tr><td>RBI Regulations</td><td>India</td><td>Banking, monetary policy</td></tr>
+<tr><td>Income Tax Act / GST</td><td>India</td><td>Taxation, disclosure</td></tr>
+<tr><td>SEBI</td><td>India</td><td>Securities market, investor protection</td></tr>
+</table>
+
+<h3>Impact on Financial Practices</h3>
+<ul>
+<li><strong>Data Governance</strong> &amp; internal controls (SOX)</li>
+<li><strong>Risk Assessment</strong> &amp; consumer protection (Dodd-Frank)</li>
+<li><strong>Data Security &amp; Privacy</strong> (GDPR)</li>
+<li><strong>Market Stability</strong> (RBI, Basel III)</li>
+<li><strong>Tax Reporting</strong> (IT Act)</li>
+<li><strong>Investor Protection &amp; Transparency</strong> (SEBI)</li>
+</ul>
+
+<h3>Role of Compliance in Ethical FDA</h3>
+<ul>
+<li>Data integrity enforcement</li>
+<li>Enhanced privacy &amp; security</li>
+<li>Transparency promotion</li>
+<li>Bias prevention in models</li>
+<li>Continuous ethical training</li>
+</ul>
+</section>
+
+<section id="privacy">
+<h2>3️⃣ Data Privacy in Finance</h2>
+
+<h3>India's Key Regulations</h3>
+<ul>
+<li><strong>RBI Data Localization (2018)</strong> — Indian users' data stored in India</li>
+<li><strong>DPDP Act (2023)</strong> — explicit consent, data minimisation, transparency</li>
+<li><strong>IT Rules 2011</strong> — sensitive personal data security</li>
+</ul>
+
+<h3>International Regulations</h3>
+<ul>
+<li><strong>GLBA</strong> — US financial institution privacy</li>
+<li><strong>Dodd-Frank / CFPB</strong> — consumer protection</li>
+<li><strong>GDPR</strong> — explicit consent, 72-hr breach notification, DPO required</li>
+<li><strong>PCI DSS</strong> — credit card transaction security</li>
+<li><strong>HIPAA</strong> — health-finance overlap</li>
+</ul>
+
+<h3>Implications</h3>
+<div class="card-grid">
+<div class="card"><h4>📋 Governance</h4><p>Strong data frameworks required</p></div>
+<div class="card"><h4>✋ Consent</h4><p>Customers may withdraw → limits ML data</p></div>
+<div class="card"><h4>🎭 Anonymisation</h4><p>Balance privacy with analytical utility</p></div>
+</div>
+
+<h3>Security Measures</h3>
+<ul>
+<li>Encryption (in transit + at rest)</li>
+<li>Access controls (multi-factor auth)</li>
+<li>Privacy-enhancing technologies (PETs): differential privacy, federated learning</li>
+<li>Regular audits &amp; monitoring</li>
+</ul>
+
+<h3>Challenges</h3>
+<ul>
+<li>Privacy vs analytics utility</li>
+<li>Real-time fraud detection vs data sharing limits</li>
+<li>Cross-border data transfer (different laws)</li>
+<li>Anonymisation reduces model accuracy</li>
+<li>Compliance costs (especially for SMEs)</li>
+</ul>
+</section>
+
+<section id="ai">
+<h2>4️⃣ Responsible AI in Finance</h2>
+
+<h3>Why It Matters</h3>
+<div class="card-grid">
+<div class="card"><h4>🔍 Transparency &amp; Trust</h4><p>Avoid black-box decisions</p></div>
+<div class="card"><h4>⚖️ Bias Prevention</h4><p>Fair access to credit, loans</p></div>
+<div class="card"><h4>🛡️ Security &amp; Privacy</h4><p>Encrypt, anonymise customer data</p></div>
+<div class="card"><h4>📋 Risk &amp; Compliance</h4><p>Avoid legal/ethical failures</p></div>
+</div>
+
+<h3>Case Studies of AI Failures</h3>
+<ul>
+<li><strong>Goldman Sachs Credit Card Bias (2018)</strong> — favoured males in credit limits</li>
+<li><strong>Wells Fargo Mortgage AI (2018)</strong> — bias against minorities, higher rejection rates</li>
+</ul>
+
+<h3>Frameworks for Responsible AI</h3>
+<table>
+<tr><th>Framework</th><th>Focus</th></tr>
+<tr><td>FAT/ML</td><td>Fairness, Accountability, Transparency</td></tr>
+<tr><td>Ethics by Design</td><td>Built-in privacy &amp; ethics</td></tr>
+<tr><td>EU HLEG Guidelines</td><td>Human oversight, GDPR-aligned</td></tr>
+<tr><td>IEEE Ethically Aligned</td><td>Human rights &amp; equity</td></tr>
+<tr><td>NIST AI Risk Management</td><td>Identify, evaluate, mitigate AI risks</td></tr>
+</table>
+
+<h3>Bias Mitigation Strategies</h3>
+<ul>
+<li><strong>Audit/preprocess data</strong> — re-sample, re-weight, remove sensitive attributes</li>
+<li><strong>Fairness-aware algorithms</strong> with constraints</li>
+<li><strong>Monitor + validate</strong> across demographic groups</li>
+<li><strong>Explainability tools</strong> (SHAP, LIME)</li>
+</ul>
+</section>
+
+<section id="compliance">
+<h2>5️⃣ Compliance in Financial Analytics</h2>
+
+<h3>Key Requirements</h3>
+<div class="card-grid">
+<div class="card"><h4>🔐 Data Privacy</h4><p>DPDP Bill, consent, minimisation</p></div>
+<div class="card"><h4>⚖️ Fair Lending</h4><p>RBI guidelines, bias prevention</p></div>
+<div class="card"><h4>🔍 Transparency</h4><p>Explainable models (SEBI)</p></div>
+<div class="card"><h4>🛡️ Cybersecurity</h4><p>IT Act 2000, RBI cyber framework</p></div>
+<div class="card"><h4>📑 Record-Keeping</h4><p>Transaction &amp; model history</p></div>
+<div class="card"><h4>🕵️ AML (Anti-Money Laundering)</h4><p>Detect & report suspicious transaction patterns; mandatory under FATF, RBI PMLA guidelines. Analytics flags layering, structuring, unusual cross-border flows.</p></div>
+<div class="card"><h4>👤 KYC (Know Your Customer)</h4><p>Verify customer identity at onboarding. Increasingly automated via FDA tools — document OCR, biometrics, sanction-list screening. Critical for AML compliance.</p></div>
+</div>
+
+<h3>Role of Compliance Officers</h3>
+<ul>
+<li>Track regulatory changes</li>
+<li>Develop &amp; enforce internal policies</li>
+<li>Conduct risk assessments</li>
+<li>Train staff</li>
+<li>Monitor &amp; report violations</li>
+</ul>
+
+<h3>Compliance Program Effectiveness</h3>
+<ul>
+<li>Systematic risk identification</li>
+<li>Uniform policy enforcement</li>
+<li>Continuous training &amp; awareness</li>
+<li>Real-time monitoring &amp; reporting</li>
+<li>Agility to regulatory changes</li>
+</ul>
+
+<h3>Compliance Case Studies</h3>
+<ul>
+<li><strong>Wells Fargo (2016)</strong> — account fraud → ethical analytics gap</li>
+<li><strong>JPMorgan London Whale (2012)</strong> — risky derivative analytics</li>
+<li><strong>Equifax Data Breach (2017)</strong> — cybersecurity lapse</li>
+<li><strong>Apple Card Gender Bias (2019)</strong> — biased credit algorithm</li>
+</ul>
+</section>
+
+<section id="cases">
+<h2>6️⃣ Indian Case Studies</h2>
+
+<h3>PNB Fraud (2018)</h3>
+<ul>
+<li>₹11,400 crore — Nirav Modi LoU manipulation</li>
+<li>Weak internal controls, regulatory gaps</li>
+<li>Post-incident: tightened RBI LoU regulations, SEBI transparency</li>
+</ul>
+
+<h3>IL&amp;FS Crisis (2018)</h3>
+<ul>
+<li>Major NBFC defaults — debt mismanagement, governance failure</li>
+<li>Heavy leverage, over-reliance on credit ratings</li>
+<li>Government takeover, NBFC oversight strengthened</li>
+</ul>
+
+<h3>DHFL Crisis (2019)</h3>
+<ul>
+<li>Housing finance default — shell-company fund diversion</li>
+<li>Weak corporate oversight</li>
+<li>Stricter NBFC framework, debt restructuring mechanisms</li>
+</ul>
+
+<h3>Key Takeaways</h3>
+<ol>
+<li><strong>Ethical corporate culture</strong> — training, audits</li>
+<li><strong>Robust governance</strong> — accountability, regulatory oversight</li>
+<li><strong>Transparency &amp; risk management</strong> — debt, audits, compliance</li>
+<li><strong>Data protection</strong> — privacy laws, bias-free analytics</li>
+</ol>
+</section>
+
+<section id="quiz">
+<h2>🎯 14-Question Quiz</h2>
+
+<div class="quiz"><p><strong>Q1.</strong> Satyam scandal involved:</p>
+<div class="quiz-option" onclick="qa(this,1)">Inflated revenues of $1.5B ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Insider trading</div>
+<div class="quiz-option" onclick="qa(this,0)">Tax evasion</div>
+</div>
+
+<div class="quiz"><p><strong>Q2.</strong> GDPR is from:</p>
+<div class="quiz-option" onclick="qa(this,1)">EU ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">USA</div>
+<div class="quiz-option" onclick="qa(this,0)">India</div>
+</div>
+
+<div class="quiz"><p><strong>Q3.</strong> SOX targets:</p>
+<div class="quiz-option" onclick="qa(this,1)">Corporate financial transparency ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Crypto only</div>
+<div class="quiz-option" onclick="qa(this,0)">Health</div>
+</div>
+
+<div class="quiz"><p><strong>Q4.</strong> DPDP Act (India 2023) requires:</p>
+<div class="quiz-option" onclick="qa(this,1)">Consent + data minimisation ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Unlimited data use</div>
+<div class="quiz-option" onclick="qa(this,0)">No localisation</div>
+</div>
+
+<div class="quiz"><p><strong>Q5.</strong> SEBI oversees:</p>
+<div class="quiz-option" onclick="qa(this,1)">Securities market, investor protection ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Banking only</div>
+<div class="quiz-option" onclick="qa(this,0)">Health</div>
+</div>
+
+<div class="quiz"><p><strong>Q6.</strong> Black-box AI risk:</p>
+<div class="quiz-option" onclick="qa(this,1)">Lack of transparency ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Too simple</div>
+<div class="quiz-option" onclick="qa(this,0)">Better accuracy</div>
+</div>
+
+<div class="quiz"><p><strong>Q7.</strong> Differential privacy:</p>
+<div class="quiz-option" onclick="qa(this,1)">Adds noise to protect individuals ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Removes accuracy</div>
+<div class="quiz-option" onclick="qa(this,0)">Stops all analytics</div>
+</div>
+
+<div class="quiz"><p><strong>Q8.</strong> FAT/ML stands for:</p>
+<div class="quiz-option" onclick="qa(this,1)">Fairness, Accountability, Transparency ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Fast AI Testing/ML</div>
+<div class="quiz-option" onclick="qa(this,0)">Federal AI Toolkit</div>
+</div>
+
+<div class="quiz"><p><strong>Q9.</strong> RBI data localisation requires:</p>
+<div class="quiz-option" onclick="qa(this,1)">Indian data stored in India ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">All data abroad</div>
+<div class="quiz-option" onclick="qa(this,0)">Optional storage</div>
+</div>
+
+<div class="quiz"><p><strong>Q10.</strong> Compliance officer's main role:</p>
+<div class="quiz-option" onclick="qa(this,1)">Track regulations + enforce policies ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Trade stocks</div>
+<div class="quiz-option" onclick="qa(this,0)">Build models</div>
+</div>
+
+<div class="quiz"><p><strong>Q11.</strong> Apple Card scandal exposed:</p>
+<div class="quiz-option" onclick="qa(this,1)">Gender bias in AI credit ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Fraud</div>
+<div class="quiz-option" onclick="qa(this,0)">Currency manipulation</div>
+</div>
+
+<div class="quiz"><p><strong>Q12.</strong> SHAP &amp; LIME provide:</p>
+<div class="quiz-option" onclick="qa(this,1)">Model explainability ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Accuracy increase</div>
+<div class="quiz-option" onclick="qa(this,0)">Encryption</div>
+</div>
+
+<div class="quiz"><p><strong>Q13.</strong> PNB scandal weakness:</p>
+<div class="quiz-option" onclick="qa(this,1)">Internal controls ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Stock prices</div>
+<div class="quiz-option" onclick="qa(this,0)">Tax filings</div>
+</div>
+
+<div class="quiz"><p><strong>Q14.</strong> Equifax breach was about:</p>
+<div class="quiz-option" onclick="qa(this,1)">Cybersecurity / data exposure ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Insider trading</div>
+<div class="quiz-option" onclick="qa(this,0)">Tax evasion</div>
+</div>
+</section>
+
+<section id="summary">
+<h2>📝 Summary &amp; Exam Tips</h2>
+
+<div class="summary">
+<h3>🎯 Key Takeaways</h3>
+<ul>
+<li>Key ethical issues: <strong>privacy, bias, transparency, integrity</strong></li>
+<li>Frameworks: SOX (USA), Dodd-Frank (USA), GDPR (EU), RBI/SEBI (India), Basel</li>
+<li>Privacy in India: <strong>RBI Localization, DPDP Act 2023, IT Rules</strong></li>
+<li>Responsible AI: <strong>FAT/ML, Ethics by Design, IEEE, NIST</strong></li>
+<li>Bias mitigation: audit data, fairness algorithms, monitoring, explainability</li>
+<li>Compliance = policy enforcement + risk monitoring + training + reporting</li>
+<li>Case studies: PNB, IL&amp;FS, DHFL (India); JPMorgan, Wells Fargo, Equifax, Apple (global)</li>
+</ul>
+</div>
+
+<div class="warning"><strong>📌 Pitfalls:</strong>
+<ul>
+<li>Treating compliance as an afterthought rather than embedded in design</li>
+<li>Black-box AI without explainability fails regulatory tests</li>
+<li>Ignoring bias in training data</li>
+<li>Confusing reliability with fairness</li>
+</ul>
+</div>
+
+<p style="text-align:center;margin-top:30px">
+<a href="Week_10_AlgoTrading.html" style="color:var(--primary);font-weight:bold">← Week 10</a> |
+<a href="index.html" style="color:var(--primary);font-weight:bold">📚 Index</a> |
+<a href="Week_12_AdvancedInsights.html" style="color:var(--primary);font-weight:bold">Week 12 → Advanced</a>
+</p>
+</section>
+
+</main>
+
+<footer><p>⚖️ Week 11 of 12 — Financial Data Analytics</p></footer>
+
+<script>
+function g(id,btn){document.getElementById(id).scrollIntoView({behavior:'smooth'});document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function dark(){document.body.classList.toggle('dark');try{localStorage.setItem('fda_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}}
+if(localStorage.getItem('fda_dark')==='1')document.body.classList.add('dark');
+function qa(el,c){el.parentElement.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('correct','wrong'));el.classList.add(c?'correct':'wrong')}
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

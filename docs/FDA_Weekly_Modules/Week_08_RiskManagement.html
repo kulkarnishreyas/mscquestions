@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 8 — Risk Management &amp; Analytics</title>
+<style>
+:root{--primary:#1e88e5;--primary-dark:#0d47a1;--accent:#ff9800;--success:#43a047;--danger:#e53935;--bg:#f5f8fb;--card:#fff;--text:#1a2332;--muted:#5a6a7a;--border:#dde5ec}
+body.dark{--bg:#0f1721;--card:#1a2535;--text:#e0e8f0;--muted:#a0b0c0;--border:#2a3545}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;transition:all .3s}
+header{background:linear-gradient(135deg,#1e88e5,#0d47a1);color:white;padding:40px 20px;text-align:center}
+header h1{font-size:2.2em;margin-bottom:6px}header .breadcrumb{font-size:.95em;opacity:.95}header .breadcrumb a{color:#ffd54f;text-decoration:none}
+nav{position:sticky;top:0;background:var(--card);z-index:100;padding:10px;overflow-x:auto;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.08);border-bottom:1px solid var(--border)}
+nav button{background:transparent;color:var(--text);border:2px solid var(--border);padding:6px 14px;margin:2px;border-radius:18px;cursor:pointer;font-size:.82em;font-weight:600}
+nav button:hover{border-color:var(--primary);color:var(--primary)}nav button.active{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-color:transparent}
+.icon-btn{background:var(--bg);width:32px;height:32px;border-radius:50%;padding:0}
+main{max-width:1100px;margin:25px auto;padding:0 18px}
+section{background:var(--card);margin:25px 0;padding:28px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.06);scroll-margin-top:80px}
+section h2{color:var(--primary-dark);border-bottom:3px solid var(--primary);padding-bottom:8px;margin-bottom:18px;font-size:1.7em}
+body.dark section h2{color:#82b1ff}section h3{margin:18px 0 10px;font-size:1.25em}
+section h4{color:var(--primary-dark);margin:12px 0 8px}body.dark section h4{color:#90caf9}
+p{margin-bottom:10px}ul,ol{margin:8px 0 12px 26px}li{margin-bottom:5px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.card{background:linear-gradient(135deg,#f0f6fc,#e8f0f8);border-left:4px solid var(--primary-dark);padding:14px;border-radius:8px}
+body.dark .card{background:linear-gradient(135deg,#1f2a3a,#2a3545)}
+.card h4{color:var(--primary-dark);margin-bottom:6px;font-size:1em}body.dark .card h4{color:#90caf9}
+.card p{font-size:.9em;margin:0;color:var(--muted)}
+table{width:100%;border-collapse:collapse;margin:12px 0}th,td{padding:9px 12px;border:1px solid var(--border);text-align:left}
+th{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white}tr:nth-child(even) td{background:var(--bg)}
+.code-block{background:#1a2535;color:#ecf0f1;padding:12px 14px;border-radius:8px;font-family:'Courier New',monospace;font-size:.9em;overflow-x:auto;margin:10px 0;white-space:pre-wrap;line-height:1.5}
+code{background:var(--bg);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:.92em;border:1px solid var(--border)}
+.quiz{background:linear-gradient(135deg,#e8f5e9,#dcedc8);border-left:4px solid var(--success);padding:16px;border-radius:10px;margin:12px 0}
+body.dark .quiz{background:linear-gradient(135deg,#1a3a2e,#2a4a3e)}
+.quiz-option{display:block;margin:6px 0;padding:10px 12px;background:var(--card);border:2px solid var(--border);border-radius:8px;cursor:pointer}
+.quiz-option:hover{border-color:var(--success);transform:translateX(3px)}
+.quiz-option.correct{background:#c8e6c9!important;border-color:var(--success);color:#1b5e20}
+.quiz-option.wrong{background:#ffcdd2!important;border-color:var(--danger);color:#b71c1c}
+.insight{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-left:4px solid #1976d2;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .insight{background:linear-gradient(135deg,#1a2a4a,#253560)}
+.warning{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-left:4px solid #f57c00;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .warning{background:linear-gradient(135deg,#3a2a1a,#4a3525)}
+.example{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left:4px solid #8e24aa;padding:14px 16px;border-radius:8px;margin:12px 0}
+body.dark .example{background:linear-gradient(135deg,#2a1a3a,#3a253f)}
+.summary{background:linear-gradient(135deg,#fff9c4,#fff59d);border-left:4px solid #fbc02d;padding:16px;border-radius:10px;margin:14px 0}
+body.dark .summary{background:linear-gradient(135deg,#3a3a1a,#4a4a25);color:var(--text)}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.9em;border-top:1px solid var(--border);margin-top:30px}
+.toc{background:var(--bg);padding:16px 20px;border-radius:10px;margin-bottom:20px}
+.toc h3{margin-bottom:8px;color:var(--primary-dark)}body.dark .toc h3{color:#90caf9}.toc ol{columns:2;column-gap:30px}
+.svg-diagram{background:var(--bg);padding:16px;border-radius:10px;margin:14px 0;text-align:center}.svg-diagram svg{max-width:100%;height:auto}
+.formula{background:linear-gradient(135deg,#f0f4ff,#dce7ff);padding:14px 18px;border-radius:8px;font-family:Georgia,serif;font-size:1.05em;text-align:center;margin:12px 0;border-left:4px solid var(--primary)}
+body.dark .formula{background:linear-gradient(135deg,#1f2a3a,#2a3a55)}
+</style>
+</head>
+<body>
+
+<header><div class="breadcrumb"><a href="index.html">📚 FDA Modules</a> › Week 8</div><h1>🛡️ Week 8 — Risk Management &amp; Analytics</h1></header>
+
+<nav>
+<button onclick="g('intro',this)" class="active">1. Intro</button>
+<button onclick="g('measure',this)">2. Risk Measures</button>
+<button onclick="g('var',this)">3. Value at Risk</button>
+<button onclick="g('stress',this)">4. Stress Testing</button>
+<button onclick="g('credit',this)">5. Credit Risk</button>
+<button onclick="g('market',this)">6. Market Risk</button>
+<button onclick="g('cases',this)">7. Case Studies</button>
+<button onclick="g('quiz',this)">🎯 Quiz</button>
+<button onclick="g('summary',this)">📝 Summary</button>
+<button class="icon-btn" onclick="dark()">🌓</button>
+</nav>
+
+<main>
+
+<section class="toc"><h3>📑 Contents</h3><ol>
+<li><a href="#intro">Financial Risk Management Intro</a></li>
+<li><a href="#measure">Risk Measurement Techniques</a></li>
+<li><a href="#var">Value at Risk (VaR)</a></li>
+<li><a href="#stress">Stress Testing</a></li>
+<li><a href="#credit">Credit Risk Analysis</a></li>
+<li><a href="#market">Market Risk Analysis</a></li>
+<li><a href="#cases">Real-World Case Studies</a></li>
+<li><a href="#quiz">14-Question Quiz</a></li>
+<li><a href="#summary">Summary</a></li>
+</ol></section>
+
+<section id="intro">
+<h2>1️⃣ Introduction to Financial Risk Management</h2>
+
+<p><strong>Risk Management</strong> = identifying, assessing, mitigating, and monitoring risks that could affect financial stability.</p>
+
+<h3>The 4 Key Concepts</h3>
+<div class="flow" style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:20px 0">
+<div style="background:linear-gradient(135deg,#1e88e5,#0d47a1);color:white;padding:12px 18px;border-radius:10px;font-weight:600">① Identify</div>
+<span style="color:#0d47a1;font-size:1.5em">→</span>
+<div style="background:linear-gradient(135deg,#1e88e5,#0d47a1);color:white;padding:12px 18px;border-radius:10px;font-weight:600">② Assess</div>
+<span style="color:#0d47a1;font-size:1.5em">→</span>
+<div style="background:linear-gradient(135deg,#43a047,#2e7d32);color:white;padding:12px 18px;border-radius:10px;font-weight:600">③ Mitigate</div>
+<span style="color:#0d47a1;font-size:1.5em">→</span>
+<div style="background:linear-gradient(135deg,#ff9800,#e65100);color:white;padding:12px 18px;border-radius:10px;font-weight:600">④ Monitor</div>
+</div>
+
+<h3>Types of Financial Risk</h3>
+<div class="card-grid">
+<div class="card"><h4>📈 Market Risk</h4><p>Interest rates, currency, equity, commodity prices</p></div>
+<div class="card"><h4>💳 Credit Risk</h4><p>Counterparty default</p></div>
+<div class="card"><h4>⚙️ Operational</h4><p>Internal failures (fraud, errors, systems)</p></div>
+<div class="card"><h4>💧 Liquidity</h4><p>Inability to meet short-term obligations</p></div>
+<div class="card"><h4>📢 Reputational</h4><p>Brand damage, lost trust</p></div>
+<div class="card"><h4>🌐 Emerging</h4><p>Cyber, climate-related</p></div>
+</div>
+
+<h3>Key Frameworks</h3>
+<table>
+<tr><th>Framework</th><th>Focus</th></tr>
+<tr><td>ERM</td><td>Holistic, enterprise-wide</td></tr>
+<tr><td>ISO 31000</td><td>Global guideline</td></tr>
+<tr><td>COSO</td><td>Internal controls, governance</td></tr>
+<tr><td>Basel Accords</td><td>Banking regulations (credit, market, operational)</td></tr>
+</table>
+</section>
+
+<section id="measure">
+<h2>2️⃣ Risk Measurement Techniques</h2>
+
+<h3>Three VaR Methods</h3>
+<table>
+<tr><th>Method</th><th>How</th><th>Pros/Cons</th></tr>
+<tr><td>Historical Simulation</td><td>Re-applies past returns</td><td>No distribution assumption; assumes past repeats</td></tr>
+<tr><td>Parametric (Var-Cov)</td><td>Normal distribution + mean/SD</td><td>Fast; underestimates tail risk</td></tr>
+<tr><td>Monte Carlo</td><td>Simulates many random scenarios</td><td>Flexible; compute-heavy</td></tr>
+</table>
+
+<h3>Sharpe Ratio</h3>
+<div class="formula">Sharpe = (Rp − Rf) / σp</div>
+<div class="code-block">import numpy as np
+daily_returns = np.random.normal(0.001, 0.02, 252)
+risk_free = 0.0002
+excess = daily_returns - risk_free
+sharpe = excess.mean() / excess.std()
+print(f"Sharpe: {sharpe:.4f}")</div>
+
+<h3>Role in Investment Strategy</h3>
+<ul>
+<li><strong>Aligns</strong> portfolio with risk tolerance</li>
+<li>Drives <strong>diversification</strong> across asset classes</li>
+<li>Enables <strong>risk-adjusted return</strong> comparisons</li>
+<li>Supports <strong>active management</strong> (hedging, rebalancing)</li>
+<li>Reduces emotional decision-making</li>
+</ul>
+</section>
+
+<section id="var">
+<h2>3️⃣ Value at Risk (VaR)</h2>
+
+<p>VaR = <strong>maximum expected loss</strong> over a defined period at a given confidence level.</p>
+
+<h3>Parametric VaR Formula</h3>
+<div class="formula">VaR = Z<sub>α</sub> × σ × √t</div>
+<p>For 95% confidence: Z = 1.65; 99% confidence: Z = 2.33.</p>
+
+<div class="code-block">import numpy as np
+z_score = 1.65   # 95%
+std_dev = 0.02   # daily SD
+var = z_score * std_dev * np.sqrt(1)
+print(f"1-day VaR: {var:.2%}")  # ~3.3%</div>
+
+<h3>Historical Example</h3>
+<div class="example"><strong>₹17 crore portfolio.</strong> Sort 100 days of returns. 10th worst = −0.75%.<br>
+VaR (90% confidence) = 0.75% × 17 crore = <strong>₹12,75,000</strong></div>
+
+<h3>Limitations of VaR</h3>
+<div class="card-grid">
+<div class="card"><h4>📊 Normality Assumption</h4><p>Real markets have fat tails — VaR underestimates extremes</p></div>
+<div class="card"><h4>📷 Static Snapshot</h4><p>Ignores portfolio changes during horizon</p></div>
+<div class="card"><h4>👁️ Tail Risk Blindness</h4><p>No info beyond confidence level</p></div>
+</div>
+
+<h3>Conditional VaR (CVaR / Expected Shortfall)</h3>
+<p>Average loss <em>beyond</em> the VaR threshold — gives a deeper look into tail risk.</p>
+
+<h3>Applications</h3>
+<ul>
+<li>Regulatory compliance (Basel)</li>
+<li>Hedging decisions</li>
+<li>Asset management &amp; capital allocation</li>
+<li>Stress testing (combined with extreme scenarios)</li>
+</ul>
+</section>
+
+<section id="stress">
+<h2>4️⃣ Stress Testing</h2>
+
+<p>Simulates extreme but plausible scenarios to evaluate resilience.</p>
+
+<h3>Scenario Types</h3>
+<div class="card-grid">
+<div class="card"><h4>📚 Historical</h4><p>Replay 2008 crisis, COVID-19 etc.</p></div>
+<div class="card"><h4>🔮 Hypothetical</h4><p>Sudden rate hikes, inflation spikes</p></div>
+<div class="card"><h4>🔄 Reverse Stress Test</h4><p>"What breaks us?" Work backwards from failure</p></div>
+</div>
+
+<h3>Effectiveness Factors</h3>
+<ol>
+<li><strong>Granularity</strong> — tailor scenarios to institution's specifics</li>
+<li><strong>Historical Benchmarking</strong> — track risk profile evolution</li>
+<li><strong>Quantitative + Qualitative Validation</strong></li>
+</ol>
+
+<h3>Implications</h3>
+<ul>
+<li>Capital buffer recalibration</li>
+<li>Liquidity &amp; asset allocation adjustments</li>
+<li>Operational/technological improvements</li>
+</ul>
+
+<h3>Comparison of Approaches</h3>
+<table>
+<tr><th>Approach</th><th>Description</th></tr>
+<tr><td>Top-Down</td><td>Macroeconomic, system-level (regulators)</td></tr>
+<tr><td>Bottom-Up</td><td>Asset/portfolio-level (institutional)</td></tr>
+<tr><td>Static</td><td>Fixed assumptions, snapshot</td></tr>
+<tr><td>Dynamic</td><td>Evolving scenarios with feedback</td></tr>
+<tr><td>Macroprudential</td><td>System stability (regulators)</td></tr>
+<tr><td>Microprudential</td><td>Individual firm exposure</td></tr>
+</table>
+</section>
+
+<section id="credit">
+<h2>5️⃣ Credit Risk Analysis</h2>
+
+<p>Probability of borrower defaulting on obligations.</p>
+
+<h3>Quantitative Models</h3>
+<ul>
+<li><strong>Logistic Regression</strong> — default vs repayment</li>
+<li><strong>GBM/SVM/Neural Networks</strong> — complex risk patterns</li>
+</ul>
+
+<h3>Credit Scoring</h3>
+<table>
+<tr><th>Approach</th><th>Description</th></tr>
+<tr><td>FICO Score</td><td>Payment history, debt, length, mix</td></tr>
+<tr><td>Behavioural Scoring</td><td>Dynamic based on post-loan behaviour</td></tr>
+</table>
+
+<h3>Key Risk Factors</h3>
+<div class="card-grid">
+<div class="card"><h4>👤 Borrower-Specific</h4><p>Income, DTI, credit history</p></div>
+<div class="card"><h4>🌍 Macroeconomic</h4><p>Recession, inflation, rates</p></div>
+<div class="card"><h4>🏭 Industry-Specific</h4><p>Cyclical sectors (tourism, mfg) more vulnerable</p></div>
+</div>
+
+<h3>Mitigation Strategies</h3>
+<ul>
+<li><strong>Credit limits</strong> per profile</li>
+<li><strong>Collateral &amp; security</strong></li>
+<li><strong>Diversify loan book</strong> across sectors</li>
+<li><strong>Stress testing</strong> under downturn scenarios</li>
+</ul>
+
+<h3>Real-World Cases</h3>
+<ul>
+<li><strong>2008 Subprime Crisis</strong> — over-optimistic MBS models</li>
+<li><strong>COVID-19</strong> — surge in default rates</li>
+<li><strong>AI Credit Monitoring</strong> — real-time risk reassessment</li>
+<li><strong>Fintech</strong> (Upstart, Affirm) — alt data (education, spending) for inclusive scoring</li>
+</ul>
+</section>
+
+<section id="market">
+<h2>6️⃣ Market Risk Analysis</h2>
+
+<h3>Key Drivers</h3>
+<div class="card-grid">
+<div class="card"><h4>📊 Interest Rates</h4><p>Bond prices ↓ when rates ↑</p></div>
+<div class="card"><h4>📈 Equity Volatility</h4><p>Sentiment + macro shifts</p></div>
+<div class="card"><h4>💱 FX Rates</h4><p>Cross-border earnings impact</p></div>
+<div class="card"><h4>🛢️ Commodities</h4><p>Input cost shifts</p></div>
+<div class="card"><h4>📉 Credit Spreads</h4><p>Default risk perception</p></div>
+</div>
+
+<h3>Measurement Models</h3>
+<table>
+<tr><th>Model</th><th>Use</th></tr>
+<tr><td>Historical VaR</td><td>Past return simulation</td></tr>
+<tr><td>Monte Carlo VaR</td><td>Random scenario generation</td></tr>
+<tr><td>Variance-Covariance VaR</td><td>Fast, assumes normal</td></tr>
+<tr><td>Expected Shortfall</td><td>Avg loss beyond VaR</td></tr>
+<tr><td>GARCH</td><td>Time-varying volatility</td></tr>
+<tr><td>Sensitivity Analysis</td><td>Per-factor impact</td></tr>
+</table>
+
+<h3>Management Strategies</h3>
+<ul>
+<li><strong>Hedging</strong> via futures, options, swaps</li>
+<li><strong>Diversification</strong> across asset classes/regions</li>
+<li><strong>Exposure limits</strong></li>
+<li><strong>Real-time monitoring</strong></li>
+<li><strong>Risk appetite framework</strong></li>
+</ul>
+</section>
+
+<section id="cases">
+<h2>7️⃣ Real-World Case Studies</h2>
+
+<h3>JPMorgan "London Whale" (2012)</h3>
+<ul>
+<li>$6.2B loss from speculative derivative trades</li>
+<li>Weak oversight; flawed risk models</li>
+<li>Triggered regulatory scrutiny &amp; internal reforms</li>
+</ul>
+
+<h3>Wells Fargo Account Fraud (2016)</h3>
+<ul>
+<li>Unauthorised accounts opened by employees under aggressive sales targets</li>
+<li>Operational risk + reputational damage</li>
+<li>Reformed incentive structures post-scandal</li>
+</ul>
+
+<h3>2008 Financial Crisis</h3>
+<ul>
+<li>Over-reliance on risk models that ignored tail events</li>
+<li>Excessive leverage + housing-market collapse</li>
+<li>Birthed Basel III, Dodd-Frank</li>
+</ul>
+
+<h3>COVID-19 (2020)</h3>
+<ul>
+<li>Static models failed against unprecedented volatility</li>
+<li>Highlighted need for adaptive, scenario-based risk frameworks</li>
+</ul>
+
+<h3>Quantitative vs Qualitative Risk Approaches</h3>
+<table>
+<tr><th>Quantitative (VaR, stress)</th><th>Qualitative (oversight, ethics)</th></tr>
+<tr><td>Precise, measurable</td><td>Catches non-numerical risks</td></tr>
+<tr><td>Misses tail events</td><td>Subjective, less precise</td></tr>
+</table>
+<p><strong>Best practice:</strong> combine both.</p>
+</section>
+
+<section id="quiz">
+<h2>🎯 14-Question Quiz</h2>
+
+<div class="quiz"><p><strong>Q1.</strong> Risk Mgmt pipeline:</p>
+<div class="quiz-option" onclick="qa(this,1)">Identify → Assess → Mitigate → Monitor ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Mitigate → Identify</div>
+<div class="quiz-option" onclick="qa(this,0)">Assess only</div>
+</div>
+
+<div class="quiz"><p><strong>Q2.</strong> VaR estimates:</p>
+<div class="quiz-option" onclick="qa(this,1)">Max expected loss at given confidence ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Average return</div>
+<div class="quiz-option" onclick="qa(this,0)">Total revenue</div>
+</div>
+
+<div class="quiz"><p><strong>Q3.</strong> Z-score for 95% confidence:</p>
+<div class="quiz-option" onclick="qa(this,1)">1.65 ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">2.33</div>
+<div class="quiz-option" onclick="qa(this,0)">1.96</div>
+</div>
+
+<div class="quiz"><p><strong>Q4.</strong> CVaR / Expected Shortfall =</p>
+<div class="quiz-option" onclick="qa(this,1)">Avg loss BEYOND VaR ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Max gain</div>
+<div class="quiz-option" onclick="qa(this,0)">Standard deviation</div>
+</div>
+
+<div class="quiz"><p><strong>Q5.</strong> Stress testing simulates:</p>
+<div class="quiz-option" onclick="qa(this,1)">Extreme, plausible adverse conditions ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Average market days</div>
+<div class="quiz-option" onclick="qa(this,0)">Future earnings</div>
+</div>
+
+<div class="quiz"><p><strong>Q6.</strong> Reverse stress test starts from:</p>
+<div class="quiz-option" onclick="qa(this,1)">Assumed institutional failure ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Best-case scenario</div>
+<div class="quiz-option" onclick="qa(this,0)">Today's prices</div>
+</div>
+
+<div class="quiz"><p><strong>Q7.</strong> Credit risk best modelled via:</p>
+<div class="quiz-option" onclick="qa(this,1)">Logistic regression / GBM ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Linear regression only</div>
+<div class="quiz-option" onclick="qa(this,0)">K-means</div>
+</div>
+
+<div class="quiz"><p><strong>Q8.</strong> Sharpe Ratio measures:</p>
+<div class="quiz-option" onclick="qa(this,1)">Excess return per total risk ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Average return</div>
+<div class="quiz-option" onclick="qa(this,0)">Volatility</div>
+</div>
+
+<div class="quiz"><p><strong>Q9.</strong> Market risk includes:</p>
+<div class="quiz-option" onclick="qa(this,1)">Interest rates, FX, equity, commodities ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Only credit</div>
+<div class="quiz-option" onclick="qa(this,0)">Only operational</div>
+</div>
+
+<div class="quiz"><p><strong>Q10.</strong> GARCH captures:</p>
+<div class="quiz-option" onclick="qa(this,1)">Time-varying volatility ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Linear returns</div>
+<div class="quiz-option" onclick="qa(this,0)">Sentiment</div>
+</div>
+
+<div class="quiz"><p><strong>Q11.</strong> "London Whale" was a:</p>
+<div class="quiz-option" onclick="qa(this,1)">JPMorgan derivative trading loss ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Marine accident</div>
+<div class="quiz-option" onclick="qa(this,0)">Currency crisis</div>
+</div>
+
+<div class="quiz"><p><strong>Q12.</strong> Basel III primarily addresses:</p>
+<div class="quiz-option" onclick="qa(this,1)">Banking capital adequacy ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Crypto regulation</div>
+<div class="quiz-option" onclick="qa(this,0)">Tax filings</div>
+</div>
+
+<div class="quiz"><p><strong>Q13.</strong> Hedging uses:</p>
+<div class="quiz-option" onclick="qa(this,1)">Futures, options, swaps ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">Long-only stocks</div>
+<div class="quiz-option" onclick="qa(this,0)">Cash hoarding</div>
+</div>
+
+<div class="quiz"><p><strong>Q14.</strong> Best practice:</p>
+<div class="quiz-option" onclick="qa(this,1)">Combine quantitative + qualitative oversight ✓</div>
+<div class="quiz-option" onclick="qa(this,0)">VaR alone</div>
+<div class="quiz-option" onclick="qa(this,0)">Manual review only</div>
+</div>
+</section>
+
+<section id="summary">
+<h2>📝 Summary &amp; Exam Tips</h2>
+
+<div class="summary">
+<h3>🎯 Key Takeaways</h3>
+<ul>
+<li>4-step pipeline: Identify → Assess → Mitigate → Monitor</li>
+<li>Risk types: Market, Credit, Operational, Liquidity, Reputational, Emerging</li>
+<li>Frameworks: ERM, ISO 31000, COSO, Basel</li>
+<li><strong>VaR</strong> = max expected loss at confidence; methods: Historical, Parametric, Monte Carlo</li>
+<li><strong>CVaR / ES</strong> = avg loss beyond VaR (better for tail risk)</li>
+<li>Stress testing: historical, hypothetical, reverse</li>
+<li>Credit risk via logistic/GBM models + FICO/behavioural scoring</li>
+<li>Market risk drivers: rates, equity, FX, commodities, spreads</li>
+<li>Combine quant (VaR, stress) + qualitative (oversight, ethics) for resilience</li>
+</ul>
+</div>
+
+<div class="warning"><strong>📌 Pitfalls:</strong>
+<ul>
+<li>Treating VaR as worst case — it's not (tail risk lies beyond)</li>
+<li>Normality assumption in parametric VaR fails in crises</li>
+<li>Single-scenario stress test misses systemic risk</li>
+<li>Ignoring qualitative risks (culture, governance)</li>
+</ul>
+</div>
+
+<p style="text-align:center;margin-top:30px">
+<a href="Week_07_AdvancedML.html" style="color:var(--primary);font-weight:bold">← Week 7</a> |
+<a href="index.html" style="color:var(--primary);font-weight:bold">📚 Index</a> |
+<a href="Week_09_Portfolio.html" style="color:var(--primary);font-weight:bold">Week 9 → Portfolio</a>
+</p>
+</section>
+
+</main>
+
+<footer><p>🛡️ Week 8 of 12 — Financial Data Analytics</p></footer>
+
+<script>
+function g(id,btn){document.getElementById(id).scrollIntoView({behavior:'smooth'});document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function dark(){document.body.classList.toggle('dark');try{localStorage.setItem('fda_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}}
+if(localStorage.getItem('fda_dark')==='1')document.body.classList.add('dark');
+function qa(el,c){el.parentElement.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('correct','wrong'));el.classList.add(c?'correct':'wrong')}
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

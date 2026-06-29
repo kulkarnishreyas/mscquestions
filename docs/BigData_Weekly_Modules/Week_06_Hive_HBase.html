@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 6 — Hive & HBase | Big Data Analytics</title>
+<style>
+:root{--primary:#667eea;--primary-dark:#764ba2;--accent:#f39c12;--success:#27ae60;--danger:#e74c3c;--bg:#f5f7fa;--card:#fff;--text:#2c3e50;--muted:#6c7a89;--border:#e1e8ed}
+body.dark{--bg:#1a1a2e;--card:#252541;--text:#e8e8f0;--muted:#a0a0b8;--border:#3a3a5c}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;transition:all 0.3s}
+header{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:40px 20px;text-align:center}
+header h1{font-size:2.2em;margin-bottom:6px}
+header .breadcrumb{font-size:0.95em;opacity:0.9}
+header .breadcrumb a{color:#ffd700;text-decoration:none}
+nav{position:sticky;top:0;background:var(--card);z-index:100;padding:10px;overflow-x:auto;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-bottom:1px solid var(--border)}
+nav button{background:transparent;color:var(--text);border:2px solid var(--border);padding:6px 14px;margin:2px;border-radius:18px;cursor:pointer;font-size:0.82em;font-weight:600}
+nav button:hover{border-color:var(--primary);color:var(--primary)}
+nav button.active{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-color:transparent}
+.icon-btn{background:var(--bg);width:32px;height:32px;border-radius:50%;padding:0}
+main{max-width:1100px;margin:25px auto;padding:0 18px}
+section{background:var(--card);margin:25px 0;padding:28px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,0.06);scroll-margin-top:80px}
+section h2{color:var(--primary-dark);border-bottom:3px solid var(--primary);padding-bottom:8px;margin-bottom:18px;font-size:1.7em}
+body.dark section h2{color:#b8a8ff}
+section h3{margin:18px 0 10px;font-size:1.25em}
+section h4{color:var(--primary-dark);margin:12px 0 8px}
+body.dark section h4{color:#c4b5ff}
+p{margin-bottom:10px}
+ul,ol{margin:8px 0 12px 26px}
+li{margin-bottom:5px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.card{background:linear-gradient(135deg,#f6f9fc,#eef2f7);border-left:4px solid var(--primary-dark);padding:14px;border-radius:8px}
+body.dark .card{background:linear-gradient(135deg,#2a2a4a,#353560)}
+.card h4{color:var(--primary-dark);margin-bottom:6px;font-size:1em}
+body.dark .card h4{color:#c4b5ff}
+.card p{font-size:0.9em;margin:0;color:var(--muted)}
+.flow{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:20px 0}
+.flow-box{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;padding:12px 18px;border-radius:10px;font-weight:600;text-align:center;min-width:120px}
+.arrow{color:var(--primary-dark);font-size:1.6em;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0}
+th,td{padding:9px 12px;border:1px solid var(--border);text-align:left}
+th{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white}
+tr:nth-child(even) td{background:var(--bg)}
+.code-block{background:#2c3e50;color:#ecf0f1;padding:12px 14px;border-radius:8px;font-family:'Courier New',monospace;font-size:0.9em;overflow-x:auto;margin:10px 0;white-space:pre-wrap;line-height:1.5}
+code{background:var(--bg);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:0.92em;border:1px solid var(--border)}
+.quiz{background:linear-gradient(135deg,#e8f5e9,#dcedc8);border-left:4px solid var(--success);padding:16px;border-radius:10px;margin:12px 0}
+body.dark .quiz{background:linear-gradient(135deg,#1a3a2e,#2a4a3e)}
+.quiz-option{display:block;margin:6px 0;padding:10px 12px;background:var(--card);border:2px solid var(--border);border-radius:8px;cursor:pointer}
+.quiz-option:hover{border-color:var(--success);transform:translateX(3px)}
+.quiz-option.correct{background:#c8e6c9!important;border-color:var(--success);color:#1b5e20}
+.quiz-option.wrong{background:#ffcdd2!important;border-color:var(--danger);color:#b71c1c}
+.insight{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-left:4px solid #1976d2;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .insight{background:linear-gradient(135deg,#1a2a4a,#253560)}
+.warning{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-left:4px solid #f57c00;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .warning{background:linear-gradient(135deg,#3a2a1a,#4a3525)}
+.example{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left:4px solid #8e24aa;padding:14px 16px;border-radius:8px;margin:12px 0}
+body.dark .example{background:linear-gradient(135deg,#2a1a3a,#3a253f)}
+.summary{background:linear-gradient(135deg,#fff9c4,#fff59d);border-left:4px solid #fbc02d;padding:16px;border-radius:10px;margin:14px 0}
+body.dark .summary{background:linear-gradient(135deg,#3a3a1a,#4a4a25);color:var(--text)}
+.arch{display:grid;gap:14px;margin:20px 0;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.arch-node{border:2px solid var(--primary);border-radius:12px;padding:14px;text-align:center}
+body.dark .arch-node{background:#2a2a4a}
+.arch-node.master{background:linear-gradient(135deg,#e74c3c,#c0392b);color:white}
+.arch-node.worker{background:linear-gradient(135deg,#3498db,#2980b9);color:white}
+.arch-node.coord{background:linear-gradient(135deg,#f39c12,#d35400);color:white}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:0.9em;border-top:1px solid var(--border);margin-top:30px}
+.toc{background:var(--bg);padding:16px 20px;border-radius:10px;margin-bottom:20px}
+.toc h3{margin-bottom:8px;color:var(--primary-dark)}
+body.dark .toc h3{color:#c4b5ff}
+.toc ol{columns:2;column-gap:30px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../BigDataAnalytics_Complete_Course.html">📚 Full Course</a> › <a href="index.html">Weekly Modules</a> › Week 6</div>
+  <h1>🐝 Week 6 — Hive & HBase Deep Dive</h1>
+</header>
+
+<nav>
+  <button onclick="g('hive-intro',this)" class="active">1. Hive Intro</button>
+  <button onclick="g('hive-arch',this)">2. Hive Arch</button>
+  <button onclick="g('hive-formats',this)">3. File Formats</button>
+  <button onclick="g('hive-ddl',this)">4. HQL DDL</button>
+  <button onclick="g('hive-dml',this)">5. HQL DML</button>
+  <button onclick="g('hbase-arch',this)">6. HBase Arch</button>
+  <button onclick="g('hbase-ddl',this)">7. HBase DDL</button>
+  <button onclick="g('hbase-dml',this)">8. HBase DML</button>
+  <button onclick="g('rdbms',this)">9. vs RDBMS</button>
+  <button onclick="g('quiz',this)">🎯 Quiz</button>
+  <button onclick="g('summary',this)">📝 Summary</button>
+  <button class="icon-btn" onclick="dark()">🌓</button>
+</nav>
+
+<main>
+
+<section class="toc">
+  <h3>📑 Table of Contents</h3>
+  <ol>
+    <li><a href="#hive-intro">Apache Hive Introduction</a></li>
+    <li><a href="#hive-arch">Hive Architecture</a></li>
+    <li><a href="#hive-formats">Hive File Formats</a></li>
+    <li><a href="#hive-ddl">HiveQL — DDL</a></li>
+    <li><a href="#hive-dml">HiveQL — DML</a></li>
+    <li><a href="#hbase-arch">HBase Architecture Recap</a></li>
+    <li><a href="#hbase-ddl">HBase Shell — DDL</a></li>
+    <li><a href="#hbase-dml">HBase Shell — DML</a></li>
+    <li><a href="#rdbms">HBase vs RDBMS</a></li>
+    <li><a href="#quiz">15-Question Quiz</a></li>
+    <li><a href="#summary">Summary & Exam Tips</a></li>
+  </ol>
+</section>
+
+<section id="hive-intro">
+  <h2>1️⃣ Introduction to Apache Hive</h2>
+
+  <p><strong>Hive</strong> is a <strong>data warehouse infrastructure</strong> built on top of Hadoop. It provides SQL-like querying for analyzing large datasets stored in HDFS (or HBase).</p>
+
+  <h3>Purpose</h3>
+  <ul>
+    <li>Makes Hadoop accessible to users <strong>familiar with SQL</strong></li>
+    <li>Projects <strong>structure onto unstructured/semi-structured</strong> data</li>
+    <li>Enables ad-hoc querying, data analysis, and ETL at scale</li>
+  </ul>
+
+  <h3>Key Features</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📝 HiveQL</h4><p>SQL-like query language. Familiar to anyone who knows SQL.</p></div>
+    <div class="card"><h4>⚙️ Translates to MR/Tez/Spark</h4><p>Hive queries get compiled to underlying execution engines.</p></div>
+    <div class="card"><h4>🗄️ Storage Flexibility</h4><p>Supports HDFS, HBase, S3, and more.</p></div>
+    <div class="card"><h4>📊 RDBMS-like Concepts</h4><p>Defines databases, tables, partitions just like SQL.</p></div>
+  </div>
+
+  <div class="warning"><strong>⚠️ Not for OLTP:</strong> Hive is for analytics (OLAP), not real-time transactions. Queries take seconds to minutes.</div>
+</section>
+
+<section id="hive-arch">
+  <h2>2️⃣ Hive Architecture</h2>
+
+  <div class="arch">
+    <div class="arch-node"><h5>🖥️ User Interface</h5><small>CLI, Beeline, JDBC/ODBC, Web UI</small></div>
+    <div class="arch-node coord"><h5>🚦 Driver</h5><small>Session + query lifecycle</small></div>
+    <div class="arch-node"><h5>⚙️ Compiler</h5><small>Parse, semantic, plan (AST → DAG)</small></div>
+    <div class="arch-node"><h5>🎯 Optimizer</h5><small>Predicate pushdown, map-join, etc.</small></div>
+    <div class="arch-node master"><h5>📚 Metastore</h5><small>Schema, partitions, locations</small></div>
+    <div class="arch-node worker"><h5>🏃 Executor</h5><small>Runs MR/Tez/Spark jobs</small></div>
+  </div>
+
+  <h3>Component Details</h3>
+  <table>
+    <tr><th>Component</th><th>Role</th></tr>
+    <tr><td><strong>Metastore</strong></td><td>Stores metadata: table schemas, locations, partition info. Backed by Derby (embedded) or MySQL/PostgreSQL (external — production).</td></tr>
+    <tr><td><strong>Driver</strong></td><td>Manages query lifecycle: receives queries, creates sessions, coordinates other components.</td></tr>
+    <tr><td><strong>Compiler</strong></td><td>Parses HiveQL, does semantic analysis, generates an execution plan (Abstract Syntax Tree → DAG).</td></tr>
+    <tr><td><strong>Optimizer</strong></td><td>Optimizes the plan: predicate pushdown, map-join conversion, partition pruning.</td></tr>
+    <tr><td><strong>Executor</strong></td><td>Submits optimized plan as MR/Tez/Spark jobs.</td></tr>
+    <tr><td><strong>HiveServer2 / Beeline</strong></td><td>Interfaces for users: command-line, JDBC/ODBC for BI tools.</td></tr>
+  </table>
+
+  <h3>How a Query Flows</h3>
+  <div class="flow">
+    <div class="flow-box">User</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">Driver</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">Compiler<br><small>parse + plan</small></div>
+    <span class="arrow">→</span>
+    <div class="flow-box">Optimizer</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">Executor<br><small>MR/Tez/Spark</small></div>
+    <span class="arrow">→</span>
+    <div class="flow-box">Results</div>
+  </div>
+</section>
+
+<section id="hive-formats">
+  <h2>3️⃣ Hive File Formats</h2>
+
+  <p>File format dramatically affects <strong>query performance, storage efficiency, and schema evolution</strong>.</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4>📄 TextFile (default)</h4>
+      <p><strong>Pros:</strong> Plain text, human-readable, easy debugging</p>
+      <p><strong>Cons:</strong> No compression, poor query performance</p>
+      <p><strong>Use when:</strong> Initial loading, external tools producing CSV</p>
+    </div>
+    <div class="card">
+      <h4>📦 SequenceFile</h4>
+      <p><strong>Pros:</strong> Binary K/V format, compact, block-compressible, splittable</p>
+      <p><strong>Cons:</strong> Not as efficient as columnar formats</p>
+      <p><strong>Use when:</strong> Need binary storage but not column-specific</p>
+    </div>
+    <div class="card">
+      <h4>📑 RCFile</h4>
+      <p><strong>Pros:</strong> Column-oriented — good for queries reading specific columns</p>
+      <p><strong>Cons:</strong> Older format, mostly replaced by ORC</p>
+    </div>
+    <div class="card" style="border-color:#27ae60">
+      <h4>🏆 ORC (Optimized Row Columnar)</h4>
+      <p><strong>Pros:</strong> Highly optimized columnar, Zlib/Snappy compression, stripe-level indexes, predicate pushdown, supports complex types & schema evolution</p>
+      <p><strong>Often the best choice for Hive</strong></p>
+    </div>
+    <div class="card">
+      <h4>📊 Parquet</h4>
+      <p><strong>Pros:</strong> Popular columnar, used in Spark/Impala/Hive</p>
+      <p><strong>Use when:</strong> Cross-tool data sharing (Hive + Spark)</p>
+    </div>
+    <div class="card">
+      <h4>🔄 Avro</h4>
+      <p><strong>Pros:</strong> Row-based, schema stored with data (in JSON), schema evolution friendly</p>
+      <p><strong>Use when:</strong> Schema changes frequently</p>
+    </div>
+  </div>
+
+  <h3>Quick Comparison</h3>
+  <table>
+    <tr><th>Format</th><th>Orientation</th><th>Compression</th><th>Schema Evolution</th><th>Best For</th></tr>
+    <tr><td>TextFile</td><td>Row</td><td>No</td><td>Manual</td><td>Loading/debugging</td></tr>
+    <tr><td>SequenceFile</td><td>Row</td><td>Yes (block)</td><td>Limited</td><td>Binary K/V</td></tr>
+    <tr><td>ORC</td><td>Column</td><td>Excellent</td><td>Yes</td><td>Hive analytics ⭐</td></tr>
+    <tr><td>Parquet</td><td>Column</td><td>Excellent</td><td>Yes</td><td>Multi-tool (Spark)</td></tr>
+    <tr><td>Avro</td><td>Row</td><td>Yes</td><td>Excellent</td><td>Evolving schemas</td></tr>
+  </table>
+</section>
+
+<section id="hive-ddl">
+  <h2>4️⃣ HiveQL — DDL (Data Definition Language)</h2>
+
+  <p>DDL defines/modifies database/table structures.</p>
+
+  <h3>Database Operations</h3>
+  <div class="code-block">CREATE DATABASE sales;
+SHOW DATABASES;
+USE sales;
+DROP DATABASE sales CASCADE;  -- CASCADE drops all tables too</div>
+
+  <h3>Table Operations</h3>
+  <div class="code-block">CREATE TABLE orders (
+  order_id INT,
+  customer STRING,
+  amount DOUBLE,
+  order_date STRING
+)
+PARTITIONED BY (region STRING)
+STORED AS ORC;
+
+-- View schema
+DESCRIBE orders;
+DESCRIBE FORMATTED orders;  -- detailed
+
+-- Alter table
+ALTER TABLE orders ADD COLUMNS (currency STRING);
+ALTER TABLE orders RENAME TO customer_orders;
+ALTER TABLE orders SET TBLPROPERTIES ('comment' = 'Updated 2024');
+
+-- Drop / truncate
+TRUNCATE TABLE orders;  -- removes data, keeps schema
+DROP TABLE orders;      -- removes everything</div>
+
+  <h3>External vs Managed Tables</h3>
+  <table>
+    <tr><th>Type</th><th>Hive Owns Data?</th><th>DROP behavior</th></tr>
+    <tr><td>Managed (default)</td><td>Yes</td><td>Deletes data + metadata</td></tr>
+    <tr><td>External</td><td>No</td><td>Deletes only metadata, data stays</td></tr>
+  </table>
+
+  <div class="code-block">CREATE EXTERNAL TABLE logs (
+  ts STRING,
+  level STRING,
+  message STRING
+)
+LOCATION '/data/external/logs';</div>
+
+  <h3>Partitioning</h3>
+  <p>Partitioning splits a table into directories by partition column values — speeds up queries that filter by the partition.</p>
+
+  <div class="code-block">CREATE TABLE sales_data (
+  product STRING,
+  amount DOUBLE
+)
+PARTITIONED BY (year INT, month INT);
+
+-- Add a partition
+ALTER TABLE sales_data ADD PARTITION (year=2024, month=5);
+
+-- Query with partition filter (fast!)
+SELECT * FROM sales_data WHERE year=2024 AND month=5;</div>
+</section>
+
+<section id="hive-dml">
+  <h2>5️⃣ HiveQL — DML (Data Manipulation Language)</h2>
+
+  <h3>Loading Data</h3>
+  <div class="code-block">-- Load from HDFS file
+LOAD DATA INPATH '/data/raw/orders.csv' INTO TABLE orders;
+
+-- Load from local
+LOAD DATA LOCAL INPATH '/home/user/orders.csv' INTO TABLE orders;
+
+-- Overwrite (replaces existing data)
+LOAD DATA INPATH '/data/orders.csv' OVERWRITE INTO TABLE orders;</div>
+
+  <h3>INSERT</h3>
+  <div class="code-block">-- Insert into table from query
+INSERT INTO TABLE orders_summary
+SELECT customer, SUM(amount) FROM orders GROUP BY customer;
+
+-- Insert overwrite (replaces existing data)
+INSERT OVERWRITE TABLE orders_summary
+SELECT customer, SUM(amount) FROM orders GROUP BY customer;
+
+-- Insert into partitioned table
+INSERT INTO TABLE sales_data PARTITION (year=2024, month=5)
+SELECT product, amount FROM staging;</div>
+
+  <h3>SELECT</h3>
+  <div class="code-block">-- Basic
+SELECT * FROM orders LIMIT 10;
+
+-- Filter + aggregate
+SELECT region, SUM(amount) AS total
+FROM orders
+WHERE order_date >= '2024-01-01'
+GROUP BY region
+ORDER BY total DESC
+LIMIT 5;
+
+-- Joins
+SELECT c.name, o.amount
+FROM customers c
+JOIN orders o ON c.id = o.customer_id;
+
+-- Subqueries
+SELECT * FROM (
+  SELECT customer, SUM(amount) AS total
+  FROM orders GROUP BY customer
+) t WHERE total > 1000;</div>
+
+  <h3>Common Aggregations</h3>
+  <table>
+    <tr><th>Function</th><th>Purpose</th></tr>
+    <tr><td>COUNT(*), COUNT(col)</td><td>Count rows / non-NULL values</td></tr>
+    <tr><td>SUM, AVG, MIN, MAX</td><td>Standard aggregates</td></tr>
+    <tr><td>COLLECT_LIST, COLLECT_SET</td><td>Aggregate into array</td></tr>
+    <tr><td>STDDEV, VARIANCE</td><td>Statistical</td></tr>
+  </table>
+</section>
+
+<section id="hbase-arch">
+  <h2>6️⃣ HBase Architecture (Recap)</h2>
+
+  <p>Quick recap from Week 5 — HBase uses master-slave:</p>
+
+  <div class="arch">
+    <div class="arch-node master"><h5>👑 HMaster</h5><small>Assigns regions, monitors via ZooKeeper</small></div>
+    <div class="arch-node coord"><h5>🦓 ZooKeeper</h5><small>Coordination</small></div>
+    <div class="arch-node worker"><h5>🔧 RegionServer</h5><small>MemStore + BlockCache + HFile + WAL</small></div>
+  </div>
+
+  <h3>Write Flow</h3>
+  <ol>
+    <li>Client → finds RegionServer via ZooKeeper</li>
+    <li>Data → <strong>WAL</strong> (durability log on HDFS)</li>
+    <li>Data → <strong>MemStore</strong> (in-memory write cache)</li>
+    <li>When MemStore fills → flush to <strong>HFile</strong> on HDFS</li>
+    <li>Periodic <strong>compaction</strong> merges small HFiles</li>
+  </ol>
+
+  <h3>Read Flow</h3>
+  <ol>
+    <li>Client → finds RegionServer via ZooKeeper</li>
+    <li>Check <strong>BlockCache</strong> (hot data)</li>
+    <li>Check <strong>MemStore</strong> (recent writes not flushed yet)</li>
+    <li>Check <strong>HFiles</strong> on HDFS</li>
+    <li>Return combined results</li>
+  </ol>
+
+  <div class="insight"><strong>💡 Why WAL?</strong> If RegionServer crashes before MemStore is flushed, the WAL replays writes to recover.</div>
+</section>
+
+<section id="hbase-ddl">
+  <h2>7️⃣ HBase Shell — DDL Commands</h2>
+
+  <p>Access via: <code>hbase shell</code></p>
+
+  <h3>Table Management</h3>
+  <div class="code-block"># Create table with column families
+create 'users', 'profile', 'activity'
+
+# Example: create with column family options
+create 'users', {NAME => 'profile', VERSIONS => 3}, {NAME => 'activity'}
+
+# List all tables
+list
+
+# Describe table schema
+describe 'users'
+
+# Check if table exists
+exists 'users'</div>
+
+  <h3>Alter Table</h3>
+  <div class="code-block"># Add column family
+alter 'users', {NAME => 'new_cf'}
+
+# Modify column family (versions)
+alter 'users', {NAME => 'profile', VERSIONS => 5}
+
+# Delete column family
+alter 'users', {NAME => 'activity', METHOD => 'delete'}</div>
+
+  <h3>Disable / Enable / Drop</h3>
+  <div class="code-block"># IMPORTANT: must disable before drop
+disable 'users'
+enable 'users'
+
+# Drop table (must be disabled first)
+disable 'users'
+drop 'users'</div>
+
+  <div class="warning"><strong>⚠️ Common mistake:</strong> Forgetting to disable a table before dropping! HBase will error out.</div>
+</section>
+
+<section id="hbase-dml">
+  <h2>8️⃣ HBase Shell — DML Commands</h2>
+
+  <h3>PUT — Insert/Update</h3>
+  <div class="code-block">put 'users', 'user123', 'profile:name', 'John Doe'
+put 'users', 'user123', 'profile:email', 'john@example.com'
+put 'users', 'user123', 'activity:last_login', '2024-05-15'</div>
+
+  <h3>GET — Retrieve</h3>
+  <div class="code-block"># Get entire row
+get 'users', 'user123'
+
+# Get specific column
+get 'users', 'user123', {COLUMN => 'profile:email'}
+
+# Get multiple columns
+get 'users', 'user123', {COLUMNS => ['profile:name', 'profile:email']}
+
+# Get with version (timestamp)
+get 'users', 'user123', {COLUMN => 'profile:email', VERSIONS => 3}
+
+# Get within time range
+get 'users', 'user123', {TIMERANGE => [1620000000000, 1630000000000]}</div>
+
+  <h3>SCAN — Range Query</h3>
+  <div class="code-block"># Scan whole table
+scan 'users'
+
+# Limit rows
+scan 'users', {LIMIT => 10}
+
+# Range scan
+scan 'users', {STARTROW => 'user100', STOPROW => 'user200'}
+
+# Filter by column
+scan 'users', {COLUMNS => 'profile:email'}
+
+# Filter expression
+scan 'users', {FILTER => "ValueFilter(=, 'binary:John Doe')"}</div>
+
+  <h3>DELETE</h3>
+  <div class="code-block"># Delete specific column
+delete 'users', 'user123', 'profile:name'
+
+# Delete all data for a row
+deleteall 'users', 'user123'
+
+# Delete a specific version (timestamp)
+delete 'users', 'user123', 'profile:name', 1620000000000</div>
+
+  <h3>INCR — Atomic Counter</h3>
+  <div class="code-block"># Increment counter (atomic operation)
+incr 'counters', 'page_views', 'stats:count', 1
+incr 'counters', 'page_views', 'stats:count', 5  # increment by 5</div>
+
+  <h3>Counts &amp; Stats</h3>
+  <div class="code-block">count 'users'           # row count
+count 'users', INTERVAL => 1000  # show progress every 1000 rows</div>
+</section>
+
+<section id="rdbms">
+  <h2>9️⃣ HBase vs RDBMS — Detailed Comparison</h2>
+
+  <table>
+    <tr><th>Feature</th><th>HBase</th><th>RDBMS (e.g., MySQL)</th></tr>
+    <tr><td>Data Model</td><td>Column-family (wide-column)</td><td>Row-oriented (tables/relations)</td></tr>
+    <tr><td>Schema</td><td>Schema-on-read (flexible, dynamic cols)</td><td>Schema-on-write (fixed, predefined)</td></tr>
+    <tr><td>Scalability</td><td>Horizontal (add nodes)</td><td>Vertical (bigger server); sharding is complex</td></tr>
+    <tr><td>Data Size</td><td>Designed for PB-scale</td><td>Typically GB to a few TB</td></tr>
+    <tr><td>Query Language</td><td>Java API, REST, Thrift, Shell (no SQL)</td><td>SQL</td></tr>
+    <tr><td>Joins</td><td>Limited / Not native</td><td>Supported (INNER, OUTER, etc.)</td></tr>
+    <tr><td>Transactions</td><td>Row-level atomicity only</td><td>Full ACID transactions</td></tr>
+    <tr><td>Normalization</td><td>Denormalized is common</td><td>Normalized (3NF) preferred</td></tr>
+    <tr><td>Sparse Data</td><td>Excellent (empty cells = 0 bytes)</td><td>Poor (NULL takes space)</td></tr>
+    <tr><td>Indexes</td><td>Primary RowKey + secondary (via Phoenix)</td><td>Multiple indexes natively</td></tr>
+    <tr><td>Use Case</td><td>Real-time random access, sparse data</td><td>Transactional apps, complex queries</td></tr>
+  </table>
+
+  <h3>When to Choose What?</h3>
+  <div class="card-grid">
+    <div class="card" style="border-color:#3498db">
+      <h4>Choose HBase if...</h4>
+      <ul>
+        <li>Data is in PB scale</li>
+        <li>Need real-time random reads/writes</li>
+        <li>Data is sparse (varying columns)</li>
+        <li>Already in Hadoop ecosystem</li>
+        <li>Time-series data (logs, sensors)</li>
+      </ul>
+    </div>
+    <div class="card" style="border-color:#27ae60">
+      <h4>Choose RDBMS if...</h4>
+      <ul>
+        <li>Data fits in single server (TB scale)</li>
+        <li>Need full ACID transactions</li>
+        <li>Complex SQL queries with joins</li>
+        <li>Schema is stable and well-defined</li>
+        <li>Strong relational integrity required</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2>🎯 15-Question Quiz</h2>
+
+  <div class="quiz"><p><strong>Q1.</strong> Hive's query language is called:</p><div class="quiz-option" onclick="qa(this,0)">CQL</div><div class="quiz-option" onclick="qa(this,1)">HiveQL ✓</div><div class="quiz-option" onclick="qa(this,0)">SQL+</div></div>
+
+  <div class="quiz"><p><strong>Q2.</strong> Hive translates queries into:</p><div class="quiz-option" onclick="qa(this,0)">Only MapReduce</div><div class="quiz-option" onclick="qa(this,1)">MapReduce, Tez, or Spark ✓</div><div class="quiz-option" onclick="qa(this,0)">Direct HDFS reads</div></div>
+
+  <div class="quiz"><p><strong>Q3.</strong> Hive metastore stores:</p><div class="quiz-option" onclick="qa(this,1)">Schema, partition, and location metadata ✓</div><div class="quiz-option" onclick="qa(this,0)">Actual data</div><div class="quiz-option" onclick="qa(this,0)">Query results</div></div>
+
+  <div class="quiz"><p><strong>Q4.</strong> Best columnar format for Hive analytics:</p><div class="quiz-option" onclick="qa(this,0)">TextFile</div><div class="quiz-option" onclick="qa(this,1)">ORC ✓</div><div class="quiz-option" onclick="qa(this,0)">SequenceFile</div></div>
+
+  <div class="quiz"><p><strong>Q5.</strong> DROP on a Hive EXTERNAL table:</p><div class="quiz-option" onclick="qa(this,1)">Removes metadata only; data files remain ✓</div><div class="quiz-option" onclick="qa(this,0)">Removes both data and metadata</div><div class="quiz-option" onclick="qa(this,0)">Just truncates</div></div>
+
+  <div class="quiz"><p><strong>Q6.</strong> Partitioning in Hive helps with:</p><div class="quiz-option" onclick="qa(this,1)">Pruning data by partition column for faster queries ✓</div><div class="quiz-option" onclick="qa(this,0)">Encryption</div><div class="quiz-option" onclick="qa(this,0)">Backups</div></div>
+
+  <div class="quiz"><p><strong>Q7.</strong> HBase command to create a table:</p><div class="quiz-option" onclick="qa(this,0)"><code>make 'table', 'cf'</code></div><div class="quiz-option" onclick="qa(this,1)"><code>create 'table', 'cf'</code> ✓</div><div class="quiz-option" onclick="qa(this,0)"><code>new 'table' WITH 'cf'</code></div></div>
+
+  <div class="quiz"><p><strong>Q8.</strong> Before dropping an HBase table, you must:</p><div class="quiz-option" onclick="qa(this,0)">truncate it</div><div class="quiz-option" onclick="qa(this,1)">disable it ✓</div><div class="quiz-option" onclick="qa(this,0)">compact it</div></div>
+
+  <div class="quiz"><p><strong>Q9.</strong> HBase command to retrieve a row:</p><div class="quiz-option" onclick="qa(this,0)"><code>SELECT</code></div><div class="quiz-option" onclick="qa(this,1)"><code>get</code> ✓</div><div class="quiz-option" onclick="qa(this,0)"><code>find</code></div></div>
+
+  <div class="quiz"><p><strong>Q10.</strong> HBase's <code>scan</code> command is for:</p><div class="quiz-option" onclick="qa(this,1)">Iterating over multiple rows ✓</div><div class="quiz-option" onclick="qa(this,0)">Scanning for viruses</div><div class="quiz-option" onclick="qa(this,0)">Backups</div></div>
+
+  <div class="quiz"><p><strong>Q11.</strong> Atomic counter in HBase uses:</p><div class="quiz-option" onclick="qa(this,0)"><code>put</code></div><div class="quiz-option" onclick="qa(this,1)"><code>incr</code> ✓</div><div class="quiz-option" onclick="qa(this,0)"><code>update</code></div></div>
+
+  <div class="quiz"><p><strong>Q12.</strong> HBase data flow on WRITE:</p><div class="quiz-option" onclick="qa(this,1)">WAL → MemStore → (later) HFile ✓</div><div class="quiz-option" onclick="qa(this,0)">HFile → MemStore → WAL</div><div class="quiz-option" onclick="qa(this,0)">Directly to HFile</div></div>
+
+  <div class="quiz"><p><strong>Q13.</strong> Why use ORC over TextFile in Hive?</p><div class="quiz-option" onclick="qa(this,1)">Compression + columnar + predicate pushdown ✓</div><div class="quiz-option" onclick="qa(this,0)">Easier to read manually</div><div class="quiz-option" onclick="qa(this,0)">Cheaper storage cost</div></div>
+
+  <div class="quiz"><p><strong>Q14.</strong> HBase vs RDBMS — joins?</p><div class="quiz-option" onclick="qa(this,0)">Both fully support joins</div><div class="quiz-option" onclick="qa(this,1)">RDBMS native; HBase limited or not native ✓</div><div class="quiz-option" onclick="qa(this,0)">Only HBase supports them</div></div>
+
+  <div class="quiz"><p><strong>Q15.</strong> Schema-on-read vs schema-on-write:</p><div class="quiz-option" onclick="qa(this,1)">HBase/Hive = schema-on-read; RDBMS = schema-on-write ✓</div><div class="quiz-option" onclick="qa(this,0)">All databases use schema-on-write</div><div class="quiz-option" onclick="qa(this,0)">It's the same thing</div></div>
+</section>
+
+<!-- LIVE DEMOS / REFERENCES -->
+<section id="refs">
+  <h2>🔗 Live Demos & References</h2>
+  <p>Live demos referenced in the course PDF:</p>
+  <ul>
+    <li><strong>Apache Hive — Instant Demo:</strong> <a href="https://hive.com/instant-demo/" target="_blank">https://hive.com/instant-demo/</a></li>
+    <li><strong>HBase Live Demo (Hadoop & Big Data course):</strong> <a href="https://juheck.gitbooks.io/course-hadoop-and-big-data/content/demo-hbase.html" target="_blank">https://juheck.gitbooks.io/course-hadoop-and-big-data/content/demo-hbase.html</a></li>
+  </ul>
+</section>
+
+<section id="summary">
+  <h2>📝 Summary & Exam Tips</h2>
+
+  <div class="summary">
+    <h3>🎯 Key Takeaways</h3>
+    <ul>
+      <li><strong>Hive</strong> = SQL-like warehouse on Hadoop (HiveQL → MR/Tez/Spark)</li>
+      <li><strong>Hive components</strong>: Metastore + Driver + Compiler + Optimizer + Executor</li>
+      <li><strong>File formats</strong>: TextFile (default), SequenceFile, RCFile, <strong>ORC ⭐ (best for Hive)</strong>, Parquet, Avro</li>
+      <li><strong>DDL</strong>: CREATE/ALTER/DROP DATABASE/TABLE</li>
+      <li><strong>DML</strong>: LOAD DATA, INSERT INTO/OVERWRITE, SELECT</li>
+      <li><strong>External tables</strong>: data not owned by Hive — DROP keeps the data</li>
+      <li><strong>HBase Shell DDL</strong>: <code>create</code>, <code>disable</code> → <code>drop</code>, <code>describe</code>, <code>alter</code></li>
+      <li><strong>HBase Shell DML</strong>: <code>put</code>, <code>get</code>, <code>scan</code>, <code>delete</code>, <code>incr</code></li>
+      <li><strong>HBase write</strong>: WAL → MemStore → HFile (compaction merges)</li>
+      <li><strong>HBase vs RDBMS</strong>: HBase for sparse, big, real-time; RDBMS for joins, ACID</li>
+    </ul>
+  </div>
+
+  <p style="text-align:center;margin-top:30px"><a href="Week_05_NoSQL_HBase.html" style="color:var(--primary);font-weight:bold">← Week 5</a> | <a href="index.html" style="color:var(--primary);font-weight:bold">Index</a> | <a href="Week_07_MongoDB.html" style="color:var(--primary);font-weight:bold">Week 7 → MongoDB</a></p>
+</section>
+
+</main>
+
+<footer><p>📚 Week 6 of 10 — Big Data Analytics</p></footer>
+
+<script>
+function g(id,btn){document.getElementById(id).scrollIntoView({behavior:'smooth'});document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function dark(){document.body.classList.toggle('dark');try{localStorage.setItem('bda_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}}
+if(localStorage.getItem('bda_dark')==='1')document.body.classList.add('dark');
+function qa(el,c){el.parentElement.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('correct','wrong'));el.classList.add(c?'correct':'wrong')}
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

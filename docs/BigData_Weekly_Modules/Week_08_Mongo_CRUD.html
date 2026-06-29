@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 8 — MongoDB CRUD & Aggregation | Big Data Analytics</title>
+<style>
+:root{--primary:#667eea;--primary-dark:#764ba2;--accent:#f39c12;--success:#27ae60;--danger:#e74c3c;--bg:#f5f7fa;--card:#fff;--text:#2c3e50;--muted:#6c7a89;--border:#e1e8ed}
+body.dark{--bg:#1a1a2e;--card:#252541;--text:#e8e8f0;--muted:#a0a0b8;--border:#3a3a5c}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;transition:all 0.3s}
+header{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:40px 20px;text-align:center}
+header h1{font-size:2.2em;margin-bottom:6px}
+header .breadcrumb{font-size:0.95em;opacity:0.9}
+header .breadcrumb a{color:#ffd700;text-decoration:none}
+nav{position:sticky;top:0;background:var(--card);z-index:100;padding:10px;overflow-x:auto;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-bottom:1px solid var(--border)}
+nav button{background:transparent;color:var(--text);border:2px solid var(--border);padding:6px 14px;margin:2px;border-radius:18px;cursor:pointer;font-size:0.82em;font-weight:600}
+nav button:hover{border-color:var(--primary);color:var(--primary)}
+nav button.active{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-color:transparent}
+.icon-btn{background:var(--bg);width:32px;height:32px;border-radius:50%;padding:0}
+main{max-width:1100px;margin:25px auto;padding:0 18px}
+section{background:var(--card);margin:25px 0;padding:28px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,0.06);scroll-margin-top:80px}
+section h2{color:var(--primary-dark);border-bottom:3px solid var(--primary);padding-bottom:8px;margin-bottom:18px;font-size:1.7em}
+body.dark section h2{color:#b8a8ff}
+section h3{margin:18px 0 10px;font-size:1.25em}
+section h4{color:var(--primary-dark);margin:12px 0 8px}
+body.dark section h4{color:#c4b5ff}
+p{margin-bottom:10px}
+ul,ol{margin:8px 0 12px 26px}
+li{margin-bottom:5px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.card{background:linear-gradient(135deg,#f6f9fc,#eef2f7);border-left:4px solid var(--primary-dark);padding:14px;border-radius:8px}
+body.dark .card{background:linear-gradient(135deg,#2a2a4a,#353560)}
+.card h4{color:var(--primary-dark);margin-bottom:6px;font-size:1em}
+body.dark .card h4{color:#c4b5ff}
+.card p{font-size:0.9em;margin:0;color:var(--muted)}
+.flow{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:20px 0}
+.flow-box{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;padding:12px 18px;border-radius:10px;font-weight:600;text-align:center;min-width:120px}
+.arrow{color:var(--primary-dark);font-size:1.6em;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0}
+th,td{padding:9px 12px;border:1px solid var(--border);text-align:left}
+th{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white}
+tr:nth-child(even) td{background:var(--bg)}
+.code-block{background:#2c3e50;color:#ecf0f1;padding:12px 14px;border-radius:8px;font-family:'Courier New',monospace;font-size:0.9em;overflow-x:auto;margin:10px 0;white-space:pre-wrap;line-height:1.5}
+code{background:var(--bg);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:0.92em;border:1px solid var(--border)}
+.quiz{background:linear-gradient(135deg,#e8f5e9,#dcedc8);border-left:4px solid var(--success);padding:16px;border-radius:10px;margin:12px 0}
+body.dark .quiz{background:linear-gradient(135deg,#1a3a2e,#2a4a3e)}
+.quiz-option{display:block;margin:6px 0;padding:10px 12px;background:var(--card);border:2px solid var(--border);border-radius:8px;cursor:pointer}
+.quiz-option:hover{border-color:var(--success);transform:translateX(3px)}
+.quiz-option.correct{background:#c8e6c9!important;border-color:var(--success);color:#1b5e20}
+.quiz-option.wrong{background:#ffcdd2!important;border-color:var(--danger);color:#b71c1c}
+.insight{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-left:4px solid #1976d2;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .insight{background:linear-gradient(135deg,#1a2a4a,#253560)}
+.warning{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-left:4px solid #f57c00;padding:12px 16px;border-radius:8px;margin:12px 0}
+body.dark .warning{background:linear-gradient(135deg,#3a2a1a,#4a3525)}
+.example{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left:4px solid #8e24aa;padding:14px 16px;border-radius:8px;margin:12px 0}
+body.dark .example{background:linear-gradient(135deg,#2a1a3a,#3a253f)}
+.summary{background:linear-gradient(135deg,#fff9c4,#fff59d);border-left:4px solid #fbc02d;padding:16px;border-radius:10px;margin:14px 0}
+body.dark .summary{background:linear-gradient(135deg,#3a3a1a,#4a4a25);color:var(--text)}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:0.9em;border-top:1px solid var(--border);margin-top:30px}
+.toc{background:var(--bg);padding:16px 20px;border-radius:10px;margin-bottom:20px}
+.toc h3{margin-bottom:8px;color:var(--primary-dark)}
+body.dark .toc h3{color:#c4b5ff}
+.toc ol{columns:2;column-gap:30px}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;margin:12px 0 0}
+.tab-btn{padding:9px 16px;background:var(--bg);border:none;border-radius:8px 8px 0 0;cursor:pointer;font-weight:600;color:var(--text)}
+.tab-btn.active{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white}
+.tab-content{display:none;padding:18px;background:var(--bg);border-radius:0 10px 10px 10px}
+.tab-content.active{display:block}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../BigDataAnalytics_Complete_Course.html">📚 Full Course</a> › <a href="index.html">Weekly Modules</a> › Week 8</div>
+  <h1>⚙️ Week 8 — MongoDB CRUD &amp; Aggregation</h1>
+</header>
+
+<nav>
+  <button onclick="g('json',this)" class="active">1. JSON</button>
+  <button onclick="g('import',this)">2. Import/Export</button>
+  <button onclick="g('crud',this)">3. CRUD</button>
+  <button onclick="g('dbmgmt',this)">4. DB Mgmt</button>
+  <button onclick="g('find',this)">5. Find</button>
+  <button onclick="g('aggregation',this)">6. Aggregation</button>
+  <button onclick="g('mr',this)">7. MapReduce</button>
+  <button onclick="g('indexes',this)">8. Indexes</button>
+  <button onclick="g('quiz',this)">🎯 Quiz</button>
+  <button onclick="g('summary',this)">📝 Summary</button>
+  <button class="icon-btn" onclick="dark()">🌓</button>
+</nav>
+
+<main>
+
+<section class="toc">
+  <h3>📑 Table of Contents</h3>
+  <ol>
+    <li><a href="#json">JSON Refresher</a></li>
+    <li><a href="#import">Import / Export</a></li>
+    <li><a href="#crud">CRUD Operations (4 types)</a></li>
+    <li><a href="#dbmgmt">Database Management</a></li>
+    <li><a href="#find">Finding Documents</a></li>
+    <li><a href="#aggregation">Aggregation Pipeline</a></li>
+    <li><a href="#mr">MapReduce in MongoDB</a></li>
+    <li><a href="#indexes">Indexes</a></li>
+    <li><a href="#quiz">15-Question Quiz</a></li>
+    <li><a href="#summary">Summary & Exam Tips</a></li>
+  </ol>
+</section>
+
+<section id="json">
+  <h2>1️⃣ JSON Refresher</h2>
+
+  <p><strong>JSON</strong> (JavaScript Object Notation) = lightweight, text-based data interchange format.</p>
+
+  <h3>Structure</h3>
+  <div class="card-grid">
+    <div class="card"><h4>📦 Objects</h4><p>Unordered key/value pairs: <code>{"k": "v"}</code></p></div>
+    <div class="card"><h4>📋 Arrays</h4><p>Ordered values: <code>[1, 2, 3]</code></p></div>
+  </div>
+
+  <h3>JSON Data Types</h3>
+  <table>
+    <tr><th>Type</th><th>Example</th></tr>
+    <tr><td>String</td><td><code>"hello"</code></td></tr>
+    <tr><td>Number</td><td><code>123</code>, <code>45.67</code></td></tr>
+    <tr><td>Boolean</td><td><code>true</code>, <code>false</code></td></tr>
+    <tr><td>Array</td><td><code>[1, 2, 3]</code></td></tr>
+    <tr><td>Object</td><td><code>{"name": "Alice"}</code></td></tr>
+    <tr><td>null</td><td><code>null</code></td></tr>
+  </table>
+
+  <h3>Full Example</h3>
+  <div class="code-block">{
+  "name": "Alice",
+  "age": 30,
+  "active": true,
+  "skills": ["Python", "SQL", "MongoDB"],
+  "address": {
+    "city": "Vellore",
+    "country": "India"
+  },
+  "manager": null
+}</div>
+
+  <div class="insight"><strong>💡 Why JSON for MongoDB?</strong> MongoDB documents look like JSON. Drivers in any language can naturally serialize/deserialize between language objects and MongoDB.</div>
+</section>
+
+<section id="import">
+  <h2>2️⃣ Import / Export</h2>
+
+  <h3>Tools</h3>
+  <table>
+    <tr><th>Tool</th><th>Purpose</th></tr>
+    <tr><td><code>mongoimport</code></td><td>Bulk import from JSON, CSV, TSV → collection</td></tr>
+    <tr><td><code>mongoexport</code></td><td>Export collection → JSON or CSV</td></tr>
+    <tr><td><code>mongodump</code></td><td>Backup whole DB to BSON files</td></tr>
+    <tr><td><code>mongorestore</code></td><td>Restore from <code>mongodump</code></td></tr>
+    <tr><td>MongoDB Compass</td><td>GUI tool with import/export</td></tr>
+  </table>
+
+  <h3>Importing JSON</h3>
+  <div class="code-block"># Basic JSON import
+mongoimport --db mydb --collection users --file users.json
+
+# JSON array file (multiple docs in one array)
+mongoimport --db mydb --collection users --file users.json --jsonArray
+
+# Drop existing collection first
+mongoimport --db mydb --collection users --file users.json --drop
+
+# Upsert (update if exists, insert if new)
+mongoimport --db mydb --collection users --file users.json --mode upsert</div>
+
+  <h3>Importing CSV</h3>
+  <div class="code-block">mongoimport --db mydb --collection products \
+  --type csv --file products.csv --headerline
+
+# Specify columns manually
+mongoimport --db mydb --collection products \
+  --type csv --fields name,price,quantity --file products.csv</div>
+
+  <h3>Exporting</h3>
+  <div class="code-block"># Export whole collection as JSON
+mongoexport --db mydb --collection users --out users.json
+
+# Pretty-print
+mongoexport --db mydb --collection users --out users.json --pretty
+
+# Export with query (filter)
+mongoexport --db mydb --collection users \
+  --query '{"status":"active"}' --out active_users.json
+
+# Export specific fields as CSV
+mongoexport --db mydb --collection users \
+  --type=csv --fields name,age,email --out users.csv</div>
+
+  <h3>Backup &amp; Restore</h3>
+  <div class="code-block"># Backup whole database
+mongodump --db mydb --out /backup/
+
+# Restore from backup
+mongorestore --db mydb /backup/mydb</div>
+</section>
+
+<section id="crud">
+  <h2>3️⃣ CRUD Operations</h2>
+
+  <p><strong>CRUD</strong> = Create, Read, Update, Delete — the 4 basic data operations.</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="tab(event,'c1')">CREATE</button>
+    <button class="tab-btn" onclick="tab(event,'c2')">READ</button>
+    <button class="tab-btn" onclick="tab(event,'c3')">UPDATE</button>
+    <button class="tab-btn" onclick="tab(event,'c4')">DELETE</button>
+  </div>
+
+  <div id="c1" class="tab-content active">
+    <h4>CREATE — Insert Documents</h4>
+    <div class="code-block">// Insert single document
+db.users.insertOne({
+  name: "Bob",
+  age: 25,
+  email: "bob@example.com"
+})
+
+// Insert multiple documents
+db.users.insertMany([
+  { name: "Carol", age: 30 },
+  { name: "Dan",   age: 22 },
+  { name: "Eve",   age: 28 }
+])
+
+// Note: _id is auto-generated if not provided</div>
+  </div>
+
+  <div id="c2" class="tab-content">
+    <h4>READ — Find Documents</h4>
+    <div class="code-block">// Find all
+db.users.find()
+
+// Find with filter
+db.users.find({ age: { $gt: 25 } })
+
+// Find one
+db.users.findOne({ name: "Bob" })
+
+// Combined filter
+db.users.find({ status: "active", age: { $lt: 30 } })
+
+// Projection (which fields)
+db.users.find({}, { name: 1, age: 1, _id: 0 })
+
+// Sort + limit
+db.users.find().sort({ age: -1 }).limit(5)
+
+// Count
+db.users.countDocuments({ age: { $gte: 18 } })</div>
+
+    <h4>Query Operators</h4>
+    <table>
+      <tr><th>Operator</th><th>Meaning</th></tr>
+      <tr><td>$eq, $ne</td><td>equal, not equal</td></tr>
+      <tr><td>$gt, $gte, $lt, $lte</td><td>greater/less than</td></tr>
+      <tr><td>$in, $nin</td><td>in / not in array</td></tr>
+      <tr><td>$and, $or, $not, $nor</td><td>logical</td></tr>
+      <tr><td>$exists</td><td>field exists</td></tr>
+      <tr><td>$regex</td><td>pattern matching</td></tr>
+    </table>
+  </div>
+
+  <div id="c3" class="tab-content">
+    <h4>UPDATE — Modify Documents</h4>
+    <div class="code-block">// Update one (first match)
+db.users.updateOne(
+  { name: "Bob" },           // filter
+  { $set: { age: 26 } }      // update
+)
+
+// Update many
+db.users.updateMany(
+  { status: "pending" },
+  { $set: { status: "active" } }
+)
+
+// Increment a field
+db.users.updateOne(
+  { name: "Bob" },
+  { $inc: { points: 10 } }
+)
+
+// Replace entire document
+db.users.replaceOne(
+  { name: "Bob" },
+  { name: "Bob", age: 27, email: "bob_new@example.com" }
+)
+
+// Upsert (insert if not found)
+db.users.updateOne(
+  { name: "Frank" },
+  { $set: { age: 35 } },
+  { upsert: true }
+)</div>
+
+    <h4>Update Operators</h4>
+    <table>
+      <tr><th>Operator</th><th>Purpose</th></tr>
+      <tr><td><code>$set</code></td><td>Set field value</td></tr>
+      <tr><td><code>$unset</code></td><td>Remove field</td></tr>
+      <tr><td><code>$inc</code></td><td>Increment number</td></tr>
+      <tr><td><code>$push</code></td><td>Append to array</td></tr>
+      <tr><td><code>$pull</code></td><td>Remove from array</td></tr>
+      <tr><td><code>$addToSet</code></td><td>Add to array if not exists</td></tr>
+      <tr><td><code>$rename</code></td><td>Rename a field</td></tr>
+    </table>
+  </div>
+
+  <div id="c4" class="tab-content">
+    <h4>DELETE — Remove Documents</h4>
+    <div class="code-block">// Delete one
+db.users.deleteOne({ name: "Bob" })
+
+// Delete many
+db.users.deleteMany({ status: "inactive" })
+
+// Delete all (dangerous!)
+db.users.deleteMany({})
+
+// Drop collection (faster than deleteMany({}) for large collections)
+db.users.drop()</div>
+  </div>
+</section>
+
+<section id="dbmgmt">
+  <h2>4️⃣ Database & Collection Management</h2>
+
+  <h3>Database Operations</h3>
+  <div class="code-block">// List all databases
+show dbs
+// (or show databases)
+
+// Switch to / create database
+use mydb
+// (DB is actually created upon first data insertion)
+
+// Show current database
+db
+
+// Drop current database (irreversible!)
+db.dropDatabase()</div>
+
+  <h3>Collection Operations</h3>
+  <div class="code-block">// List collections
+show collections
+
+// Create collection explicitly
+db.createCollection("users")
+
+// Create with options (capped, max size)
+db.createCollection("logs", { capped: true, size: 100000, max: 1000 })
+
+// Drop collection
+db.users.drop()
+
+// Rename collection
+db.users.renameCollection("active_users")</div>
+
+  <div class="insight"><strong>💡 Implicit creation:</strong> If you <code>use newdb</code> and then <code>db.newcoll.insertOne(...)</code>, MongoDB auto-creates both the database and collection.</div>
+
+  <div class="warning"><strong>⚠️ Caution:</strong> <code>db.dropDatabase()</code> is irreversible! Always verify you're on the right DB with <code>db</code> first.</div>
+</section>
+
+<section id="find">
+  <h2>5️⃣ Finding Documents — Detailed</h2>
+
+  <h3>Basic find()</h3>
+  <div class="code-block">// All docs (returns cursor)
+db.users.find()
+
+// Pretty-print
+db.users.find().pretty()
+
+// First matching doc
+db.users.findOne({ name: "Alice" })</div>
+
+  <h3>Filter (Query Document)</h3>
+  <div class="code-block">// Exact match
+db.users.find({ status: "active" })
+
+// Multiple conditions (implicit AND)
+db.users.find({ status: "active", age: { $gt: 18 } })
+
+// Explicit AND
+db.users.find({ $and: [{ status: "active" }, { age: { $gt: 18 } }] })
+
+// OR
+db.users.find({ $or: [{ status: "active" }, { vip: true }] })
+
+// Array contains
+db.users.find({ tags: "admin" })
+
+// Nested field
+db.users.find({ "address.city": "Vellore" })</div>
+
+  <h3>Projection (Select Fields)</h3>
+  <div class="code-block">// Include only name and email
+db.users.find({}, { name: 1, email: 1 })
+
+// Exclude _id
+db.users.find({}, { name: 1, email: 1, _id: 0 })
+
+// Exclude specific field
+db.users.find({}, { password: 0 })</div>
+
+  <h3>Sort, Limit, Skip</h3>
+  <div class="code-block">// Sort ascending
+db.users.find().sort({ age: 1 })
+
+// Sort descending
+db.users.find().sort({ age: -1 })
+
+// Limit + skip (pagination)
+db.users.find().sort({ age: -1 }).skip(20).limit(10)
+// → Skip first 20, return next 10</div>
+
+  <h3>Common Query Operators</h3>
+  <div class="code-block">// Comparison
+db.users.find({ age: { $gt: 18, $lte: 65 } })
+
+// In a list
+db.users.find({ role: { $in: ["admin", "moderator"] } })
+
+// Not in
+db.users.find({ status: { $nin: ["deleted", "banned"] } })
+
+// Field exists
+db.users.find({ email: { $exists: true } })
+
+// Regex
+db.users.find({ name: { $regex: "^Al", $options: "i" } })
+
+// Array size
+db.users.find({ skills: { $size: 3 } })
+
+// Array element match
+db.users.find({ scores: { $elemMatch: { $gt: 80, $lt: 100 } } })</div>
+</section>
+
+<section id="aggregation">
+  <h2>6️⃣ Aggregation Pipeline</h2>
+
+  <p>The <strong>Aggregation Pipeline</strong> is MongoDB's powerful framework for data processing. Documents flow through a sequence of <strong>stages</strong>, each transforming them.</p>
+
+  <h3>Pipeline Concept</h3>
+  <div class="flow">
+    <div class="flow-box">$match</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">$group</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">$sort</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">$project</div>
+    <span class="arrow">→</span>
+    <div class="flow-box">$limit</div>
+  </div>
+
+  <h3>Common Stages</h3>
+  <table>
+    <tr><th>Stage</th><th>Purpose</th></tr>
+    <tr><td><code>$match</code></td><td>Filter documents (like find filter)</td></tr>
+    <tr><td><code>$group</code></td><td>Group by key + apply accumulators</td></tr>
+    <tr><td><code>$sort</code></td><td>Order results</td></tr>
+    <tr><td><code>$project</code></td><td>Reshape (select, rename, compute fields)</td></tr>
+    <tr><td><code>$limit</code> / <code>$skip</code></td><td>Pagination</td></tr>
+    <tr><td><code>$unwind</code></td><td>Deconstruct array → one doc per element</td></tr>
+    <tr><td><code>$lookup</code></td><td>Left outer join with another collection</td></tr>
+    <tr><td><code>$count</code></td><td>Count remaining documents</td></tr>
+  </table>
+
+  <h3>Accumulator Operators (in $group)</h3>
+  <table>
+    <tr><th>Operator</th><th>Purpose</th></tr>
+    <tr><td><code>$sum</code></td><td>Sum of values (use <code>$sum: 1</code> to count)</td></tr>
+    <tr><td><code>$avg</code></td><td>Average</td></tr>
+    <tr><td><code>$min</code> / <code>$max</code></td><td>Min/Max value</td></tr>
+    <tr><td><code>$first</code> / <code>$last</code></td><td>First/last value in group</td></tr>
+    <tr><td><code>$push</code></td><td>Array of all values</td></tr>
+    <tr><td><code>$addToSet</code></td><td>Array of unique values</td></tr>
+  </table>
+
+  <h3>Worked Examples</h3>
+
+  <h4>Example 1: Total quantity & avg price per item type</h4>
+  <div class="code-block">db.orders.aggregate([
+  { $match: { status: "completed" } },     // Stage 1: filter
+  { $group: {                              // Stage 2: group
+      _id: "$itemType",
+      totalQty: { $sum: "$quantity" },
+      avgPrice: { $avg: "$price" }
+  }}
+])</div>
+
+  <h4>Example 2: Top 5 customers by total spend</h4>
+  <div class="code-block">db.orders.aggregate([
+  { $group: {
+      _id: "$customer_id",
+      totalSpent: { $sum: "$amount" },
+      orderCount: { $sum: 1 }
+  }},
+  { $sort: { totalSpent: -1 } },
+  { $limit: 5 }
+])</div>
+
+  <h4>Example 3: Sales per month with projection</h4>
+  <div class="code-block">db.orders.aggregate([
+  { $group: {
+      _id: { year: { $year: "$date" }, month: { $month: "$date" } },
+      revenue: { $sum: "$amount" }
+  }},
+  { $project: {
+      _id: 0,
+      period: { $concat: [
+        { $toString: "$_id.year" }, "-",
+        { $toString: "$_id.month" }
+      ]},
+      revenue: 1
+  }},
+  { $sort: { period: 1 } }
+])</div>
+
+  <h4>Example 4: $unwind + $lookup (join)</h4>
+  <div class="code-block">db.orders.aggregate([
+  // Look up customer info
+  { $lookup: {
+      from: "customers",
+      localField: "customer_id",
+      foreignField: "_id",
+      as: "customer"
+  }},
+  { $unwind: "$customer" },  // flatten the array
+  { $project: {
+      orderId: "$_id",
+      customerName: "$customer.name",
+      amount: 1
+  }}
+])</div>
+</section>
+
+<section id="mr">
+  <h2>7️⃣ MapReduce in MongoDB</h2>
+
+  <p>MongoDB also supports <strong>MapReduce</strong> as an alternative aggregation method (older, more flexible but slower than aggregation pipeline).</p>
+
+  <h3>Two Phases</h3>
+  <div class="card-grid">
+    <div class="card"><h4>① Map</h4><p>Processes each input document. Emits one or more (key, value) pairs. Written in JavaScript.</p></div>
+    <div class="card"><h4>② Reduce</h4><p>Takes the key + list of values. Combines them. Produces final output. Also JavaScript.</p></div>
+  </div>
+
+  <h3>Example</h3>
+  <div class="code-block">db.orders.mapReduce(
+  // Map function
+  function() {
+    emit(this.customer_id, this.amount);
+  },
+  // Reduce function
+  function(key, values) {
+    return Array.sum(values);
+  },
+  {
+    out: "total_per_customer"  // output collection
+  }
+)</div>
+
+  <div class="insight"><strong>💡 When to use which?</strong>
+    <ul>
+      <li><strong>Aggregation Pipeline</strong> → faster, simpler, recommended for most cases</li>
+      <li><strong>MapReduce</strong> → only for complex custom aggregations not expressible via pipeline</li>
+    </ul>
+  </div>
+</section>
+
+<section id="indexes">
+  <h2>8️⃣ Indexes</h2>
+
+  <p><strong>Indexes</strong> are special data structures that store a small portion of data in an easy-to-traverse form. They <strong>dramatically speed up queries</strong>.</p>
+
+  <h3>Why Indexes Matter</h3>
+  <p>Without an index, MongoDB must scan EVERY document in the collection (collection scan). With an index, it jumps directly to matching documents.</p>
+
+  <h3>Automatic Index</h3>
+  <p>MongoDB automatically creates a unique index on <code>_id</code> for every collection.</p>
+
+  <h3>Index Types</h3>
+  <table>
+    <tr><th>Type</th><th>Use Case</th></tr>
+    <tr><td><strong>Single Field</strong></td><td>Index on one field</td></tr>
+    <tr><td><strong>Compound</strong></td><td>Index on multiple fields (order matters!)</td></tr>
+    <tr><td><strong>Multikey</strong></td><td>Index on array elements</td></tr>
+    <tr><td><strong>Text</strong></td><td>Full-text search on strings</td></tr>
+    <tr><td><strong>Geospatial</strong> (<code>2dsphere</code>, <code>2d</code>)</td><td>Location queries (proximity, geometry)</td></tr>
+    <tr><td><strong>Hashed</strong></td><td>For sharding via hash partitioning</td></tr>
+    <tr><td><strong>TTL</strong></td><td>Auto-delete documents after expiration</td></tr>
+  </table>
+
+  <h3>Creating Indexes</h3>
+  <div class="code-block">// Single field (ascending)
+db.users.createIndex({ email: 1 })
+
+// Single field (descending)
+db.users.createIndex({ created_at: -1 })
+
+// Compound index
+db.users.createIndex({ city: 1, age: -1 })
+
+// Unique index (no duplicates allowed)
+db.users.createIndex({ email: 1 }, { unique: true })
+
+// Text index
+db.products.createIndex({ name: "text", description: "text" })
+
+// Geospatial
+db.places.createIndex({ location: "2dsphere" })
+
+// TTL — auto-delete after 30 days
+db.sessions.createIndex({ created_at: 1 }, { expireAfterSeconds: 2592000 })</div>
+
+  <h3>Inspecting Indexes</h3>
+  <div class="code-block">// List indexes
+db.users.getIndexes()
+
+// Drop a specific index
+db.users.dropIndex("email_1")
+
+// Drop all indexes (except _id)
+db.users.dropIndexes()
+
+// Explain query (see if index is used)
+db.users.find({ email: "alice@example.com" }).explain("executionStats")</div>
+
+  <h3>Trade-offs</h3>
+  <div class="card-grid">
+    <div class="card" style="border-color:#27ae60">
+      <h4>✅ Pros</h4>
+      <ul>
+        <li>Massively faster reads / queries</li>
+        <li>Sort operations don't require in-memory sort</li>
+        <li>Unique indexes enforce data integrity</li>
+      </ul>
+    </div>
+    <div class="card" style="border-color:#e74c3c">
+      <h4>❌ Cons</h4>
+      <ul>
+        <li>Writes slower (must update index too)</li>
+        <li>Consumes additional disk space</li>
+        <li>Index for every query is overkill</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Index Strategy</h3>
+  <ul>
+    <li>Index fields used in <code>find</code> filters, <code>sort</code>, <code>$match</code></li>
+    <li>For compound indexes, put <strong>equality fields first</strong>, then sort, then range</li>
+    <li>Use <code>.explain()</code> to verify indexes are being used</li>
+    <li>Don't over-index — every write incurs cost</li>
+  </ul>
+</section>
+
+<section id="quiz">
+  <h2>🎯 15-Question Quiz</h2>
+
+  <div class="quiz"><p><strong>Q1.</strong> JSON object keys must be:</p><div class="quiz-option" onclick="qa(this,0)">Numbers</div><div class="quiz-option" onclick="qa(this,1)">Strings ✓</div><div class="quiz-option" onclick="qa(this,0)">Any data type</div></div>
+
+  <div class="quiz"><p><strong>Q2.</strong> CRUD stands for:</p><div class="quiz-option" onclick="qa(this,1)">Create, Read, Update, Delete ✓</div><div class="quiz-option" onclick="qa(this,0)">Copy, Replace, Update, Drop</div><div class="quiz-option" onclick="qa(this,0)">Cache, Read, Use, Delete</div></div>
+
+  <div class="quiz"><p><strong>Q3.</strong> Insert one document in MongoDB:</p><div class="quiz-option" onclick="qa(this,0)"><code>db.users.add({...})</code></div><div class="quiz-option" onclick="qa(this,1)"><code>db.users.insertOne({...})</code> ✓</div><div class="quiz-option" onclick="qa(this,0)"><code>db.users.create({...})</code></div></div>
+
+  <div class="quiz"><p><strong>Q4.</strong> Find docs where age > 25:</p><div class="quiz-option" onclick="qa(this,0)"><code>db.users.find({age > 25})</code></div><div class="quiz-option" onclick="qa(this,1)"><code>db.users.find({age: {$gt: 25}})</code> ✓</div><div class="quiz-option" onclick="qa(this,0)"><code>db.users.find({age = 25+})</code></div></div>
+
+  <div class="quiz"><p><strong>Q5.</strong> Update operator to increment a number:</p><div class="quiz-option" onclick="qa(this,0)"><code>$add</code></div><div class="quiz-option" onclick="qa(this,1)"><code>$inc</code> ✓</div><div class="quiz-option" onclick="qa(this,0)"><code>$set</code></div></div>
+
+  <div class="quiz"><p><strong>Q6.</strong> To delete database:</p><div class="quiz-option" onclick="qa(this,0)"><code>db.delete()</code></div><div class="quiz-option" onclick="qa(this,1)"><code>db.dropDatabase()</code> ✓</div><div class="quiz-option" onclick="qa(this,0)"><code>db.remove()</code></div></div>
+
+  <div class="quiz"><p><strong>Q7.</strong> Aggregation stage that filters:</p><div class="quiz-option" onclick="qa(this,1)"><code>$match</code> ✓</div><div class="quiz-option" onclick="qa(this,0)"><code>$filter</code></div><div class="quiz-option" onclick="qa(this,0)"><code>$where</code></div></div>
+
+  <div class="quiz"><p><strong>Q8.</strong> Count documents per group:</p><div class="quiz-option" onclick="qa(this,1)"><code>{$sum: 1}</code> ✓</div><div class="quiz-option" onclick="qa(this,0)"><code>{$count: 0}</code></div><div class="quiz-option" onclick="qa(this,0)"><code>{$avg: 1}</code></div></div>
+
+  <div class="quiz"><p><strong>Q9.</strong> Average:</p><div class="quiz-option" onclick="qa(this,0)"><code>$mean</code></div><div class="quiz-option" onclick="qa(this,1)"><code>$avg</code> ✓</div><div class="quiz-option" onclick="qa(this,0)"><code>$average</code></div></div>
+
+  <div class="quiz"><p><strong>Q10.</strong> What does $unwind do?</p><div class="quiz-option" onclick="qa(this,1)">Deconstructs array → one doc per element ✓</div><div class="quiz-option" onclick="qa(this,0)">Removes index</div><div class="quiz-option" onclick="qa(this,0)">Reverses sort</div></div>
+
+  <div class="quiz"><p><strong>Q11.</strong> $lookup performs:</p><div class="quiz-option" onclick="qa(this,1)">Left outer join with another collection ✓</div><div class="quiz-option" onclick="qa(this,0)">Index lookup</div><div class="quiz-option" onclick="qa(this,0)">Random sampling</div></div>
+
+  <div class="quiz"><p><strong>Q12.</strong> Create unique index:</p><div class="quiz-option" onclick="qa(this,1)"><code>createIndex({email: 1}, {unique: true})</code> ✓</div><div class="quiz-option" onclick="qa(this,0)"><code>createIndex({email: 1}, "unique")</code></div><div class="quiz-option" onclick="qa(this,0)"><code>createUniqueIndex({email})</code></div></div>
+
+  <div class="quiz"><p><strong>Q13.</strong> Indexes:</p><div class="quiz-option" onclick="qa(this,1)">Speed reads but slow down writes ✓</div><div class="quiz-option" onclick="qa(this,0)">Speed up everything</div><div class="quiz-option" onclick="qa(this,0)">Have no overhead</div></div>
+
+  <div class="quiz"><p><strong>Q14.</strong> Tool to import JSON files:</p><div class="quiz-option" onclick="qa(this,1)"><code>mongoimport</code> ✓</div><div class="quiz-option" onclick="qa(this,0)"><code>mongoload</code></div><div class="quiz-option" onclick="qa(this,0)"><code>mongoinsert</code></div></div>
+
+  <div class="quiz"><p><strong>Q15.</strong> findOne() returns:</p><div class="quiz-option" onclick="qa(this,0)">All matches</div><div class="quiz-option" onclick="qa(this,1)">First matching document (or null) ✓</div><div class="quiz-option" onclick="qa(this,0)">Count of matches</div></div>
+</section>
+
+<section id="summary">
+  <h2>📝 Summary & Exam Tips</h2>
+
+  <div class="summary">
+    <h3>🎯 Key Takeaways</h3>
+    <ul>
+      <li><strong>JSON</strong>: text format with String, Number, Bool, Array, Object, null types</li>
+      <li><strong>CRUD</strong>: insertOne/Many, find/findOne, updateOne/Many, deleteOne/Many</li>
+      <li><strong>Query operators</strong>: $gt, $lt, $in, $and, $or, $exists, $regex</li>
+      <li><strong>Update operators</strong>: $set, $inc, $push, $pull, $addToSet, $unset</li>
+      <li><strong>Aggregation pipeline</strong>: $match → $group → $sort → $project → $limit (any combination)</li>
+      <li><strong>Accumulators</strong>: $sum, $avg, $min, $max, $push, $addToSet</li>
+      <li><strong>MapReduce</strong>: Map (emit) + Reduce (combine) — JS functions, slower than pipeline</li>
+      <li><strong>Indexes</strong>: single, compound, multikey, text, geospatial, hashed, TTL</li>
+      <li><strong>Trade-off</strong>: indexes accelerate reads but slow writes & cost storage</li>
+    </ul>
+  </div>
+
+  <div class="warning"><strong>📌 Common Exam Pitfalls:</strong>
+    <ul>
+      <li>Using <code>{age > 25}</code> instead of <code>{age: {$gt: 25}}</code> (MongoDB syntax!)</li>
+      <li>Forgetting <code>updateOne</code> requires update operators ($set, etc.) — not raw object</li>
+      <li>Confusing $set (modify field) vs $inc (add to number)</li>
+      <li>Thinking aggregation is just for SQL-like SELECT — it can transform, join, even output to collections</li>
+      <li>Over-indexing: every index costs writes & storage</li>
+    </ul>
+  </div>
+
+  <p style="text-align:center;margin-top:30px"><a href="Week_07_MongoDB.html" style="color:var(--primary);font-weight:bold">← Week 7</a> | <a href="index.html" style="color:var(--primary);font-weight:bold">Index</a> | <a href="Week_09_Cassandra.html" style="color:var(--primary);font-weight:bold">Week 9 → Cassandra</a></p>
+</section>
+
+</main>
+
+<footer><p>📚 Week 8 of 10 — Big Data Analytics</p></footer>
+
+<script>
+function g(id,btn){document.getElementById(id).scrollIntoView({behavior:'smooth'});document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function dark(){document.body.classList.toggle('dark');try{localStorage.setItem('bda_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}}
+if(localStorage.getItem('bda_dark')==='1')document.body.classList.add('dark');
+function qa(el,c){el.parentElement.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('correct','wrong'));el.classList.add(c?'correct':'wrong')}
+function tab(e,id){const p=e.target.parentElement.parentElement;p.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));p.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));e.target.classList.add('active');document.getElementById(id).classList.add('active')}
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

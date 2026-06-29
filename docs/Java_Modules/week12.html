@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 12 – Java RMI</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d2e; --accent:#6c63ff; --accent2:#00d4aa; --yellow:#f7c948; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --code:#2d3748; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+  header { background:linear-gradient(135deg,#6c63ff,#00d4aa); padding:3rem 2rem; text-align:center; }
+  header h1 { font-size:2.5rem; font-weight:800; color:#fff; }
+  header p { font-size:1.1rem; color:rgba(255,255,255,0.85); margin-top:0.5rem; }
+  nav { background:var(--card); border-bottom:2px solid var(--accent); display:flex; flex-wrap:wrap; gap:0.25rem; padding:0.75rem 1rem; position:sticky; top:0; z-index:100; }
+  nav a { color:var(--muted); text-decoration:none; padding:0.4rem 1rem; border-radius:6px; font-size:0.9rem; transition:all 0.2s; }
+  nav a:hover, nav a.active { background:var(--accent); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:2rem 1.5rem; }
+  section { margin-bottom:3rem; }
+  h2 { font-size:1.8rem; color:var(--accent); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  h3 { font-size:1.2rem; color:var(--accent2); margin:1.2rem 0 0.6rem; }
+  h4 { font-size:1rem; color:var(--yellow); margin:0.8rem 0 0.3rem; }
+  p { margin-bottom:0.8rem; color:var(--text); }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .highlight { border-left:4px solid var(--accent); background:rgba(108,99,255,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight2 { border-left:4px solid var(--accent2); background:rgba(0,212,170,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight3 { border-left:4px solid var(--yellow); background:rgba(247,201,72,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+  th { background:var(--accent); color:#fff; padding:0.7rem 1rem; text-align:left; }
+  td { padding:0.6rem 1rem; border-bottom:1px solid var(--border); }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.03); }
+  ul,ol { padding-left:1.5rem; margin-bottom:0.8rem; }
+  li { margin-bottom:0.3rem; }
+  .tag { background:var(--accent); color:#fff; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag2 { background:var(--accent2); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag3 { background:var(--yellow); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  svg text { font-family:'Segoe UI',sans-serif; }
+  .step { display:flex; gap:1rem; align-items:flex-start; margin-bottom:0.8rem; }
+  .step-num { background:var(--accent); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:700px) { .two-col { grid-template-columns:1fr; } header h1 { font-size:1.8rem; } }
+  .interactive-box { background:var(--card); border:2px solid var(--accent); border-radius:12px; padding:1.5rem; margin:1.5rem 0; }
+  input[type=number],input[type=text],select { background:var(--code); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:0.4rem 0.8rem; font-size:0.95rem; margin-bottom:0.5rem; }
+  button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:0.6rem 1.5rem; cursor:pointer; font-size:0.95rem; font-weight:600; transition:all 0.2s; }
+  button:hover { opacity:0.85; transform:translateY(-1px); }
+  button.btn2 { background:var(--accent2); color:#000; }
+  button.btn3 { background:var(--yellow); color:#000; }
+  .result-box { background:rgba(0,212,170,0.1); border:1px solid var(--accent2); border-radius:8px; padding:1rem; margin-top:1rem; font-weight:600; color:var(--accent2); min-height:2.5rem; }
+  .error-box { background:rgba(255,80,80,0.1); border:1px solid #ff5050; border-radius:8px; padding:1rem; margin-top:1rem; font-weight:600; color:#ff8080; }
+  /* Code cell */
+  .code-cell { background:#12151f; border:1px solid var(--border); border-radius:10px; margin:1rem 0; overflow:hidden; }
+  .code-header { background:#1e2235; display:flex; justify-content:space-between; align-items:center; padding:0.5rem 1rem; border-bottom:1px solid var(--border); }
+  .code-lang { font-size:0.78rem; color:var(--yellow); font-weight:700; letter-spacing:0.05em; }
+  .run-btn { background:var(--accent2); color:#000; border:none; border-radius:6px; padding:0.3rem 0.9rem; font-size:0.82rem; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:0.4rem; transition:opacity 0.2s; }
+  .run-btn:hover { opacity:0.85; }
+  .run-btn::before { content:'▶'; font-size:0.7rem; }
+  pre.code-body { padding:1rem 1.2rem; margin:0; overflow-x:auto; font-size:0.88rem; line-height:1.6; background:transparent; }
+  .code-output { background:#0a0d14; border-top:1px solid var(--border); padding:0.7rem 1.2rem; display:none; }
+  .code-output.show { display:block; }
+  .code-output-label { font-size:0.75rem; color:var(--muted); margin-bottom:0.3rem; }
+  .code-output pre { color:#4ade80; font-size:0.87rem; margin:0; }
+  /* Syntax highlight */
+  .kw { color:#c678dd; font-weight:600; }
+  .cls { color:#e5c07b; }
+  .fn { color:#61afef; }
+  .str { color:#98c379; }
+  .cmt { color:#5c6370; font-style:italic; }
+  .num { color:#d19a66; }
+  .ann { color:#e06c75; }
+  /* Layer diagram */
+  .layer-diag { width:100%; overflow-x:auto; }
+  /* RMI flow animation */
+  #rmi-canvas-wrap { position:relative; width:100%; overflow:hidden; }
+  .flow-step { opacity:0; transition:opacity 0.4s, transform 0.4s; transform:translateX(-10px); }
+  .flow-step.visible { opacity:1; transform:translateX(0); }
+  /* Grid 3 */
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+  @media(max-width:700px) { .grid3 { grid-template-columns:1fr; } }
+  .grid4 { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+  @media(max-width:800px) { .grid4 { grid-template-columns:1fr 1fr; } }
+  /* Number badge for programs */
+  .prog-badge { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:50%; font-weight:800; font-size:0.9rem; flex-shrink:0; }
+  .prog-row { display:flex; align-items:center; gap:1rem; margin-bottom:1rem; }
+  /* Marshal diagram */
+  .marshal-row { display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; margin:0.8rem 0; }
+  .marshal-box { background:var(--code); border-radius:8px; padding:0.5rem 1rem; font-size:0.9rem; text-align:center; }
+  .marshal-arrow { color:var(--accent); font-size:1.2rem; }
+  /* calc interactive */
+  #calc-server-status { display:inline-flex; align-items:center; gap:0.5rem; font-weight:700; }
+  .status-dot { width:10px; height:10px; border-radius:50%; background:#ff5050; display:inline-block; }
+  .status-dot.on { background:#4ade80; box-shadow:0 0 8px #4ade80; animation:pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  /* animation path */
+  .anim-wrap { position:relative; height:120px; margin:1rem 0; }
+  .anim-node { position:absolute; background:var(--code); border-radius:8px; padding:0.4rem 0.8rem; font-size:0.82rem; font-weight:700; text-align:center; top:50%; transform:translateY(-50%); white-space:nowrap; }
+  .anim-packet { position:absolute; width:14px; height:14px; border-radius:50%; background:var(--accent); top:50%; transform:translateY(-50%); display:none; box-shadow:0 0 8px var(--accent); }
+  .anim-label { position:absolute; font-size:0.72rem; color:var(--muted); white-space:nowrap; }
+  /* tabs */
+  .tab-bar { display:flex; gap:0.3rem; margin-bottom:-1px; flex-wrap:wrap; }
+  .tab { padding:0.5rem 1.2rem; border-radius:8px 8px 0 0; border:1px solid var(--border); border-bottom:none; cursor:pointer; font-size:0.88rem; background:var(--bg); color:var(--muted); transition:all 0.2s; }
+  .tab.active { background:var(--card); color:var(--text); border-color:var(--accent); border-bottom:1px solid var(--card); }
+  .tab-content { display:none; border:1px solid var(--accent); border-radius:0 8px 8px 8px; padding:1.2rem; background:var(--card); }
+  .tab-content.active { display:block; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Week 12: Java RMI</h1>
+  <p>Remote Method Invocation &nbsp;·&nbsp; Stubs &amp; Skeletons &nbsp;·&nbsp; Registry &nbsp;·&nbsp; Marshalling &nbsp;·&nbsp; Distributed Computing</p>
+</header>
+
+<nav>
+  <a href="#intro" class="active">Introduction</a>
+  <a href="#architecture">Architecture</a>
+  <a href="#stub">Stub</a>
+  <a href="#skeleton">Skeleton</a>
+  <a href="#registry">Registry</a>
+  <a href="#naming">Naming Class</a>
+  <a href="#programs">4 Programs</a>
+  <a href="#hello">Hello RMI</a>
+  <a href="#calculator">Calculator</a>
+  <a href="#comparison">RMI vs Sockets</a>
+  <a href="#working">How RMI Works</a>
+  <a href="#xn-extra">🔢 Numericals</a>
+  <a href="#xn-mcq">📝 MCQs</a>
+</nav>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 1: Introduction -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section id="intro">
+  <h2>1. Introduction to RMI</h2>
+  <div class="card">
+    <div class="highlight">
+      <strong>Definition:</strong> Java RMI (Remote Method Invocation) is a Java API that allows an object running in one Java Virtual Machine (JVM) to invoke methods on an object running in another JVM — on the same machine or across a network.
+    </div>
+
+    <p>Before RMI, distributed computing in Java required developers to manually handle low-level socket programming, serialization, and protocol design. RMI abstracts all of that away, making remote calls look almost identical to local method calls.</p>
+
+    <h3>Core Idea</h3>
+    <div class="two-col">
+      <div class="card" style="background:#1e1b3a; border-color:#6c63ff;">
+        <h4>Machine A (Client)</h4>
+        <p>Has a <strong>stub</strong> — a proxy object that looks like the real remote object. When a method is called on the stub, it secretly packages the call and sends it over the network.</p>
+      </div>
+      <div class="card" style="background:#0d2b1e; border-color:#00d4aa;">
+        <h4>Machine B (Server)</h4>
+        <p>Has the <strong>real object</strong>. A <strong>skeleton</strong> receives the packaged call, unpacks it, invokes the actual method, and sends results back.</p>
+      </div>
+    </div>
+
+    <h3>Key Facts</h3>
+    <ul>
+      <li>Package: <code style="background:var(--code); padding:0.1rem 0.4rem; border-radius:4px; color:var(--yellow);">java.rmi</code></li>
+      <li>The remote server object must be <strong>publicly accessible</strong></li>
+      <li>Used for client-server communication in distributed Java applications</li>
+      <li>Parameters and return values are transferred via <strong>serialization</strong> (marshalling)</li>
+      <li>Default port: <strong>1099</strong> (RMI Registry)</li>
+    </ul>
+
+    <h3>RMI in Context</h3>
+    <div class="grid3">
+      <div class="card" style="border-top:4px solid var(--accent); text-align:center;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">🖥️</div>
+        <h4 style="margin:0 0 0.4rem;">Local Call</h4>
+        <p style="font-size:0.88rem; margin:0;">Object A calls method on Object B in <em>same JVM</em>. Instantaneous, no network.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent2); text-align:center;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">🌐</div>
+        <h4 style="margin:0 0 0.4rem;">RMI Call</h4>
+        <p style="font-size:0.88rem; margin:0;">Object A calls method on Object B in <em>different JVM</em>. Transparent over network.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--yellow); text-align:center;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">🔌</div>
+        <h4 style="margin:0 0 0.4rem;">Socket Call</h4>
+        <p style="font-size:0.88rem; margin:0;">Raw byte streams. Developer manages <em>all</em> protocol details manually.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 2: Architecture -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section id="architecture">
+  <h2>2. RMI Architecture</h2>
+  <div class="card">
+    <p>RMI is built on four distinct layers. Each layer has a well-defined responsibility, allowing the system to be modular and replaceable.</p>
+
+    <!-- SVG Architecture Diagram -->
+    <div class="layer-diag">
+      <svg viewBox="0 0 760 320" width="100%" style="max-width:760px; display:block; margin:0 auto;">
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#6c63ff"/>
+          </marker>
+          <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#00d4aa"/>
+          </marker>
+        </defs>
+
+        <!-- Layer 1: Application Layer -->
+        <rect x="10" y="10" width="740" height="60" rx="10" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2"/>
+        <text x="380" y="30" fill="#6c63ff" font-size="13" font-weight="bold" text-anchor="middle">Application Layer</text>
+        <!-- Client App -->
+        <rect x="30" y="38" width="110" height="24" rx="6" fill="#2d3748"/>
+        <text x="85" y="54" fill="#e2e8f0" font-size="11" text-anchor="middle">Client Application</text>
+        <!-- Server App -->
+        <rect x="620" y="38" width="110" height="24" rx="6" fill="#2d3748"/>
+        <text x="675" y="54" fill="#e2e8f0" font-size="11" text-anchor="middle">Server Application</text>
+        <text x="380" y="58" fill="#94a3b8" font-size="10" text-anchor="middle">Actual machines doing business logic</text>
+
+        <!-- Layer 2: Proxy/Stub-Skeleton Layer -->
+        <rect x="10" y="85" width="740" height="60" rx="10" fill="#1a1d2e" stroke="#f7c948" stroke-width="2"/>
+        <text x="380" y="105" fill="#f7c948" font-size="13" font-weight="bold" text-anchor="middle">Proxy Layer (Stub / Skeleton)</text>
+        <rect x="30" y="112" width="80" height="24" rx="6" fill="#2d3748"/>
+        <text x="70" y="128" fill="#e5c07b" font-size="11" text-anchor="middle">Stub</text>
+        <rect x="650" y="112" width="80" height="24" rx="6" fill="#2d3748"/>
+        <text x="690" y="128" fill="#e5c07b" font-size="11" text-anchor="middle">Skeleton</text>
+        <text x="380" y="133" fill="#94a3b8" font-size="10" text-anchor="middle">Proxy objects that manage marshalling &amp; communication</text>
+
+        <!-- Layer 3: Remote Reference Layer -->
+        <rect x="10" y="160" width="740" height="60" rx="10" fill="#1a1d2e" stroke="#00d4aa" stroke-width="2"/>
+        <text x="380" y="185" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">Remote Reference Layer</text>
+        <text x="380" y="205" fill="#94a3b8" font-size="10" text-anchor="middle">Manages remote object references · Handles unicast/multicast semantics · Activation</text>
+
+        <!-- Layer 4: Transport Layer -->
+        <rect x="10" y="235" width="740" height="60" rx="10" fill="#1a1d2e" stroke="#c678dd" stroke-width="2"/>
+        <text x="380" y="260" fill="#c678dd" font-size="13" font-weight="bold" text-anchor="middle">Transport Layer (TCP/IP)</text>
+        <text x="380" y="280" fill="#94a3b8" font-size="10" text-anchor="middle">Establishes and manages TCP connections · Handles routing · Low-level data transport</text>
+
+        <!-- Arrows between layers -->
+        <line x1="380" y1="70" x2="380" y2="84" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#arr)"/>
+        <line x1="380" y1="145" x2="380" y2="159" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#arr)"/>
+        <line x1="380" y1="220" x2="380" y2="234" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <!-- RMI System bracket -->
+        <rect x="0" y="0" width="6" height="300" rx="3" fill="none" stroke="#6c63ff" stroke-width="1.5"/>
+        <rect x="754" y="0" width="6" height="300" rx="3" fill="none" stroke="#6c63ff" stroke-width="1.5"/>
+        <text x="380" y="312" fill="#6c63ff" font-size="11" text-anchor="middle" font-weight="bold">RMI System</text>
+      </svg>
+    </div>
+
+    <h3>Layer Explanations</h3>
+    <div class="grid4">
+      <div class="card" style="border-top:4px solid var(--accent);">
+        <h4 style="margin-top:0;">Application Layer</h4>
+        <p style="font-size:0.88rem;">The actual client and server programs written by developers. Client calls methods; server implements them.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--yellow);">
+        <h4 style="margin-top:0;">Stub / Skeleton</h4>
+        <p style="font-size:0.88rem;">Proxy objects. Stub is on the client, Skeleton on the server. They handle marshalling/unmarshalling.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent2);">
+        <h4 style="margin-top:0;">Remote Reference</h4>
+        <p style="font-size:0.88rem;">Manages the lifecycle of remote object references. Decides <em>how</em> calls are delivered (one-to-one, one-to-many).</p>
+      </div>
+      <div class="card" style="border-top:4px solid #c678dd;">
+        <h4 style="margin-top:0;">Transport Layer</h4>
+        <p style="font-size:0.88rem;">Raw TCP/IP socket management. Sets up connections, routes packets, handles failures at the network level.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 3: Stub -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section id="stub">
+  <h2>3. Stub (Client Side)</h2>
+  <div class="card">
+    <div class="highlight">
+      A <strong>Stub</strong> is a client-side proxy/representative of the remote object. From the client's perspective, it looks and behaves exactly like the real object — but under the hood it forwards every call over the network.
+    </div>
+
+    <p>When the client calls a method on the stub, the following sequence occurs:</p>
+
+    <div class="step"><div class="step-num">1</div><div><strong>Initiate Connection</strong> — The stub opens (or reuses) a TCP connection to the remote JVM where the real object lives.</div></div>
+    <div class="step"><div class="step-num">2</div><div><strong>Marshal Parameters</strong> — Arguments are serialized into a byte stream (<em>marshalling</em>). Primitive types are encoded directly; objects must implement <code style="background:var(--code);padding:0.1rem 0.4rem;border-radius:4px;color:var(--yellow);">Serializable</code>.</div></div>
+    <div class="step"><div class="step-num">3</div><div><strong>Send &amp; Wait</strong> — The marshalled data is sent to the skeleton. The stub thread blocks, waiting for a response.</div></div>
+    <div class="step"><div class="step-num">4</div><div><strong>Unmarshal Return Value</strong> — When the skeleton sends back the result, the stub deserializes the byte stream back into a Java object (<em>unmarshalling</em>).</div></div>
+    <div class="step"><div class="step-num">5</div><div><strong>Return to Caller</strong> — The deserialized return value (or exception) is handed back to the client code as if it came from a local method.</div></div>
+
+    <div class="highlight2">
+      <strong>Key insight:</strong> The stub implements the same <em>Remote Interface</em> as the real object. This is how the client code remains completely unaware that the object is remote.
+    </div>
+
+    <h3>Marshalling Visualized</h3>
+    <div class="marshal-row">
+      <div class="marshal-box" style="border:1px solid var(--accent); color:var(--accent);">Java Object<br><small>int a=20, int b=10</small></div>
+      <div class="marshal-arrow">→</div>
+      <div class="marshal-box" style="border:1px solid var(--yellow); color:var(--yellow);">Serialized Bytes<br><small>0x00 0x14 0x00 0x0A ...</small></div>
+      <div class="marshal-arrow">→</div>
+      <div class="marshal-box" style="border:1px solid var(--accent2); color:var(--accent2);">TCP Stream<br><small>Network Transport</small></div>
+      <div class="marshal-arrow">→</div>
+      <div class="marshal-box" style="border:1px solid #c678dd; color:#c678dd;">Deserialized<br><small>int result=10</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 4: Skeleton -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section id="skeleton">
+  <h2>4. Skeleton (Server Side)</h2>
+  <div class="card">
+    <div class="highlight">
+      A <strong>Skeleton</strong> is the server-side counterpart to the stub. It acts as a gateway into the real remote object — receiving calls from the stub, dispatching them to the actual implementation, and sending results back.
+    </div>
+
+    <p>The skeleton's responsibilities in order:</p>
+
+    <div class="step"><div class="step-num">1</div><div><strong>Receive Incoming Data</strong> — The skeleton listens on a TCP port for incoming marshalled calls from any connected stub.</div></div>
+    <div class="step"><div class="step-num">2</div><div><strong>Unmarshal Parameters</strong> — The byte stream is deserialized back into Java types (integers, strings, objects, etc.).</div></div>
+    <div class="step"><div class="step-num">3</div><div><strong>Invoke Actual Method</strong> — The skeleton calls the <em>real</em> method on the server-side implementation object with the deserialized parameters.</div></div>
+    <div class="step"><div class="step-num">4</div><div><strong>Marshal Result or Exception</strong> — The return value (or any thrown exception) is serialized into bytes.</div></div>
+    <div class="step"><div class="step-num">5</div><div><strong>Send Back to Stub</strong> — The serialized response is transmitted back to the client's stub over the same TCP connection.</div></div>
+
+    <div class="two-col" style="margin-top:1rem;">
+      <div class="card" style="background:#1e1b3a;">
+        <h4>In Java 1.1</h4>
+        <p style="font-size:0.88rem;">Skeletons were generated as separate <code style="color:var(--yellow);">_Skel.class</code> files by the <strong>rmic</strong> compiler. You had to run <code style="color:var(--yellow);">rmic MyImpl</code> explicitly.</p>
+      </div>
+      <div class="card" style="background:#0d2b1e;">
+        <h4>Java 1.2+ (Modern RMI)</h4>
+        <p style="font-size:0.88rem;">Skeleton logic was moved into the RMI runtime itself via reflection. No need to run rmic — skeleton behavior is automatic.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 5: RMI Registry -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section id="registry">
+  <h2>5. RMI Registry</h2>
+  <div class="card">
+    <p>The RMI Registry is a simple name server — a phone book for remote objects. Before a client can call a remote object, it must first <em>find</em> it. The registry enables this discovery.</p>
+
+    <!-- SVG Registry Diagram -->
+    <svg viewBox="0 0 680 200" width="100%" style="max-width:680px; display:block; margin:1rem auto;">
+      <defs>
+        <marker id="ra" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#6c63ff"/>
+        </marker>
+        <marker id="ra2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#00d4aa"/>
+        </marker>
+        <marker id="ra3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#f7c948"/>
+        </marker>
+      </defs>
+
+      <!-- Client box -->
+      <rect x="20" y="70" width="120" height="60" rx="10" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2"/>
+      <text x="80" y="96" fill="#6c63ff" font-size="13" font-weight="bold" text-anchor="middle">Client</text>
+      <text x="80" y="114" fill="#94a3b8" font-size="10" text-anchor="middle">Machine A</text>
+
+      <!-- Registry box -->
+      <rect x="270" y="30" width="140" height="60" rx="10" fill="#1a1d2e" stroke="#f7c948" stroke-width="2"/>
+      <text x="340" y="56" fill="#f7c948" font-size="13" font-weight="bold" text-anchor="middle">RMI Registry</text>
+      <text x="340" y="76" fill="#94a3b8" font-size="10" text-anchor="middle">localhost:1099</text>
+
+      <!-- Server box -->
+      <rect x="540" y="70" width="120" height="60" rx="10" fill="#1a1d2e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="600" y="96" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">Server</text>
+      <text x="600" y="114" fill="#94a3b8" font-size="10" text-anchor="middle">Machine B</text>
+
+      <!-- Server → Registry (rebind) -->
+      <path d="M540,90 Q430,30 410,60" stroke="#00d4aa" fill="none" stroke-width="2" marker-end="url(#ra2)" stroke-dasharray="5,3"/>
+      <text x="475" y="42" fill="#00d4aa" font-size="10" text-anchor="middle">rebind("Calculator", obj)</text>
+
+      <!-- Client → Registry (lookup) -->
+      <path d="M140,90 Q200,50 270,60" stroke="#6c63ff" fill="none" stroke-width="2" marker-end="url(#ra)"/>
+      <text x="195" y="58" fill="#6c63ff" font-size="10" text-anchor="middle">lookup("Calculator")</text>
+
+      <!-- Client → Server (direct call) -->
+      <path d="M140,110 Q340,170 540,110" stroke="#f7c948" fill="none" stroke-width="2" marker-end="url(#ra3)"/>
+      <text x="340" y="175" fill="#f7c948" font-size="10" text-anchor="middle">Direct Remote Method Call (after lookup)</text>
+
+      <!-- Registry returns stub -->
+      <path d="M270,75 Q220,80 160,92" stroke="#94a3b8" fill="none" stroke-width="1.5" marker-end="url(#ra)" stroke-dasharray="4,3"/>
+      <text x="210" y="92" fill="#94a3b8" font-size="9" text-anchor="middle">returns stub</text>
+    </svg>
+
+    <h3>How the Registry Works</h3>
+    <div class="step"><div class="step-num">1</div><div><strong>Server starts up</strong> and creates (or locates) the registry on port 1099.</div></div>
+    <div class="step"><div class="step-num">2</div><div><strong>Server registers</strong> its remote object: <code style="background:var(--code);padding:0.1rem 0.5rem;border-radius:4px;color:var(--yellow);">registry.rebind("Calculator", new CalculatorImpl())</code></div></div>
+    <div class="step"><div class="step-num">3</div><div><strong>Client looks up</strong> the object by name: <code style="background:var(--code);padding:0.1rem 0.5rem;border-radius:4px;color:var(--yellow);">Naming.lookup("//localhost/Calculator")</code></div></div>
+    <div class="step"><div class="step-num">4</div><div><strong>Registry returns a stub</strong> reference to the client.</div></div>
+    <div class="step"><div class="step-num">5</div><div><strong>Client calls methods</strong> directly on the stub — the registry is no longer involved.</div></div>
+
+    <div class="highlight3">
+      <strong>Important:</strong> The registry acts as a one-time broker. Once the client has the stub, all subsequent method calls go directly from client stub to server skeleton — bypassing the registry entirely.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 6: Naming Class -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section id="naming">
+  <h2>6. The Naming Class</h2>
+  <div class="card">
+    <p>The <code style="background:var(--code);padding:0.1rem 0.5rem;border-radius:4px;color:var(--yellow);">java.rmi.Naming</code> class provides static methods to interact with the RMI registry using URL-style names.</p>
+
+    <table>
+      <tr>
+        <th>Method</th>
+        <th>Signature</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><span class="tag">bind()</span></td>
+        <td><code style="color:var(--accent2);">bind(String name, Remote obj)</code></td>
+        <td>Binds a name to a remote object. Throws <code>AlreadyBoundException</code> if the name is taken.</td>
+      </tr>
+      <tr>
+        <td><span class="tag2">rebind()</span></td>
+        <td><code style="color:var(--accent2);">rebind(String name, Remote obj)</code></td>
+        <td>Binds or <em>replaces</em> an existing binding. Safe to call even if name is already bound.</td>
+      </tr>
+      <tr>
+        <td><span class="tag3">lookup()</span></td>
+        <td><code style="color:var(--yellow);">lookup(String name) : Remote</code></td>
+        <td>Returns the stub for a named remote object. Used by clients.</td>
+      </tr>
+      <tr>
+        <td><span class="tag">unbind()</span></td>
+        <td><code style="color:var(--accent2);">unbind(String name)</code></td>
+        <td>Removes a name-to-object binding from the registry.</td>
+      </tr>
+      <tr>
+        <td><span class="tag2">list()</span></td>
+        <td><code style="color:var(--accent2);">list(String host) : String[]</code></td>
+        <td>Returns an array of all names currently registered in the registry.</td>
+      </tr>
+    </table>
+
+    <h3>URL Format</h3>
+    <div style="background:var(--code); border-radius:8px; padding:1rem 1.5rem; font-family:monospace; color:var(--yellow); margin:1rem 0; font-size:1rem;">
+      rmi://<span style="color:#00d4aa;">hostname</span>:<span style="color:#c678dd;">port</span>/<span style="color:#e2e8f0;">objectName</span>
+      <br><br>
+      <span style="color:#5c6370;">// Examples:</span><br>
+      <span style="color:#98c379;">"//localhost/Calculator"</span>  <span style="color:#5c6370;">// port defaults to 1099</span><br>
+      <span style="color:#98c379;">"//192.168.1.10:1099/Hi"</span>  <span style="color:#5c6370;">// explicit IP and port</span>
+    </div>
+
+    <div class="highlight2">
+      <strong>bind() vs rebind():</strong> Always prefer <code>rebind()</code> on the server. If you restart your server and use <code>bind()</code>, it throws <code>AlreadyBoundException</code> because the old binding still exists. <code>rebind()</code> simply replaces the old one.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 7: Four Required Programs -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section id="programs">
+  <h2>7. Four Required Programs</h2>
+  <div class="card">
+    <p>Every RMI application consists of exactly <strong>four components</strong>. Understanding the role of each is essential before writing any code.</p>
+
+    <div class="prog-row">
+      <div class="prog-badge" style="background:var(--accent);">1</div>
+      <div>
+        <h4 style="margin:0;">Remote Interface</h4>
+        <p style="margin:0.2rem 0 0; font-size:0.93rem;">Declares the methods that can be called remotely. Must <strong>extend</strong> <code style="background:var(--code);padding:0.1rem 0.4rem;border-radius:4px;color:var(--yellow);">java.rmi.Remote</code>. Every declared method must <strong>throw</strong> <code style="background:var(--code);padding:0.1rem 0.4rem;border-radius:4px;color:var(--yellow);">RemoteException</code>. This interface is shared between client and server.</p>
+      </div>
+    </div>
+
+    <div class="prog-row">
+      <div class="prog-badge" style="background:var(--accent2); color:#000;">2</div>
+      <div>
+        <h4 style="margin:0;">Implementation Class</h4>
+        <p style="margin:0.2rem 0 0; font-size:0.93rem;">The actual server-side object. Must <strong>extend</strong> <code style="background:var(--code);padding:0.1rem 0.4rem;border-radius:4px;color:var(--yellow);">UnicastRemoteObject</code> and <strong>implement</strong> the remote interface. Contains the real business logic. Constructor must throw <code style="background:var(--code);padding:0.1rem 0.4rem;border-radius:4px;color:var(--yellow);">RemoteException</code>.</p>
+      </div>
+    </div>
+
+    <div class="prog-row">
+      <div class="prog-badge" style="background:var(--yellow); color:#000;">3</div>
+      <div>
+        <h4 style="margin:0;">Server Program</h4>
+        <p style="margin:0.2rem 0 0; font-size:0.93rem;">Creates (or locates) the RMI registry using <code style="background:var(--code);padding:0.1rem 0.4rem;border-radius:4px;color:var(--yellow);">LocateRegistry.createRegistry(1099)</code>, instantiates the implementation object, and registers it with <code style="background:var(--code);padding:0.1rem 0.4rem;border-radius:4px;color:var(--yellow);">rebind()</code>. Must run before any client.</p>
+      </div>
+    </div>
+
+    <div class="prog-row">
+      <div class="prog-badge" style="background:#c678dd;">4</div>
+      <div>
+        <h4 style="margin:0;">Client Program</h4>
+        <p style="margin:0.2rem 0 0; font-size:0.93rem;">Calls <code style="background:var(--code);padding:0.1rem 0.4rem;border-radius:4px;color:var(--yellow);">Naming.lookup()</code> to get a stub reference, casts it to the remote interface type, then calls methods as if the object were local.</p>
+      </div>
+    </div>
+
+    <h3>Compilation &amp; Run Order</h3>
+    <div style="background:var(--code); border-radius:8px; padding:1rem 1.5rem; font-family:monospace; font-size:0.88rem; color:#e2e8f0; margin:1rem 0; line-height:2;">
+      <span style="color:#5c6370;"># 1. Compile all Java files</span><br>
+      <span style="color:#98c379;">javac</span> *.java<br>
+      <span style="color:#5c6370;"># 2. Start the RMI registry (separate terminal)</span><br>
+      <span style="color:#98c379;">rmiregistry</span> &amp;<br>
+      <span style="color:#5c6370;"># 3. Start the server</span><br>
+      <span style="color:#98c379;">java</span> CalServer<br>
+      <span style="color:#5c6370;"># 4. Run the client (separate terminal)</span><br>
+      <span style="color:#98c379;">java</span> CalClient1
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 8: Hello RMI Example -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section id="hello">
+  <h2>8. Simple Hello RMI Example</h2>
+  <div class="card">
+    <p>The classic "Hello World" of RMI. A server holds a greeting message; a client retrieves it remotely.</p>
+
+    <!-- Tab bar for 4 files -->
+    <div class="tab-bar">
+      <div class="tab active" onclick="switchTab('hello','iface')">HiInterface.java</div>
+      <div class="tab" onclick="switchTab('hello','impl')">Hi.java</div>
+      <div class="tab" onclick="switchTab('hello','server')">HiServer.java</div>
+      <div class="tab" onclick="switchTab('hello','client')">HiClient.java</div>
+    </div>
+
+    <!-- Tab: Interface -->
+    <div id="hello-iface" class="tab-content active">
+      <div class="code-cell">
+        <div class="code-header">
+          <span class="code-lang">JAVA</span>
+          <button class="run-btn" onclick="showOutput('hi-iface-out')">Run</button>
+        </div>
+        <pre class="code-body"><span class="kw">import</span> java.rmi.Remote;
+<span class="kw">import</span> java.rmi.RemoteException;
+
+<span class="cmt">// Step 1: Define the remote interface</span>
+<span class="kw">public interface</span> <span class="cls">HiInterface</span> <span class="kw">extends</span> <span class="cls">Remote</span> {
+
+    <span class="cmt">// Every method MUST declare throws RemoteException</span>
+    <span class="kw">public</span> <span class="cls">String</span> <span class="fn">sayHi</span>() <span class="kw">throws</span> <span class="cls">RemoteException</span>;
+
+}</pre>
+        <div class="code-output" id="hi-iface-out">
+          <div class="code-output-label">Output:</div>
+          <pre>Compiled successfully. (Interface — no runtime output)</pre>
+        </div>
+      </div>
+      <div class="highlight">
+        <strong>Rules for Remote Interface:</strong>
+        <ul style="margin-top:0.5rem;">
+          <li>Must extend <code>java.rmi.Remote</code> (marker interface)</li>
+          <li>Every method must declare <code>throws RemoteException</code></li>
+          <li>This interface is the contract shared by client and server</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tab: Implementation -->
+    <div id="hello-impl" class="tab-content">
+      <div class="code-cell">
+        <div class="code-header">
+          <span class="code-lang">JAVA</span>
+          <button class="run-btn" onclick="showOutput('hi-impl-out')">Run</button>
+        </div>
+        <pre class="code-body"><span class="kw">import</span> java.rmi.RemoteException;
+<span class="kw">import</span> java.rmi.server.UnicastRemoteObject;
+
+<span class="cmt">// Step 2: Implement the remote interface</span>
+<span class="kw">public class</span> <span class="cls">Hi</span> <span class="kw">extends</span> <span class="cls">UnicastRemoteObject</span>
+              <span class="kw">implements</span> <span class="cls">HiInterface</span> {
+
+    <span class="kw">private</span> <span class="cls">String</span> message;
+
+    <span class="cmt">// Constructor MUST throw RemoteException</span>
+    <span class="kw">public</span> <span class="fn">Hi</span>(<span class="cls">String</span> msg) <span class="kw">throws</span> <span class="cls">RemoteException</span> {
+        <span class="kw">super</span>();          <span class="cmt">// exports this object on an anonymous port</span>
+        message = msg;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="cls">String</span> <span class="fn">sayHi</span>() <span class="kw">throws</span> <span class="cls">RemoteException</span> {
+        <span class="kw">return</span> message;   <span class="cmt">// actual business logic</span>
+    }
+}</pre>
+        <div class="code-output" id="hi-impl-out">
+          <div class="code-output-label">Output:</div>
+          <pre>Compiled successfully. (Implementation class — run via server)</pre>
+        </div>
+      </div>
+      <div class="highlight2">
+        <strong>UnicastRemoteObject:</strong> Extending this class exports the object (makes it reachable over the network) automatically in the constructor. It also handles deep cloning of parameters.
+      </div>
+    </div>
+
+    <!-- Tab: Server -->
+    <div id="hello-server" class="tab-content">
+      <div class="code-cell">
+        <div class="code-header">
+          <span class="code-lang">JAVA</span>
+          <button class="run-btn" onclick="showOutput('hi-server-out')">Run</button>
+        </div>
+        <pre class="code-body"><span class="kw">import</span> java.rmi.registry.LocateRegistry;
+<span class="kw">import</span> java.rmi.registry.Registry;
+
+<span class="kw">public class</span> <span class="cls">HiServer</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cls">String</span>[] args) {
+        <span class="kw">try</span> {
+            <span class="cmt">// Create and start the RMI registry on port 1099</span>
+            <span class="cls">Registry</span> r = <span class="cls">LocateRegistry</span>.<span class="fn">createRegistry</span>(<span class="num">1099</span>);
+
+            <span class="cmt">// Create the remote object with our message</span>
+            <span class="cls">Hi</span> hiObj = <span class="kw">new</span> <span class="cls">Hi</span>(<span class="str">"I am from VIT, Chennai."</span>);
+
+            <span class="cmt">// Register it in the registry under the name "Hi"</span>
+            r.<span class="fn">rebind</span>(<span class="str">"Hi"</span>, hiObj);
+
+            <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"Server is up"</span>);
+
+        } <span class="kw">catch</span> (<span class="cls">Exception</span> e) {
+            e.<span class="fn">printStackTrace</span>();
+        }
+    }
+}</pre>
+        <div class="code-output" id="hi-server-out">
+          <div class="code-output-label">Output:</div>
+          <pre>Server is up</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Client -->
+    <div id="hello-client" class="tab-content">
+      <div class="code-cell">
+        <div class="code-header">
+          <span class="code-lang">JAVA</span>
+          <button class="run-btn" onclick="showOutput('hi-client-out')">Run</button>
+        </div>
+        <pre class="code-body"><span class="kw">import</span> java.rmi.Naming;
+
+<span class="kw">public class</span> <span class="cls">HiClient</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cls">String</span>[] args) {
+        <span class="kw">try</span> {
+            <span class="cmt">// Look up the remote object in the registry</span>
+            <span class="cls">HiInterface</span> hiObj =
+                (<span class="cls">HiInterface</span>) <span class="cls">Naming</span>.<span class="fn">lookup</span>(<span class="str">"//localhost/Hi"</span>);
+
+            <span class="cmt">// Call the remote method — looks just like a local call!</span>
+            <span class="cls">String</span> result = hiObj.<span class="fn">sayHi</span>();
+
+            <span class="cls">System</span>.out.<span class="fn">println</span>(result);
+
+        } <span class="kw">catch</span> (<span class="cls">Exception</span> e) {
+            e.<span class="fn">printStackTrace</span>();
+        }
+    }
+}</pre>
+        <div class="code-output" id="hi-client-out">
+          <div class="code-output-label">Output:</div>
+          <pre>I am from VIT, Chennai.</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Hello RMI Simulator -->
+    <h3>Interactive RMI Simulator</h3>
+    <div class="interactive-box">
+      <p style="margin-bottom:1rem;">Simulate the RMI communication flow. Click "Start Server" first, then call the remote method.</p>
+      <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center; margin-bottom:1rem;">
+        <button onclick="helloStartServer()">Start Server</button>
+        <button class="btn2" onclick="helloCallMethod()" id="helloCallBtn" disabled>Call sayHi()</button>
+        <button onclick="helloReset()" style="background:var(--border);">Reset</button>
+        <span id="hello-server-indicator" style="margin-left:0.5rem; font-size:0.88rem; color:var(--muted);">Server: OFFLINE</span>
+      </div>
+
+      <div id="hello-flow-log" style="background:#0a0d14; border-radius:8px; padding:1rem; min-height:120px; font-family:monospace; font-size:0.85rem; line-height:1.8;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 9: Calculator RMI Example -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section id="calculator">
+  <h2>9. Calculator RMI Example</h2>
+  <div class="card">
+    <p>A complete, realistic RMI application: a remote calculator supporting addition, subtraction, multiplication, and division.</p>
+
+    <!-- Tab bar -->
+    <div class="tab-bar">
+      <div class="tab active" onclick="switchTab('cal','iface')">CalInterface.java</div>
+      <div class="tab" onclick="switchTab('cal','impl')">CalculatorImpl.java</div>
+      <div class="tab" onclick="switchTab('cal','server')">CalServer.java</div>
+      <div class="tab" onclick="switchTab('cal','clients')">Clients (×4)</div>
+    </div>
+
+    <!-- CalInterface -->
+    <div id="cal-iface" class="tab-content active">
+      <div class="code-cell">
+        <div class="code-header">
+          <span class="code-lang">JAVA — CalInterface.java</span>
+          <button class="run-btn" onclick="showOutput('cal-iface-out')">Run</button>
+        </div>
+        <pre class="code-body"><span class="kw">import</span> java.rmi.Remote;
+<span class="kw">import</span> java.rmi.RemoteException;
+
+<span class="kw">public interface</span> <span class="cls">CalInterface</span> <span class="kw">extends</span> <span class="cls">Remote</span> {
+
+    <span class="kw">int</span> <span class="fn">addition</span>      (<span class="kw">int</span> a, <span class="kw">int</span> b) <span class="kw">throws</span> <span class="cls">RemoteException</span>;
+    <span class="kw">int</span> <span class="fn">subtraction</span>   (<span class="kw">int</span> a, <span class="kw">int</span> b) <span class="kw">throws</span> <span class="cls">RemoteException</span>;
+    <span class="kw">int</span> <span class="fn">multiplication</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) <span class="kw">throws</span> <span class="cls">RemoteException</span>;
+    <span class="kw">int</span> <span class="fn">division</span>      (<span class="kw">int</span> a, <span class="kw">int</span> b) <span class="kw">throws</span> <span class="cls">RemoteException</span>;
+
+}</pre>
+        <div class="code-output" id="cal-iface-out">
+          <div class="code-output-label">Output:</div>
+          <pre>CalInterface.class compiled — 4 remote methods declared.</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- CalculatorImpl -->
+    <div id="cal-impl" class="tab-content">
+      <div class="code-cell">
+        <div class="code-header">
+          <span class="code-lang">JAVA — CalculatorImpl.java</span>
+          <button class="run-btn" onclick="showOutput('cal-impl-out')">Run</button>
+        </div>
+        <pre class="code-body"><span class="kw">import</span> java.rmi.RemoteException;
+<span class="kw">import</span> java.rmi.server.UnicastRemoteObject;
+
+<span class="kw">public class</span> <span class="cls">CalculatorImpl</span> <span class="kw">extends</span> <span class="cls">UnicastRemoteObject</span>
+                           <span class="kw">implements</span> <span class="cls">CalInterface</span> {
+
+    <span class="cmt">// Constructor must throw RemoteException (required by UnicastRemoteObject)</span>
+    <span class="kw">public</span> <span class="fn">CalculatorImpl</span>() <span class="kw">throws</span> <span class="cls">RemoteException</span> {
+        <span class="kw">super</span>();
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public int</span> <span class="fn">addition</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) <span class="kw">throws</span> <span class="cls">RemoteException</span> {
+        <span class="kw">return</span> a + b;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public int</span> <span class="fn">subtraction</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) <span class="kw">throws</span> <span class="cls">RemoteException</span> {
+        <span class="kw">return</span> a - b;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public int</span> <span class="fn">multiplication</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) <span class="kw">throws</span> <span class="cls">RemoteException</span> {
+        <span class="kw">return</span> a * b;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public int</span> <span class="fn">division</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) <span class="kw">throws</span> <span class="cls">RemoteException</span> {
+        <span class="kw">if</span> (b == <span class="num">0</span>) <span class="kw">throw new</span> <span class="cls">ArithmeticException</span>(<span class="str">"Division by zero"</span>);
+        <span class="kw">return</span> a / b;
+    }
+}</pre>
+        <div class="code-output" id="cal-impl-out">
+          <div class="code-output-label">Output:</div>
+          <pre>CalculatorImpl.class compiled — ready to be registered.</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- CalServer -->
+    <div id="cal-server" class="tab-content">
+      <div class="code-cell">
+        <div class="code-header">
+          <span class="code-lang">JAVA — CalServer.java</span>
+          <button class="run-btn" onclick="showOutput('cal-server-out')">Run</button>
+        </div>
+        <pre class="code-body"><span class="kw">import</span> java.rmi.registry.LocateRegistry;
+<span class="kw">import</span> java.rmi.registry.Registry;
+
+<span class="kw">public class</span> <span class="cls">CalServer</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cls">String</span>[] args) {
+        <span class="kw">try</span> {
+            <span class="cmt">// Start RMI registry on port 1099</span>
+            <span class="cls">Registry</span> r = <span class="cls">LocateRegistry</span>.<span class="fn">createRegistry</span>(<span class="num">1099</span>);
+
+            <span class="cmt">// Create the implementation object</span>
+            <span class="cls">CalculatorImpl</span> calc = <span class="kw">new</span> <span class="cls">CalculatorImpl</span>();
+
+            <span class="cmt">// Register under the name "Calculator"</span>
+            r.<span class="fn">rebind</span>(<span class="str">"Calculator"</span>, calc);
+
+            <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"Server is up"</span>);
+
+        } <span class="kw">catch</span> (<span class="cls">Exception</span> e) {
+            e.<span class="fn">printStackTrace</span>();
+        }
+    }
+}</pre>
+        <div class="code-output" id="cal-server-out">
+          <div class="code-output-label">Output:</div>
+          <pre>Server is up</pre>
+        </div>
+      </div>
+
+      <div class="highlight3">
+        <strong>BindException Error:</strong> If you run CalServer when the registry is already running on port 1099, you get:<br>
+        <code style="color:#ff8080;">java.rmi.server.ExportException: Port already in use: 1099</code><br>
+        Fix: Use <code>LocateRegistry.getRegistry(1099)</code> to connect to an existing registry instead of creating a new one.
+      </div>
+    </div>
+
+    <!-- Clients -->
+    <div id="cal-clients" class="tab-content">
+      <div class="two-col">
+        <!-- Client 1: Addition -->
+        <div>
+          <h4>CalClient1.java — Addition (20 + 10)</h4>
+          <div class="code-cell">
+            <div class="code-header">
+              <span class="code-lang">JAVA</span>
+              <button class="run-btn" onclick="showOutput('cal-c1-out')">Run</button>
+            </div>
+            <pre class="code-body" style="font-size:0.8rem;"><span class="kw">import</span> java.rmi.Naming;
+
+<span class="kw">public class</span> <span class="cls">CalClient1</span> {
+  <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cls">String</span>[] args) {
+    <span class="kw">try</span> {
+      <span class="cls">CalInterface</span> c = (<span class="cls">CalInterface</span>)
+        <span class="cls">Naming</span>.<span class="fn">lookup</span>(<span class="str">"//localhost/Calculator"</span>);
+      <span class="cls">System</span>.out.<span class="fn">println</span>(c.<span class="fn">addition</span>(<span class="num">20</span>, <span class="num">10</span>));
+    } <span class="kw">catch</span>(<span class="cls">Exception</span> e) { e.<span class="fn">printStackTrace</span>(); }
+  }
+}</pre>
+            <div class="code-output" id="cal-c1-out">
+              <div class="code-output-label">Output:</div>
+              <pre>30</pre>
+            </div>
+          </div>
+        </div>
+        <!-- Client 2: Subtraction -->
+        <div>
+          <h4>CalClient2.java — Subtraction (20 − 10)</h4>
+          <div class="code-cell">
+            <div class="code-header">
+              <span class="code-lang">JAVA</span>
+              <button class="run-btn" onclick="showOutput('cal-c2-out')">Run</button>
+            </div>
+            <pre class="code-body" style="font-size:0.8rem;"><span class="kw">import</span> java.rmi.Naming;
+
+<span class="kw">public class</span> <span class="cls">CalClient2</span> {
+  <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cls">String</span>[] args) {
+    <span class="kw">try</span> {
+      <span class="cls">CalInterface</span> c = (<span class="cls">CalInterface</span>)
+        <span class="cls">Naming</span>.<span class="fn">lookup</span>(<span class="str">"//localhost/Calculator"</span>);
+      <span class="cls">System</span>.out.<span class="fn">println</span>(c.<span class="fn">subtraction</span>(<span class="num">20</span>, <span class="num">10</span>));
+    } <span class="kw">catch</span>(<span class="cls">Exception</span> e) { e.<span class="fn">printStackTrace</span>(); }
+  }
+}</pre>
+            <div class="code-output" id="cal-c2-out">
+              <div class="code-output-label">Output:</div>
+              <pre>10</pre>
+            </div>
+          </div>
+        </div>
+        <!-- Client 3: Multiplication -->
+        <div>
+          <h4>CalClient3.java — Multiplication (20 × 10)</h4>
+          <div class="code-cell">
+            <div class="code-header">
+              <span class="code-lang">JAVA</span>
+              <button class="run-btn" onclick="showOutput('cal-c3-out')">Run</button>
+            </div>
+            <pre class="code-body" style="font-size:0.8rem;"><span class="kw">import</span> java.rmi.Naming;
+
+<span class="kw">public class</span> <span class="cls">CalClient3</span> {
+  <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cls">String</span>[] args) {
+    <span class="kw">try</span> {
+      <span class="cls">CalInterface</span> c = (<span class="cls">CalInterface</span>)
+        <span class="cls">Naming</span>.<span class="fn">lookup</span>(<span class="str">"//localhost/Calculator"</span>);
+      <span class="cls">System</span>.out.<span class="fn">println</span>(c.<span class="fn">multiplication</span>(<span class="num">20</span>, <span class="num">10</span>));
+    } <span class="kw">catch</span>(<span class="cls">Exception</span> e) { e.<span class="fn">printStackTrace</span>(); }
+  }
+}</pre>
+            <div class="code-output" id="cal-c3-out">
+              <div class="code-output-label">Output:</div>
+              <pre>200</pre>
+            </div>
+          </div>
+        </div>
+        <!-- Client 4: Division -->
+        <div>
+          <h4>CalClient4.java — Division (20 ÷ 10)</h4>
+          <div class="code-cell">
+            <div class="code-header">
+              <span class="code-lang">JAVA</span>
+              <button class="run-btn" onclick="showOutput('cal-c4-out')">Run</button>
+            </div>
+            <pre class="code-body" style="font-size:0.8rem;"><span class="kw">import</span> java.rmi.Naming;
+
+<span class="kw">public class</span> <span class="cls">CalClient4</span> {
+  <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cls">String</span>[] args) {
+    <span class="kw">try</span> {
+      <span class="cls">CalInterface</span> c = (<span class="cls">CalInterface</span>)
+        <span class="cls">Naming</span>.<span class="fn">lookup</span>(<span class="str">"//localhost/Calculator"</span>);
+      <span class="cls">System</span>.out.<span class="fn">println</span>(c.<span class="fn">division</span>(<span class="num">20</span>, <span class="num">10</span>));
+    } <span class="kw">catch</span>(<span class="cls">Exception</span> e) { e.<span class="fn">printStackTrace</span>(); }
+  }
+}</pre>
+            <div class="code-output" id="cal-c4-out">
+              <div class="code-output-label">Output:</div>
+              <pre>2</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Interactive RMI Calculator ══ -->
+    <h3 style="margin-top:2rem;">Interactive RMI Calculator with Animated Call Visualization</h3>
+    <div class="interactive-box">
+
+      <!-- Server Status Row -->
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.2rem;">
+        <div>
+          <div style="font-size:0.82rem; color:var(--muted); margin-bottom:0.3rem;">SERVER STATUS</div>
+          <span id="calc-server-status">
+            <span class="status-dot" id="calc-dot"></span>
+            <span id="calc-status-text" style="color:#ff5050;">OFFLINE</span>
+          </span>
+        </div>
+        <div style="display:flex; gap:0.8rem; flex-wrap:wrap;">
+          <button onclick="calcStartServer()" id="calcStartBtn">Start Server</button>
+          <button onclick="calcStopServer()" id="calcStopBtn" style="background:#ff5050;" disabled>Stop Server</button>
+        </div>
+      </div>
+
+      <!-- Server Registry display -->
+      <div id="calc-registry-display" style="background:#0a0d14; border:1px solid var(--border); border-radius:8px; padding:0.8rem 1.2rem; margin-bottom:1.2rem; font-family:monospace; font-size:0.85rem; color:var(--muted);">
+        Registry (port 1099): <span id="calc-registry-content" style="color:#ff5050;">empty — server not started</span>
+      </div>
+
+      <!-- Calculator Inputs -->
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:0.8rem; align-items:end; margin-bottom:1.2rem; flex-wrap:wrap;">
+        <div>
+          <label style="font-size:0.82rem; color:var(--muted); display:block; margin-bottom:0.3rem;">Operand A</label>
+          <input type="number" id="calc-a" value="20" style="width:100%;">
+        </div>
+        <div>
+          <label style="font-size:0.82rem; color:var(--muted); display:block; margin-bottom:0.3rem;">Operand B</label>
+          <input type="number" id="calc-b" value="10" style="width:100%;">
+        </div>
+        <div>
+          <label style="font-size:0.82rem; color:var(--muted); display:block; margin-bottom:0.3rem;">Operation</label>
+          <select id="calc-op" style="width:100%;">
+            <option value="add">addition(a, b)</option>
+            <option value="sub" selected>subtraction(a, b)</option>
+            <option value="mul">multiplication(a, b)</option>
+            <option value="div">division(a, b)</option>
+          </select>
+        </div>
+        <div>
+          <button class="btn2" onclick="calcCallMethod()" id="calcCallBtn" disabled style="white-space:nowrap;">Call Remote Method</button>
+        </div>
+      </div>
+
+      <!-- Animation Canvas -->
+      <div style="position:relative; background:#0a0d14; border-radius:10px; padding:1.2rem; margin-bottom:1rem; overflow:hidden; min-height:160px;" id="calc-anim-area">
+
+        <!-- Static nodes -->
+        <svg id="calc-svg" viewBox="0 0 700 130" width="100%" style="display:block;">
+          <defs>
+            <marker id="carr" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L7,3 z" fill="#6c63ff"/>
+            </marker>
+            <marker id="carr2" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L7,3 z" fill="#00d4aa"/>
+            </marker>
+          </defs>
+
+          <!-- Client -->
+          <rect x="5" y="40" width="100" height="50" rx="8" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2" id="cn-client"/>
+          <text x="55" y="60" fill="#6c63ff" font-size="11" font-weight="bold" text-anchor="middle">Client</text>
+          <text x="55" y="76" fill="#94a3b8" font-size="9" text-anchor="middle">Machine A</text>
+          <text x="55" y="88" fill="#e2e8f0" font-size="8" text-anchor="middle" id="cn-client-call"></text>
+
+          <!-- Stub -->
+          <rect x="130" y="40" width="90" height="50" rx="8" fill="#1a1d2e" stroke="#f7c948" stroke-width="2" id="cn-stub"/>
+          <text x="175" y="60" fill="#f7c948" font-size="11" font-weight="bold" text-anchor="middle">Stub</text>
+          <text x="175" y="76" fill="#94a3b8" font-size="9" text-anchor="middle">marshals</text>
+          <text x="175" y="88" fill="#94a3b8" font-size="9" text-anchor="middle">params</text>
+
+          <!-- Network -->
+          <rect x="255" y="40" width="110" height="50" rx="8" fill="#1a1d2e" stroke="#c678dd" stroke-width="2" id="cn-net"/>
+          <text x="310" y="60" fill="#c678dd" font-size="11" font-weight="bold" text-anchor="middle">Network</text>
+          <text x="310" y="76" fill="#94a3b8" font-size="9" text-anchor="middle">TCP/IP</text>
+          <text x="310" y="88" fill="#94a3b8" font-size="9" text-anchor="middle">transport</text>
+
+          <!-- Skeleton -->
+          <rect x="400" y="40" width="90" height="50" rx="8" fill="#1a1d2e" stroke="#f7c948" stroke-width="2" id="cn-skel"/>
+          <text x="445" y="60" fill="#f7c948" font-size="11" font-weight="bold" text-anchor="middle">Skeleton</text>
+          <text x="445" y="76" fill="#94a3b8" font-size="9" text-anchor="middle">unmarshals</text>
+          <text x="445" y="88" fill="#94a3b8" font-size="9" text-anchor="middle">params</text>
+
+          <!-- Server -->
+          <rect x="525" y="40" width="100" height="50" rx="8" fill="#1a1d2e" stroke="#00d4aa" stroke-width="2" id="cn-server"/>
+          <text x="575" y="60" fill="#00d4aa" font-size="11" font-weight="bold" text-anchor="middle">Server</text>
+          <text x="575" y="76" fill="#94a3b8" font-size="9" text-anchor="middle">CalculatorImpl</text>
+          <text x="575" y="88" fill="#e2e8f0" font-size="8" text-anchor="middle" id="cn-server-exec"></text>
+
+          <!-- Arrows (forward) -->
+          <line x1="108" y1="65" x2="128" y2="65" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#carr)" id="arr-cs"/>
+          <line x1="222" y1="65" x2="253" y2="65" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#carr)" id="arr-sn"/>
+          <line x1="367" y1="65" x2="398" y2="65" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#carr)" id="arr-nsk"/>
+          <line x1="492" y1="65" x2="523" y2="65" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#carr)" id="arr-sks"/>
+
+          <!-- Packet circle (animated via JS) -->
+          <circle id="calc-packet" cx="-20" cy="65" r="7" fill="#6c63ff" opacity="0">
+            <title>RMI Packet</title>
+          </circle>
+
+          <!-- Return path (below) -->
+          <path d="M525,95 Q310,130 105,95" stroke="#00d4aa" fill="none" stroke-width="1.5" marker-end="url(#carr2)" id="ret-path" opacity="0.3"/>
+          <text x="310" y="125" fill="#00d4aa" font-size="9" text-anchor="middle" id="ret-label">return value travels back</text>
+
+          <!-- Step labels -->
+          <text x="55" y="18" fill="#5c6370" font-size="9" text-anchor="middle" id="lbl-client">1. call method</text>
+          <text x="175" y="18" fill="#5c6370" font-size="9" text-anchor="middle" id="lbl-stub">2. marshal</text>
+          <text x="310" y="18" fill="#5c6370" font-size="9" text-anchor="middle" id="lbl-net">3. send bytes</text>
+          <text x="445" y="18" fill="#5c6370" font-size="9" text-anchor="middle" id="lbl-skel">4. unmarshal</text>
+          <text x="575" y="18" fill="#5c6370" font-size="9" text-anchor="middle" id="lbl-server">5. execute</text>
+        </svg>
+      </div>
+
+      <!-- Result -->
+      <div id="calc-result" class="result-box" style="display:none;"></div>
+      <div id="calc-error" class="error-box" style="display:none;"></div>
+
+      <!-- Call log -->
+      <div style="margin-top:1rem;">
+        <div style="font-size:0.78rem; color:var(--muted); margin-bottom:0.3rem; text-transform:uppercase; letter-spacing:0.06em;">Call Log</div>
+        <div id="calc-log" style="background:#0a0d14; border-radius:8px; padding:0.8rem; font-family:monospace; font-size:0.82rem; line-height:1.8; min-height:60px; color:var(--muted);">Waiting for calls...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 10: RMI vs Sockets -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section id="comparison">
+  <h2>10. RMI vs Socket Programming</h2>
+  <div class="card">
+    <p>Both RMI and raw sockets enable distributed communication in Java. Understanding their trade-offs helps you choose the right tool.</p>
+
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>RMI</th>
+        <th>Sockets</th>
+      </tr>
+      <tr>
+        <td><strong>Abstraction Level</strong></td>
+        <td><span class="tag2">High</span> — method calls</td>
+        <td><span class="tag" style="background:#555;">Low</span> — byte streams</td>
+      </tr>
+      <tr>
+        <td><strong>Object Passing</strong></td>
+        <td>Yes — objects serialized automatically</td>
+        <td>No — manual serialization required</td>
+      </tr>
+      <tr>
+        <td><strong>Developer Complexity</strong></td>
+        <td>Lower — protocol handled by RMI runtime</td>
+        <td>Higher — developer writes all protocol logic</td>
+      </tr>
+      <tr>
+        <td><strong>Performance</strong></td>
+        <td>Slightly slower (serialization overhead)</td>
+        <td>Faster (raw bytes, minimal overhead)</td>
+      </tr>
+      <tr>
+        <td><strong>Error Handling</strong></td>
+        <td>RemoteException hierarchy, automatic</td>
+        <td>Manual IOException handling</td>
+      </tr>
+      <tr>
+        <td><strong>Language Restriction</strong></td>
+        <td>Java-to-Java only</td>
+        <td>Language agnostic</td>
+      </tr>
+      <tr>
+        <td><strong>Security</strong></td>
+        <td>Built-in RMI security manager</td>
+        <td>Developer must implement manually</td>
+      </tr>
+      <tr>
+        <td><strong>Use Case</strong></td>
+        <td>Distributed Java enterprise apps</td>
+        <td>High-performance, cross-language systems</td>
+      </tr>
+    </table>
+
+    <div class="two-col" style="margin-top:1rem;">
+      <div class="card" style="background:#1e1b3a; border-color:var(--accent);">
+        <h4>When to Choose RMI</h4>
+        <ul style="font-size:0.9rem;">
+          <li>Pure Java distributed system</li>
+          <li>Need to pass complex Java objects</li>
+          <li>Rapid development is priority</li>
+          <li>Method-oriented API design</li>
+          <li>Enterprise application servers (EJB uses RMI)</li>
+        </ul>
+      </div>
+      <div class="card" style="background:#1a2010; border-color:#888;">
+        <h4>When to Choose Sockets</h4>
+        <ul style="font-size:0.9rem;">
+          <li>Multi-language client-server system</li>
+          <li>Maximum performance required</li>
+          <li>Custom binary protocol needed</li>
+          <li>Embedded/constrained environments</li>
+          <li>Low-level network programming</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 11: How RMI Works -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section id="working">
+  <h2>11. How RMI Works — Detailed Walkthrough</h2>
+  <div class="card">
+    <p>Let's trace a complete RMI call from start to finish, following every byte and every object across the network.</p>
+
+    <!-- Detailed architecture SVG -->
+    <svg viewBox="0 0 720 380" width="100%" style="max-width:720px; display:block; margin:1rem auto;">
+      <defs>
+        <marker id="wa" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#6c63ff"/>
+        </marker>
+        <marker id="wa2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#00d4aa"/>
+        </marker>
+        <marker id="wa3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#f7c948"/>
+        </marker>
+      </defs>
+
+      <!-- Machine A box -->
+      <rect x="5" y="5" width="300" height="240" rx="14" fill="none" stroke="#6c63ff" stroke-width="2" stroke-dasharray="6,3"/>
+      <text x="155" y="25" fill="#6c63ff" font-size="13" font-weight="bold" text-anchor="middle">Machine A (Client JVM)</text>
+
+      <!-- Client code box -->
+      <rect x="20" y="35" width="120" height="60" rx="8" fill="#1a1d2e" stroke="#6c63ff" stroke-width="1.5"/>
+      <text x="80" y="56" fill="#6c63ff" font-size="11" font-weight="bold" text-anchor="middle">Client Code</text>
+      <text x="80" y="72" fill="#94a3b8" font-size="9" text-anchor="middle">calObj.subtraction</text>
+      <text x="80" y="84" fill="#94a3b8" font-size="9" text-anchor="middle">(20, 10)</text>
+
+      <!-- Stub box -->
+      <rect x="165" y="35" width="120" height="60" rx="8" fill="#1a1d2e" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="225" y="56" fill="#f7c948" font-size="11" font-weight="bold" text-anchor="middle">Stub</text>
+      <text x="225" y="72" fill="#94a3b8" font-size="9" text-anchor="middle">marshal: int 20, int 10</text>
+      <text x="225" y="84" fill="#94a3b8" font-size="9" text-anchor="middle">→ byte stream</text>
+
+      <!-- RRL Client -->
+      <rect x="20" y="120" width="265" height="50" rx="8" fill="#1a1d2e" stroke="#00d4aa" stroke-width="1.5"/>
+      <text x="152" y="141" fill="#00d4aa" font-size="11" font-weight="bold" text-anchor="middle">Remote Reference Layer</text>
+      <text x="152" y="158" fill="#94a3b8" font-size="9" text-anchor="middle">resolves remote object reference → finds server address</text>
+
+      <!-- Transport Client -->
+      <rect x="20" y="190" width="265" height="45" rx="8" fill="#1a1d2e" stroke="#c678dd" stroke-width="1.5"/>
+      <text x="152" y="210" fill="#c678dd" font-size="11" font-weight="bold" text-anchor="middle">Transport Layer</text>
+      <text x="152" y="225" fill="#94a3b8" font-size="9" text-anchor="middle">TCP socket → 192.168.x.x:1099 → send bytes</text>
+
+      <!-- Machine B box -->
+      <rect x="415" y="5" width="300" height="240" rx="14" fill="none" stroke="#00d4aa" stroke-width="2" stroke-dasharray="6,3"/>
+      <text x="565" y="25" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">Machine B (Server JVM)</text>
+
+      <!-- Skeleton box -->
+      <rect x="430" y="35" width="120" height="60" rx="8" fill="#1a1d2e" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="490" y="56" fill="#f7c948" font-size="11" font-weight="bold" text-anchor="middle">Skeleton</text>
+      <text x="490" y="72" fill="#94a3b8" font-size="9" text-anchor="middle">unmarshal bytes</text>
+      <text x="490" y="84" fill="#94a3b8" font-size="9" text-anchor="middle">→ int 20, int 10</text>
+
+      <!-- Impl box -->
+      <rect x="575" y="35" width="120" height="60" rx="8" fill="#1a1d2e" stroke="#00d4aa" stroke-width="1.5"/>
+      <text x="635" y="52" fill="#00d4aa" font-size="11" font-weight="bold" text-anchor="middle">CalculatorImpl</text>
+      <text x="635" y="68" fill="#94a3b8" font-size="9" text-anchor="middle">subtraction(20,10)</text>
+      <text x="635" y="84" fill="#f7c948" font-size="10" text-anchor="middle" font-weight="bold">returns 10</text>
+
+      <!-- RRL Server -->
+      <rect x="430" y="120" width="265" height="50" rx="8" fill="#1a1d2e" stroke="#00d4aa" stroke-width="1.5"/>
+      <text x="562" y="141" fill="#00d4aa" font-size="11" font-weight="bold" text-anchor="middle">Remote Reference Layer</text>
+      <text x="562" y="158" fill="#94a3b8" font-size="9" text-anchor="middle">manages object lifecycle · dispatches call</text>
+
+      <!-- Transport Server -->
+      <rect x="430" y="190" width="265" height="45" rx="8" fill="#1a1d2e" stroke="#c678dd" stroke-width="1.5"/>
+      <text x="562" y="210" fill="#c678dd" font-size="11" font-weight="bold" text-anchor="middle">Transport Layer</text>
+      <text x="562" y="225" fill="#94a3b8" font-size="9" text-anchor="middle">TCP socket → listen on port 1099 → receive bytes</text>
+
+      <!-- Network in middle -->
+      <rect x="315" y="185" width="90" height="55" rx="8" fill="#12151f" stroke="#c678dd" stroke-width="2"/>
+      <text x="360" y="207" fill="#c678dd" font-size="10" font-weight="bold" text-anchor="middle">Network</text>
+      <text x="360" y="221" fill="#94a3b8" font-size="9" text-anchor="middle">TCP/IP</text>
+      <text x="360" y="234" fill="#94a3b8" font-size="8" text-anchor="middle">bytes travel</text>
+
+      <!-- Arrows: Client code → Stub -->
+      <line x1="140" y1="65" x2="163" y2="65" stroke="#6c63ff" stroke-width="2" marker-end="url(#wa)"/>
+      <text x="152" y="58" fill="#6c63ff" font-size="8" text-anchor="middle">call</text>
+
+      <!-- Stub → down to RRL -->
+      <line x1="225" y1="95" x2="225" y2="118" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#wa)"/>
+
+      <!-- RRL → Transport -->
+      <line x1="152" y1="170" x2="152" y2="188" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#wa)"/>
+
+      <!-- Transport client → Network -->
+      <line x1="285" y1="212" x2="313" y2="212" stroke="#c678dd" stroke-width="2" marker-end="url(#wa)"/>
+
+      <!-- Network → Transport server -->
+      <line x1="405" y1="212" x2="428" y2="212" stroke="#c678dd" stroke-width="2" marker-end="url(#wa)"/>
+
+      <!-- Transport server → RRL server -->
+      <line x1="562" y1="188" x2="562" y2="172" stroke="#00d4aa" stroke-width="1.5" marker-end="url(#wa2)"/>
+
+      <!-- RRL server → Skeleton -->
+      <line x1="490" y1="120" x2="490" y2="97" stroke="#00d4aa" stroke-width="1.5" marker-end="url(#wa2)"/>
+
+      <!-- Skeleton → Impl -->
+      <line x1="550" y1="65" x2="573" y2="65" stroke="#00d4aa" stroke-width="2" marker-end="url(#wa2)"/>
+      <text x="562" y="58" fill="#00d4aa" font-size="8" text-anchor="middle">invoke</text>
+
+      <!-- Return path -->
+      <path d="M635,97 Q635,270 360,270 Q85,270 80,100" stroke="#f7c948" fill="none" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#wa3)"/>
+      <text x="360" y="288" fill="#f7c948" font-size="10" text-anchor="middle" font-weight="bold">Return value (marshalled int=10) travels back</text>
+
+      <!-- Step numbers along the forward path -->
+      <circle cx="152" cy="67" r="8" fill="#6c63ff"/>
+      <text x="152" y="71" fill="#fff" font-size="9" text-anchor="middle" font-weight="bold">1</text>
+
+      <circle cx="237" cy="67" r="8" fill="#f7c948"/>
+      <text x="237" y="71" fill="#000" font-size="9" text-anchor="middle" font-weight="bold">2</text>
+
+      <circle cx="360" cy="212" r="8" fill="#c678dd"/>
+      <text x="360" y="216" fill="#fff" font-size="9" text-anchor="middle" font-weight="bold">3</text>
+
+      <circle cx="478" cy="67" r="8" fill="#f7c948"/>
+      <text x="478" y="71" fill="#000" font-size="9" text-anchor="middle" font-weight="bold">4</text>
+
+      <circle cx="600" cy="67" r="8" fill="#00d4aa"/>
+      <text x="600" y="71" fill="#000" font-size="9" text-anchor="middle" font-weight="bold">5</text>
+    </svg>
+
+    <h3>Step-by-Step Explanation</h3>
+
+    <div class="step"><div class="step-num" style="background:var(--accent);">1</div>
+      <div><strong>Client calls method on stub</strong> — The client code holds a reference to the stub (obtained from the registry). Calling <code style="background:var(--code);padding:0.1rem 0.4rem;border-radius:4px;color:var(--yellow);">calObj.subtraction(20, 10)</code> looks identical to a local call.</div>
+    </div>
+
+    <div class="step"><div class="step-num" style="background:var(--yellow); color:#000;">2</div>
+      <div><strong>Stub marshals parameters</strong> — The stub intercepts the call. It serializes the method identifier and parameters (integers 20 and 10) into a byte array. This is <em>marshalling</em>.</div>
+    </div>
+
+    <div class="step"><div class="step-num" style="background:#c678dd;">3</div>
+      <div><strong>Bytes travel over TCP/IP</strong> — The Remote Reference and Transport layers handle opening a TCP socket to the server machine and streaming the bytes. The network sees only raw bytes — it knows nothing about Java objects.</div>
+    </div>
+
+    <div class="step"><div class="step-num" style="background:var(--yellow); color:#000;">4</div>
+      <div><strong>Skeleton unmarshals parameters</strong> — On the server side, the skeleton receives the bytes and deserializes them back into Java values: method name = "subtraction", a = 20, b = 10. This is <em>unmarshalling</em>.</div>
+    </div>
+
+    <div class="step"><div class="step-num" style="background:var(--accent2); color:#000;">5</div>
+      <div><strong>Real method executes</strong> — The skeleton calls <code style="background:var(--code);padding:0.1rem 0.4rem;border-radius:4px;color:var(--yellow);">calculatorImpl.subtraction(20, 10)</code>. The actual business logic runs. Result = 10.</div>
+    </div>
+
+    <div class="step"><div class="step-num" style="background:var(--yellow); color:#000;">6</div>
+      <div><strong>Return value marshalled and sent back</strong> — The skeleton serializes the integer 10 into bytes and sends it back to the stub via the TCP connection.</div>
+    </div>
+
+    <div class="step"><div class="step-num" style="background:var(--accent);">7</div>
+      <div><strong>Stub unmarshals result</strong> — The stub deserializes the return bytes back into Java int value 10 and returns it to the client code. From the client's perspective, it just got 10 back from a method call.</div>
+    </div>
+
+    <h3>What is Marshalling?</h3>
+    <div class="highlight">
+      <strong>Marshalling</strong> is the process of converting Java objects and primitive values into a flat byte array suitable for transmission over a network. <strong>Unmarshalling</strong> is the reverse — reconstructing Java objects from received bytes. In Java RMI, <code>java.io.ObjectOutputStream</code> and <code>java.io.ObjectInputStream</code> handle this automatically. Objects must implement <code>java.io.Serializable</code> to be marshallable.
+    </div>
+
+    <div class="two-col">
+      <div class="card" style="background:#1a1d2e;">
+        <h4>Marshalling (Serialization)</h4>
+        <div style="font-family:monospace; font-size:0.85rem; line-height:1.8;">
+          <span style="color:var(--accent2);">Java Object:</span><br>
+          &nbsp;&nbsp;int a = 20 → <span style="color:var(--yellow);">0x00 0x00 0x00 0x14</span><br>
+          &nbsp;&nbsp;int b = 10 → <span style="color:var(--yellow);">0x00 0x00 0x00 0x0A</span><br>
+          &nbsp;&nbsp;method = <span style="color:#98c379;">"subtraction"</span><br>
+          → bytes sent over TCP
+        </div>
+      </div>
+      <div class="card" style="background:#1a1d2e;">
+        <h4>Unmarshalling (Deserialization)</h4>
+        <div style="font-family:monospace; font-size:0.85rem; line-height:1.8;">
+          <span style="color:#c678dd;">Received bytes:</span><br>
+          &nbsp;&nbsp;<span style="color:var(--yellow);">0x00 0x00 0x00 0x14</span> → int 20<br>
+          &nbsp;&nbsp;<span style="color:var(--yellow);">0x00 0x00 0x00 0x0A</span> → int 10<br>
+          &nbsp;&nbsp;method identifier decoded<br>
+          → skeleton invokes method
+        </div>
+      </div>
+    </div>
+
+    <h3>Common Exceptions in RMI</h3>
+    <table>
+      <tr><th>Exception</th><th>When it occurs</th></tr>
+      <tr><td><code style="color:#ff8080;">RemoteException</code></td><td>Any network/communication failure during a remote method call</td></tr>
+      <tr><td><code style="color:#ff8080;">NotBoundException</code></td><td>Client calls <code>lookup()</code> for a name not registered in the registry</td></tr>
+      <tr><td><code style="color:#ff8080;">AlreadyBoundException</code></td><td>Server calls <code>bind()</code> when that name is already registered</td></tr>
+      <tr><td><code style="color:#ff8080;">ConnectException</code></td><td>Client cannot reach the server (server not running, wrong host/port)</td></tr>
+      <tr><td><code style="color:#ff8080;">ExportException: Port in use</code></td><td>createRegistry() called when registry already running on that port</td></tr>
+      <tr><td><code style="color:#ff8080;">ClassNotFoundException</code></td><td>Server cannot find the class for a deserialized object from client</td></tr>
+    </table>
+  </div>
+</section>
+
+</div><!-- end .container -->
+
+<footer style="background:var(--card); border-top:1px solid var(--border); padding:2rem; text-align:center; color:var(--muted); font-size:0.88rem; margin-top:2rem;">
+  <p>Week 12 — Programming in Java &nbsp;|&nbsp; Remote Method Invocation &nbsp;|&nbsp; <span style="color:var(--accent);">java.rmi</span></p>
+  <p style="margin-top:0.3rem;">Topics: RMI Architecture · Stub &amp; Skeleton · Registry · Marshalling · Hello RMI · Calculator RMI</p>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- JAVASCRIPT -->
+<!-- ═══════════════════════════════════════════════════ -->
+<script>
+// ── Nav active on scroll ──────────────────────────────
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 80) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+
+// ── Show code output ──────────────────────────────────
+function showOutput(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('show');
+}
+
+// ── Tab switching ─────────────────────────────────────
+function switchTab(group, tab) {
+  // Find all tabs in the same group
+  const prefix = group + '-';
+  // Deactivate all tab-content divs starting with prefix
+  document.querySelectorAll('[id^="' + prefix + '"]').forEach(el => {
+    if (el.classList.contains('tab-content')) el.classList.remove('active');
+  });
+  // Deactivate all .tab buttons in the same tab-bar
+  const target = document.getElementById(prefix + tab);
+  if (!target) return;
+  const tabBar = target.closest('.card').querySelector('.tab-bar');
+  if (tabBar) tabBar.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  // Activate target
+  target.classList.add('active');
+  // Find matching tab button
+  if (tabBar) {
+    tabBar.querySelectorAll('.tab').forEach(t => {
+      if (t.getAttribute('onclick') && t.getAttribute('onclick').includes("'" + tab + "'")) {
+        t.classList.add('active');
+      }
+    });
+  }
+}
+
+// ── Hello RMI Simulator ───────────────────────────────
+let helloServerRunning = false;
+const helloLog = document.getElementById('hello-flow-log');
+
+function helloLog_add(msg, color) {
+  color = color || '#e2e8f0';
+  helloLog.innerHTML += '<span style="color:' + color + ';">' + msg + '</span>\n';
+  helloLog.scrollTop = helloLog.scrollHeight;
+}
+
+function helloStartServer() {
+  helloLog.innerHTML = '';
+  helloLog_add('[Server] Starting RMI Registry on port 1099...', '#f7c948');
+  setTimeout(() => helloLog_add('[Server] Registry created: LocateRegistry.createRegistry(1099)', '#94a3b8'), 300);
+  setTimeout(() => helloLog_add('[Server] Creating Hi object with message: "I am from VIT, Chennai."', '#94a3b8'), 700);
+  setTimeout(() => helloLog_add('[Server] Binding: registry.rebind("Hi", hiObj)', '#94a3b8'), 1100);
+  setTimeout(() => {
+    helloLog_add('[Server] Server is up  ✓', '#4ade80');
+    helloServerRunning = true;
+    document.getElementById('hello-server-indicator').textContent = 'Server: ONLINE';
+    document.getElementById('hello-server-indicator').style.color = '#4ade80';
+    document.getElementById('helloCallBtn').disabled = false;
+  }, 1500);
+}
+
+function helloCallMethod() {
+  if (!helloServerRunning) { alert('Start the server first!'); return; }
+  helloLog_add('\n[Client] Looking up: Naming.lookup("//localhost/Hi")', '#6c63ff');
+  setTimeout(() => helloLog_add('[Registry] Found binding "Hi" → returning stub reference', '#f7c948'), 400);
+  setTimeout(() => helloLog_add('[Client] Received stub. Calling hiObj.sayHi()...', '#6c63ff'), 800);
+  setTimeout(() => helloLog_add('[Stub] Marshalling method call: sayHi() — no parameters', '#f7c948'), 1100);
+  setTimeout(() => helloLog_add('[Network] Sending serialized call over TCP/IP to localhost:1099', '#c678dd'), 1400);
+  setTimeout(() => helloLog_add('[Skeleton] Received bytes. Unmarshalling... method = sayHi()', '#f7c948'), 1800);
+  setTimeout(() => helloLog_add('[Server] Invoking Hi.sayHi() on real object...', '#00d4aa'), 2100);
+  setTimeout(() => helloLog_add('[Server] Result: "I am from VIT, Chennai."', '#00d4aa'), 2400);
+  setTimeout(() => helloLog_add('[Skeleton] Marshalling return value → bytes', '#f7c948'), 2700);
+  setTimeout(() => helloLog_add('[Network] Sending result bytes back to client', '#c678dd'), 3000);
+  setTimeout(() => helloLog_add('[Stub] Unmarshalling return → String received', '#f7c948'), 3300);
+  setTimeout(() => {
+    helloLog_add('[Client] System.out.println(result):', '#6c63ff');
+    helloLog_add('  I am from VIT, Chennai.', '#4ade80');
+  }, 3600);
+}
+
+function helloReset() {
+  helloLog.innerHTML = '';
+  helloServerRunning = false;
+  document.getElementById('hello-server-indicator').textContent = 'Server: OFFLINE';
+  document.getElementById('hello-server-indicator').style.color = 'var(--muted)';
+  document.getElementById('helloCallBtn').disabled = true;
+}
+
+// ── Calculator RMI Simulator ──────────────────────────
+let calcServerRunning = false;
+let calcAnimRunning = false;
+const calcLog = document.getElementById('calc-log');
+
+function calcLog_add(msg, color) {
+  color = color || '#94a3b8';
+  const ts = new Date().toLocaleTimeString('en-GB', {hour12:false});
+  calcLog.innerHTML += '<span style="color:#5c6370;">[' + ts + ']</span> <span style="color:' + color + ';">' + msg + '</span>\n';
+  calcLog.scrollTop = calcLog.scrollHeight;
+}
+
+function calcStartServer() {
+  if (calcServerRunning) return;
+  document.getElementById('calcStartBtn').disabled = true;
+  calcLog_add('Starting RMI Registry on port 1099...', '#f7c948');
+  setTimeout(() => {
+    calcLog_add('LocateRegistry.createRegistry(1099) — OK', '#94a3b8');
+    calcLog_add('new CalculatorImpl() — exporting object...', '#94a3b8');
+  }, 400);
+  setTimeout(() => {
+    calcLog_add('registry.rebind("Calculator", calcImpl)', '#94a3b8');
+    calcLog_add('Server is up  ✓', '#4ade80');
+    calcServerRunning = true;
+    document.getElementById('calc-dot').classList.add('on');
+    document.getElementById('calc-status-text').textContent = 'ONLINE';
+    document.getElementById('calc-status-text').style.color = '#4ade80';
+    document.getElementById('calc-registry-content').innerHTML = '<span style="color:#4ade80;">"Calculator" → CalculatorImpl@localhost:1099</span>';
+    document.getElementById('calcStopBtn').disabled = false;
+    document.getElementById('calcCallBtn').disabled = false;
+  }, 1200);
+}
+
+function calcStopServer() {
+  calcServerRunning = false;
+  document.getElementById('calc-dot').classList.remove('on');
+  document.getElementById('calc-status-text').textContent = 'OFFLINE';
+  document.getElementById('calc-status-text').style.color = '#ff5050';
+  document.getElementById('calc-registry-content').innerHTML = '<span style="color:#ff5050;">empty — server stopped</span>';
+  document.getElementById('calcStartBtn').disabled = false;
+  document.getElementById('calcStopBtn').disabled = true;
+  document.getElementById('calcCallBtn').disabled = true;
+  calcLog_add('Server stopped.', '#ff8080');
+}
+
+function calcCallMethod() {
+  if (!calcServerRunning) {
+    showCalcError('Server is not running! Start the server first.');
+    return;
+  }
+  if (calcAnimRunning) return;
+
+  const a = parseInt(document.getElementById('calc-a').value) || 0;
+  const b = parseInt(document.getElementById('calc-b').value) || 0;
+  const op = document.getElementById('calc-op').value;
+
+  const opNames = { add:'addition', sub:'subtraction', mul:'multiplication', div:'division' };
+  const opName = opNames[op];
+
+  // Compute result
+  let result, error = null;
+  if (op === 'add') result = a + b;
+  else if (op === 'sub') result = a - b;
+  else if (op === 'mul') result = a * b;
+  else if (op === 'div') {
+    if (b === 0) { error = 'ArithmeticException: / by zero'; }
+    else result = Math.trunc(a / b);
+  }
+
+  document.getElementById('calc-result').style.display = 'none';
+  document.getElementById('calc-error').style.display = 'none';
+
+  calcLog_add('Client calling: CalInterface c = Naming.lookup("//localhost/Calculator")', '#6c63ff');
+
+  // Animate packet
+  calcAnimRunning = true;
+  animatePacket(a, b, opName, result, error);
+}
+
+function animatePacket(a, b, opName, result, error) {
+  const packet = document.getElementById('calc-packet');
+  const svg = document.getElementById('calc-svg');
+  const svgRect = svg.getBoundingClientRect();
+
+  // Waypoints in SVG coords
+  const waypoints = [
+    {x: 55,  delay: 0,    label: 'Client calls ' + opName + '(' + a + ',' + b + ')',  color:'#6c63ff'},
+    {x: 175, delay: 600,  label: 'Stub marshalling parameters...',                     color:'#f7c948'},
+    {x: 310, delay: 1200, label: 'Bytes in transit over TCP/IP',                       color:'#c678dd'},
+    {x: 445, delay: 1800, label: 'Skeleton unmarshalling → ' + opName + '(' + a + ',' + b + ')', color:'#f7c948'},
+    {x: 575, delay: 2400, label: 'Executing ' + opName + '(' + a + ',' + b + ')...',  color:'#00d4aa'},
+  ];
+
+  // Highlight nodes
+  const nodeIds = ['cn-client','cn-stub','cn-net','cn-skel','cn-server'];
+  const labelIds = ['lbl-client','lbl-stub','lbl-net','lbl-skel','lbl-server'];
+
+  waypoints.forEach((wp, i) => {
+    setTimeout(() => {
+      // Move packet
+      packet.setAttribute('cx', wp.x);
+      packet.setAttribute('opacity', '1');
+      // Highlight current node
+      nodeIds.forEach((nid, j) => {
+        const el = document.getElementById(nid);
+        if (el) el.style.filter = j === i ? 'drop-shadow(0 0 8px ' + wp.color + ')' : '';
+      });
+      const lbl = document.getElementById(labelIds[i]);
+      if (lbl) { lbl.style.fill = wp.color; lbl.style.fontWeight = 'bold'; }
+      calcLog_add(wp.label, wp.color);
+    }, wp.delay);
+  });
+
+  // Return path + result
+  setTimeout(() => {
+    packet.setAttribute('opacity', '0');
+    nodeIds.forEach(nid => {
+      const el = document.getElementById(nid);
+      if (el) el.style.filter = '';
+    });
+    labelIds.forEach(lid => {
+      const el = document.getElementById(lid);
+      if (el) { el.style.fill = ''; el.style.fontWeight = ''; }
+    });
+
+    if (error) {
+      calcLog_add('Exception thrown: ' + error, '#ff8080');
+      showCalcError(error);
+    } else {
+      calcLog_add('Result marshalled: int ' + result + ' → bytes', '#f7c948');
+      calcLog_add('Result returned to client: ' + result, '#4ade80');
+      // Update SVG labels
+      const clientCall = document.getElementById('cn-client-call');
+      const serverExec = document.getElementById('cn-server-exec');
+      if (clientCall) clientCall.textContent = '→ ' + result;
+      if (serverExec) serverExec.textContent = '= ' + result;
+      showCalcResult('Remote call successful: ' + opName + '(' + a + ', ' + b + ') = ' + result);
+    }
+    calcAnimRunning = false;
+  }, 3200);
+}
+
+function showCalcResult(msg) {
+  const el = document.getElementById('calc-result');
+  el.textContent = msg;
+  el.style.display = 'block';
+  document.getElementById('calc-error').style.display = 'none';
+}
+
+function showCalcError(msg) {
+  const el = document.getElementById('calc-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+  document.getElementById('calc-result').style.display = 'none';
+}
+</script>
+<style>
+.xn-extra-wrap{max-width:1100px;margin:2.5rem auto;padding:0 1.5rem;}
+.xn-intro{background:rgba(108,99,255,.08);border-left:4px solid #6c63ff;border-radius:0 8px 8px 0;padding:1rem 1.2rem;margin:1rem 0 1.5rem;color:var(--muted);font-size:.92rem;}
+.xn-prob{background:var(--card);border:1px solid var(--border);border-left:4px solid #6c63ff;border-radius:10px;padding:1.1rem 1.2rem;margin:1rem 0;}
+.xn-q{margin-bottom:.75rem;color:var(--text);}
+.xn-tag{display:inline-block;background:#6c63ff;color:#fff;font-size:.72rem;font-weight:700;padding:.14rem .6rem;border-radius:20px;margin-right:.45rem;vertical-align:middle;}
+.xn-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.xn-in{background:#12152a;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.5rem .85rem;font-size:.95rem;min-width:180px;font-family:'Cascadia Code','Fira Code',monospace;}
+.xn-in:focus{outline:none;border-color:#6c63ff;}
+.xn-check,.xn-toggle{border:none;border-radius:8px;padding:.5rem 1.15rem;cursor:pointer;font-weight:700;font-size:.88rem;}
+.xn-check{background:#6c63ff;color:#fff;}
+.xn-check:hover{background:#574fd6;}
+.xn-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.xn-toggle:hover{border-color:#00d4aa;color:#00d4aa;}
+.xn-fb{margin-top:.65rem;font-weight:700;font-size:.9rem;min-height:1rem;}
+.xn-fb.xn-ok{color:#00d4aa;}
+.xn-fb.xn-no{color:#ff6b6b;}
+.xn-fb.xn-warn{color:#f7c948;}
+.xn-sol{display:none;margin-top:.85rem;padding:.95rem 1.05rem;background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.3);border-radius:8px;font-size:.9rem;color:var(--text);}
+.xn-sol.open{display:block;animation:xnfade .25s ease;}
+@keyframes xnfade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.xn-sol .xf{background:#12152a;color:#f7c948;font-family:'Cascadia Code','Fira Code',monospace;padding:.55rem .85rem;border-radius:6px;margin:.45rem 0;overflow-x:auto;white-space:pre-wrap;font-size:.86rem;}
+.xn-sol b{color:#00d4aa;}
+.xn-opts{display:flex;flex-direction:column;gap:.45rem;margin-top:.4rem;}
+.xn-opt{text-align:left;background:#12152a;border:1px solid var(--border);color:var(--text);padding:.55rem .85rem;border-radius:6px;cursor:pointer;font-size:.9rem;font-family:inherit;}
+.xn-opt:hover:not(:disabled){border-color:#6c63ff;}
+.xn-opt.xn-ok{background:rgba(0,212,170,.18);border-color:#00d4aa;color:#00d4aa;font-weight:700;}
+.xn-opt.xn-no{background:rgba(255,107,107,.15);border-color:#ff6b6b;color:#ff6b6b;}
+.xn-codeblock{background:#12152a;border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;font-family:'Cascadia Code','Fira Code',monospace;font-size:.85rem;line-height:1.6;white-space:pre;overflow-x:auto;margin:.5rem 0 .8rem;color:#e2e8f0;}
+</style>
+
+<section id="xn-extra" class="xn-extra-wrap">
+  <h2>🔢 Engineered Numerical Practice</h2>
+  <div class="xn-intro">
+    Fresh exam-style computational problems built from this week's concepts. Type your answer and hit
+    <b>Check</b> for instant feedback, or reveal the worked steps. <em>(Press Enter in any answer box to check.)</em>
+  </div>
+
+  <div class="xn-prob" data-ans="1099" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP1</span><b>RMI registry default port.</b>
+      When you start the RMI registry with no port argument (<code>rmiregistry</code>), which default port number does it use?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="port number">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The RMI registry's well-known default port is <code>1099</code> (also used in the notes' <code>createRegistry(1099)</code> example).
+      Default port = <b>1099</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="160" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP2</span><b>Calculator RMI — addition.</b>
+      The remote <code>CalculatorImpl</code> implements <code>int addition(int a, int b){ return a + b; }</code>.
+      A client calls <code>calObj.addition(144, 16)</code>. What does it print?
+      <div class="xn-codeblock">System.out.println(calObj.addition(144, 16));</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="sum">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The remote method returns the sum of its arguments.
+      <div class="xf">144 + 16 = 160</div>
+      Printed value = <b>160</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="2304" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP3</span><b>Calculator RMI — multiplication.</b>
+      The remote method <code>int multiplication(int a, int b){ return a * b; }</code> is invoked as below. What is printed?
+      <div class="xn-codeblock">System.out.println(calObj.multiplication(144, 16));</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="product">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The remote method returns the product.
+      <div class="xf">144 * 16 = 2304</div>
+      Printed value = <b>2304</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="9" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP4</span><b>Calculator RMI — integer division.</b>
+      The remote method <code>int division(int a, int b){ return a / b; }</code> returns an <code>int</code>.
+      A client calls <code>calObj.division(150, 16)</code>. What integer is printed?
+      <div class="xn-codeblock">System.out.println(calObj.division(150, 16));</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="quotient">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Java <code>int</code> division truncates toward zero — the fractional part is discarded.
+      <div class="xf">150 / 16 = 9.375  →  truncates to 9</div>
+      Printed value = <b>9</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="4" data-tol="0" data-unit=" programs">
+    <div class="xn-q"><span class="xn-tag">NP5</span><b>Core RMI programs.</b>
+      The notes state a complete RMI application is built from four core programs (remote interface, implementation,
+      server, client). How many is that?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="how many">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The four core programs are: remote interface, implementation class, server program, client program
+      (stub, skeleton and the registry are supporting pieces).
+      <div class="xf">interface + impl + server + client = 4</div>
+      Count = <b>4</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="5" data-tol="0" data-unit=" methods">
+    <div class="xn-q"><span class="xn-tag">NP6</span><b>Naming class methods.</b>
+      How many methods of <code>java.rmi.Naming</code> are listed in the notes
+      (<code>bind</code>, <code>list</code>, <code>lookup</code>, <code>rebind</code>, <code>unbind</code>)?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="how many">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The five <code>Naming</code> methods are <code>bind()</code>, <code>list()</code>, <code>lookup()</code>,
+      <code>rebind()</code>, and <code>unbind()</code>.
+      <div class="xf">bind + list + lookup + rebind + unbind = 5</div>
+      Count = <b>5</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="24" data-tol="0" data-unit=" bytes">
+    <div class="xn-q"><span class="xn-tag">NP7</span><b>Marshalling byte count.</b>
+      A remote method marshals 6 <code>int</code> parameters for network transport. A Java <code>int</code> is 4 bytes.
+      Counting only the raw integer payload, how many bytes are marshalled?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="bytes">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Each <code>int</code> is 4 bytes on the wire.
+      <div class="xf">6 ints * 4 bytes = 24 bytes</div>
+      Marshalled payload = <b>24</b> bytes.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">NP8</span><b>Client method that produced 200.</b>
+      Three Calculator clients call the remote object as <code>op(20, 10)</code>. The PDF run shows three outputs:
+      <code>10</code>, <code>30</code>, and <code>200</code>. Which operation produced the <code>200</code>?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) addition(20, 10)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) subtraction(20, 10)</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) multiplication(20, 10)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) division(20, 10)</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>subtraction(20,10)=10</code>, <code>addition(20,10)=30</code>, <code>division(20,10)=2</code>, and
+      <code>multiplication(20,10)=200</code>. The value 200 comes from <b>multiplication(20, 10)</b>.
+    </div>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  if(window.__xnInit) return; window.__xnInit=true;
+  function num(s){
+    if(s==null) return NaN;
+    s=(''+s).replace(/−/g,'-').replace(/[^0-9.\-]/g,'');
+    if(s===''||s==='-'||s==='.') return NaN;
+    return parseFloat(s);
+  }
+  window.xnCheck=function(btn){
+    var p=btn.closest('.xn-prob'); if(!p) return;
+    var ans=parseFloat(p.getAttribute('data-ans'));
+    var tol=parseFloat(p.getAttribute('data-tol')||'0.05');
+    var unit=p.getAttribute('data-unit')||'';
+    var inp=p.querySelector('.xn-in'); var fb=p.querySelector('.xn-fb');
+    var v=num(inp.value);
+    if(isNaN(v)){ fb.className='xn-fb xn-warn'; fb.textContent='⚠ Enter a numeric answer first.'; return; }
+    if(Math.abs(v-ans)<=tol){ fb.className='xn-fb xn-ok'; fb.innerHTML='✓ Correct! Answer = '+ans+unit; }
+    else { fb.className='xn-fb xn-no'; fb.innerHTML='✗ Not quite — you entered '+v+'. Try again, or reveal the steps.'; }
+  };
+  window.xnToggle=function(btn){
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol');
+    var open=s.classList.toggle('open'); btn.textContent=open?'Hide steps':'Show steps';
+  };
+  window.xnPick=function(btn,ok){
+    var box=btn.parentElement;
+    box.querySelectorAll('.xn-opt').forEach(function(b){b.disabled=true; b.style.cursor='default';});
+    btn.classList.add(ok?'xn-ok':'xn-no');
+    if(!ok){ box.querySelectorAll('.xn-opt').forEach(function(b){ if(b.getAttribute('data-correct')==='1') b.classList.add('xn-ok'); }); }
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol'); if(s) s.classList.add('open');
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter' && e.target.classList && e.target.classList.contains('xn-in')){
+      var b=e.target.closest('.xn-prob').querySelector('.xn-check'); if(b) b.click();
+    }
+  });
+})();
+</script>
+<section id="xn-mcq" class="xn-extra-wrap">
+  <h2>📝 Exam-Style MCQs — 2 Marks Each</h2>
+  <p style="opacity:.85;font-size:.95em;margin-bottom:1rem;">Each question is worth 2 marks — a mix of applied numerical and conceptual items. Click an option to check it; the correct answer and explanation appear instantly.</p>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q1 · 2 marks</span> A client looks up a remote object using <code>Naming.lookup("rmi://localhost/Calc")</code> without specifying a port. On which default port does the RMI registry listen?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 80</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 8080</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 1099</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 1024</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">When no port is given, RMI uses its standard registry port.
+      <div class="xf">Default RMI registry port = 1099   (started via <code>rmiregistry</code> or <code>LocateRegistry.createRegistry(1099)</code>)</div>
+      The answer is <b>1099</b>.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q2 · 2 marks</span> A remote <code>Calculator</code> stub is invoked as shown. What value does the client receive in <code>r</code>?
+      <div class="xn-codeblock">Calculator c = (Calculator) Naming.lookup("rmi://localhost/Calc");
+int r = c.add(45, 55);</div></div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) 100</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 90</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 4555</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) -10</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">The stub marshals the arguments, the server executes <code>add</code>, and the result is returned to the client.
+      <div class="xf">add(45, 55) → 45 + 55 = 100</div>
+      The client receives <b>100</b>. (The remote call is transparent — it looks like a local method call.)</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q3 · 2 marks</span> Using the same remote <code>Calculator</code>, what does this sequence return?
+      <div class="xn-codeblock">int a = c.multiply(12, 8);
+int b = c.power(2, 10);   // computes 2^10
+int result = b - a;</div></div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 1120</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) 928</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 96</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 1024</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Each remote call returns its computed value; the subtraction happens on the client.
+      <div class="xf">multiply(12, 8) = 96   ·   power(2, 10) = 2¹⁰ = 1024   ·   result = 1024 − 96 = 928</div>
+      The final value is <b>928</b>.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q4 · 2 marks</span> In RMI architecture, what is the role of the <em>stub</em> on the client side?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) It executes the actual remote method body on the client machine</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) It is the client-side proxy that marshals the call/arguments and sends them to the server, then unmarshals the result</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) It stores the binding name in the registry</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) It compiles the remote interface into bytecode</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">The <b>stub is the client-side proxy</b>: it marshals (serializes) the method name and arguments, ships them over the network, then unmarshals the returned value — making the remote call look local. The server-side counterpart (the skeleton, in older RMI) unmarshals the request and dispatches it to the real object. The answer is the <b>client-side proxy that marshals/unmarshals</b>.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q5 · 2 marks</span> Which pair of rules must a valid RMI <em>remote interface</em> satisfy?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) It must extend <code>Serializable</code> and methods throw <code>IOException</code></button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) It must extend <code>Thread</code> and methods are <code>synchronized</code></button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) It must extend <code>java.rmi.Remote</code> and every remote method must declare <code>throws RemoteException</code></button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) It must be a <code>final class</code> and methods return <code>void</code></button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">A remote interface must <b>extend <code>java.rmi.Remote</code></b> (a marker interface) and <b>each method must declare <code>throws RemoteException</code></b> to account for network failures. The implementation class typically extends <code>UnicastRemoteObject</code>. The answer is <b>extends Remote + throws RemoteException</b>.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q6 · 2 marks</span> Which <code>Naming</code> method should a server use to register a remote object so that it <em>replaces</em> any existing binding under the same name (avoiding an <code>AlreadyBoundException</code>)?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Naming.bind(name, obj)</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) Naming.rebind(name, obj)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Naming.lookup(name)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Naming.unbind(name)</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol"><code>bind()</code> throws <code>AlreadyBoundException</code> if the name is taken, whereas <b><code>rebind()</code></b> binds the object and silently overwrites any existing binding — the safe choice for (re)starting a server. <code>lookup()</code> retrieves a stub and <code>unbind()</code> removes a binding. The answer is <b>Naming.rebind(name, obj)</b>.</div>
+  </div>
+</section>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

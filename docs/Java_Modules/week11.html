@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 11 – Networking in Java</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d2e; --accent:#6c63ff; --accent2:#00d4aa; --yellow:#f7c948; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --code:#2d3748; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+  header { background:linear-gradient(135deg,#6c63ff,#00d4aa); padding:3rem 2rem; text-align:center; }
+  header h1 { font-size:2.5rem; font-weight:800; color:#fff; }
+  header p { font-size:1.1rem; color:rgba(255,255,255,0.85); margin-top:0.5rem; }
+  nav { background:var(--card); border-bottom:2px solid var(--accent); display:flex; flex-wrap:wrap; gap:0.25rem; padding:0.75rem 1rem; position:sticky; top:0; z-index:100; }
+  nav a { color:var(--muted); text-decoration:none; padding:0.4rem 1rem; border-radius:6px; font-size:0.85rem; transition:all 0.2s; }
+  nav a:hover, nav a.active { background:var(--accent); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:2rem 1.5rem; }
+  section { margin-bottom:3rem; }
+  h2 { font-size:1.8rem; color:var(--accent); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  h3 { font-size:1.2rem; color:var(--accent2); margin:1.2rem 0 0.6rem; }
+  h4 { font-size:1rem; color:var(--yellow); margin:0.8rem 0 0.3rem; }
+  p { margin-bottom:0.8rem; color:var(--text); }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .highlight { border-left:4px solid var(--accent); background:rgba(108,99,255,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight2 { border-left:4px solid var(--accent2); background:rgba(0,212,170,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight3 { border-left:4px solid var(--yellow); background:rgba(247,201,72,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+  th { background:var(--accent); color:#fff; padding:0.7rem 1rem; text-align:left; }
+  td { padding:0.6rem 1rem; border-bottom:1px solid var(--border); }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.03); }
+  ul,ol { padding-left:1.5rem; margin-bottom:0.8rem; }
+  li { margin-bottom:0.3rem; }
+  .tag { background:var(--accent); color:#fff; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag2 { background:var(--accent2); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag3 { background:var(--yellow); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  svg text { font-family:'Segoe UI',sans-serif; }
+  .step { display:flex; gap:1rem; align-items:flex-start; margin-bottom:0.8rem; }
+  .step-num { background:var(--accent); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+  @media(max-width:700px) { .two-col,.three-col { grid-template-columns:1fr; } header h1 { font-size:1.8rem; } }
+  .interactive-box { background:var(--card); border:2px solid var(--accent); border-radius:12px; padding:1.5rem; margin:1.5rem 0; }
+  input[type=text], input[type=number], textarea, select { background:var(--code); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:0.4rem 0.8rem; font-size:0.95rem; width:100%; margin-bottom:0.5rem; }
+  textarea { resize:vertical; font-family:monospace; }
+  button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:0.6rem 1.5rem; cursor:pointer; font-size:0.95rem; font-weight:600; transition:opacity 0.2s; }
+  button:hover { opacity:0.85; }
+  button.btn2 { background:var(--accent2); color:#000; }
+  button.btn3 { background:var(--yellow); color:#000; }
+  .result-box { background:rgba(0,212,170,0.1); border:1px solid var(--accent2); border-radius:8px; padding:1rem; margin-top:1rem; font-weight:600; color:var(--accent2); min-height:2rem; }
+  /* Code block styling */
+  .code-cell { background:#12152a; border:1px solid var(--border); border-radius:10px; margin:1rem 0; overflow:hidden; }
+  .code-header { background:#1e2238; padding:0.5rem 1rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); }
+  .code-header span { color:var(--muted); font-size:0.82rem; font-family:monospace; }
+  .code-header button { padding:0.3rem 0.9rem; font-size:0.82rem; background:var(--accent2); color:#000; border-radius:6px; }
+  .code-body { padding:1rem 1.2rem; font-family:'Cascadia Code','Fira Code',monospace; font-size:0.88rem; line-height:1.6; overflow-x:auto; }
+  .code-output { background:#0a0d1a; border-top:1px solid var(--border); padding:0.8rem 1.2rem; font-family:'Cascadia Code','Fira Code',monospace; font-size:0.85rem; color:#a8ff78; display:none; }
+  .code-output.visible { display:block; }
+  /* Java syntax highlighting */
+  .kw { color:#c792ea; font-weight:600; }
+  .cm { color:#546e7a; font-style:italic; }
+  .st { color:#c3e88d; }
+  .nu { color:#f78c6c; }
+  .cl { color:#82aaff; }
+  .mt { color:#89ddff; }
+  .an { color:#ffcb6b; }
+  /* Key term cards */
+  .term-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; margin:1rem 0; }
+  .term-card { background:#12152a; border:1px solid var(--border); border-radius:10px; padding:1rem; border-top:3px solid var(--accent); }
+  .term-card h4 { color:var(--accent); margin-top:0; font-size:0.95rem; }
+  .term-card p { font-size:0.87rem; color:var(--muted); margin:0; }
+  /* Terminal style */
+  .terminal { background:#0a0d1a; border:1px solid #2d3748; border-radius:10px; padding:1rem 1.2rem; font-family:'Cascadia Code','Fira Code',monospace; font-size:0.85rem; color:#a8ff78; margin:1rem 0; white-space:pre-wrap; }
+  .terminal .prompt { color:#6c63ff; }
+  .terminal .out { color:#e2e8f0; }
+  /* TCP Diagram */
+  .port-pill { display:inline-block; background:var(--accent); color:#fff; padding:0.15rem 0.6rem; border-radius:20px; font-size:0.78rem; font-family:monospace; }
+  /* UDP simulator */
+  .udp-box { background:#0a0d1a; border-radius:8px; padding:0.8rem 1rem; font-family:monospace; font-size:0.83rem; height:150px; overflow-y:auto; border:1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>&#9749; Week 11: Networking in Java</h1>
+  <p>TCP/IP &middot; Sockets &middot; UDP &middot; URL Class &middot; Client-Server Programming</p>
+</header>
+
+<nav>
+  <a href="#basics" class="active">Basics</a>
+  <a href="#ip">IP Protocol</a>
+  <a href="#tcpudp">TCP vs UDP</a>
+  <a href="#ports">Ports</a>
+  <a href="#url">URL Class</a>
+  <a href="#sockets">Sockets</a>
+  <a href="#timeserver">Time Server</a>
+  <a href="#echo">Echo Server</a>
+  <a href="#udp">UDP</a>
+  <a href="#udpcode">UDP Code</a>
+  <a href="#usecases">Use Cases</a>
+  <a href="#xn-extra">🔢 Numericals</a>
+  <a href="#xn-mcq">📝 MCQs</a>
+</nav>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════
+     SECTION 1: BASICS OF NETWORKING
+     ═══════════════════════════════════════════ -->
+<section id="basics">
+  <h2>&#127760; 1. Basics of Networking</h2>
+  <div class="card">
+    <p>A <strong>computer network</strong> is a system of computers and devices that can communicate with each other. Networking underpins everything from loading a webpage to sending an email to video calls.</p>
+
+    <h3>Key Terms</h3>
+    <div class="term-grid">
+      <div class="term-card">
+        <h4>Network</h4>
+        <p>Computers/devices that communicate via electromagnetic waves, radio signals, or fibre-optic cables.</p>
+      </div>
+      <div class="term-card">
+        <h4>Node</h4>
+        <p>Any computer or device connected to the network — laptops, phones, servers, routers, printers.</p>
+      </div>
+      <div class="term-card">
+        <h4>Address</h4>
+        <p>A unique string that identifies each node on the network (e.g., 192.168.1.1 or a domain name).</p>
+      </div>
+      <div class="term-card">
+        <h4>Protocol</h4>
+        <p>Guidelines defining format, packet structure, and addressing rules. Examples: IEEE 802.3, HTTP, FTP.</p>
+      </div>
+      <div class="term-card">
+        <h4>Packets</h4>
+        <p>Data split into independently managed units, each carrying sender and recipient info for routing.</p>
+      </div>
+    </div>
+
+    <h3>TCP/IP Four-Layer Model</h3>
+    <p>The TCP/IP model organises networking into four distinct layers, each with specific responsibilities:</p>
+
+    <svg viewBox="0 0 620 280" width="100%" height="280" style="display:block;">
+      <!-- Layer 4: Application -->
+      <rect x="40" y="20" width="540" height="55" rx="10" fill="#1e1b3a" stroke="#6c63ff" stroke-width="2"/>
+      <text x="220" y="50" fill="#6c63ff" font-size="16" font-weight="bold">Application Layer</text>
+      <text x="220" y="68" fill="#94a3b8" font-size="12">HTTP, FTP, telnet, SMTP, DNS</text>
+      <text x="520" y="52" fill="#f7c948" font-size="11" text-anchor="middle">Layer 4</text>
+
+      <!-- Arrow down -->
+      <line x1="310" y1="75" x2="310" y2="95" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrd)"/>
+
+      <!-- Layer 3: Transport -->
+      <rect x="40" y="95" width="540" height="55" rx="10" fill="#0d2b2b" stroke="#00d4aa" stroke-width="2"/>
+      <text x="220" y="125" fill="#00d4aa" font-size="16" font-weight="bold">Transport Layer</text>
+      <text x="220" y="143" fill="#94a3b8" font-size="12">TCP (reliable) &nbsp;&nbsp; UDP (fast)</text>
+      <text x="520" y="127" fill="#f7c948" font-size="11" text-anchor="middle">Layer 3</text>
+
+      <!-- Arrow down -->
+      <line x1="310" y1="150" x2="310" y2="170" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrd)"/>
+
+      <!-- Layer 2: Network/Internet -->
+      <rect x="40" y="170" width="540" height="55" rx="10" fill="#1a1507" stroke="#f7c948" stroke-width="2"/>
+      <text x="220" y="200" fill="#f7c948" font-size="16" font-weight="bold">Network Layer</text>
+      <text x="220" y="218" fill="#94a3b8" font-size="12">Internet Protocol (IP) — routing packets</text>
+      <text x="520" y="202" fill="#f7c948" font-size="11" text-anchor="middle">Layer 2</text>
+
+      <!-- Arrow down -->
+      <line x1="310" y1="225" x2="310" y2="245" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrd)"/>
+
+      <!-- Layer 1: Link -->
+      <rect x="40" y="245" width="540" height="25" rx="8" fill="#1e1220" stroke="#c792ea" stroke-width="2"/>
+      <text x="220" y="261" fill="#c792ea" font-size="14" font-weight="bold">Link Layer</text>
+      <text x="430" y="261" fill="#94a3b8" font-size="11">Ethernet, WiFi (IEEE 802.3/802.11)</text>
+
+      <defs>
+        <marker id="arrd" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 z" fill="#94a3b8"/>
+        </marker>
+      </defs>
+    </svg>
+
+    <div class="highlight">
+      <strong>Encapsulation:</strong> Data travels <em>down</em> the layers when sending (each layer wraps the data with its own header). When receiving, it travels <em>up</em> the layers, stripping headers at each step.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 2: INTERNET PROTOCOL
+     ═══════════════════════════════════════════ -->
+<section id="ip">
+  <h2>&#127760; 2. Internet Protocol (IP)</h2>
+  <div class="card">
+    <p>The <strong>Internet Protocol (IP)</strong> is the principal communications protocol in the Network Layer. It delivers packets from source to destination across multiple networks.</p>
+
+    <div class="two-col">
+      <div>
+        <h3>Key Characteristics</h3>
+        <ul>
+          <li><strong>Packet routing:</strong> Transports individual packets from source to destination host</li>
+          <li><strong>Addressing:</strong> Assigns IP addresses to uniquely identify each device</li>
+          <li><strong>Packet structure:</strong> Each packet contains header (source IP, destination IP, TTL) and payload</li>
+          <li><strong>Connectionless service:</strong> IP does <em>not</em> establish a connection before sending; each packet is routed independently</li>
+          <li><strong>Best-effort delivery:</strong> IP makes no guarantees — packets may arrive out of order, be duplicated, or be dropped</li>
+        </ul>
+      </div>
+      <div>
+        <h3>IP Versions</h3>
+        <div class="highlight">
+          <h4>IPv4</h4>
+          <p>32-bit address space. Format: <code style="color:var(--yellow);">192.168.0.1</code><br>
+          ~4.3 billion unique addresses. Nearly exhausted.</p>
+        </div>
+        <div class="highlight2">
+          <h4>IPv6</h4>
+          <p>128-bit address space. Format: <code style="color:var(--yellow);">2001:db8::1</code><br>
+          340 undecillion addresses. The future of IP.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Two Transport Protocols Built on IP</h3>
+    <div class="two-col">
+      <div class="card" style="background:#1e1b3a; border-top:3px solid var(--accent);">
+        <h4>TCP/IP (Transmission Control Protocol)</h4>
+        <p>Adds reliability on top of IP. Guarantees delivery, ordering, and error checking. The reliable option.</p>
+        <p><span class="tag">Connection-oriented</span></p>
+      </div>
+      <div class="card" style="background:#0d2b2b; border-top:3px solid var(--accent2);">
+        <h4>UDP/IP (User Datagram Protocol)</h4>
+        <p>Lightweight protocol on top of IP. No delivery guarantees. The fast option.</p>
+        <p><span class="tag2">Connectionless</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 3: TCP VS UDP
+     ═══════════════════════════════════════════ -->
+<section id="tcpudp">
+  <h2>&#9878; 3. TCP vs UDP Comparison</h2>
+  <div class="card">
+    <p>TCP and UDP are the two main transport protocols. Understanding their trade-offs is essential for choosing the right one.</p>
+
+    <div class="two-col" style="margin:1.5rem 0;">
+      <div class="card" style="background:#1e1b3a; border:2px solid var(--accent);">
+        <h3 style="color:var(--accent); margin-top:0;">TCP</h3>
+        <p style="font-size:0.85rem; color:var(--muted);">Transmission Control Protocol</p>
+        <ul>
+          <li><strong>Connection-oriented</strong> — handshake before data</li>
+          <li><strong>Reliable delivery</strong> — guaranteed arrival</li>
+          <li><strong>Ordered packets</strong> — arrives in sequence</li>
+          <li><strong>Acknowledges each packet</strong> — ACK/NACK mechanism</li>
+          <li><strong>Flow &amp; congestion control</strong></li>
+          <li><strong>Slower</strong> — overhead from reliability</li>
+          <li><strong>Use case:</strong> file transfer, web browsing, email, database queries</li>
+        </ul>
+      </div>
+      <div class="card" style="background:#0d2b2b; border:2px solid var(--accent2);">
+        <h3 style="color:var(--accent2); margin-top:0;">UDP</h3>
+        <p style="font-size:0.85rem; color:var(--muted);">User Datagram Protocol</p>
+        <ul>
+          <li><strong>Connectionless</strong> — no handshake</li>
+          <li><strong>No delivery guarantee</strong> — fire and forget</li>
+          <li><strong>No ordering</strong> — packets may arrive scrambled</li>
+          <li><strong>No acknowledgment</strong> — no ACK/NACK</li>
+          <li><strong>No flow control</strong></li>
+          <li><strong>Faster, lower latency</strong> — minimal overhead</li>
+          <li><strong>Use case:</strong> video streaming, online gaming, VoIP, DNS</li>
+        </ul>
+      </div>
+    </div>
+
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th style="color:#a8b8ff;">TCP</th>
+        <th style="color:#a8ffee;">UDP</th>
+      </tr>
+      <tr>
+        <td>Connection</td>
+        <td>Connection-oriented (3-way handshake)</td>
+        <td>Connectionless</td>
+      </tr>
+      <tr>
+        <td>Reliability</td>
+        <td>Guaranteed delivery</td>
+        <td>No delivery guarantee</td>
+      </tr>
+      <tr>
+        <td>Ordering</td>
+        <td>Packets arrive in order</td>
+        <td>No ordering guarantee</td>
+      </tr>
+      <tr>
+        <td>Acknowledgment</td>
+        <td>ACK for every packet</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td>Speed</td>
+        <td>Slower (overhead)</td>
+        <td>Faster, lower latency</td>
+      </tr>
+      <tr>
+        <td>Header size</td>
+        <td>20–60 bytes</td>
+        <td>8 bytes</td>
+      </tr>
+      <tr>
+        <td>Error checking</td>
+        <td>Full error checking + recovery</td>
+        <td>Basic checksum only</td>
+      </tr>
+      <tr>
+        <td>Best for</td>
+        <td>File transfer, email, HTTP</td>
+        <td>Video streaming, gaming, VoIP</td>
+      </tr>
+    </table>
+
+    <div class="highlight3">
+      <strong>Rule of thumb:</strong> Use TCP when data correctness matters. Use UDP when speed matters more than perfect delivery (e.g., a dropped video frame is acceptable; a corrupted file transfer is not).
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 4: PORTS
+     ═══════════════════════════════════════════ -->
+<section id="ports">
+  <h2>&#128268; 4. Ports</h2>
+  <div class="card">
+    <p>An IP address identifies a <strong>computer</strong> on the network. A port number identifies a specific <strong>application</strong> on that computer. Together they form a <em>socket address</em>.</p>
+
+    <div class="highlight">
+      <strong>Port numbers</strong> are 16-bit unsigned integers, ranging from <strong>0 to 65535</strong>.<br>
+      &bull; <strong>0–1023:</strong> Well-known ports (reserved for standard services, require root/admin)<br>
+      &bull; <strong>1024–49151:</strong> Registered ports (for common software)<br>
+      &bull; <strong>49152–65535:</strong> Dynamic/ephemeral ports (used by clients for outgoing connections)
+    </div>
+
+    <h3>Application Addressing with Ports</h3>
+
+    <svg viewBox="0 0 650 220" width="100%" height="220" style="display:block;">
+      <!-- Computer box -->
+      <rect x="20" y="20" width="600" height="175" rx="14" fill="#12152a" stroke="#2d3748" stroke-width="1.5"/>
+      <text x="320" y="45" fill="#94a3b8" font-size="13" text-anchor="middle">Computer — IP: 203.0.113.45</text>
+
+      <!-- App 1: Browser -->
+      <rect x="50" y="60" width="140" height="80" rx="10" fill="#1e1b3a" stroke="#6c63ff" stroke-width="2"/>
+      <text x="120" y="95" fill="#6c63ff" font-size="13" font-weight="bold" text-anchor="middle">Web Browser</text>
+      <rect x="75" y="105" width="90" height="24" rx="6" fill="#6c63ff"/>
+      <text x="120" y="122" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">Port 80 / 443</text>
+
+      <!-- App 2: FTP Client -->
+      <rect x="245" y="60" width="160" height="80" rx="10" fill="#0d2b2b" stroke="#00d4aa" stroke-width="2"/>
+      <text x="325" y="95" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">FTP Client</text>
+      <rect x="270" y="105" width="110" height="24" rx="6" fill="#00d4aa"/>
+      <text x="325" y="122" fill="#000" font-size="11" font-weight="bold" text-anchor="middle">Port 21</text>
+
+      <!-- App 3: DB -->
+      <rect x="455" y="60" width="140" height="80" rx="10" fill="#1a1507" stroke="#f7c948" stroke-width="2"/>
+      <text x="525" y="95" fill="#f7c948" font-size="13" font-weight="bold" text-anchor="middle">MySQL</text>
+      <rect x="480" y="105" width="90" height="24" rx="6" fill="#f7c948"/>
+      <text x="525" y="122" fill="#000" font-size="11" font-weight="bold" text-anchor="middle">Port 3306</text>
+
+      <!-- TCP/UDP layer -->
+      <rect x="50" y="158" width="545" height="24" rx="6" fill="#2d3748"/>
+      <text x="322" y="174" fill="#e2e8f0" font-size="12" text-anchor="middle">TCP / UDP Transport Layer — routes packets to correct application by port number</text>
+
+      <!-- Arrows up -->
+      <line x1="120" y1="158" x2="120" y2="142" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#arru)"/>
+      <line x1="325" y1="158" x2="325" y2="142" stroke="#00d4aa" stroke-width="1.5" marker-end="url(#arru)"/>
+      <line x1="525" y1="158" x2="525" y2="142" stroke="#f7c948" stroke-width="1.5" marker-end="url(#arru)"/>
+
+      <defs>
+        <marker id="arru" markerWidth="8" markerHeight="8" refX="4" refY="0" orient="auto">
+          <path d="M0,8 L4,0 L8,8 z" fill="#94a3b8"/>
+        </marker>
+      </defs>
+    </svg>
+
+    <h3>Well-Known Port Numbers</h3>
+    <table>
+      <tr><th>Port</th><th>Protocol</th><th>Description</th></tr>
+      <tr><td><span class="port-pill">80</span></td><td>HTTP</td><td>HyperText Transfer Protocol — web traffic (unencrypted)</td></tr>
+      <tr><td><span class="port-pill">443</span></td><td>HTTPS</td><td>HTTP Secure — encrypted web traffic (TLS/SSL)</td></tr>
+      <tr><td><span class="port-pill">21</span></td><td>FTP</td><td>File Transfer Protocol — control channel</td></tr>
+      <tr><td><span class="port-pill">22</span></td><td>SSH</td><td>Secure Shell — encrypted remote terminal access</td></tr>
+      <tr><td><span class="port-pill">25</span></td><td>SMTP</td><td>Simple Mail Transfer Protocol — sending email</td></tr>
+      <tr><td><span class="port-pill">53</span></td><td>DNS</td><td>Domain Name System — hostname to IP resolution</td></tr>
+      <tr><td><span class="port-pill">3306</span></td><td>MySQL</td><td>MySQL Database server default port</td></tr>
+      <tr><td><span class="port-pill">6868</span></td><td>Custom</td><td>User-defined port (used in examples below)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 5: URL CLASS
+     ═══════════════════════════════════════════ -->
+<section id="url">
+  <h2>&#128279; 5. URL Class</h2>
+  <div class="card">
+    <p>Java's <code class="cl" style="background:var(--code);padding:0.1rem 0.4rem;border-radius:4px;">java.net.URL</code> class represents a Uniform Resource Locator — a reference to a resource on the web. It parses the URL into its components and provides methods to access each part.</p>
+
+    <div class="highlight">
+      <strong>URL anatomy:</strong><br>
+      <code style="color:var(--yellow); font-size:0.9rem;">https://www.scopus.com:443/authid/detail.uri?authorId=52232500600#results</code><br><br>
+      <span style="color:var(--accent);">https</span> :// <span style="color:var(--accent2);">www.scopus.com</span> : <span style="color:var(--yellow);">443</span> <span style="color:#c792ea;">/authid/detail.uri</span> ? <span style="color:#ff9b7a;">authorId=52232500600</span> # <span style="color:#a8ff78;">results</span>
+    </div>
+
+    <h3>URL Class Methods</h3>
+    <table>
+      <tr><th>Method</th><th>Returns</th><th>Example</th></tr>
+      <tr><td><code>getProtocol()</code></td><td>Protocol string</td><td><code style="color:var(--accent2);">https</code></td></tr>
+      <tr><td><code>getHost()</code></td><td>Hostname</td><td><code style="color:var(--accent2);">www.scopus.com</code></td></tr>
+      <tr><td><code>getDefaultPort()</code></td><td>Default port for protocol</td><td><code style="color:var(--accent2);">443</code></td></tr>
+      <tr><td><code>getPort()</code></td><td>Explicit port (-1 if not set)</td><td><code style="color:var(--accent2);">-1</code></td></tr>
+      <tr><td><code>getPath()</code></td><td>Path component</td><td><code style="color:var(--accent2)">/authid/detail.uri</code></td></tr>
+      <tr><td><code>getQuery()</code></td><td>Query string</td><td><code style="color:var(--accent2);">authorId=52232500600</code></td></tr>
+      <tr><td><code>getRef()</code></td><td>Fragment/anchor (#)</td><td><code style="color:var(--accent2);">results</code></td></tr>
+      <tr><td><code>getFile()</code></td><td>Path + query</td><td><code style="color:var(--accent2)">/authid/detail.uri?authorId=...</code></td></tr>
+    </table>
+
+    <h3>Code Example</h3>
+    <div class="code-cell">
+      <div class="code-header">
+        <span>URLExample.java</span>
+        <button onclick="showOutput('url-out')">&#9654; Run</button>
+      </div>
+      <div class="code-body">
+<span class="kw">import</span> java.net.URL;<br>
+<br>
+<span class="kw">public class</span> <span class="cl">URLExample</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">public static void</span> <span class="mt">main</span>(String[] args) <span class="kw">throws</span> Exception {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">URL</span> urlExample = <span class="kw">new</span> <span class="cl">URL</span>(<span class="st">"https://www.scopus.com/authid/detail.uri?authorId=52232500600"</span>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"Protocol: "</span> + urlExample.<span class="mt">getProtocol</span>());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"Host: "</span> + urlExample.<span class="mt">getHost</span>());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"Default port: "</span> + urlExample.<span class="mt">getDefaultPort</span>());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"Port: "</span> + urlExample.<span class="mt">getPort</span>());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"Query: "</span> + urlExample.<span class="mt">getQuery</span>());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"Path: "</span> + urlExample.<span class="mt">getPath</span>());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"File: "</span> + urlExample.<span class="mt">getFile</span>());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"Ref: "</span> + urlExample.<span class="mt">getRef</span>());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+      </div>
+      <div class="code-output" id="url-out">
+Protocol: https
+Host: www.scopus.com
+Default port: 443
+Port: -1
+Query: authorId=52232500600
+Path: /authid/detail.uri
+File: /authid/detail.uri?authorId=52232500600
+Ref: null</div>
+    </div>
+
+    <!-- Interactive URL Parser -->
+    <div class="interactive-box">
+      <h3 style="margin-top:0;">&#128301; Interactive URL Parser</h3>
+      <p>Enter any URL to parse its components using the browser's URL API:</p>
+      <input type="text" id="url-input" placeholder="https://www.example.com:8080/path/page?query=value#section" value="https://www.scopus.com/authid/detail.uri?authorId=52232500600">
+      <button onclick="parseURL()">Parse URL</button>
+      <div class="result-box" id="url-result" style="display:none;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 6: SOCKETS
+     ═══════════════════════════════════════════ -->
+<section id="sockets">
+  <h2>&#128301; 6. Sockets</h2>
+  <div class="card">
+    <p>A <strong>socket</strong> is an endpoint for communication between two machines. It is uniquely identified by:</p>
+    <div class="highlight">
+      <strong>Socket = IP Address + Port Number</strong><br>
+      A TCP connection has <em>two</em> endpoints (two sockets): one at each end. Data flows in both directions.
+    </div>
+
+    <h3>Connection Lifecycle</h3>
+    <div class="step"><div class="step-num">1</div><div><strong>Server creates ServerSocket</strong> on a specific port — begins listening for connections</div></div>
+    <div class="step"><div class="step-num">2</div><div><strong>Server calls <code>accept()</code></strong> — the thread blocks, waiting for a client to connect</div></div>
+    <div class="step"><div class="step-num">3</div><div><strong>Client creates <code>Socket(hostname, port)</code></strong> — this triggers the TCP 3-way handshake (connection request)</div></div>
+    <div class="step"><div class="step-num">4</div><div><strong>Server's <code>accept()</code> returns</strong> — a new Socket object is created specifically for this client</div></div>
+    <div class="step"><div class="step-num">5</div><div><strong>Both sides have a Socket</strong> — bidirectional communication via <code>getInputStream()</code> / <code>getOutputStream()</code></div></div>
+
+    <h3>Socket Connection Diagram</h3>
+    <svg viewBox="0 0 660 230" width="100%" height="230" style="display:block;">
+      <defs>
+        <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#6c63ff"/>
+        </marker>
+        <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#00d4aa"/>
+        </marker>
+      </defs>
+
+      <!-- Phase 1: Connection Request -->
+      <rect x="20" y="20" width="295" height="190" rx="12" fill="#12152a" stroke="#2d3748" stroke-width="1"/>
+      <text x="167" y="45" fill="#94a3b8" font-size="12" font-weight="bold" text-anchor="middle">Phase 1: Connection Request</text>
+
+      <!-- Client box -->
+      <rect x="35" y="60" width="100" height="60" rx="8" fill="#1e1b3a" stroke="#6c63ff" stroke-width="2"/>
+      <text x="85" y="87" fill="#6c63ff" font-size="12" font-weight="bold" text-anchor="middle">CLIENT</text>
+      <text x="85" y="105" fill="#94a3b8" font-size="10" text-anchor="middle">new Socket()</text>
+
+      <!-- Server box -->
+      <rect x="185" y="60" width="110" height="60" rx="8" fill="#0d2b2b" stroke="#00d4aa" stroke-width="2"/>
+      <text x="240" y="84" fill="#00d4aa" font-size="12" font-weight="bold" text-anchor="middle">SERVER</text>
+      <text x="240" y="100" fill="#94a3b8" font-size="10" text-anchor="middle">ServerSocket</text>
+      <text x="240" y="114" fill="#94a3b8" font-size="10" text-anchor="middle">accept()</text>
+
+      <!-- Connection request arrow -->
+      <line x1="137" y1="82" x2="183" y2="82" stroke="#6c63ff" stroke-width="2" marker-end="url(#arr2)"/>
+      <text x="160" y="76" fill="#6c63ff" font-size="9" text-anchor="middle">connect</text>
+
+      <text x="167" y="155" fill="#94a3b8" font-size="10" text-anchor="middle">Client initiates TCP handshake</text>
+      <text x="167" y="170" fill="#94a3b8" font-size="10" text-anchor="middle">Server's accept() is blocking</text>
+      <text x="167" y="185" fill="#f7c948" font-size="10" text-anchor="middle">SYN → SYN-ACK → ACK</text>
+
+      <!-- Phase 2: Established -->
+      <rect x="345" y="20" width="295" height="190" rx="12" fill="#12152a" stroke="#2d3748" stroke-width="1"/>
+      <text x="492" y="45" fill="#94a3b8" font-size="12" font-weight="bold" text-anchor="middle">Phase 2: Connection Established</text>
+
+      <!-- Client box -->
+      <rect x="360" y="60" width="100" height="60" rx="8" fill="#1e1b3a" stroke="#6c63ff" stroke-width="2"/>
+      <text x="410" y="87" fill="#6c63ff" font-size="12" font-weight="bold" text-anchor="middle">CLIENT</text>
+      <text x="410" y="105" fill="#94a3b8" font-size="10" text-anchor="middle">Socket</text>
+
+      <!-- Server box -->
+      <rect x="510" y="60" width="110" height="60" rx="8" fill="#0d2b2b" stroke="#00d4aa" stroke-width="2"/>
+      <text x="565" y="84" fill="#00d4aa" font-size="12" font-weight="bold" text-anchor="middle">SERVER</text>
+      <text x="565" y="100" fill="#94a3b8" font-size="10" text-anchor="middle">Socket</text>
+      <text x="565" y="114" fill="#94a3b8" font-size="10" text-anchor="middle">(new per client)</text>
+
+      <!-- Bidirectional arrows -->
+      <line x1="462" y1="78" x2="508" y2="78" stroke="#6c63ff" stroke-width="2" marker-end="url(#arr2)"/>
+      <line x1="508" y1="96" x2="462" y2="96" stroke="#00d4aa" stroke-width="2" marker-end="url(#arr3)"/>
+      <text x="485" y="74" fill="#6c63ff" font-size="9" text-anchor="middle">send</text>
+      <text x="485" y="110" fill="#00d4aa" font-size="9" text-anchor="middle">reply</text>
+
+      <text x="492" y="155" fill="#94a3b8" font-size="10" text-anchor="middle">Both have Socket objects</text>
+      <text x="492" y="170" fill="#94a3b8" font-size="10" text-anchor="middle">Use InputStream/OutputStream</text>
+      <text x="492" y="185" fill="#f7c948" font-size="10" text-anchor="middle">Full duplex communication</text>
+    </svg>
+
+    <div class="two-col" style="margin-top:1rem;">
+      <div>
+        <h3>java.net.Socket Methods</h3>
+        <table>
+          <tr><th>Method</th><th>Description</th></tr>
+          <tr><td><code>getInputStream()</code></td><td>Returns input stream to read data from</td></tr>
+          <tr><td><code>getOutputStream()</code></td><td>Returns output stream to write data to</td></tr>
+          <tr><td><code>close()</code></td><td>Closes the socket and its streams</td></tr>
+          <tr><td><code>getInetAddress()</code></td><td>Returns the remote IP address</td></tr>
+          <tr><td><code>getPort()</code></td><td>Returns the remote port number</td></tr>
+          <tr><td><code>getLocalPort()</code></td><td>Returns the local port number</td></tr>
+          <tr><td><code>isConnected()</code></td><td>Whether the socket is connected</td></tr>
+        </table>
+      </div>
+      <div>
+        <h3>java.net.ServerSocket Methods</h3>
+        <table>
+          <tr><th>Method</th><th>Description</th></tr>
+          <tr><td><code>accept()</code></td><td>Waits for and accepts a client connection; returns a Socket</td></tr>
+          <tr><td><code>close()</code></td><td>Closes the server socket</td></tr>
+          <tr><td><code>getLocalPort()</code></td><td>Returns the port the server is listening on</td></tr>
+          <tr><td><code>isBound()</code></td><td>Whether the socket is bound to a port</td></tr>
+          <tr><td><code>isClosed()</code></td><td>Whether the server socket is closed</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 7: TCP TIME SERVER/CLIENT
+     ═══════════════════════════════════════════ -->
+<section id="timeserver">
+  <h2>&#9201; 7. TCP Time Server / Client</h2>
+  <div class="card">
+    <p>A classic first networking example: a server that sends the current date/time to any client that connects. The client simply connects, reads one line, and prints it.</p>
+
+    <h3>Time Server</h3>
+    <div class="code-cell">
+      <div class="code-header">
+        <span>TimeServer.java</span>
+        <button onclick="showOutput('time-server-out')">&#9654; Run</button>
+      </div>
+      <div class="code-body">
+<span class="kw">import</span> java.net.*;<br>
+<span class="kw">import</span> java.io.*;<br>
+<span class="kw">import</span> java.util.Date;<br>
+<br>
+<span class="kw">public class</span> <span class="cl">TimeServer</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">public static void</span> <span class="mt">main</span>(String[] args) <span class="kw">throws</span> IOException {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">ServerSocket</span> timeSocket = <span class="kw">new</span> <span class="cl">ServerSocket</span>(<span class="nu">6868</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"Server is listening on port 6868"</span>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> (<span class="kw">true</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">Socket</span> socket = timeSocket.<span class="mt">accept</span>(); <span class="cm">// blocks here</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"New client connected"</span>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">PrintWriter</span> writer = <span class="kw">new</span> <span class="cl">PrintWriter</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;socket.<span class="mt">getOutputStream</span>(), <span class="kw">true</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;writer.<span class="mt">println</span>(<span class="kw">new</span> <span class="cl">Date</span>().<span class="mt">toString</span>());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;socket.<span class="mt">close</span>();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+      </div>
+      <div class="code-output" id="time-server-out">
+Server is listening on port 6868
+New client connected</div>
+    </div>
+
+    <h3>Time Client</h3>
+    <div class="code-cell">
+      <div class="code-header">
+        <span>TimeClient.java</span>
+        <button onclick="showOutput('time-client-out')">&#9654; Run</button>
+      </div>
+      <div class="code-body">
+<span class="kw">import</span> java.net.*;<br>
+<span class="kw">import</span> java.io.*;<br>
+<br>
+<span class="kw">public class</span> <span class="cl">TimeClient</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">public static void</span> <span class="mt">main</span>(String[] args) <span class="kw">throws</span> IOException {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">Socket</span> socket = <span class="kw">new</span> <span class="cl">Socket</span>(<span class="st">"localhost"</span>, <span class="nu">6868</span>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">BufferedReader</span> reader = <span class="kw">new</span> <span class="cl">BufferedReader</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">new</span> <span class="cl">InputStreamReader</span>(socket.<span class="mt">getInputStream</span>()));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">String</span> time = reader.<span class="mt">readLine</span>();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(time);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;socket.<span class="mt">close</span>();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+      </div>
+      <div class="code-output" id="time-client-out">
+Sun Oct 29 13:26:23 IST 2023</div>
+    </div>
+
+    <!-- Interactive TCP Simulator -->
+    <div class="interactive-box">
+      <h3 style="margin-top:0;">&#128187; Simulated TCP Exchange</h3>
+      <p>Click the buttons in order to simulate a TCP Time Server/Client connection:</p>
+      <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
+        <button onclick="tcpStep1()" id="btn-server">&#128308; Start Server</button>
+        <button onclick="tcpStep2()" id="btn-client" disabled style="opacity:0.5;">&#128309; Connect Client</button>
+        <button onclick="tcpReset()" class="btn3">&#8635; Reset</button>
+      </div>
+      <div class="terminal" id="tcp-terminal" style="min-height:120px; color:#e2e8f0;">
+<span style="color:#94a3b8;"># TCP Time Server/Client Simulation</span>
+<span style="color:#94a3b8;"># Click "Start Server" to begin...</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 8: ECHO REVERSE SERVER
+     ═══════════════════════════════════════════ -->
+<section id="echo">
+  <h2>&#8617; 8. Echo Reverse Server / Client</h2>
+  <div class="card">
+    <p>A more interactive example: the client sends a string; the server reverses it and sends it back. This demonstrates bidirectional communication over a persistent TCP connection.</p>
+
+    <h3>Echo Reverse Server</h3>
+    <div class="code-cell">
+      <div class="code-header">
+        <span>EchoReverseServer.java</span>
+        <button onclick="showOutput('echo-server-out')">&#9654; Run</button>
+      </div>
+      <div class="code-body">
+<span class="kw">import</span> java.net.*;<br>
+<span class="kw">import</span> java.io.*;<br>
+<br>
+<span class="kw">public class</span> <span class="cl">EchoReverseServer</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">public static void</span> <span class="mt">main</span>(String[] args) <span class="kw">throws</span> IOException {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">ServerSocket</span> serverSocket = <span class="kw">new</span> <span class="cl">ServerSocket</span>(<span class="nu">6868</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"Echo Reverse Server started on port 6868"</span>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">Socket</span> socket = serverSocket.<span class="mt">accept</span>();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"Client connected: "</span> + socket.<span class="mt">getInetAddress</span>());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">BufferedReader</span> reader = <span class="kw">new</span> <span class="cl">BufferedReader</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">new</span> <span class="cl">InputStreamReader</span>(socket.<span class="mt">getInputStream</span>()));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">PrintWriter</span> writer = <span class="kw">new</span> <span class="cl">PrintWriter</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;socket.<span class="mt">getOutputStream</span>(), <span class="kw">true</span>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">String</span> line;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> ((line = reader.<span class="mt">readLine</span>()) != <span class="kw">null</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">String</span> reversed = <span class="kw">new</span> <span class="cl">StringBuilder</span>(line).<span class="mt">reverse</span>().<span class="mt">toString</span>();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"Received: "</span> + line + <span class="st">" → Sending: "</span> + reversed);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;writer.<span class="mt">println</span>(reversed);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;socket.<span class="mt">close</span>();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;serverSocket.<span class="mt">close</span>();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+      </div>
+      <div class="code-output" id="echo-server-out">
+Echo Reverse Server started on port 6868
+Client connected: /127.0.0.1
+Received: heloe → Sending: eoleh
+Received: prakash → Sending: hsakarp</div>
+    </div>
+
+    <h3>Echo Reverse Client</h3>
+    <div class="code-cell">
+      <div class="code-header">
+        <span>EchoReverseClient1.java</span>
+        <button onclick="showOutput('echo-client-out')">&#9654; Run</button>
+      </div>
+      <div class="code-body">
+<span class="kw">import</span> java.net.*;<br>
+<span class="kw">import</span> java.io.*;<br>
+<br>
+<span class="kw">public class</span> <span class="cl">EchoReverseClient1</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">public static void</span> <span class="mt">main</span>(String[] args) <span class="kw">throws</span> IOException {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">Socket</span> socket = <span class="kw">new</span> <span class="cl">Socket</span>(<span class="st">"localhost"</span>, <span class="nu">6868</span>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">BufferedReader</span> userInput = <span class="kw">new</span> <span class="cl">BufferedReader</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">new</span> <span class="cl">InputStreamReader</span>(<span class="cl">System</span>.in));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">PrintWriter</span> writer = <span class="kw">new</span> <span class="cl">PrintWriter</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;socket.<span class="mt">getOutputStream</span>(), <span class="kw">true</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">BufferedReader</span> serverReader = <span class="kw">new</span> <span class="cl">BufferedReader</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">new</span> <span class="cl">InputStreamReader</span>(socket.<span class="mt">getInputStream</span>()));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">String</span> inputLine;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> ((inputLine = userInput.<span class="mt">readLine</span>()) != <span class="kw">null</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;writer.<span class="mt">println</span>(inputLine);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"Server replied: "</span> + serverReader.<span class="mt">readLine</span>());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;socket.<span class="mt">close</span>();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+      </div>
+      <div class="code-output" id="echo-client-out">
+heloe
+Server replied: eoleh
+prakash
+Server replied: hsakarp</div>
+    </div>
+
+    <h3>Sample Run</h3>
+    <div class="terminal">
+<span class="out">[Client terminal]</span>
+<span class="prompt">Enter text: </span>heloe
+<span class="out">Server replied: eoleh</span>
+<span class="prompt">Enter text: </span>prakash
+<span class="out">Server replied: hsakarp</span>
+<span class="prompt">Enter text: </span>Java Networking
+<span class="out">Server replied: gnikrowteN avaJ</span>
+    </div>
+
+    <!-- Interactive Echo Simulator -->
+    <div class="interactive-box">
+      <h3 style="margin-top:0;">&#128301; Echo Reverse Simulator</h3>
+      <p>Type a string and the simulated server will reverse it:</p>
+      <div style="display:flex;gap:0.5rem;align-items:flex-end;">
+        <div style="flex:1;">
+          <label style="color:var(--muted);font-size:0.85rem;">Client Input:</label>
+          <input type="text" id="echo-input" placeholder="Type a word or sentence..." value="heloe">
+        </div>
+        <button onclick="echoReverse()" style="margin-bottom:0.5rem;">Send &#10148;</button>
+      </div>
+      <div class="result-box" id="echo-result" style="display:none;"></div>
+      <div id="echo-history" style="margin-top:1rem;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 9: UDP DATAGRAMS
+     ═══════════════════════════════════════════ -->
+<section id="udp">
+  <h2>&#128228; 9. UDP Datagrams</h2>
+  <div class="card">
+    <p>UDP (User Datagram Protocol) sends data in self-contained messages called <strong>datagrams</strong>. Unlike TCP, there is no connection setup, no acknowledgment, and no guarantee of delivery or ordering.</p>
+
+    <div class="three-col">
+      <div class="highlight">
+        <strong>No Guarantee</strong><br>
+        Packets may be lost in transit. The sender never knows if the data arrived.
+      </div>
+      <div class="highlight2">
+        <strong>No Ordering</strong><br>
+        Packets may arrive out of sequence. The application must handle reordering if needed.
+      </div>
+      <div class="highlight3">
+        <strong>Low Overhead</strong><br>
+        Minimal header (8 bytes). No handshake. Much faster than TCP for time-sensitive data.
+      </div>
+    </div>
+
+    <h3>DatagramSocket Class</h3>
+    <p>Used to both send and receive UDP datagrams. Represents the socket endpoint.</p>
+
+    <div class="two-col">
+      <div>
+        <h4>Constructors</h4>
+        <table>
+          <tr><th>Constructor</th><th>Description</th></tr>
+          <tr><td><code>DatagramSocket()</code></td><td>Creates socket on any available port (for clients)</td></tr>
+          <tr><td><code>DatagramSocket(int port)</code></td><td>Creates socket bound to specific port (for servers)</td></tr>
+          <tr><td><code>DatagramSocket(int port, InetAddress addr)</code></td><td>Binds to specific port and address</td></tr>
+        </table>
+      </div>
+      <div>
+        <h4>Methods</h4>
+        <table>
+          <tr><th>Method</th><th>Description</th></tr>
+          <tr><td><code>send(DatagramPacket p)</code></td><td>Sends a datagram packet</td></tr>
+          <tr><td><code>receive(DatagramPacket p)</code></td><td>Receives a datagram packet (blocks)</td></tr>
+          <tr><td><code>close()</code></td><td>Closes the socket</td></tr>
+          <tr><td><code>getPort()</code></td><td>Returns the port number</td></tr>
+          <tr><td><code>getLocalAddress()</code></td><td>Returns the local address</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <h3>DatagramPacket Class</h3>
+    <p>Represents a single UDP datagram — the data container sent through a DatagramSocket.</p>
+
+    <div class="two-col">
+      <div>
+        <h4>Constructors</h4>
+        <table>
+          <tr><th>Constructor</th><th>Use</th></tr>
+          <tr><td><code>DatagramPacket(byte[] buf, int len)</code></td><td>For <strong>receiving</strong> data</td></tr>
+          <tr><td><code>DatagramPacket(byte[] buf, int len, InetAddress addr, int port)</code></td><td>For <strong>sending</strong> data to addr:port</td></tr>
+          <tr><td><code>DatagramPacket(byte[] buf, int offset, int len, InetAddress addr, int port)</code></td><td>Sending with offset into buffer</td></tr>
+        </table>
+      </div>
+      <div>
+        <h4>Methods</h4>
+        <table>
+          <tr><th>Method</th><th>Description</th></tr>
+          <tr><td><code>getData()</code></td><td>Returns the data buffer as byte[]</td></tr>
+          <tr><td><code>getLength()</code></td><td>Returns length of data received</td></tr>
+          <tr><td><code>getAddress()</code></td><td>Returns sender/destination InetAddress</td></tr>
+          <tr><td><code>getPort()</code></td><td>Returns sender/destination port</td></tr>
+          <tr><td><code>setData(byte[] buf)</code></td><td>Sets the data buffer</td></tr>
+          <tr><td><code>setAddress(InetAddress addr)</code></td><td>Sets the destination address</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 10: UDP SERVER/CLIENT CODE
+     ═══════════════════════════════════════════ -->
+<section id="udpcode">
+  <h2>&#128228; 10. UDP Server / Client Code</h2>
+  <div class="card">
+    <p>UDP programming uses <code>DatagramSocket</code> and <code>DatagramPacket</code> instead of <code>Socket</code>. The server binds to a port; the client sends to that port.</p>
+
+    <h3>UDP Server</h3>
+    <div class="code-cell">
+      <div class="code-header">
+        <span>UDPServer.java</span>
+        <button onclick="showOutput('udp-server-out')">&#9654; Run</button>
+      </div>
+      <div class="code-body">
+<span class="kw">import</span> java.net.*;<br>
+<span class="kw">import</span> java.io.*;<br>
+<br>
+<span class="kw">public class</span> <span class="cl">UDPServer</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">public static void</span> <span class="mt">main</span>(String[] args) <span class="kw">throws</span> Exception {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">DatagramSocket</span> ds = <span class="kw">new</span> <span class="cl">DatagramSocket</span>(<span class="nu">6868</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"UDP Server listening on port 6868"</span>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">byte</span>[] receiveData = <span class="kw">new byte</span>[<span class="nu">1024</span>];<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> (<span class="kw">true</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">DatagramPacket</span> dpReceive = <span class="kw">new</span> <span class="cl">DatagramPacket</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receiveData, receiveData.length);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ds.<span class="mt">receive</span>(dpReceive); <span class="cm">// blocks until data arrives</span><br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">String</span> str = <span class="kw">new</span> <span class="cl">String</span>(dpReceive.<span class="mt">getData</span>(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nu">0</span>, dpReceive.<span class="mt">getLength</span>());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="mt">println</span>(<span class="st">"Data from client ["</span> +<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dpReceive.<span class="mt">getAddress</span>() + <span class="st">"] : "</span> + str);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+      </div>
+      <div class="code-output" id="udp-server-out">
+UDP Server listening on port 6868
+Data from client [/127.0.0.1] : Hello, UDP Server!
+Data from client [/127.0.0.1] : How are you?</div>
+    </div>
+
+    <h3>UDP Client</h3>
+    <div class="code-cell">
+      <div class="code-header">
+        <span>UDPClient.java</span>
+        <button onclick="showOutput('udp-client-out')">&#9654; Run</button>
+      </div>
+      <div class="code-body">
+<span class="kw">import</span> java.net.*;<br>
+<span class="kw">import</span> java.io.*;<br>
+<br>
+<span class="kw">public class</span> <span class="cl">UDPClient</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">public static void</span> <span class="mt">main</span>(String[] args) <span class="kw">throws</span> Exception {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">DatagramSocket</span> ds = <span class="kw">new</span> <span class="cl">DatagramSocket</span>(); <span class="cm">// no port needed for client</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">InetAddress</span> ip = <span class="cl">InetAddress</span>.<span class="mt">getByName</span>(<span class="st">"localhost"</span>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">BufferedReader</span> input = <span class="kw">new</span> <span class="cl">BufferedReader</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">new</span> <span class="cl">InputStreamReader</span>(<span class="cl">System</span>.in));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> (<span class="kw">true</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">String</span> msg = input.<span class="mt">readLine</span>();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">byte</span>[] buf = msg.<span class="mt">getBytes</span>();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">DatagramPacket</span> dpSend = <span class="kw">new</span> <span class="cl">DatagramPacket</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buf, buf.length, ip, <span class="nu">6868</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ds.<span class="mt">send</span>(dpSend);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (msg.<span class="mt">equals</span>(<span class="st">"bye"</span>)) <span class="kw">break</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ds.<span class="mt">close</span>();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+      </div>
+      <div class="code-output" id="udp-client-out">
+Hello, UDP Server!
+How are you?
+bye</div>
+    </div>
+
+    <!-- Interactive UDP Simulator -->
+    <div class="interactive-box">
+      <h3 style="margin-top:0;">&#128228; UDP Message Simulator</h3>
+      <p>Simulate a UDP client sending messages to a server. Messages appear in the server log instantly (UDP — no handshake needed).</p>
+      <div class="two-col">
+        <div>
+          <label style="color:var(--accent); font-size:0.9rem; font-weight:600;">&#128100; Client</label>
+          <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+            <input type="text" id="udp-msg" placeholder="Type a message..." style="flex:1; margin-bottom:0;">
+            <button onclick="udpSend()" class="btn2" style="white-space:nowrap;">Send &#10148;</button>
+          </div>
+          <div style="margin-top:0.5rem;">
+            <label style="font-size:0.8rem; color:var(--muted);">Messages sent:</label>
+            <div class="udp-box" id="udp-client-log"></div>
+          </div>
+        </div>
+        <div>
+          <label style="color:var(--accent2); font-size:0.9rem; font-weight:600;">&#128268; Server (Port 6868)</label>
+          <div style="margin-top:0.5rem; height:28px; display:flex; align-items:center;">
+            <span style="color:var(--accent2); font-size:0.83rem;">&#9679; Listening...</span>
+          </div>
+          <div style="margin-top:0.5rem;">
+            <label style="font-size:0.8rem; color:var(--muted);">Received datagrams:</label>
+            <div class="udp-box" id="udp-server-log"></div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:0.8rem; text-align:right;">
+        <button onclick="udpClearLogs()" class="btn3" style="font-size:0.82rem; padding:0.3rem 0.8rem;">Clear Logs</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 11: TCP VS UDP USE CASES
+     ═══════════════════════════════════════════ -->
+<section id="usecases">
+  <h2>&#9878; 11. TCP vs UDP Use Cases</h2>
+  <div class="card">
+    <p>Choosing between TCP and UDP depends on whether reliability or speed is the higher priority for your application.</p>
+
+    <div class="two-col">
+      <div class="card" style="background:#1e1b3a; border:2px solid var(--accent);">
+        <h3 style="color:var(--accent); margin-top:0;">&#9989; Use TCP When...</h3>
+        <p style="font-size:0.87rem;color:var(--muted);">Correctness matters more than speed</p>
+        <ul>
+          <li>
+            <strong>File downloads (HTTP/FTP)</strong><br>
+            <span style="font-size:0.85rem;color:var(--muted);">Every byte must arrive correctly. A missing block corrupts the file.</span>
+          </li>
+          <li>
+            <strong>Web browsing (HTTP/HTTPS)</strong><br>
+            <span style="font-size:0.85rem;color:var(--muted);">HTML, CSS, JS must arrive intact for the page to render correctly.</span>
+          </li>
+          <li>
+            <strong>Email (SMTP/IMAP/POP3)</strong><br>
+            <span style="font-size:0.85rem;color:var(--muted);">Messages must not be truncated or lost.</span>
+          </li>
+          <li>
+            <strong>Database queries (JDBC/SQL)</strong><br>
+            <span style="font-size:0.85rem;color:var(--muted);">Query results must be complete and correct.</span>
+          </li>
+          <li>
+            <strong>Remote login (SSH)</strong><br>
+            <span style="font-size:0.85rem;color:var(--muted);">Every keystroke and response must arrive in order.</span>
+          </li>
+          <li>
+            <strong>Financial transactions</strong><br>
+            <span style="font-size:0.85rem;color:var(--muted);">A lost payment instruction could be catastrophic.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card" style="background:#0d2b2b; border:2px solid var(--accent2);">
+        <h3 style="color:var(--accent2); margin-top:0;">&#9889; Use UDP When...</h3>
+        <p style="font-size:0.87rem;color:var(--muted);">Speed and low latency matter more than reliability</p>
+        <ul>
+          <li>
+            <strong>Live video streaming (YouTube Live, Twitch)</strong><br>
+            <span style="font-size:0.85rem;color:var(--muted);">A dropped frame is barely noticeable; buffering is worse.</span>
+          </li>
+          <li>
+            <strong>Online gaming</strong><br>
+            <span style="font-size:0.85rem;color:var(--muted);">Player position updates need to be real-time; stale data is useless.</span>
+          </li>
+          <li>
+            <strong>VoIP / Video calls (Zoom, Teams)</strong><br>
+            <span style="font-size:0.85rem;color:var(--muted);">A brief audio glitch is acceptable; a multi-second TCP retransmit delay is not.</span>
+          </li>
+          <li>
+            <strong>DNS lookups</strong><br>
+            <span style="font-size:0.85rem;color:var(--muted);">Small, single-packet queries/responses. If it fails, just retry.</span>
+          </li>
+          <li>
+            <strong>IoT sensor broadcasts</strong><br>
+            <span style="font-size:0.85rem;color:var(--muted);">Temperature readings — losing one in a thousand is fine.</span>
+          </li>
+          <li>
+            <strong>Network discovery (DHCP, mDNS)</strong><br>
+            <span style="font-size:0.85rem;color:var(--muted);">Broadcast/multicast to unknown addresses — TCP can't do this.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Decision Guide</h3>
+    <svg viewBox="0 0 660 280" width="100%" height="280" style="display:block;">
+      <defs>
+        <marker id="arrf" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+        </marker>
+      </defs>
+
+      <!-- Start -->
+      <ellipse cx="330" cy="30" rx="120" ry="22" fill="#2d3748"/>
+      <text x="330" y="35" fill="#e2e8f0" font-size="13" font-weight="bold" text-anchor="middle">New Network Feature</text>
+
+      <line x1="330" y1="52" x2="330" y2="78" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrf)"/>
+
+      <!-- Q1 -->
+      <rect x="190" y="78" width="280" height="40" rx="8" fill="#1a1d2e" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="330" y="103" fill="#f7c948" font-size="12" text-anchor="middle">Does every byte need to arrive correctly?</text>
+
+      <!-- Yes branch -->
+      <line x1="250" y1="118" x2="150" y2="160" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrf)"/>
+      <text x="185" y="142" fill="#a8ff78" font-size="11">YES</text>
+
+      <!-- No branch -->
+      <line x1="410" y1="118" x2="510" y2="160" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrf)"/>
+      <text x="466" y="142" fill="#ff9b9b" font-size="11">NO</text>
+
+      <!-- Q2 -->
+      <rect x="320" y="160" width="250" height="40" rx="8" fill="#1a1d2e" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="445" y="180" fill="#f7c948" font-size="11" text-anchor="middle">Is low latency critical?</text>
+      <text x="445" y="194" fill="#94a3b8" font-size="10" text-anchor="middle">(gaming, live video, VoIP)</text>
+
+      <!-- TCP result -->
+      <rect x="50" y="155" width="160" height="50" rx="10" fill="#1e1b3a" stroke="#6c63ff" stroke-width="2"/>
+      <text x="130" y="178" fill="#6c63ff" font-size="14" font-weight="bold" text-anchor="middle">Use TCP</text>
+      <text x="130" y="196" fill="#94a3b8" font-size="10" text-anchor="middle">Reliable, ordered</text>
+
+      <!-- UDP Yes -->
+      <line x1="445" y1="200" x2="555" y2="235" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrf)"/>
+      <text x="508" y="222" fill="#a8ff78" font-size="11">YES</text>
+
+      <!-- UDP No → TCP -->
+      <line x1="360" y1="200" x2="200" y2="235" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrf)"/>
+      <text x="270" y="222" fill="#ff9b9b" font-size="11">NO → prefer TCP</text>
+
+      <!-- UDP result -->
+      <rect x="470" y="235" width="160" height="35" rx="10" fill="#0d2b2b" stroke="#00d4aa" stroke-width="2"/>
+      <text x="550" y="257" fill="#00d4aa" font-size="14" font-weight="bold" text-anchor="middle">Use UDP</text>
+
+      <!-- TCP2 result -->
+      <rect x="110" y="235" width="165" height="35" rx="10" fill="#1e1b3a" stroke="#6c63ff" stroke-width="2"/>
+      <text x="192" y="257" fill="#6c63ff" font-size="14" font-weight="bold" text-anchor="middle">Use TCP</text>
+    </svg>
+
+    <h3>Summary</h3>
+    <table>
+      <tr>
+        <th>Application</th>
+        <th>Protocol</th>
+        <th>Reason</th>
+      </tr>
+      <tr><td>File download (HTTP/FTP)</td><td><span class="tag">TCP</span></td><td>Every byte must be correct</td></tr>
+      <tr><td>Web browsing (HTTPS)</td><td><span class="tag">TCP</span></td><td>Reliable page delivery</td></tr>
+      <tr><td>Email (SMTP)</td><td><span class="tag">TCP</span></td><td>Messages must not be lost</td></tr>
+      <tr><td>Database queries</td><td><span class="tag">TCP</span></td><td>Complete, ordered results required</td></tr>
+      <tr><td>Live video streaming</td><td><span class="tag2">UDP</span></td><td>Low latency &gt; perfect delivery</td></tr>
+      <tr><td>Online gaming</td><td><span class="tag2">UDP</span></td><td>Real-time position updates</td></tr>
+      <tr><td>VoIP / Video calls</td><td><span class="tag2">UDP</span></td><td>Latency-sensitive audio/video</td></tr>
+      <tr><td>DNS resolution</td><td><span class="tag2">UDP</span></td><td>Small single-packet request/reply</td></tr>
+    </table>
+  </div>
+</section>
+
+</div><!-- end container -->
+
+<script>
+/* ═══════════════════════════════════
+   Code output toggle
+   ═══════════════════════════════════ */
+function showOutput(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('visible');
+}
+
+/* ═══════════════════════════════════
+   URL Parser
+   ═══════════════════════════════════ */
+function parseURL() {
+  const raw = document.getElementById('url-input').value.trim();
+  const resultEl = document.getElementById('url-result');
+  resultEl.style.display = 'block';
+
+  if (!raw) {
+    resultEl.innerHTML = '<span style="color:#ff6b6b;">Please enter a URL.</span>';
+    return;
+  }
+
+  let parsed;
+  try {
+    parsed = new URL(raw);
+  } catch (e) {
+    resultEl.innerHTML = '<span style="color:#ff6b6b;">Invalid URL. Make sure it includes a protocol (e.g., https://).</span>';
+    return;
+  }
+
+  const defaultPorts = { 'http:': 80, 'https:': 443, 'ftp:': 21, 'ssh:': 22 };
+  const defPort = defaultPorts[parsed.protocol] || 'N/A';
+  const explicitPort = parsed.port || '(default)';
+  const query = parsed.search ? parsed.search.slice(1) : 'null';
+  const hash = parsed.hash ? parsed.hash.slice(1) : 'null';
+
+  resultEl.innerHTML = `
+    <table style="width:100%;font-size:0.88rem;border-collapse:collapse;">
+      <tr><td style="padding:0.3rem 0.6rem;color:var(--muted);width:120px;">Protocol</td><td style="padding:0.3rem 0.6rem;color:var(--accent);font-family:monospace;">${parsed.protocol.replace(':','')}</td></tr>
+      <tr><td style="padding:0.3rem 0.6rem;color:var(--muted);">Host</td><td style="padding:0.3rem 0.6rem;color:var(--accent2);font-family:monospace;">${parsed.hostname}</td></tr>
+      <tr><td style="padding:0.3rem 0.6rem;color:var(--muted);">Default port</td><td style="padding:0.3rem 0.6rem;color:var(--yellow);font-family:monospace;">${defPort}</td></tr>
+      <tr><td style="padding:0.3rem 0.6rem;color:var(--muted);">Explicit port</td><td style="padding:0.3rem 0.6rem;color:var(--yellow);font-family:monospace;">${explicitPort}</td></tr>
+      <tr><td style="padding:0.3rem 0.6rem;color:var(--muted);">Path</td><td style="padding:0.3rem 0.6rem;color:#c792ea;font-family:monospace;">${parsed.pathname || '/'}</td></tr>
+      <tr><td style="padding:0.3rem 0.6rem;color:var(--muted);">Query</td><td style="padding:0.3rem 0.6rem;color:#ff9b7a;font-family:monospace;">${query}</td></tr>
+      <tr><td style="padding:0.3rem 0.6rem;color:var(--muted);">Hash/Ref</td><td style="padding:0.3rem 0.6rem;color:#a8ff78;font-family:monospace;">${hash}</td></tr>
+    </table>
+  `;
+}
+
+/* ═══════════════════════════════════
+   TCP Simulator
+   ═══════════════════════════════════ */
+let tcpState = 0;
+const terminal = document.getElementById('tcp-terminal');
+
+function tcpAppend(html, delay) {
+  setTimeout(() => {
+    terminal.innerHTML += '\n' + html;
+    terminal.scrollTop = terminal.scrollHeight;
+  }, delay);
+}
+
+function tcpStep1() {
+  if (tcpState !== 0) return;
+  tcpState = 1;
+  terminal.innerHTML = '';
+  document.getElementById('btn-server').style.opacity = '0.6';
+  document.getElementById('btn-client').disabled = false;
+  document.getElementById('btn-client').style.opacity = '1';
+
+  tcpAppend('<span style="color:#6c63ff;">[SERVER]</span> <span style="color:#e2e8f0;">ServerSocket timeSocket = new ServerSocket(6868);</span>', 0);
+  tcpAppend('<span style="color:#6c63ff;">[SERVER]</span> <span style="color:#a8ff78;">Server is listening on port 6868</span>', 400);
+  tcpAppend('<span style="color:#6c63ff;">[SERVER]</span> <span style="color:#94a3b8;">Waiting... (timeSocket.accept() blocking)</span>', 800);
+}
+
+function tcpStep2() {
+  if (tcpState !== 1) return;
+  tcpState = 2;
+  document.getElementById('btn-client').disabled = true;
+  document.getElementById('btn-client').style.opacity = '0.5';
+
+  tcpAppend('<span style="color:#00d4aa;">[CLIENT]</span> <span style="color:#e2e8f0;">Socket socket = new Socket("localhost", 6868);</span>', 0);
+  tcpAppend('<span style="color:#00d4aa;">[CLIENT]</span> <span style="color:#94a3b8;">TCP 3-way handshake: SYN → SYN-ACK → ACK</span>', 400);
+  tcpAppend('<span style="color:#6c63ff;">[SERVER]</span> <span style="color:#a8ff78;">New client connected! accept() returned.</span>', 900);
+  tcpAppend('<span style="color:#6c63ff;">[SERVER]</span> <span style="color:#e2e8f0;">PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);</span>', 1300);
+  tcpAppend('<span style="color:#6c63ff;">[SERVER]</span> <span style="color:#e2e8f0;">writer.println(new Date().toString());</span>', 1700);
+  tcpAppend('<span style="color:#00d4aa;">[CLIENT]</span> <span style="color:#e2e8f0;">BufferedReader reader = new BufferedReader(...);</span>', 2100);
+  tcpAppend('<span style="color:#00d4aa;">[CLIENT]</span> <span style="color:#a8ff78;">Received: Sun Oct 29 13:26:23 IST 2023</span>', 2500);
+  tcpAppend('<span style="color:#6c63ff;">[SERVER]</span> <span style="color:#94a3b8;">socket.close() — connection closed.</span>', 2900);
+  tcpAppend('<span style="color:#00d4aa;">[CLIENT]</span> <span style="color:#94a3b8;">socket.close().</span>', 3100);
+  tcpAppend('<span style="color:#f7c948;">&#10003; Exchange complete.</span>', 3500);
+}
+
+function tcpReset() {
+  tcpState = 0;
+  terminal.innerHTML = '<span style="color:#94a3b8;"># TCP Time Server/Client Simulation\n# Click "Start Server" to begin...</span>';
+  document.getElementById('btn-server').style.opacity = '1';
+  document.getElementById('btn-client').disabled = true;
+  document.getElementById('btn-client').style.opacity = '0.5';
+}
+
+/* ═══════════════════════════════════
+   Echo Reverse Simulator
+   ═══════════════════════════════════ */
+const echoHistory = [];
+
+function echoReverse() {
+  const input = document.getElementById('echo-input').value.trim();
+  const resultEl = document.getElementById('echo-result');
+  const histEl = document.getElementById('echo-history');
+
+  if (!input) return;
+
+  const reversed = input.split('').reverse().join('');
+  resultEl.style.display = 'block';
+  resultEl.innerHTML = `
+    <strong>Client sent:</strong> <span style="color:#f7c948;font-family:monospace;">"${input}"</span>
+    &nbsp;&nbsp;&#10148;&nbsp;&nbsp;
+    <strong>Server replied:</strong> <span style="color:#a8ff78;font-family:monospace;">"${reversed}"</span>
+  `;
+
+  echoHistory.unshift({ sent: input, recv: reversed });
+  if (echoHistory.length > 5) echoHistory.pop();
+
+  histEl.innerHTML = '<h4 style="color:var(--muted);font-size:0.82rem;margin-bottom:0.5rem;">Recent exchanges:</h4>';
+  echoHistory.forEach((item, i) => {
+    histEl.innerHTML += `
+      <div style="display:flex;gap:1rem;font-family:monospace;font-size:0.83rem;padding:0.3rem 0;border-bottom:1px solid var(--border);">
+        <span style="color:var(--yellow);min-width:20px;">${echoHistory.length - i}.</span>
+        <span style="color:#94a3b8;">sent:</span> <span style="color:#f7c948;">"${item.sent}"</span>
+        <span style="color:#94a3b8;">recv:</span> <span style="color:#a8ff78;">"${item.recv}"</span>
+      </div>
+    `;
+  });
+
+  document.getElementById('echo-input').value = '';
+}
+
+document.getElementById('echo-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') echoReverse();
+});
+
+/* ═══════════════════════════════════
+   UDP Simulator
+   ═══════════════════════════════════ */
+let udpCount = 0;
+
+function udpSend() {
+  const msgEl = document.getElementById('udp-msg');
+  const msg = msgEl.value.trim();
+  if (!msg) return;
+
+  udpCount++;
+  const ts = new Date().toLocaleTimeString();
+  const clientLog = document.getElementById('udp-client-log');
+  const serverLog = document.getElementById('udp-server-log');
+
+  // Simulate occasional "packet loss" for realism (5% chance)
+  const lost = Math.random() < 0.05;
+
+  clientLog.innerHTML += `<div style="color:#e2e8f0;padding:0.15rem 0;"><span style="color:#6c63ff;">&#9654;</span> [${ts}] "${msg}"</div>`;
+  clientLog.scrollTop = clientLog.scrollHeight;
+
+  if (!lost) {
+    setTimeout(() => {
+      serverLog.innerHTML += `<div style="color:#a8ff78;padding:0.15rem 0;"><span style="color:#00d4aa;">&#9664;</span> [${ts}] <span style="color:#94a3b8;">[/127.0.0.1:${50000 + udpCount}]</span> "${msg}"</div>`;
+      serverLog.scrollTop = serverLog.scrollHeight;
+    }, Math.floor(Math.random() * 80) + 10);
+  } else {
+    clientLog.innerHTML += `<div style="color:#ff6b6b;font-size:0.78rem;padding:0.1rem 0;">&nbsp;&nbsp;&#9888; Packet lost (UDP: no retransmit)</div>`;
+    clientLog.scrollTop = clientLog.scrollHeight;
+  }
+
+  msgEl.value = '';
+}
+
+document.getElementById('udp-msg').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') udpSend();
+});
+
+function udpClearLogs() {
+  document.getElementById('udp-client-log').innerHTML = '';
+  document.getElementById('udp-server-log').innerHTML = '';
+  udpCount = 0;
+}
+
+/* ═══════════════════════════════════
+   Nav active state on scroll
+   ═══════════════════════════════════ */
+window.addEventListener('scroll', () => {
+  const sections = document.querySelectorAll('section[id]');
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 160) current = s.id;
+  });
+  document.querySelectorAll('nav a').forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+});
+
+document.querySelectorAll('nav a').forEach(link => {
+  link.addEventListener('click', function() {
+    document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+<style>
+.xn-extra-wrap{max-width:1100px;margin:2.5rem auto;padding:0 1.5rem;}
+.xn-intro{background:rgba(108,99,255,.08);border-left:4px solid #6c63ff;border-radius:0 8px 8px 0;padding:1rem 1.2rem;margin:1rem 0 1.5rem;color:var(--muted);font-size:.92rem;}
+.xn-prob{background:var(--card);border:1px solid var(--border);border-left:4px solid #6c63ff;border-radius:10px;padding:1.1rem 1.2rem;margin:1rem 0;}
+.xn-q{margin-bottom:.75rem;color:var(--text);}
+.xn-tag{display:inline-block;background:#6c63ff;color:#fff;font-size:.72rem;font-weight:700;padding:.14rem .6rem;border-radius:20px;margin-right:.45rem;vertical-align:middle;}
+.xn-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.xn-in{background:#12152a;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.5rem .85rem;font-size:.95rem;min-width:180px;font-family:'Cascadia Code','Fira Code',monospace;}
+.xn-in:focus{outline:none;border-color:#6c63ff;}
+.xn-check,.xn-toggle{border:none;border-radius:8px;padding:.5rem 1.15rem;cursor:pointer;font-weight:700;font-size:.88rem;}
+.xn-check{background:#6c63ff;color:#fff;}
+.xn-check:hover{background:#574fd6;}
+.xn-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.xn-toggle:hover{border-color:#00d4aa;color:#00d4aa;}
+.xn-fb{margin-top:.65rem;font-weight:700;font-size:.9rem;min-height:1rem;}
+.xn-fb.xn-ok{color:#00d4aa;}
+.xn-fb.xn-no{color:#ff6b6b;}
+.xn-fb.xn-warn{color:#f7c948;}
+.xn-sol{display:none;margin-top:.85rem;padding:.95rem 1.05rem;background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.3);border-radius:8px;font-size:.9rem;color:var(--text);}
+.xn-sol.open{display:block;animation:xnfade .25s ease;}
+@keyframes xnfade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.xn-sol .xf{background:#12152a;color:#f7c948;font-family:'Cascadia Code','Fira Code',monospace;padding:.55rem .85rem;border-radius:6px;margin:.45rem 0;overflow-x:auto;white-space:pre-wrap;font-size:.86rem;}
+.xn-sol b{color:#00d4aa;}
+.xn-opts{display:flex;flex-direction:column;gap:.45rem;margin-top:.4rem;}
+.xn-opt{text-align:left;background:#12152a;border:1px solid var(--border);color:var(--text);padding:.55rem .85rem;border-radius:6px;cursor:pointer;font-size:.9rem;font-family:inherit;}
+.xn-opt:hover:not(:disabled){border-color:#6c63ff;}
+.xn-opt.xn-ok{background:rgba(0,212,170,.18);border-color:#00d4aa;color:#00d4aa;font-weight:700;}
+.xn-opt.xn-no{background:rgba(255,107,107,.15);border-color:#ff6b6b;color:#ff6b6b;}
+.xn-codeblock{background:#12152a;border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;font-family:'Cascadia Code','Fira Code',monospace;font-size:.85rem;line-height:1.6;white-space:pre;overflow-x:auto;margin:.5rem 0 .8rem;color:#e2e8f0;}
+</style>
+
+<section id="xn-extra" class="xn-extra-wrap">
+  <h2>🔢 Engineered Numerical Practice</h2>
+  <div class="xn-intro">
+    Fresh exam-style computational problems built from this week's concepts. Type your answer and hit
+    <b>Check</b> for instant feedback, or reveal the worked steps. <em>(Press Enter in any answer box to check.)</em>
+  </div>
+
+  <div class="xn-prob" data-ans="4" data-tol="0" data-unit=" layers">
+    <div class="xn-q"><span class="xn-tag">NP1</span><b>TCP/IP model layers.</b>
+      How many layers are in the TCP/IP model used for the Internet (Application, Transport, Network, Link)?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="number of layers">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The notes give the four-layer TCP/IP stack.
+      <div class="xf">Application + Transport + Network + Link = 4</div>
+      Layers = <b>4</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="65536" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP2</span><b>Port number space.</b>
+      Ports are identified by a 16-bit number. How many distinct port numbers exist (including 0)?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="count">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      A 16-bit unsigned number ranges over <code>2^16</code> values (0 through 65535).
+      <div class="xf">2^16 = 65536</div>
+      Distinct ports = <b>65536</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="32" data-tol="0" data-unit=" bits">
+    <div class="xn-q"><span class="xn-tag">NP3</span><b>IPv4 address size.</b>
+      An IPv4 address is 4 bytes long. How many bits is that?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="bits">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Each byte is 8 bits.
+      <div class="xf">4 bytes * 8 bits = 32 bits</div>
+      Answer = <b>32</b> bits.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="544" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP4</span><b>Sum of well-known ports.</b>
+      Add the default well-known ports for HTTPS, HTTP and FTP.
+      <div class="xn-codeblock">HTTPS = 443
+HTTP  =  80
+FTP   =  21</div>
+      What is their total?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="sum">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The notes' URL example shows <code>getDefaultPort()</code> returning 443 for an <code>https</code> URL; HTTP is 80 and FTP is 21.
+      <div class="xf">443 + 80 + 21 = 544</div>
+      Total = <b>544</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="5" data-tol="0" data-unit=" packets">
+    <div class="xn-q"><span class="xn-tag">NP5</span><b>Packet count for a payload.</b>
+      A 7300-byte message is split into packets with a maximum payload of 1500 bytes each (a packet may be partially filled).
+      How many packets are needed?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="packets">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Number of packets = ceil(data / MTU).
+      <div class="xf">7300 / 1500 = 4.87
+ceil(4.87) = 5</div>
+      Packets = <b>5</b> (four full 1500-byte packets + one 1300-byte packet).
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="3" data-tol="0" data-unit=" s">
+    <div class="xn-q"><span class="xn-tag">NP6</span><b>Transfer time.</b>
+      A file of 600 megabits is sent over a link with bandwidth 200 megabits per second.
+      How long (in seconds) does the transfer take?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="seconds">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Transfer time = size / bandwidth.
+      <div class="xf">600 Mb / 200 Mbps = 3 s</div>
+      Time = <b>3</b> seconds.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="65535" data-tol="0" data-unit=" bytes">
+    <div class="xn-q"><span class="xn-tag">NP7</span><b>UDP receive buffer size.</b>
+      The UDP server in the notes allocates its receive buffer with <code>new byte[65535]</code>. How many bytes can
+      that buffer hold (the practical maximum UDP datagram payload)?
+      <div class="xn-codeblock">byte[] receiveData = new byte[65535];</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="bytes">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The array length is the buffer capacity in bytes.
+      <div class="xf">new byte[65535]  →  65535 bytes</div>
+      Capacity = <b>65535</b> bytes.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">NP8</span><b>Echo-reverse server output.</b>
+      The <code>EchoReverseServer</code> reverses each line it receives using <code>new StringBuilder(text).reverse()</code>.
+      If the client sends <code>socket</code>, what does the server reply with?
+      <div class="xn-codeblock">String reversed = new StringBuilder("socket").reverse().toString();</div>
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) socket</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) tekcos</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) sockte</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) ocskte</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Reversing the characters of <code>s-o-c-k-e-t</code> gives <code>t-e-k-c-o-s</code>.
+      Server reply = <b>tekcos</b>.
+    </div>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  if(window.__xnInit) return; window.__xnInit=true;
+  function num(s){
+    if(s==null) return NaN;
+    s=(''+s).replace(/−/g,'-').replace(/[^0-9.\-]/g,'');
+    if(s===''||s==='-'||s==='.') return NaN;
+    return parseFloat(s);
+  }
+  window.xnCheck=function(btn){
+    var p=btn.closest('.xn-prob'); if(!p) return;
+    var ans=parseFloat(p.getAttribute('data-ans'));
+    var tol=parseFloat(p.getAttribute('data-tol')||'0.05');
+    var unit=p.getAttribute('data-unit')||'';
+    var inp=p.querySelector('.xn-in'); var fb=p.querySelector('.xn-fb');
+    var v=num(inp.value);
+    if(isNaN(v)){ fb.className='xn-fb xn-warn'; fb.textContent='⚠ Enter a numeric answer first.'; return; }
+    if(Math.abs(v-ans)<=tol){ fb.className='xn-fb xn-ok'; fb.innerHTML='✓ Correct! Answer = '+ans+unit; }
+    else { fb.className='xn-fb xn-no'; fb.innerHTML='✗ Not quite — you entered '+v+'. Try again, or reveal the steps.'; }
+  };
+  window.xnToggle=function(btn){
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol');
+    var open=s.classList.toggle('open'); btn.textContent=open?'Hide steps':'Show steps';
+  };
+  window.xnPick=function(btn,ok){
+    var box=btn.parentElement;
+    box.querySelectorAll('.xn-opt').forEach(function(b){b.disabled=true; b.style.cursor='default';});
+    btn.classList.add(ok?'xn-ok':'xn-no');
+    if(!ok){ box.querySelectorAll('.xn-opt').forEach(function(b){ if(b.getAttribute('data-correct')==='1') b.classList.add('xn-ok'); }); }
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol'); if(s) s.classList.add('open');
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter' && e.target.classList && e.target.classList.contains('xn-in')){
+      var b=e.target.closest('.xn-prob').querySelector('.xn-check'); if(b) b.click();
+    }
+  });
+})();
+</script>
+<section id="xn-mcq" class="xn-extra-wrap">
+  <h2>📝 Exam-Style MCQs — 2 Marks Each</h2>
+  <p style="opacity:.85;font-size:.95em;margin-bottom:1rem;">Each question is worth 2 marks — a mix of applied numerical and conceptual items. Click an option to check it; the correct answer and explanation appear instantly.</p>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q1 · 2 marks</span> A file of 5000 bytes is sent over a link whose Maximum Transmission Unit (MTU) payload is 1500 bytes per packet. How many packets are required?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 3 packets</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) 4 packets</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 5 packets</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 33 packets</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">The number of packets is the ceiling of data divided by MTU.
+      <div class="xf">5000 / 1500 = 3.33…  →  ceil(3.33) = 4   (3 full packets of 1500 = 4500, plus 500 leftover → 1 more)</div>
+      So <b>4 packets</b> are needed.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q2 · 2 marks</span> How long does it take to transfer a 4 MB file over a link with a bandwidth of 8 Mbps (1 byte = 8 bits)?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 0.5 seconds</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 2 seconds</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 4 seconds</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 32 seconds</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Convert the file size to bits, then divide by bandwidth (time = size / bandwidth).
+      <div class="xf">4 MB × 8 = 32 Mbit   →   32 Mbit ÷ 8 Mbps = 4 s</div>
+      The transfer takes <b>4 seconds</b>.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q3 · 2 marks</span> An IPv4 address is 32 bits wide. How many bytes is that, and what is the range of "well-known" port numbers?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 8 bytes; ports 0–65535</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) 4 bytes; ports 0–1023</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 4 bytes; ports 1024–49151</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 16 bytes; ports 0–1023</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">Bytes are computed by dividing the bit width by 8; well-known ports are a fixed reserved range.
+      <div class="xf">32 bits ÷ 8 = 4 bytes   ·   well-known ports = 0 to 1023</div>
+      An IPv4 address is <b>4 bytes</b> and the well-known port range is <b>0–1023</b> (e.g., HTTP 80, FTP 21).</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q4 · 2 marks</span> Which set of properties correctly describes <em>UDP</em> (compared with TCP)?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Connection-oriented, reliable, ordered, slower</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) Connectionless, unreliable (no guaranteed delivery), fast, low overhead</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Connection-oriented, unreliable, used for file transfer</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Connectionless but guarantees ordered delivery</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">TCP is connection-oriented and reliable (handshake, acknowledgements, ordering, retransmission) at the cost of overhead. <b>UDP is connectionless and unreliable</b> — it just fires datagrams with no handshake or delivery guarantee, which makes it fast and lightweight (good for streaming, gaming, DNS). The answer is <b>connectionless, unreliable, fast, low overhead</b>.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q5 · 2 marks</span> In Java socket programming, what is the role of <code>ServerSocket</code> versus <code>Socket</code>?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Both are used only on the client side to send data</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) ServerSocket sends datagrams; Socket listens for them</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) ServerSocket listens for and accepts incoming connections; Socket represents one established endpoint-to-endpoint connection</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) ServerSocket is for UDP only; Socket is for TCP only</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">In TCP, the server creates a <code>ServerSocket</code> bound to a port and calls <code>accept()</code>, which blocks until a client connects and then returns a <code>Socket</code>. The client creates a <code>Socket</code> to connect. So <b>ServerSocket listens/accepts</b> while a <b>Socket is one live connection</b> used for the actual I/O streams.</div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q6 · 2 marks</span> The TCP/IP reference model has 4 layers. Which option lists them from top (application-facing) to bottom?</div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Physical → Data Link → Network → Transport (4 layers)</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) Application → Transport → Internet → Network Access (4 layers)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Application → Presentation → Session → Transport (4 layers)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) Session → Transport → Internet → Physical (4 layers)</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">The TCP/IP model has exactly 4 layers: <b>Application → Transport → Internet → Network Access (Link)</b>. (Presentation/Session/Physical/Data-Link are OSI-model terms.) The transport layer hosts TCP and UDP; the internet layer hosts IP. The answer is <b>Application → Transport → Internet → Network Access</b>.</div>
+  </div>
+</section>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>
