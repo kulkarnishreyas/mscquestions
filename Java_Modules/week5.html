@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 5 — AWT GUI Programming | Programming in Java</title>
+<style>
+:root{--bg:#0f1117;--card:#1a1d2e;--accent:#6c63ff;--accent2:#00d4aa;--accent3:#f7c948;--text:#e2e8f0;--muted:#94a3b8;--border:rgba(108,99,255,0.2)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.7}
+nav{position:sticky;top:0;background:rgba(15,17,23,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:.75rem 2rem;z-index:100;display:flex;gap:1.2rem;overflow-x:auto;flex-wrap:nowrap}
+nav a{color:var(--muted);text-decoration:none;font-size:.8rem;white-space:nowrap;padding:.3rem .6rem;border-radius:4px;transition:all .2s}
+nav a:hover,nav a.active{color:var(--accent);background:rgba(108,99,255,.1)}
+header{background:linear-gradient(135deg,#1a1d2e 0%,#0f1117 60%,rgba(108,99,255,.1) 100%);padding:4rem 2rem 3rem;text-align:center;border-bottom:1px solid var(--border)}
+header .week-badge{background:rgba(108,99,255,.2);color:var(--accent);border:1px solid var(--accent);padding:.3rem 1rem;border-radius:20px;font-size:.85rem;display:inline-block;margin-bottom:1rem}
+header h1{font-size:2.8rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
+header p{color:var(--muted);font-size:1.1rem;max-width:600px;margin:0 auto}
+main{max-width:1100px;margin:0 auto;padding:2rem}
+section{margin-bottom:3.5rem;scroll-margin-top:60px}
+h2{font-size:1.6rem;color:var(--accent2);margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem}
+h2::before{content:'';width:4px;height:1.6rem;background:var(--accent);border-radius:2px;flex-shrink:0}
+h3{font-size:1.15rem;color:var(--accent3);margin:1.2rem 0 .6rem}
+p{color:var(--text);margin-bottom:.8rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+@media(max-width:700px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+.highlight{background:rgba(108,99,255,.08);border-left:3px solid var(--accent);padding:1rem 1.2rem;border-radius:0 8px 8px 0;margin:1rem 0}
+.highlight.teal{border-color:var(--accent2);background:rgba(0,212,170,.08)}
+.highlight.yellow{border-color:var(--accent3);background:rgba(247,201,72,.08)}
+table{width:100%;border-collapse:collapse;margin:1rem 0}
+th{background:rgba(108,99,255,.15);color:var(--accent);padding:.7rem 1rem;text-align:left;font-size:.9rem}
+td{padding:.65rem 1rem;border-bottom:1px solid var(--border);font-size:.9rem;color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.code-cell{background:#0a0c14;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:1rem 0}
+.code-header{background:#12141f;padding:.5rem 1rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.code-header span{color:var(--muted);font-size:.8rem}
+.run-btn{background:var(--accent);color:#fff;border:none;padding:.3rem .9rem;border-radius:5px;cursor:pointer;font-size:.82rem;transition:background .2s}
+.run-btn:hover{background:#5a52e0}
+pre{padding:1.2rem;font-size:.85rem;line-height:1.6;overflow-x:auto;font-family:'Fira Code','Courier New',monospace}
+.output-panel{display:none;background:#070910;border-top:1px solid var(--border);padding:1rem 1.2rem;font-family:'Fira Code',monospace;font-size:.83rem;color:#4ade80}
+.output-panel.visible{display:block}
+.kw{color:#c084fc}.cl{color:#60a5fa}.fn{color:#60a5fa}.str{color:#4ade80}.cm{color:#64748b;font-style:italic}.num{color:#fb923c}.an{color:#f7c948}
+.badge{display:inline-block;padding:.2rem .6rem;border-radius:4px;font-size:.78rem;font-weight:600}
+.badge.green{background:rgba(74,222,128,.15);color:#4ade80}
+.badge.purple{background:rgba(192,132,252,.15);color:#c084fc}
+.badge.blue{background:rgba(96,165,250,.15);color:#60a5fa}
+.badge.yellow{background:rgba(247,201,72,.15);color:#f7c948}
+.step-num{display:inline-flex;width:28px;height:28px;background:var(--accent);color:#fff;border-radius:50%;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;flex-shrink:0}
+.interactive-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.interactive-box h4{color:var(--accent3);margin-bottom:1rem}
+input[type=text],input[type=number]{background:#12141f;border:1px solid var(--border);color:var(--text);padding:.5rem .8rem;border-radius:6px;width:100%;margin:.3rem 0 .8rem;font-size:.9rem}
+button.action-btn{background:var(--accent2);color:#000;border:none;padding:.5rem 1.2rem;border-radius:6px;cursor:pointer;font-weight:600;font-size:.9rem;transition:background .2s}
+button.action-btn:hover{background:#00b894}
+.sim-output{background:#070910;border:1px solid var(--border);border-radius:6px;padding:1rem;font-family:monospace;font-size:.85rem;color:#4ade80;min-height:60px;margin-top:.8rem}
+svg text{font-family:'Segoe UI',system-ui,sans-serif}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="#intro">Intro</a>
+  <a href="#hierarchy">Hierarchy</a>
+  <a href="#components">Components</a>
+  <a href="#frame">Frame</a>
+  <a href="#events">Event Model</a>
+  <a href="#flow">FlowLayout</a>
+  <a href="#grid">GridLayout</a>
+  <a href="#border">BorderLayout</a>
+  <a href="#calculator">Calculator</a>
+  <a href="#keylistener">KeyListener</a>
+  <a href="#windowadapter">WindowAdapter</a>
+  <a href="#xn-extra">🔢 Numericals</a>
+  <a href="#xn-mcq">📝 MCQs</a>
+</nav>
+
+<header>
+  <div class="week-badge">Week 5</div>
+  <h1>AWT GUI Programming</h1>
+  <p>Building graphical user interfaces with Java's Abstract Window Toolkit — event handling, layout managers, and interactive components</p>
+</header>
+
+<main>
+
+<!-- 1. Introduction -->
+<section id="intro">
+  <h2>Introduction to AWT</h2>
+  <p>The <strong>Abstract Window Toolkit (AWT)</strong> is Java's original GUI framework, part of the Java Foundation Classes (JFC). AWT provides a set of classes for building platform-native graphical interfaces. It uses the operating system's own GUI components — making AWT apps look different on Windows, macOS, and Linux.</p>
+  <div class="highlight yellow">
+    <strong>Key Characteristic:</strong> AWT components are <em>heavyweight</em> — each component is a wrapper around a native OS widget. This means the OS does the actual rendering, giving native look-and-feel but less control over appearance.
+  </div>
+  <h3>AWT vs Swing vs JavaFX</h3>
+  <table>
+    <tr><th>Feature</th><th>AWT</th><th>Swing</th><th>JavaFX</th></tr>
+    <tr><td>Package</td><td>java.awt</td><td>javax.swing</td><td>javafx.*</td></tr>
+    <tr><td>Component type</td><td>Heavyweight (native)</td><td>Lightweight (Java-painted)</td><td>Lightweight (scene graph)</td></tr>
+    <tr><td>Look &amp; Feel</td><td>OS-native only</td><td>Pluggable L&amp;F</td><td>CSS styleable</td></tr>
+    <tr><td>Rich widgets</td><td>Basic only</td><td>Rich set</td><td>Very rich</td></tr>
+    <tr><td>FXML support</td><td>No</td><td>No</td><td>Yes</td></tr>
+    <tr><td>Animation</td><td>No</td><td>Limited</td><td>Full</td></tr>
+    <tr><td>Modern status</td><td>Legacy</td><td>Still used</td><td>Current standard</td></tr>
+  </table>
+  <div class="highlight teal">
+    <strong>Why learn AWT?</strong> AWT's event model (the Delegation Event Model) is the foundation for both Swing and JavaFX. Understanding AWT means understanding how all Java GUI frameworks work at their core.
+  </div>
+</section>
+
+<!-- 2. Component Hierarchy -->
+<section id="hierarchy">
+  <h2>AWT Component Hierarchy</h2>
+  <p>Every AWT widget extends <code>Component</code>. Containers can hold other components. Understanding this hierarchy is key to building UIs correctly.</p>
+  <div class="card">
+    <svg width="100%" viewBox="0 0 700 360" style="max-width:700px;display:block;margin:0 auto">
+      <!-- Component -->
+      <rect x="280" y="10" width="140" height="36" rx="6" fill="#1e2035" stroke="#6c63ff" stroke-width="2"/>
+      <text x="350" y="33" text-anchor="middle" fill="#c084fc" font-size="14" font-weight="bold">Component</text>
+      <!-- line down to Container and non-containers -->
+      <line x1="350" y1="46" x2="350" y2="80" stroke="#6c63ff" stroke-width="1.5"/>
+      <!-- Container -->
+      <rect x="280" y="80" width="140" height="36" rx="6" fill="#1e2035" stroke="#6c63ff" stroke-width="2"/>
+      <text x="350" y="103" text-anchor="middle" fill="#60a5fa" font-size="14" font-weight="bold">Container</text>
+      <!-- Container children -->
+      <line x1="350" y1="116" x2="350" y2="140" stroke="#6c63ff" stroke-width="1.5"/>
+      <line x1="140" y1="140" x2="570" y2="140" stroke="#6c63ff" stroke-width="1.5"/>
+      <!-- Panel -->
+      <line x1="140" y1="140" x2="140" y2="160" stroke="#6c63ff" stroke-width="1.5"/>
+      <rect x="70" y="160" width="140" height="36" rx="6" fill="#1e2035" stroke="#00d4aa" stroke-width="2"/>
+      <text x="140" y="183" text-anchor="middle" fill="#00d4aa" font-size="13">Panel</text>
+      <text x="140" y="208" text-anchor="middle" fill="#64748b" font-size="11">(default: FlowLayout)</text>
+      <!-- Window -->
+      <line x1="350" y1="140" x2="350" y2="160" stroke="#6c63ff" stroke-width="1.5"/>
+      <rect x="280" y="160" width="140" height="36" rx="6" fill="#1e2035" stroke="#00d4aa" stroke-width="2"/>
+      <text x="350" y="183" text-anchor="middle" fill="#00d4aa" font-size="13">Window</text>
+      <!-- Frame and Dialog under Window -->
+      <line x1="350" y1="196" x2="350" y2="220" stroke="#00d4aa" stroke-width="1.5"/>
+      <line x1="290" y1="220" x2="415" y2="220" stroke="#00d4aa" stroke-width="1.5"/>
+      <line x1="290" y1="220" x2="290" y2="240" stroke="#00d4aa" stroke-width="1.5"/>
+      <line x1="415" y1="220" x2="415" y2="240" stroke="#00d4aa" stroke-width="1.5"/>
+      <rect x="220" y="240" width="140" height="36" rx="6" fill="#1e2035" stroke="#f7c948" stroke-width="2"/>
+      <text x="290" y="263" text-anchor="middle" fill="#f7c948" font-size="13">Frame</text>
+      <rect x="345" y="240" width="140" height="36" rx="6" fill="#1e2035" stroke="#f7c948" stroke-width="2"/>
+      <text x="415" y="263" text-anchor="middle" fill="#f7c948" font-size="13">Dialog</text>
+      <!-- Non-containers -->
+      <line x1="570" y1="140" x2="570" y2="160" stroke="#6c63ff" stroke-width="1.5"/>
+      <rect x="490" y="160" width="160" height="36" rx="6" fill="#1e2035" stroke="#c084fc" stroke-width="2"/>
+      <text x="570" y="183" text-anchor="middle" fill="#c084fc" font-size="13">Non-Containers</text>
+      <!-- Non-container children -->
+      <text x="570" y="220" text-anchor="middle" fill="#94a3b8" font-size="11">Button • Label</text>
+      <text x="570" y="235" text-anchor="middle" fill="#94a3b8" font-size="11">TextField • TextArea</text>
+      <text x="570" y="250" text-anchor="middle" fill="#94a3b8" font-size="11">Checkbox • Choice • List</text>
+      <text x="570" y="265" text-anchor="middle" fill="#94a3b8" font-size="11">Scrollbar • Canvas</text>
+    </svg>
+  </div>
+  <div class="highlight">
+    <strong>Container vs Component:</strong> A Container can hold other Components inside it. Panel, Frame, and Dialog are all Containers. Button and Label are simple Components — they cannot contain other components.
+  </div>
+</section>
+
+<!-- 3. Key AWT Components -->
+<section id="components">
+  <h2>Key AWT Components</h2>
+  <p>AWT provides a set of basic UI elements. Each wraps a native OS widget:</p>
+  <div class="grid3">
+    <div class="card"><h3>Button</h3><p class="badge purple">java.awt.Button</p><br><br><p>A push button that triggers an ActionEvent when clicked. Created with <code>new Button("label")</code>. Uses ActionListener for event handling.</p></div>
+    <div class="card"><h3>Label</h3><p class="badge blue">java.awt.Label</p><br><br><p>Displays read-only text. Alignment can be LEFT, CENTER, or RIGHT. <code>label.setText("new")</code> updates it dynamically.</p></div>
+    <div class="card"><h3>TextField</h3><p class="badge purple">java.awt.TextField</p><br><br><p>Single-line text input. <code>tf.getText()</code> reads value; <code>tf.setEchoChar('*')</code> makes it a password field.</p></div>
+    <div class="card"><h3>TextArea</h3><p class="badge blue">java.awt.TextArea</p><br><br><p>Multi-line text input with optional scrollbars. Created with <code>new TextArea(rows, cols)</code>. Supports append(), insert(), replaceRange().</p></div>
+    <div class="card"><h3>Checkbox</h3><p class="badge green">java.awt.Checkbox</p><br><br><p>A toggle-able check box. Can be grouped into a CheckboxGroup for radio-button behavior. <code>cb.getState()</code> returns boolean.</p></div>
+    <div class="card"><h3>Choice</h3><p class="badge yellow">java.awt.Choice</p><br><br><p>A drop-down selection list. Items added with <code>choice.add("item")</code>. <code>choice.getSelectedItem()</code> returns selection.</p></div>
+    <div class="card"><h3>List</h3><p class="badge purple">java.awt.List</p><br><br><p>A scrollable list allowing single or multiple selection. <code>new List(visibleRows, multipleSelection)</code>.</p></div>
+    <div class="card"><h3>Scrollbar</h3><p class="badge blue">java.awt.Scrollbar</p><br><br><p>A horizontal or vertical scrollbar. Used for value selection in a range. Generates AdjustmentEvent.</p></div>
+    <div class="card"><h3>Canvas</h3><p class="badge green">java.awt.Canvas</p><br><br><p>A blank drawing surface. Override <code>paint(Graphics g)</code> to draw shapes, images, or text directly.</p></div>
+  </div>
+</section>
+
+<!-- 4. Frame -->
+<section id="frame">
+  <h2>Frame — The Main Window</h2>
+  <p>A <code>Frame</code> is the top-level window with a title bar, border, and optional menu bar. It's the foundation of any AWT application.</p>
+  <h3>Frame Constructors and Key Methods</h3>
+  <table>
+    <tr><th>Method / Constructor</th><th>Description</th></tr>
+    <tr><td><code>Frame()</code></td><td>Creates invisible, untitled frame</td></tr>
+    <tr><td><code>Frame(String title)</code></td><td>Creates invisible frame with title</td></tr>
+    <tr><td><code>setVisible(boolean b)</code></td><td>Shows (true) or hides (false) the frame</td></tr>
+    <tr><td><code>setSize(int w, int h)</code></td><td>Sets window dimensions in pixels</td></tr>
+    <tr><td><code>setLayout(LayoutManager m)</code></td><td>Sets how child components are arranged</td></tr>
+    <tr><td><code>add(Component c)</code></td><td>Adds a component to the frame</td></tr>
+    <tr><td><code>add(Component c, Object constraint)</code></td><td>Adds component at a specific position (e.g., BorderLayout.NORTH)</td></tr>
+    <tr><td><code>addWindowListener(WindowListener l)</code></td><td>Registers listener for window events (close, minimize, etc.)</td></tr>
+    <tr><td><code>setTitle(String t)</code></td><td>Changes the window title</td></tr>
+    <tr><td><code>setResizable(boolean b)</code></td><td>Controls whether user can resize the window</td></tr>
+    <tr><td><code>pack()</code></td><td>Resizes frame to fit all components at preferred sizes</td></tr>
+    <tr><td><code>dispose()</code></td><td>Destroys the window and frees OS resources</td></tr>
+  </table>
+  <div class="code-cell">
+    <div class="code-header"><span>Java — BasicFrame.java</span><button class="run-btn" onclick="toggleOutput(this)">▶ Run</button></div>
+    <pre><span class="kw">import</span> java.awt.*;
+<span class="kw">import</span> java.awt.event.*;
+
+<span class="kw">public class</span> <span class="cl">BasicFrame</span> <span class="kw">extends</span> <span class="cl">Frame</span> {
+    <span class="kw">public</span> <span class="cl">BasicFrame</span>() {
+        <span class="kw">super</span>(<span class="str">"My First AWT Window"</span>);  <span class="cm">// sets title</span>
+        setSize(<span class="num">400</span>, <span class="num">300</span>);
+        setLayout(<span class="kw">new</span> <span class="cl">FlowLayout</span>());
+
+        <span class="cl">Label</span> lbl = <span class="kw">new</span> <span class="cl">Label</span>(<span class="str">"Hello, AWT!"</span>);
+        <span class="cl">Button</span> btn = <span class="kw">new</span> <span class="cl">Button</span>(<span class="str">"Click Me"</span>);
+
+        add(lbl);
+        add(btn);
+
+        <span class="cm">// Close window on X button</span>
+        addWindowListener(<span class="kw">new</span> <span class="cl">WindowAdapter</span>() {
+            <span class="kw">public void</span> <span class="fn">windowClosing</span>(<span class="cl">WindowEvent</span> e) {
+                dispose();
+            }
+        });
+
+        setVisible(<span class="kw">true</span>);
+    }
+
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cl">String</span>[] args) {
+        <span class="kw">new</span> <span class="cl">BasicFrame</span>();
+    }
+}</pre>
+    <div class="output-panel">
+<svg width="360" height="220" style="display:block;margin:0 auto" viewBox="0 0 360 220">
+  <!-- Window frame -->
+  <rect x="10" y="10" width="340" height="200" rx="6" fill="#2d2d2d" stroke="#555" stroke-width="2"/>
+  <!-- Title bar -->
+  <rect x="10" y="10" width="340" height="28" rx="6" fill="#444"/>
+  <rect x="10" y="28" width="340" height="10" fill="#444"/>
+  <text x="25" y="29" fill="#fff" font-size="12">My First AWT Window</text>
+  <!-- Window controls -->
+  <circle cx="316" cy="24" r="7" fill="#ff5f57"/>
+  <circle cx="330" cy="24" r="7" fill="#ffbd2e"/>
+  <circle cx="344" cy="24" r="7" fill="#28c840"/>
+  <!-- Content area -->
+  <rect x="10" y="38" width="340" height="172" fill="#e8e8e8"/>
+  <!-- Label -->
+  <text x="130" y="100" fill="#000" font-size="14">Hello, AWT!</text>
+  <!-- Button -->
+  <rect x="140" y="120" width="80" height="28" rx="2" fill="#d4d0c8" stroke="#888" stroke-width="1"/>
+  <text x="180" y="139" text-anchor="middle" fill="#000" font-size="12">Click Me</text>
+</svg>
+<span style="color:#64748b">▲ AWT window rendered by the OS</span></div>
+  </div>
+</section>
+
+<!-- 5. Delegation Event Model -->
+<section id="events">
+  <h2>Event Handling — Delegation Event Model</h2>
+  <p>Java AWT uses the <strong>Delegation Event Model</strong> (introduced in Java 1.1). The idea is simple: the component that generates an event (the source) delegates handling to a separate listener object.</p>
+  <div class="card">
+    <svg width="100%" viewBox="0 0 600 120" style="max-width:600px;display:block;margin:0 auto">
+      <rect x="20" y="40" width="120" height="44" rx="8" fill="#1e2035" stroke="#6c63ff" stroke-width="2"/>
+      <text x="80" y="58" text-anchor="middle" fill="#c084fc" font-size="13" font-weight="bold">Event Source</text>
+      <text x="80" y="75" text-anchor="middle" fill="#94a3b8" font-size="11">(Button, TextField)</text>
+      <polygon points="160,62 190,55 190,69" fill="#6c63ff"/>
+      <line x1="140" y1="62" x2="190" y2="62" stroke="#6c63ff" stroke-width="2"/>
+      <text x="215" y="50" text-anchor="middle" fill="#64748b" font-size="11">fires</text>
+      <rect x="190" y="40" width="120" height="44" rx="8" fill="#1e2035" stroke="#00d4aa" stroke-width="2"/>
+      <text x="250" y="58" text-anchor="middle" fill="#00d4aa" font-size="13" font-weight="bold">Event Object</text>
+      <text x="250" y="75" text-anchor="middle" fill="#94a3b8" font-size="11">(ActionEvent, etc.)</text>
+      <polygon points="330,62 360,55 360,69" fill="#00d4aa"/>
+      <line x1="310" y1="62" x2="360" y2="62" stroke="#00d4aa" stroke-width="2"/>
+      <text x="385" y="50" text-anchor="middle" fill="#64748b" font-size="11">sent to</text>
+      <rect x="360" y="40" width="140" height="44" rx="8" fill="#1e2035" stroke="#f7c948" stroke-width="2"/>
+      <text x="430" y="58" text-anchor="middle" fill="#f7c948" font-size="13" font-weight="bold">Listener</text>
+      <text x="430" y="75" text-anchor="middle" fill="#94a3b8" font-size="11">(ActionListener)</text>
+      <text x="430" y="108" text-anchor="middle" fill="#64748b" font-size="11">→ actionPerformed(e)</text>
+    </svg>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>Step 1 — Implement a Listener</h3>
+      <p>Create a class that implements the appropriate listener interface (e.g., <code>ActionListener</code>).</p>
+    </div>
+    <div class="card">
+      <h3>Step 2 — Register the Listener</h3>
+      <p>Call <code>component.addActionListener(listener)</code> to register your listener with the source component.</p>
+    </div>
+    <div class="card">
+      <h3>Step 3 — Handle the Event</h3>
+      <p>Implement the required method (e.g., <code>actionPerformed(ActionEvent e)</code>). This is called automatically when the event occurs.</p>
+    </div>
+    <div class="card">
+      <h3>Event Object Info</h3>
+      <p><code>e.getSource()</code> — the component that fired the event<br><code>e.getActionCommand()</code> — label of button or typed text<br><code>e.getWhen()</code> — timestamp of the event</p>
+    </div>
+  </div>
+  <h3>Common Event Types</h3>
+  <table>
+    <tr><th>Event Class</th><th>Listener Interface</th><th>Source Components</th><th>Method</th></tr>
+    <tr><td>ActionEvent</td><td>ActionListener</td><td>Button, TextField, MenuItem</td><td>actionPerformed(e)</td></tr>
+    <tr><td>MouseEvent</td><td>MouseListener</td><td>Any Component</td><td>mouseClicked, mousePressed, ...</td></tr>
+    <tr><td>KeyEvent</td><td>KeyListener</td><td>Any Component</td><td>keyPressed, keyReleased, keyTyped</td></tr>
+    <tr><td>WindowEvent</td><td>WindowListener</td><td>Frame, Dialog</td><td>windowClosing, windowOpened, ...</td></tr>
+    <tr><td>ItemEvent</td><td>ItemListener</td><td>Checkbox, Choice, List</td><td>itemStateChanged(e)</td></tr>
+    <tr><td>AdjustmentEvent</td><td>AdjustmentListener</td><td>Scrollbar</td><td>adjustmentValueChanged(e)</td></tr>
+  </table>
+  <div class="code-cell">
+    <div class="code-header"><span>Java — ActionListenerDemo.java</span><button class="run-btn" onclick="toggleOutput(this)">▶ Run</button></div>
+    <pre><span class="kw">import</span> java.awt.*;
+<span class="kw">import</span> java.awt.event.*;
+
+<span class="kw">public class</span> <span class="cl">ActionListenerDemo</span> <span class="kw">extends</span> <span class="cl">Frame</span>
+        <span class="kw">implements</span> <span class="cl">ActionListener</span> {
+    <span class="cl">Label</span> result;
+
+    <span class="kw">public</span> <span class="cl">ActionListenerDemo</span>() {
+        <span class="kw">super</span>(<span class="str">"ActionListener Demo"</span>);
+        setLayout(<span class="kw">new</span> <span class="cl">FlowLayout</span>());
+        setSize(<span class="num">300</span>, <span class="num">150</span>);
+
+        <span class="cl">Button</span> b1 = <span class="kw">new</span> <span class="cl">Button</span>(<span class="str">"Say Hello"</span>);
+        <span class="cl">Button</span> b2 = <span class="kw">new</span> <span class="cl">Button</span>(<span class="str">"Say Bye"</span>);
+        result = <span class="kw">new</span> <span class="cl">Label</span>(<span class="str">"Press a button..."</span>);
+
+        b1.addActionListener(<span class="kw">this</span>);  <span class="cm">// register listener</span>
+        b2.addActionListener(<span class="kw">this</span>);
+
+        add(b1); add(b2); add(result);
+        setVisible(<span class="kw">true</span>);
+    }
+
+    <span class="kw">public void</span> <span class="fn">actionPerformed</span>(<span class="cl">ActionEvent</span> e) {
+        <span class="cl">String</span> cmd = e.getActionCommand();
+        <span class="kw">if</span> (cmd.equals(<span class="str">"Say Hello"</span>))
+            result.setText(<span class="str">"Hello, World!"</span>);
+        <span class="kw">else</span>
+            result.setText(<span class="str">"Goodbye!"</span>);
+    }
+}</pre>
+    <div class="output-panel">
+<svg width="300" height="160" viewBox="0 0 300 160" style="display:block;margin:0 auto">
+  <rect x="5" y="5" width="290" height="150" rx="4" fill="#2d2d2d" stroke="#555" stroke-width="1.5"/>
+  <rect x="5" y="5" width="290" height="26" rx="4" fill="#444"/>
+  <rect x="5" y="21" width="290" height="10" fill="#444"/>
+  <text x="15" y="22" fill="#fff" font-size="11">ActionListener Demo</text>
+  <circle cx="269" cy="18" r="6" fill="#ff5f57"/>
+  <circle cx="281" cy="18" r="6" fill="#ffbd2e"/>
+  <circle cx="293" cy="18" r="6" fill="#28c840"/>
+  <rect x="5" y="31" width="290" height="124" fill="#e8e8e8"/>
+  <rect x="40" y="55" width="80" height="26" rx="2" fill="#d4d0c8" stroke="#888"/>
+  <text x="80" y="73" text-anchor="middle" fill="#000" font-size="11">Say Hello</text>
+  <rect x="135" y="55" width="80" height="26" rx="2" fill="#d4d0c8" stroke="#888"/>
+  <text x="175" y="73" text-anchor="middle" fill="#000" font-size="11">Say Bye</text>
+  <text x="150" y="110" text-anchor="middle" fill="#000" font-size="13">Hello, World!</text>
+</svg>
+<span style="color:#64748b">▲ After clicking "Say Hello" — label updates</span></div>
+  </div>
+</section>
+
+<!-- 6. FlowLayout -->
+<section id="flow">
+  <h2>FlowLayout</h2>
+  <p><code>FlowLayout</code> is the <strong>default layout</strong> for Panel (and Applet). It arranges components left-to-right in a row, wrapping to the next line when the row is full — like words in a paragraph.</p>
+  <div class="highlight">
+    <strong>Constructor:</strong> <code>new FlowLayout()</code> — center-aligned with 5px gaps<br>
+    <code>new FlowLayout(FlowLayout.LEFT, 10, 10)</code> — left-aligned, 10px H-gap, 10px V-gap
+  </div>
+  <div class="code-cell">
+    <div class="code-header"><span>Java — FlowLayoutDemo.java</span><button class="run-btn" onclick="toggleOutput(this)">▶ Run</button></div>
+    <pre><span class="kw">import</span> java.awt.*;
+
+<span class="kw">public class</span> <span class="cl">FlowLayoutDemo</span> <span class="kw">extends</span> <span class="cl">Frame</span> {
+    <span class="kw">public</span> <span class="cl">FlowLayoutDemo</span>() {
+        <span class="kw">super</span>(<span class="str">"FlowLayout Demo"</span>);
+        setLayout(<span class="kw">new</span> <span class="cl">FlowLayout</span>(<span class="cl">FlowLayout</span>.LEFT, <span class="num">10</span>, <span class="num">10</span>));
+        setSize(<span class="num">350</span>, <span class="num">200</span>);
+
+        <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">7</span>; i++) {
+            add(<span class="kw">new</span> <span class="cl">Button</span>(<span class="str">"Button "</span> + i));
+        }
+
+        setVisible(<span class="kw">true</span>);
+    }
+}</pre>
+    <div class="output-panel">
+<svg width="350" height="200" viewBox="0 0 350 200" style="display:block;margin:0 auto">
+  <rect x="5" y="5" width="340" height="190" rx="4" fill="#2d2d2d" stroke="#555"/>
+  <rect x="5" y="5" width="340" height="26" rx="4" fill="#444"/>
+  <rect x="5" y="21" width="340" height="10" fill="#444"/>
+  <text x="15" y="22" fill="#fff" font-size="11">FlowLayout Demo</text>
+  <rect x="5" y="31" width="340" height="164" fill="#e8e8e8"/>
+  <!-- Row 1 -->
+  <rect x="15" y="45" width="70" height="26" rx="2" fill="#d4d0c8" stroke="#888"/><text x="50" y="63" text-anchor="middle" fill="#000" font-size="11">Button 1</text>
+  <rect x="95" y="45" width="70" height="26" rx="2" fill="#d4d0c8" stroke="#888"/><text x="130" y="63" text-anchor="middle" fill="#000" font-size="11">Button 2</text>
+  <rect x="175" y="45" width="70" height="26" rx="2" fill="#d4d0c8" stroke="#888"/><text x="210" y="63" text-anchor="middle" fill="#000" font-size="11">Button 3</text>
+  <rect x="255" y="45" width="70" height="26" rx="2" fill="#d4d0c8" stroke="#888"/><text x="290" y="63" text-anchor="middle" fill="#000" font-size="11">Button 4</text>
+  <!-- Row 2 -->
+  <rect x="15" y="81" width="70" height="26" rx="2" fill="#d4d0c8" stroke="#888"/><text x="50" y="99" text-anchor="middle" fill="#000" font-size="11">Button 5</text>
+  <rect x="95" y="81" width="70" height="26" rx="2" fill="#d4d0c8" stroke="#888"/><text x="130" y="99" text-anchor="middle" fill="#000" font-size="11">Button 6</text>
+  <rect x="175" y="81" width="70" height="26" rx="2" fill="#d4d0c8" stroke="#888"/><text x="210" y="99" text-anchor="middle" fill="#000" font-size="11">Button 7</text>
+  <text x="175" y="150" text-anchor="middle" fill="#888" font-size="11">← wraps to next row →</text>
+</svg></div>
+  </div>
+</section>
+
+<!-- 7. GridLayout -->
+<section id="grid">
+  <h2>GridLayout</h2>
+  <p><code>GridLayout</code> arranges components in a rectangular grid. Every cell is the same size, and components fill their cell completely. Components are added left-to-right, top-to-bottom.</p>
+  <div class="highlight">
+    <strong>Constructor:</strong> <code>new GridLayout(rows, cols)</code><br>
+    <code>new GridLayout(3, 2, 5, 5)</code> — 3 rows, 2 cols, 5px horizontal gap, 5px vertical gap<br>
+    Setting rows=0 means "as many rows as needed" and vice versa for cols.
+  </div>
+  <div class="code-cell">
+    <div class="code-header"><span>Java — GridLayoutDemo.java</span><button class="run-btn" onclick="toggleOutput(this)">▶ Run</button></div>
+    <pre><span class="kw">import</span> java.awt.*;
+
+<span class="kw">public class</span> <span class="cl">GridLayoutDemo</span> <span class="kw">extends</span> <span class="cl">Frame</span> {
+    <span class="kw">public</span> <span class="cl">GridLayoutDemo</span>() {
+        <span class="kw">super</span>(<span class="str">"GridLayout 3x2"</span>);
+        setLayout(<span class="kw">new</span> <span class="cl">GridLayout</span>(<span class="num">3</span>, <span class="num">2</span>, <span class="num">5</span>, <span class="num">5</span>));
+        setSize(<span class="num">300</span>, <span class="num">200</span>);
+
+        <span class="kw">String</span>[] labels = {<span class="str">"Name:"</span>,<span class="str">"Age:"</span>,<span class="str">"City:"</span>,
+                            <span class="str">""</span>,<span class="str">""</span>,<span class="str">""</span>};
+        <span class="kw">for</span> (<span class="cl">String</span> s : labels) {
+            <span class="kw">if</span> (s.isEmpty())
+                add(<span class="kw">new</span> <span class="cl">TextField</span>(<span class="num">15</span>));
+            <span class="kw">else</span>
+                add(<span class="kw">new</span> <span class="cl">Label</span>(s));
+        }
+        setVisible(<span class="kw">true</span>);
+    }
+}</pre>
+    <div class="output-panel">
+<svg width="300" height="200" viewBox="0 0 300 200" style="display:block;margin:0 auto">
+  <rect x="5" y="5" width="290" height="190" rx="4" fill="#2d2d2d" stroke="#555"/>
+  <rect x="5" y="5" width="290" height="26" rx="4" fill="#444"/>
+  <rect x="5" y="21" width="290" height="10" fill="#444"/>
+  <text x="15" y="22" fill="#fff" font-size="11">GridLayout 3x2</text>
+  <rect x="5" y="31" width="290" height="164" fill="#e8e8e8"/>
+  <!-- Grid cells -->
+  <rect x="10" y="37" width="130" height="44" fill="#ddd" stroke="#aaa"/>
+  <text x="75" y="64" text-anchor="middle" fill="#000" font-size="13">Name:</text>
+  <rect x="150" y="37" width="140" height="44" fill="#fff" stroke="#aaa"/>
+  <rect x="10" y="87" width="130" height="44" fill="#ddd" stroke="#aaa"/>
+  <text x="75" y="114" text-anchor="middle" fill="#000" font-size="13">Age:</text>
+  <rect x="150" y="87" width="140" height="44" fill="#fff" stroke="#aaa"/>
+  <rect x="10" y="137" width="130" height="44" fill="#ddd" stroke="#aaa"/>
+  <text x="75" y="164" text-anchor="middle" fill="#000" font-size="13">City:</text>
+  <rect x="150" y="137" width="140" height="44" fill="#fff" stroke="#aaa"/>
+</svg></div>
+  </div>
+</section>
+
+<!-- 8. BorderLayout -->
+<section id="border">
+  <h2>BorderLayout</h2>
+  <p><code>BorderLayout</code> is the <strong>default layout for Frame and Dialog</strong>. It divides the container into five named regions. Each region holds at most one component, and the CENTER region gets all remaining space.</p>
+  <div class="card">
+    <svg width="100%" viewBox="0 0 400 280" style="max-width:400px;display:block;margin:0 auto">
+      <!-- NORTH -->
+      <rect x="10" y="10" width="380" height="55" fill="#1e2035" stroke="#6c63ff" stroke-width="2"/>
+      <text x="200" y="37" text-anchor="middle" fill="#6c63ff" font-size="14" font-weight="bold">NORTH</text>
+      <text x="200" y="54" text-anchor="middle" fill="#94a3b8" font-size="11">Fixed height, full width</text>
+      <!-- WEST -->
+      <rect x="10" y="75" width="80" height="130" fill="#1e2035" stroke="#00d4aa" stroke-width="2"/>
+      <text x="50" y="135" text-anchor="middle" fill="#00d4aa" font-size="13" font-weight="bold">WEST</text>
+      <text x="50" y="152" text-anchor="middle" fill="#94a3b8" font-size="10">Fixed</text>
+      <text x="50" y="164" text-anchor="middle" fill="#94a3b8" font-size="10">width</text>
+      <!-- CENTER -->
+      <rect x="100" y="75" width="200" height="130" fill="#1a1d2e" stroke="#f7c948" stroke-width="2"/>
+      <text x="200" y="137" text-anchor="middle" fill="#f7c948" font-size="14" font-weight="bold">CENTER</text>
+      <text x="200" y="155" text-anchor="middle" fill="#94a3b8" font-size="11">Gets remaining space</text>
+      <!-- EAST -->
+      <rect x="310" y="75" width="80" height="130" fill="#1e2035" stroke="#00d4aa" stroke-width="2"/>
+      <text x="350" y="135" text-anchor="middle" fill="#00d4aa" font-size="13" font-weight="bold">EAST</text>
+      <text x="350" y="152" text-anchor="middle" fill="#94a3b8" font-size="10">Fixed</text>
+      <text x="350" y="164" text-anchor="middle" fill="#94a3b8" font-size="10">width</text>
+      <!-- SOUTH -->
+      <rect x="10" y="215" width="380" height="55" fill="#1e2035" stroke="#6c63ff" stroke-width="2"/>
+      <text x="200" y="242" text-anchor="middle" fill="#6c63ff" font-size="14" font-weight="bold">SOUTH</text>
+      <text x="200" y="259" text-anchor="middle" fill="#94a3b8" font-size="11">Fixed height, full width</text>
+    </svg>
+  </div>
+  <div class="code-cell">
+    <div class="code-header"><span>Java — BorderLayoutDemo.java</span><button class="run-btn" onclick="toggleOutput(this)">▶ Run</button></div>
+    <pre><span class="kw">import</span> java.awt.*;
+
+<span class="kw">public class</span> <span class="cl">BorderLayoutDemo</span> <span class="kw">extends</span> <span class="cl">Frame</span> {
+    <span class="kw">public</span> <span class="cl">BorderLayoutDemo</span>() {
+        <span class="kw">super</span>(<span class="str">"BorderLayout Demo"</span>);
+        <span class="cm">// BorderLayout is default for Frame, but explicit here:</span>
+        setLayout(<span class="kw">new</span> <span class="cl">BorderLayout</span>(<span class="num">5</span>, <span class="num">5</span>));
+        setSize(<span class="num">400</span>, <span class="num">300</span>);
+
+        add(<span class="kw">new</span> <span class="cl">Button</span>(<span class="str">"NORTH"</span>),  <span class="cl">BorderLayout</span>.NORTH);
+        add(<span class="kw">new</span> <span class="cl">Button</span>(<span class="str">"SOUTH"</span>),  <span class="cl">BorderLayout</span>.SOUTH);
+        add(<span class="kw">new</span> <span class="cl">Button</span>(<span class="str">"EAST"</span>),   <span class="cl">BorderLayout</span>.EAST);
+        add(<span class="kw">new</span> <span class="cl">Button</span>(<span class="str">"WEST"</span>),   <span class="cl">BorderLayout</span>.WEST);
+        add(<span class="kw">new</span> <span class="cl">Button</span>(<span class="str">"CENTER"</span>), <span class="cl">BorderLayout</span>.CENTER);
+
+        setVisible(<span class="kw">true</span>);
+    }
+}</pre>
+    <div class="output-panel">
+<svg width="380" height="260" viewBox="0 0 380 260" style="display:block;margin:0 auto">
+  <rect x="5" y="5" width="370" height="250" rx="4" fill="#2d2d2d" stroke="#555"/>
+  <rect x="5" y="5" width="370" height="26" rx="4" fill="#444"/>
+  <rect x="5" y="21" width="370" height="10" fill="#444"/>
+  <text x="15" y="22" fill="#fff" font-size="11">BorderLayout Demo</text>
+  <rect x="5" y="31" width="370" height="224" fill="#e8e8e8"/>
+  <rect x="10" y="36" width="355" height="36" fill="#d4d0c8" stroke="#888"/><text x="187" y="59" text-anchor="middle" fill="#000" font-size="12">NORTH</text>
+  <rect x="10" y="200" width="355" height="36" fill="#d4d0c8" stroke="#888"/><text x="187" y="223" text-anchor="middle" fill="#000" font-size="12">SOUTH</text>
+  <rect x="10" y="78" width="60" height="116" fill="#d4d0c8" stroke="#888"/><text x="40" y="141" text-anchor="middle" fill="#000" font-size="12">WEST</text>
+  <rect x="310" y="78" width="55" height="116" fill="#d4d0c8" stroke="#888"/><text x="337" y="141" text-anchor="middle" fill="#000" font-size="12">EAST</text>
+  <rect x="76" y="78" width="228" height="116" fill="#d4d0c8" stroke="#888"/><text x="190" y="141" text-anchor="middle" fill="#000" font-size="13" font-weight="bold">CENTER</text>
+</svg></div>
+  </div>
+</section>
+
+<!-- 9. Calculator -->
+<section id="calculator">
+  <h2>Calculator using GridLayout</h2>
+  <p>A classic AWT example — a calculator using GridLayout for the button pad and ActionListener for button events.</p>
+  <div class="code-cell">
+    <div class="code-header"><span>Java — CalcFrame.java</span><button class="run-btn" onclick="toggleOutput(this)">▶ Run</button></div>
+    <pre><span class="kw">import</span> java.awt.*;
+<span class="kw">import</span> java.awt.event.*;
+
+<span class="kw">public class</span> <span class="cl">CalcFrame</span> <span class="kw">extends</span> <span class="cl">Frame</span>
+        <span class="kw">implements</span> <span class="cl">ActionListener</span> {
+    <span class="cl">TextField</span> display;
+    <span class="kw">double</span> num1 = <span class="num">0</span>;
+    <span class="cl">String</span> op = <span class="str">""</span>;
+    <span class="kw">boolean</span> newNum = <span class="kw">true</span>;
+
+    <span class="kw">public</span> <span class="cl">CalcFrame</span>() {
+        <span class="kw">super</span>(<span class="str">"Calculator"</span>);
+        setLayout(<span class="kw">new</span> <span class="cl">BorderLayout</span>());
+        setSize(<span class="num">220</span>, <span class="num">280</span>);
+
+        display = <span class="kw">new</span> <span class="cl">TextField</span>(<span class="str">"0"</span>);
+        display.setEditable(<span class="kw">false</span>);
+        add(display, <span class="cl">BorderLayout</span>.NORTH);
+
+        <span class="cl">Panel</span> btnPanel = <span class="kw">new</span> <span class="cl">Panel</span>(
+            <span class="kw">new</span> <span class="cl">GridLayout</span>(<span class="num">4</span>, <span class="num">4</span>, <span class="num">3</span>, <span class="num">3</span>));
+
+        <span class="cl">String</span>[] btns = {
+            <span class="str">"7"</span>,<span class="str">"8"</span>,<span class="str">"9"</span>,<span class="str">"/"</span>,
+            <span class="str">"4"</span>,<span class="str">"5"</span>,<span class="str">"6"</span>,<span class="str">"*"</span>,
+            <span class="str">"1"</span>,<span class="str">"2"</span>,<span class="str">"3"</span>,<span class="str">"-"</span>,
+            <span class="str">"0"</span>,<span class="str">"."</span>,<span class="str">"="</span>,<span class="str">"+"</span>
+        };
+
+        <span class="kw">for</span> (<span class="cl">String</span> label : btns) {
+            <span class="cl">Button</span> b = <span class="kw">new</span> <span class="cl">Button</span>(label);
+            b.addActionListener(<span class="kw">this</span>);
+            btnPanel.add(b);
+        }
+
+        add(btnPanel, <span class="cl">BorderLayout</span>.CENTER);
+        setVisible(<span class="kw">true</span>);
+    }
+
+    <span class="kw">public void</span> <span class="fn">actionPerformed</span>(<span class="cl">ActionEvent</span> e) {
+        <span class="cl">String</span> cmd = e.getActionCommand();
+        <span class="kw">if</span> (cmd.matches(<span class="str">"[0-9.]"</span>)) {
+            <span class="kw">if</span> (newNum) { display.setText(cmd); newNum = <span class="kw">false</span>; }
+            <span class="kw">else</span> display.setText(display.getText() + cmd);
+        } <span class="kw">else if</span> (cmd.equals(<span class="str">"="</span>)) {
+            <span class="kw">double</span> num2 = <span class="cl">Double</span>.parseDouble(display.getText());
+            <span class="kw">switch</span> (op) {
+                <span class="kw">case</span> <span class="str">"+"</span>: display.setText(<span class="str">""</span> + (num1 + num2)); <span class="kw">break</span>;
+                <span class="kw">case</span> <span class="str">"-"</span>: display.setText(<span class="str">""</span> + (num1 - num2)); <span class="kw">break</span>;
+                <span class="kw">case</span> <span class="str">"*"</span>: display.setText(<span class="str">""</span> + (num1 * num2)); <span class="kw">break</span>;
+                <span class="kw">case</span> <span class="str">"/"</span>: display.setText(<span class="str">""</span> + (num1 / num2)); <span class="kw">break</span>;
+            }
+            newNum = <span class="kw">true</span>;
+        } <span class="kw">else</span> {
+            num1 = <span class="cl">Double</span>.parseDouble(display.getText());
+            op = cmd;
+            newNum = <span class="kw">true</span>;
+        }
+    }
+}</pre>
+    <div class="output-panel">
+<svg width="220" height="280" viewBox="0 0 220 280" style="display:block;margin:0 auto">
+  <rect x="5" y="5" width="210" height="270" rx="4" fill="#2d2d2d" stroke="#555"/>
+  <rect x="5" y="5" width="210" height="26" rx="4" fill="#444"/>
+  <rect x="5" y="21" width="210" height="10" fill="#444"/>
+  <text x="15" y="22" fill="#fff" font-size="11">Calculator</text>
+  <rect x="5" y="31" width="210" height="244" fill="#e8e8e8"/>
+  <rect x="10" y="37" width="200" height="28" fill="#fff" stroke="#888"/>
+  <text x="205" y="56" text-anchor="end" fill="#000" font-size="14">12</text>
+  <!-- Button grid 4x4 -->
+  <rect x="10" y="73" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="32" y="97" text-anchor="middle" fill="#000" font-size="14">7</text>
+  <rect x="60" y="73" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="82" y="97" text-anchor="middle" fill="#000" font-size="14">8</text>
+  <rect x="110" y="73" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="132" y="97" text-anchor="middle" fill="#000" font-size="14">9</text>
+  <rect x="160" y="73" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="182" y="97" text-anchor="middle" fill="#000" font-size="14">/</text>
+  <rect x="10" y="117" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="32" y="141" text-anchor="middle" fill="#000" font-size="14">4</text>
+  <rect x="60" y="117" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="82" y="141" text-anchor="middle" fill="#000" font-size="14">5</text>
+  <rect x="110" y="117" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="132" y="141" text-anchor="middle" fill="#000" font-size="14">6</text>
+  <rect x="160" y="117" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="182" y="141" text-anchor="middle" fill="#000" font-size="14">*</text>
+  <rect x="10" y="161" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="32" y="185" text-anchor="middle" fill="#000" font-size="14">1</text>
+  <rect x="60" y="161" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="82" y="185" text-anchor="middle" fill="#000" font-size="14">2</text>
+  <rect x="110" y="161" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="132" y="185" text-anchor="middle" fill="#000" font-size="14">3</text>
+  <rect x="160" y="161" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="182" y="185" text-anchor="middle" fill="#000" font-size="14">-</text>
+  <rect x="10" y="205" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="32" y="229" text-anchor="middle" fill="#000" font-size="14">0</text>
+  <rect x="60" y="205" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="82" y="229" text-anchor="middle" fill="#000" font-size="14">.</text>
+  <rect x="110" y="205" width="44" height="38" fill="#c8e6c9" stroke="#888"/><text x="132" y="229" text-anchor="middle" fill="#000" font-size="14">=</text>
+  <rect x="160" y="205" width="44" height="38" fill="#d4d0c8" stroke="#888"/><text x="182" y="229" text-anchor="middle" fill="#000" font-size="14">+</text>
+</svg></div>
+  </div>
+  <div class="interactive-box">
+    <h4>Interactive Calculator</h4>
+    <p style="color:var(--muted);font-size:.9rem">Try the actual calculator right here:</p>
+    <div id="calc-display" style="background:#12141f;border:1px solid var(--border);border-radius:6px;padding:.7rem 1rem;font-size:1.5rem;text-align:right;color:#4ade80;margin-bottom:.5rem;font-family:monospace">0</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+      <button class="calc-btn" onclick="calcPress('7')">7</button><button class="calc-btn" onclick="calcPress('8')">8</button><button class="calc-btn" onclick="calcPress('9')">9</button><button class="calc-btn op" onclick="calcPress('/')">÷</button>
+      <button class="calc-btn" onclick="calcPress('4')">4</button><button class="calc-btn" onclick="calcPress('5')">5</button><button class="calc-btn" onclick="calcPress('6')">6</button><button class="calc-btn op" onclick="calcPress('*')">×</button>
+      <button class="calc-btn" onclick="calcPress('1')">1</button><button class="calc-btn" onclick="calcPress('2')">2</button><button class="calc-btn" onclick="calcPress('3')">3</button><button class="calc-btn op" onclick="calcPress('-')">−</button>
+      <button class="calc-btn" onclick="calcPress('0')">0</button><button class="calc-btn" onclick="calcPress('.')">.</button><button class="calc-btn eq" onclick="calcPress('=')">=</button><button class="calc-btn op" onclick="calcPress('+')">+</button>
+    </div>
+    <button onclick="calcClear()" style="margin-top:.5rem;width:100%;background:#c084fc;color:#000;border:none;padding:.5rem;border-radius:6px;cursor:pointer;font-weight:600">C — Clear</button>
+  </div>
+  <style>
+    .calc-btn{background:#1e2035;color:var(--text);border:1px solid var(--border);padding:.7rem;border-radius:6px;cursor:pointer;font-size:1.1rem;transition:background .2s}
+    .calc-btn:hover{background:#2a2d40}
+    .calc-btn.op{color:#f7c948}
+    .calc-btn.eq{background:var(--accent2);color:#000;font-weight:700}
+  </style>
+  <script>
+    let calcVal='0', calcNum1=0, calcOp='', calcNew=true;
+    function calcPress(k){
+      const d=document.getElementById('calc-display');
+      if('0123456789.'.includes(k)){
+        if(calcNew){calcVal=k==='.'?'0.':k;calcNew=false;}
+        else calcVal+=k;
+      } else if(k==='='){
+        let n2=parseFloat(calcVal);
+        let r=calcOp==='+'?calcNum1+n2:calcOp==='-'?calcNum1-n2:calcOp==='*'?calcNum1*n2:calcOp==='/'?calcNum1/n2:n2;
+        calcVal=String(parseFloat(r.toFixed(10)));calcNew=true;
+      } else {
+        calcNum1=parseFloat(calcVal);calcOp=k;calcNew=true;
+      }
+      d.textContent=calcVal;
+    }
+    function calcClear(){calcVal='0';calcNum1=0;calcOp='';calcNew=true;document.getElementById('calc-display').textContent='0';}
+  </script>
+</section>
+
+<!-- 10. KeyListener -->
+<section id="keylistener">
+  <h2>KeyListener</h2>
+  <p>The <code>KeyListener</code> interface lets you respond to keyboard events on any Component that has focus.</p>
+  <h3>KeyListener Methods</h3>
+  <table>
+    <tr><th>Method</th><th>When Called</th><th>Key Info Available</th></tr>
+    <tr><td><code>keyPressed(KeyEvent e)</code></td><td>When a key is pressed down</td><td>getKeyCode(), getKeyChar()</td></tr>
+    <tr><td><code>keyReleased(KeyEvent e)</code></td><td>When a key is released</td><td>getKeyCode(), getKeyChar()</td></tr>
+    <tr><td><code>keyTyped(KeyEvent e)</code></td><td>After press+release of a printable key</td><td>getKeyChar() only (code is UNDEFINED)</td></tr>
+  </table>
+  <div class="highlight teal">
+    <strong>keyChar vs keyCode:</strong><br>
+    <code>e.getKeyChar()</code> — the Unicode character ('A', '1', '@')<br>
+    <code>e.getKeyCode()</code> — integer code for all keys including Ctrl/Alt/F1 (use <code>KeyEvent.VK_*</code> constants)<br>
+    <code>e.isShiftDown()</code>, <code>e.isControlDown()</code> — modifier key state
+  </div>
+  <div class="code-cell">
+    <div class="code-header"><span>Java — KeyListenerDemo.java</span><button class="run-btn" onclick="toggleOutput(this)">▶ Run</button></div>
+    <pre><span class="kw">import</span> java.awt.*;
+<span class="kw">import</span> java.awt.event.*;
+
+<span class="kw">public class</span> <span class="cl">KeyListenerDemo</span> <span class="kw">extends</span> <span class="cl">Frame</span>
+        <span class="kw">implements</span> <span class="cl">KeyListener</span> {
+    <span class="cl">TextArea</span> log;
+
+    <span class="kw">public</span> <span class="cl">KeyListenerDemo</span>() {
+        <span class="kw">super</span>(<span class="str">"Key Events"</span>);
+        setLayout(<span class="kw">new</span> <span class="cl">BorderLayout</span>());
+        setSize(<span class="num">400</span>, <span class="num">300</span>);
+
+        <span class="cl">TextField</span> input = <span class="kw">new</span> <span class="cl">TextField</span>(<span class="str">"Type here..."</span>);
+        log = <span class="kw">new</span> <span class="cl">TextArea</span>(<span class="num">8</span>, <span class="num">40</span>);
+        log.setEditable(<span class="kw">false</span>);
+
+        input.addKeyListener(<span class="kw">this</span>);
+
+        add(input, <span class="cl">BorderLayout</span>.NORTH);
+        add(log, <span class="cl">BorderLayout</span>.CENTER);
+        setVisible(<span class="kw">true</span>);
+    }
+
+    <span class="kw">public void</span> <span class="fn">keyPressed</span>(<span class="cl">KeyEvent</span> e) {
+        log.append(<span class="str">"PRESSED: code="</span> + e.getKeyCode()
+            + <span class="str">" char="</span> + e.getKeyChar() + <span class="str">"\n"</span>);
+    }
+    <span class="kw">public void</span> <span class="fn">keyReleased</span>(<span class="cl">KeyEvent</span> e) {
+        log.append(<span class="str">"RELEASED: "</span> + e.getKeyChar() + <span class="str">"\n"</span>);
+    }
+    <span class="kw">public void</span> <span class="fn">keyTyped</span>(<span class="cl">KeyEvent</span> e) {
+        log.append(<span class="str">"TYPED: '"</span> + e.getKeyChar() + <span class="str">"'\n"</span>);
+    }
+}</pre>
+    <div class="output-panel"><span style="color:#94a3b8">Sample output when typing "Hi":</span>
+PRESSED: code=72 char=H
+TYPED: 'H'
+RELEASED: H
+PRESSED: code=73 char=i
+TYPED: 'i'
+RELEASED: i</div>
+  </div>
+  <div class="interactive-box">
+    <h4>Live Keypress Detector</h4>
+    <p style="color:var(--muted);font-size:.9rem">Click in the box below and type:</p>
+    <input type="text" id="keyInput" placeholder="Click here and type..." style="background:#12141f;border:1px solid var(--border);color:var(--text);padding:.6rem;border-radius:6px;width:100%;font-size:1rem" onkeydown="logKey(event,'PRESSED')" onkeyup="logKey(event,'RELEASED')" onkeypress="logKey(event,'TYPED')">
+    <div id="keyLog" class="sim-output" style="height:120px;overflow-y:auto">Waiting for keypress...</div>
+    <button class="action-btn" onclick="document.getElementById('keyLog').textContent='Waiting for keypress...'">Clear Log</button>
+  </div>
+  <script>
+    function logKey(e,type){
+      const log=document.getElementById('keyLog');
+      if(log.textContent==='Waiting for keypress...')log.textContent='';
+      log.textContent+=type+': code='+e.keyCode+' char="'+(e.key.length===1?e.key:e.key)+'"\n';
+      log.scrollTop=log.scrollHeight;
+    }
+  </script>
+</section>
+
+<!-- 11. WindowAdapter -->
+<section id="windowadapter">
+  <h2>WindowAdapter</h2>
+  <p>The <code>WindowListener</code> interface has 7 methods — you'd have to implement all of them even if you only care about window closing. <code>WindowAdapter</code> is an adapter class that provides empty implementations of all 7 methods, so you only override the ones you need.</p>
+  <h3>WindowListener Methods</h3>
+  <table>
+    <tr><th>Method</th><th>When Called</th></tr>
+    <tr><td><code>windowOpened(WindowEvent e)</code></td><td>First time window becomes visible</td></tr>
+    <tr><td><code>windowClosing(WindowEvent e)</code></td><td>User clicks the close (X) button — window not yet closed</td></tr>
+    <tr><td><code>windowClosed(WindowEvent e)</code></td><td>After dispose() completes</td></tr>
+    <tr><td><code>windowIconified(WindowEvent e)</code></td><td>Window minimized</td></tr>
+    <tr><td><code>windowDeiconified(WindowEvent e)</code></td><td>Window restored from minimize</td></tr>
+    <tr><td><code>windowActivated(WindowEvent e)</code></td><td>Window gains focus</td></tr>
+    <tr><td><code>windowDeactivated(WindowEvent e)</code></td><td>Window loses focus</td></tr>
+  </table>
+  <div class="highlight yellow">
+    <strong>Important:</strong> <code>windowClosing</code> is where you put <code>System.exit(0)</code> or <code>dispose()</code>. Without it, clicking the X button does nothing — the window won't close!
+  </div>
+  <div class="code-cell">
+    <div class="code-header"><span>Java — Complete AWT App with WindowAdapter</span><button class="run-btn" onclick="toggleOutput(this)">▶ Run</button></div>
+    <pre><span class="kw">import</span> java.awt.*;
+<span class="kw">import</span> java.awt.event.*;
+
+<span class="kw">public class</span> <span class="cl">CompleteAWTApp</span> <span class="kw">extends</span> <span class="cl">Frame</span>
+        <span class="kw">implements</span> <span class="cl">ActionListener</span> {
+    <span class="cl">TextField</span> nameField, ageField;
+    <span class="cl">Choice</span> cityChoice;
+    <span class="cl">Checkbox</span> agreeBox;
+    <span class="cl">TextArea</span> output;
+
+    <span class="kw">public</span> <span class="cl">CompleteAWTApp</span>() {
+        <span class="kw">super</span>(<span class="str">"Complete AWT Form"</span>);
+        setLayout(<span class="kw">new</span> <span class="cl">BorderLayout</span>(<span class="num">8</span>, <span class="num">8</span>));
+        setSize(<span class="num">450</span>, <span class="num">400</span>);
+
+        <span class="cm">// Form panel</span>
+        <span class="cl">Panel</span> form = <span class="kw">new</span> <span class="cl">Panel</span>(<span class="kw">new</span> <span class="cl">GridLayout</span>(<span class="num">4</span>, <span class="num">2</span>, <span class="num">5</span>, <span class="num">5</span>));
+        form.add(<span class="kw">new</span> <span class="cl">Label</span>(<span class="str">"Name:"</span>));
+        nameField = <span class="kw">new</span> <span class="cl">TextField</span>();
+        form.add(nameField);
+        form.add(<span class="kw">new</span> <span class="cl">Label</span>(<span class="str">"Age:"</span>));
+        ageField = <span class="kw">new</span> <span class="cl">TextField</span>();
+        form.add(ageField);
+        form.add(<span class="kw">new</span> <span class="cl">Label</span>(<span class="str">"City:"</span>));
+        cityChoice = <span class="kw">new</span> <span class="cl">Choice</span>();
+        cityChoice.add(<span class="str">"Mumbai"</span>); cityChoice.add(<span class="str">"Delhi"</span>);
+        cityChoice.add(<span class="str">"Bangalore"</span>); cityChoice.add(<span class="str">"Pune"</span>);
+        form.add(cityChoice);
+        agreeBox = <span class="kw">new</span> <span class="cl">Checkbox</span>(<span class="str">"I agree to terms"</span>);
+        form.add(<span class="kw">new</span> <span class="cl">Label</span>(<span class="str">""</span>));
+        form.add(agreeBox);
+        add(form, <span class="cl">BorderLayout</span>.NORTH);
+
+        output = <span class="kw">new</span> <span class="cl">TextArea</span>(<span class="num">5</span>, <span class="num">40</span>);
+        output.setEditable(<span class="kw">false</span>);
+        add(output, <span class="cl">BorderLayout</span>.CENTER);
+
+        <span class="cl">Button</span> submit = <span class="kw">new</span> <span class="cl">Button</span>(<span class="str">"Submit"</span>);
+        submit.addActionListener(<span class="kw">this</span>);
+        add(submit, <span class="cl">BorderLayout</span>.SOUTH);
+
+        <span class="cm">// WindowAdapter — only override what we need</span>
+        addWindowListener(<span class="kw">new</span> <span class="cl">WindowAdapter</span>() {
+            <span class="kw">public void</span> <span class="fn">windowClosing</span>(<span class="cl">WindowEvent</span> e) {
+                <span class="cl">System</span>.exit(<span class="num">0</span>);
+            }
+            <span class="kw">public void</span> <span class="fn">windowOpened</span>(<span class="cl">WindowEvent</span> e) {
+                output.append(<span class="str">"Window opened!\n"</span>);
+            }
+        });
+
+        setVisible(<span class="kw">true</span>);
+    }
+
+    <span class="kw">public void</span> <span class="fn">actionPerformed</span>(<span class="cl">ActionEvent</span> e) {
+        output.setText(<span class="str">""</span>);
+        output.append(<span class="str">"Name: "</span> + nameField.getText() + <span class="str">"\n"</span>);
+        output.append(<span class="str">"Age: "</span>  + ageField.getText()  + <span class="str">"\n"</span>);
+        output.append(<span class="str">"City: "</span> + cityChoice.getSelectedItem() + <span class="str">"\n"</span>);
+        output.append(<span class="str">"Agreed: "</span> + agreeBox.getState() + <span class="str">"\n"</span>);
+    }
+
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cl">String</span>[] args) {
+        <span class="kw">new</span> <span class="cl">CompleteAWTApp</span>();
+    }
+}</pre>
+    <div class="output-panel">
+<svg width="420" height="380" viewBox="0 0 420 380" style="display:block;margin:0 auto">
+  <rect x="5" y="5" width="410" height="370" rx="4" fill="#2d2d2d" stroke="#555"/>
+  <rect x="5" y="5" width="410" height="26" rx="4" fill="#444"/>
+  <rect x="5" y="21" width="410" height="10" fill="#444"/>
+  <text x="15" y="22" fill="#fff" font-size="11">Complete AWT Form</text>
+  <rect x="5" y="31" width="410" height="344" fill="#e8e8e8"/>
+  <!-- Form -->
+  <text x="15" y="60" fill="#000" font-size="12">Name:</text>
+  <rect x="100" y="44" width="300" height="24" fill="#fff" stroke="#888"/><text x="105" y="61" fill="#555" font-size="11">John Doe</text>
+  <text x="15" y="90" fill="#000" font-size="12">Age:</text>
+  <rect x="100" y="74" width="300" height="24" fill="#fff" stroke="#888"/><text x="105" y="91" fill="#555" font-size="11">25</text>
+  <text x="15" y="120" fill="#000" font-size="12">City:</text>
+  <rect x="100" y="104" width="300" height="24" fill="#d4d0c8" stroke="#888"/><text x="105" y="121" fill="#000" font-size="11">Bangalore ▼</text>
+  <rect x="105" y="130" width="12" height="12" fill="#fff" stroke="#888"/><rect x="106" y="131" width="10" height="10" fill="#6c63ff"/>
+  <text x="122" y="141" fill="#000" font-size="11">I agree to terms</text>
+  <!-- TextArea output -->
+  <rect x="10" y="155" width="400" height="100" fill="#fff" stroke="#888"/>
+  <text x="15" y="172" fill="#000" font-size="11">Window opened!</text>
+  <text x="15" y="188" fill="#000" font-size="11">Name: John Doe</text>
+  <text x="15" y="204" fill="#000" font-size="11">Age: 25</text>
+  <text x="15" y="220" fill="#000" font-size="11">City: Bangalore</text>
+  <text x="15" y="236" fill="#000" font-size="11">Agreed: true</text>
+  <!-- Submit button -->
+  <rect x="170" y="265" width="80" height="26" fill="#d4d0c8" stroke="#888"/>
+  <text x="210" y="283" text-anchor="middle" fill="#000" font-size="12">Submit</text>
+</svg></div>
+  </div>
+
+  <div class="interactive-box">
+    <h4>Interactive AWT Form Simulator</h4>
+    <div class="grid2">
+      <div>
+        <label style="color:var(--muted);font-size:.85rem">Name:</label>
+        <input type="text" id="formName" placeholder="Enter name">
+        <label style="color:var(--muted);font-size:.85rem">Age:</label>
+        <input type="number" id="formAge" placeholder="Enter age">
+        <label style="color:var(--muted);font-size:.85rem">City:</label>
+        <select id="formCity" style="background:#12141f;border:1px solid var(--border);color:var(--text);padding:.5rem;border-radius:6px;width:100%;margin-bottom:.8rem">
+          <option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Pune</option>
+        </select>
+        <label style="display:flex;align-items:center;gap:.5rem;color:var(--muted);font-size:.9rem"><input type="checkbox" id="formAgree"> I agree to terms</label>
+      </div>
+      <div>
+        <div class="sim-output" id="formOutput" style="height:160px">TextArea output will appear here...</div>
+      </div>
+    </div>
+    <button class="action-btn" onclick="submitForm()" style="margin-top:1rem">Submit Form</button>
+  </div>
+  <script>
+    function submitForm(){
+      const o=document.getElementById('formOutput');
+      o.textContent='Name: '+document.getElementById('formName').value+'\n'
+        +'Age: '+document.getElementById('formAge').value+'\n'
+        +'City: '+document.getElementById('formCity').value+'\n'
+        +'Agreed: '+document.getElementById('formAgree').checked;
+    }
+  </script>
+
+  <div class="highlight teal" style="margin-top:2rem">
+    <strong>Summary — AWT Key Points:</strong><br>
+    • AWT = heavyweight, native OS widgets<br>
+    • Frame is the top-level window; use WindowAdapter to handle closing<br>
+    • Delegation Event Model: Source fires event → Listener handles it<br>
+    • Layout Managers: FlowLayout (default Panel), GridLayout (grids), BorderLayout (default Frame, 5 regions)<br>
+    • KeyListener: keyPressed/keyReleased/keyTyped — use KeyAdapter to avoid implementing all 3<br>
+    • Always call <code>setVisible(true)</code> last after adding all components
+  </div>
+</section>
+
+</main>
+
+<script>
+function toggleOutput(btn){
+  const panel=btn.closest('.code-cell').querySelector('.output-panel');
+  const show=!panel.classList.contains('visible');
+  panel.classList.toggle('visible',show);
+  btn.textContent=show?'■ Hide':'▶ Run';
+}
+// Nav scroll highlighting
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('nav a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-80)cur=s.id});
+  navLinks.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+cur)});
+},{passive:true});
+</script>
+
+<style>
+.xn-extra-wrap{max-width:1100px;margin:2.5rem auto;padding:0 1.5rem;}
+.xn-intro{background:rgba(108,99,255,.08);border-left:4px solid #6c63ff;border-radius:0 8px 8px 0;padding:1rem 1.2rem;margin:1rem 0 1.5rem;color:var(--muted);font-size:.92rem;}
+.xn-prob{background:var(--card);border:1px solid var(--border);border-left:4px solid #6c63ff;border-radius:10px;padding:1.1rem 1.2rem;margin:1rem 0;}
+.xn-q{margin-bottom:.75rem;color:var(--text);}
+.xn-tag{display:inline-block;background:#6c63ff;color:#fff;font-size:.72rem;font-weight:700;padding:.14rem .6rem;border-radius:20px;margin-right:.45rem;vertical-align:middle;}
+.xn-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.xn-in{background:#12152a;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.5rem .85rem;font-size:.95rem;min-width:180px;font-family:'Cascadia Code','Fira Code',monospace;}
+.xn-in:focus{outline:none;border-color:#6c63ff;}
+.xn-check,.xn-toggle{border:none;border-radius:8px;padding:.5rem 1.15rem;cursor:pointer;font-weight:700;font-size:.88rem;}
+.xn-check{background:#6c63ff;color:#fff;}
+.xn-check:hover{background:#574fd6;}
+.xn-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.xn-toggle:hover{border-color:#00d4aa;color:#00d4aa;}
+.xn-fb{margin-top:.65rem;font-weight:700;font-size:.9rem;min-height:1rem;}
+.xn-fb.xn-ok{color:#00d4aa;}
+.xn-fb.xn-no{color:#ff6b6b;}
+.xn-fb.xn-warn{color:#f7c948;}
+.xn-sol{display:none;margin-top:.85rem;padding:.95rem 1.05rem;background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.3);border-radius:8px;font-size:.9rem;color:var(--text);}
+.xn-sol.open{display:block;animation:xnfade .25s ease;}
+@keyframes xnfade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.xn-sol .xf{background:#12152a;color:#f7c948;font-family:'Cascadia Code','Fira Code',monospace;padding:.55rem .85rem;border-radius:6px;margin:.45rem 0;overflow-x:auto;white-space:pre-wrap;font-size:.86rem;}
+.xn-sol b{color:#00d4aa;}
+.xn-opts{display:flex;flex-direction:column;gap:.45rem;margin-top:.4rem;}
+.xn-opt{text-align:left;background:#12152a;border:1px solid var(--border);color:var(--text);padding:.55rem .85rem;border-radius:6px;cursor:pointer;font-size:.9rem;font-family:inherit;}
+.xn-opt:hover:not(:disabled){border-color:#6c63ff;}
+.xn-opt.xn-ok{background:rgba(0,212,170,.18);border-color:#00d4aa;color:#00d4aa;font-weight:700;}
+.xn-opt.xn-no{background:rgba(255,107,107,.15);border-color:#ff6b6b;color:#ff6b6b;}
+.xn-codeblock{background:#12152a;border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;font-family:'Cascadia Code','Fira Code',monospace;font-size:.85rem;line-height:1.6;white-space:pre;overflow-x:auto;margin:.5rem 0 .8rem;color:#e2e8f0;}
+</style>
+
+<section id="xn-extra" class="xn-extra-wrap">
+  <h2>🔢 Engineered Numerical Practice</h2>
+  <div class="xn-intro">
+    Fresh exam-style computational problems built from this week's concepts. Type your answer and hit
+    <b>Check</b> for instant feedback, or reveal the worked steps. <em>(Press Enter in any answer box to check.)</em>
+  </div>
+
+  <div class="xn-prob" data-ans="24" data-tol="0" data-unit=" cells">
+    <div class="xn-q"><span class="xn-tag">NP1</span><b>GridLayout cell count.</b>
+      A Frame's content is laid out with the manager below. How many equal-sized grid cells does it define?
+      <div class="xn-codeblock">setLayout(new GridLayout(6, 4));</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="number of cells">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>GridLayout(rows, cols)</code> divides the container into <code>rows × cols</code> equal rectangles.
+      <div class="xf">cells = rows × cols = 6 × 4 = 24</div>
+      The grid defines <b>24</b> cells.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="434" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP2</span><b>Calculator handler result.</b>
+      In the AWT "Add Two Numbers" app, the user types <code>256</code> and <code>178</code>, then clicks Add.
+      The handler runs the code below. What int is written to the result field?
+      <div class="xn-codeblock">int number1 = Integer.parseInt(number1Field.getText()); // 256
+int number2 = Integer.parseInt(number2Field.getText()); // 178
+int sum = number1 + number2;</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="sum">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">256 + 178 = 434</div>
+      The result field shows <b>434</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="170" data-tol="0" data-unit=" px">
+    <div class="xn-q"><span class="xn-tag">NP3</span><b>setBounds coordinate math.</b>
+      A Button is placed with the call below (in a null-layout Frame). What is the x-coordinate of the button's
+      <em>right edge</em> in pixels? (signature: <code>setBounds(x, y, width, height)</code>)
+      <div class="xn-codeblock">b.setBounds(50, 40, 120, 30);</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="right edge x (px)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Right edge = left x + width.
+      <div class="xf">x_right = 50 + 120 = 170</div>
+      The right edge sits at x = <b>170</b> px.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="70000" data-tol="0" data-unit=" px²">
+    <div class="xn-q"><span class="xn-tag">NP4</span><b>Frame area from setSize.</b>
+      A MyFrame is sized with <code>this.setSize(350, 200)</code> (width, height in px).
+      What is the frame's area in square pixels?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="area (px²)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>setSize(width, height)</code> → area = width × height.
+      <div class="xf">area = 350 × 200 = 70000</div>
+      The frame covers <b>70000</b> px².
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="9" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP5</span><b>KeyListener character count.</b>
+      The Text Analysis Tool updates a label with <code>text.length()</code> on every keystroke.
+      If the TextArea currently holds the exact string <code>AWT Frame</code> (one space), what does the
+      Character Count show? (spaces count.)
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="character count">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>String.length()</code> counts every char including the space.
+      <div class="xf">"AWT Frame" → A W T _ F r a m e = 9 chars</div>
+      Character Count = <b>9</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="6" data-tol="0" data-unit=" words">
+    <div class="xn-q"><span class="xn-tag">NP6</span><b>KeyListener word count.</b>
+      The tool computes words with <code>trimmed.split("\\s+").length</code>. For the typed text
+      <code>build a simple GUI window now</code>, what Word Count is displayed?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="word count">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Splitting on whitespace yields the individual tokens.
+      <div class="xf">build | a | simple | GUI | window | now = 6 tokens</div>
+      Word Count = <b>6</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="1" data-tol="0" data-unit=" cell">
+    <div class="xn-q"><span class="xn-tag">NP7</span><b>Empty grid cells.</b>
+      A panel uses <code>new GridLayout(4, 2)</code> and the program adds 3 Labels, 3 TextFields and 1 Button
+      (7 components total). How many grid cells remain empty?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="empty cells">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">total cells = 4 × 2 = 8
+components added = 3 + 3 + 1 = 7
+empty = 8 − 7 = 1</div>
+      <b>1</b> cell stays empty.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">NP8</span><b>Layout default — output prediction.</b>
+      A new <code>Panel()</code> is created and four buttons are added with no explicit layout set.
+      In what order/arrangement do they appear?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) Left-to-right in a row, wrapping when space runs out (FlowLayout — Panel's default)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Stacked into the five North/South/East/West/Center regions (BorderLayout)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) In a fixed rectangular grid (GridLayout)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) All overlapping in the same spot (CardLayout)</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      A <code>Panel</code>'s default layout manager is <code>FlowLayout</code>, which places components left-to-right
+      and wraps to the next line. (A Frame/Window default is BorderLayout instead.) Answer: <b>A</b>.
+    </div>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  if(window.__xnInit) return; window.__xnInit=true;
+  function num(s){
+    if(s==null) return NaN;
+    s=(''+s).replace(/−/g,'-').replace(/[^0-9.\-]/g,'');
+    if(s===''||s==='-'||s==='.') return NaN;
+    return parseFloat(s);
+  }
+  window.xnCheck=function(btn){
+    var p=btn.closest('.xn-prob'); if(!p) return;
+    var ans=parseFloat(p.getAttribute('data-ans'));
+    var tol=parseFloat(p.getAttribute('data-tol')||'0.05');
+    var unit=p.getAttribute('data-unit')||'';
+    var inp=p.querySelector('.xn-in'); var fb=p.querySelector('.xn-fb');
+    var v=num(inp.value);
+    if(isNaN(v)){ fb.className='xn-fb xn-warn'; fb.textContent='⚠ Enter a numeric answer first.'; return; }
+    if(Math.abs(v-ans)<=tol){ fb.className='xn-fb xn-ok'; fb.innerHTML='✓ Correct! Answer = '+ans+unit; }
+    else { fb.className='xn-fb xn-no'; fb.innerHTML='✗ Not quite — you entered '+v+'. Try again, or reveal the steps.'; }
+  };
+  window.xnToggle=function(btn){
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol');
+    var open=s.classList.toggle('open'); btn.textContent=open?'Hide steps':'Show steps';
+  };
+  window.xnPick=function(btn,ok){
+    var box=btn.parentElement;
+    box.querySelectorAll('.xn-opt').forEach(function(b){b.disabled=true; b.style.cursor='default';});
+    btn.classList.add(ok?'xn-ok':'xn-no');
+    if(!ok){ box.querySelectorAll('.xn-opt').forEach(function(b){ if(b.getAttribute('data-correct')==='1') b.classList.add('xn-ok'); }); }
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol'); if(s) s.classList.add('open');
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter' && e.target.classList && e.target.classList.contains('xn-in')){
+      var b=e.target.closest('.xn-prob').querySelector('.xn-check'); if(b) b.click();
+    }
+  });
+})();
+</script>
+
+<section id="xn-mcq" class="xn-extra-wrap">
+  <h2>📝 Exam-Style MCQs — 2 Marks Each</h2>
+  <p style="opacity:.85;font-size:.95em;margin-bottom:1rem;">Each question is worth 2 marks — a mix of applied numerical and conceptual items. Click an option to check it; the correct answer and explanation appear instantly.</p>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q1 · 2 marks</span> A Frame's content area is configured with the layout manager below, and the program then adds 12 buttons. How many grid cells stay empty?
+      <div class="xn-codeblock">setLayout(new GridLayout(5, 3));</div>
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 0 — the grid expands to fit</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 1</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 3</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 12</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>GridLayout(rows, cols)</code> defines <code>rows × cols</code> equal cells, filled in order.
+      <div class="xf">total cells = 5 × 3 = 15
+empty = 15 − 12 = 3</div>
+      <b>3</b> cells remain empty (answer C).
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q2 · 2 marks</span> In the AWT "Add Two Numbers" calculator, the user types <code>487</code> and <code>159</code> and clicks Add. The handler parses both fields as <code>int</code> and assigns <code>sum = n1 + n2</code>. What value is written to the result field?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) "487159" (string concatenation)</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) 646</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 636</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 328</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>Integer.parseInt</code> converts the text to <code>int</code>, so <code>+</code> is numeric addition, not concatenation.
+      <div class="xf">487 + 159 = 646</div>
+      The result field shows <b>646</b> (answer B). Option A is the mistake of adding two Strings.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q3 · 2 marks</span> In a null-layout Frame, a Button is positioned with the call below (signature <code>setBounds(x, y, width, height)</code>). What is the y-coordinate of the button's <em>bottom edge</em>, in pixels?
+      <div class="xn-codeblock">b.setBounds(30, 60, 120, 90);</div>
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 90 px</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 120 px</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 150 px</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 180 px</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The bottom edge sits at the top y plus the height (the 3rd arg 120 is width, not height).
+      <div class="xf">y_bottom = y + height = 60 + 90 = 150</div>
+      The bottom edge is at y = <b>150</b> px (answer C). Option B wrongly uses the width.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q4 · 2 marks</span> AWT components are described as <em>heavyweight</em>. Which statement best explains what that means?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) They use a large amount of heap memory because each is a deep object tree</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) Each component is backed by a native OS "peer" widget that the operating system renders</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) They are painted entirely in Java with no operating-system involvement</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) They can only be used inside heavyweight server applications</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      A heavyweight component wraps a <b>native OS peer</b>; the OS does the actual drawing, giving native look-and-feel but a different appearance per platform. Option C describes Swing's <em>lightweight</em> model. Answer: <b>B</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q5 · 2 marks</span> A component is added to a <code>BorderLayout</code> Frame with <code>add(comp)</code> — i.e. with <em>no</em> region constraint given. In which region does it appear?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) NORTH</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) WEST</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) CENTER</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) It is not added at all — a constraint is required</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      In <code>BorderLayout</code>, <code>add(comp)</code> with no constraint defaults to <code>CENTER</code>, which stretches to fill the space left by the four edge regions. Answer: <b>C</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q6 · 2 marks</span> Under the Delegation Event Model, you want your code to run when the user clicks an AWT <code>Button</code>. Which listener interface do you implement, and which method handles the click?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) MouseListener — mouseClicked()</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) ActionListener — actionPerformed()</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) WindowListener — windowActivated()</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) KeyListener — keyPressed()</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      A Button click fires an <code>ActionEvent</code>, handled by an <code>ActionListener</code> registered with <code>addActionListener(...)</code>; the callback is <code>actionPerformed(ActionEvent e)</code>. MouseListener fires for low-level mouse activity, not the semantic button "action". Answer: <b>B</b>.
+    </div>
+  </div>
+
+</section>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>

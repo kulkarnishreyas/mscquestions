@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk '/Exam-Style MCQs/{f=1} f' week1.html)",
+      "Bash(cd *)"
+    ]
+  },
+  "disabledMcpjsonServers": [
+    "delphix-dct"
+  ]
+}

@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 6 – Swing and JavaFX</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d2e; --accent:#6c63ff; --accent2:#00d4aa; --yellow:#f7c948; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --code:#2d3748; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+  header { background:linear-gradient(135deg,#6c63ff,#00d4aa); padding:3rem 2rem; text-align:center; }
+  header h1 { font-size:2.5rem; font-weight:800; color:#fff; }
+  header p { font-size:1.1rem; color:rgba(255,255,255,0.85); margin-top:0.5rem; }
+  nav { background:var(--card); border-bottom:2px solid var(--accent); display:flex; flex-wrap:wrap; gap:0.25rem; padding:0.75rem 1rem; position:sticky; top:0; z-index:100; }
+  nav a { color:var(--muted); text-decoration:none; padding:0.4rem 1rem; border-radius:6px; font-size:0.9rem; transition:all 0.2s; }
+  nav a:hover, nav a.active { background:var(--accent); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:2rem 1.5rem; }
+  section { margin-bottom:3rem; }
+  h2 { font-size:1.8rem; color:var(--accent); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  h3 { font-size:1.2rem; color:var(--accent2); margin:1.2rem 0 0.6rem; }
+  h4 { font-size:1rem; color:var(--yellow); margin:0.8rem 0 0.3rem; }
+  p { margin-bottom:0.8rem; color:var(--text); }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .highlight { border-left:4px solid var(--accent); background:rgba(108,99,255,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight2 { border-left:4px solid var(--accent2); background:rgba(0,212,170,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  .highlight3 { border-left:4px solid var(--yellow); background:rgba(247,201,72,0.08); border-radius:0 8px 8px 0; padding:1rem 1rem 1rem 1.2rem; margin:1rem 0; }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+  th { background:var(--accent); color:#fff; padding:0.7rem 1rem; text-align:left; }
+  td { padding:0.6rem 1rem; border-bottom:1px solid var(--border); }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.03); }
+  ul,ol { padding-left:1.5rem; margin-bottom:0.8rem; }
+  li { margin-bottom:0.3rem; }
+  .tag { background:var(--accent); color:#fff; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .tag2 { background:var(--accent2); color:#000; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  svg text { font-family:'Segoe UI',sans-serif; }
+  .step { display:flex; gap:1rem; align-items:flex-start; margin-bottom:0.8rem; }
+  .step-num { background:var(--accent); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:700px) { .two-col { grid-template-columns:1fr; } header h1 { font-size:1.8rem; } }
+  .interactive-box { background:var(--card); border:2px solid var(--accent); border-radius:12px; padding:1.5rem; margin:1.5rem 0; }
+  .interactive-box h4 { color:var(--accent2); margin-bottom:1rem; font-size:1rem; }
+  input[type=text], input[type=password] { background:var(--code); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:0.5rem 0.8rem; font-size:0.95rem; width:100%; margin-bottom:0.5rem; outline:none; }
+  input[type=text]:focus, input[type=password]:focus { border-color:var(--accent); }
+  button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:0.6rem 1.5rem; cursor:pointer; font-size:0.95rem; font-weight:600; transition:opacity 0.2s; }
+  button:hover { opacity:0.85; }
+  button.btn2 { background:var(--accent2); color:#000; }
+  button.btn3 { background:var(--yellow); color:#000; }
+  .result-box { background:rgba(0,212,170,0.1); border:1px solid var(--accent2); border-radius:8px; padding:1rem; margin-top:1rem; font-weight:600; color:var(--accent2); min-height:2.5rem; font-family:monospace; }
+  .console-box { background:#0a0c14; border:1px solid var(--border); border-radius:8px; padding:1rem; margin-top:1rem; font-family:monospace; font-size:0.88rem; color:#a8ff78; min-height:3rem; white-space:pre-wrap; }
+  /* Code block */
+  .code-block { background:#0d0f1a; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:1rem 0; }
+  .code-header { background:var(--code); padding:0.5rem 1rem; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; color:var(--muted); }
+  .code-header span { color:var(--accent2); font-weight:600; }
+  .run-btn { background:var(--accent2); color:#000; border:none; border-radius:6px; padding:0.25rem 0.9rem; cursor:pointer; font-size:0.8rem; font-weight:700; }
+  pre { padding:1.2rem 1.5rem; overflow-x:auto; font-size:0.88rem; line-height:1.6; }
+  code { font-family:'Cascadia Code','Fira Code',monospace; }
+  .kw { color:#c792ea; }
+  .cl { color:#82aaff; }
+  .str { color:#c3e88d; }
+  .cm { color:#546e7a; font-style:italic; }
+  .fn { color:#82aaff; }
+  .num { color:#f78c6c; }
+  .ann { color:#ffcb6b; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+  @media(max-width:700px) { .grid3 { grid-template-columns:1fr; } }
+  .badge { display:inline-block; background:rgba(108,99,255,0.2); border:1px solid var(--accent); color:var(--accent); border-radius:6px; padding:0.15rem 0.6rem; font-size:0.8rem; margin-right:0.3rem; }
+  .mockup-label { text-align:center; color:var(--muted); font-size:0.82rem; margin-top:0.3rem; font-style:italic; }
+  label.form-label { display:block; color:var(--muted); font-size:0.88rem; margin-bottom:0.25rem; margin-top:0.6rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Week 6: Swing &amp; JavaFX</h1>
+  <p>GUI Programming in Java &middot; Components &middot; Layouts &middot; Event Handling &middot; Scene Graph</p>
+</header>
+
+<nav>
+  <a href="#swing-intro" class="active">Swing Intro</a>
+  <a href="#hierarchy">Hierarchy</a>
+  <a href="#basic-swing">Basic Swing</a>
+  <a href="#login-swing">Login (Swing)</a>
+  <a href="#joptionpane">JOptionPane</a>
+  <a href="#jfilechooser">JFileChooser</a>
+  <a href="#javafx-intro">JavaFX Intro</a>
+  <a href="#javafx-elements">FX Elements</a>
+  <a href="#lifecycle">Lifecycle</a>
+  <a href="#eventhandler">EventHandler</a>
+  <a href="#simple-fx">Simple FX App</a>
+  <a href="#login-fx">Login (FX)</a>
+  <a href="#comparison">AWT vs Swing vs FX</a>
+  <a href="#xn-extra">🔢 Numericals</a>
+  <a href="#xn-mcq">📝 MCQs</a>
+</nav>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 1 — Introduction to Swing
+════════════════════════════════════════════════════════════ -->
+<section id="swing-intro">
+  <h2>1. Introduction to Swing</h2>
+
+  <div class="card">
+    <p>Swing is Java's primary GUI toolkit, introduced in Java 1.2 as part of the Java Foundation Classes (JFC). It superseded the older Abstract Window Toolkit (AWT) by addressing its fundamental limitations.</p>
+
+    <div class="highlight">
+      <strong>Key insight:</strong> AWT components are <em>heavyweight</em> — they delegate to the native OS for rendering. Swing components are <em>lightweight</em> — they paint themselves entirely in Java, giving you consistent behaviour across every platform.
+    </div>
+
+    <h3>Advantages of Swing over AWT</h3>
+    <div class="grid3">
+      <div class="card" style="border-top:4px solid var(--accent);">
+        <h4>Platform-Independent Look &amp; Feel</h4>
+        <p>Swing ships with multiple pluggable L&amp;Fs: Metal (default), Nimbus, Motif, and OS-native (Windows, GTK, Aqua). You switch them at runtime with a single call.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent2);">
+        <h4>Lightweight Components</h4>
+        <p>Every Swing component renders itself via Java2D. No OS handles, no peer objects. This means no Z-order clipping bugs between components and perfect cross-platform fidelity.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--yellow);">
+        <h4>Richer Component Set</h4>
+        <p><code>JTable</code>, <code>JTree</code>, <code>JTabbedPane</code>, <code>JEditorPane</code>, <code>JSpinner</code>, <code>JColorChooser</code> — none of these existed in AWT.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent);">
+        <h4>Pluggable Look and Feel (PLAF)</h4>
+        <p>The UI delegate pattern allows the appearance of every component to be swapped independently of its model and behaviour.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent2);">
+        <h4>MVC Architecture</h4>
+        <p>Each component separates <em>Model</em> (data), <em>View</em> (rendering), and <em>Controller</em> (input). E.g. <code>JTable</code> uses <code>TableModel</code>, <code>TableCellRenderer</code>, and <code>TableCellEditor</code>.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--yellow);">
+        <h4>Accessibility &amp; Internationalisation</h4>
+        <p>Built-in accessibility API, full Unicode support, bidirectional text, and locale-aware components out of the box.</p>
+      </div>
+    </div>
+
+    <div class="highlight2">
+      <strong>Thread rule:</strong> All Swing GUI updates must happen on the <strong>Event Dispatch Thread (EDT)</strong>. Use <code>SwingUtilities.invokeLater(Runnable)</code> to schedule work on the EDT from any other thread.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 2 — Swing Component Hierarchy
+════════════════════════════════════════════════════════════ -->
+<section id="hierarchy">
+  <h2>2. Swing Component Hierarchy</h2>
+
+  <div class="card">
+    <p>Swing sits on top of AWT's <code>Component</code>/<code>Container</code> hierarchy. Understanding this tree tells you which methods are available on every object.</p>
+
+    <svg viewBox="0 0 860 370" width="100%" style="max-height:370px;">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#6c63ff"/>
+        </marker>
+      </defs>
+
+      <!-- Object -->
+      <rect x="360" y="10" width="130" height="34" rx="8" fill="#2d3748" stroke="#6c63ff" stroke-width="2"/>
+      <text x="425" y="32" fill="#e2e8f0" font-size="13" font-weight="bold" text-anchor="middle">Object</text>
+
+      <!-- Component -->
+      <rect x="360" y="70" width="130" height="34" rx="8" fill="#2d3748" stroke="#6c63ff" stroke-width="2"/>
+      <text x="425" y="92" fill="#e2e8f0" font-size="13" font-weight="bold" text-anchor="middle">Component</text>
+      <line x1="425" y1="44" x2="425" y2="70" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Container -->
+      <rect x="360" y="130" width="130" height="34" rx="8" fill="#2d3748" stroke="#6c63ff" stroke-width="2"/>
+      <text x="425" y="152" fill="#e2e8f0" font-size="13" font-weight="bold" text-anchor="middle">Container</text>
+      <line x1="425" y1="104" x2="425" y2="130" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Window branch -->
+      <rect x="120" y="200" width="120" height="34" rx="8" fill="#1e1b3a" stroke="#6c63ff" stroke-width="1.5"/>
+      <text x="180" y="222" fill="#a78bfa" font-size="12" font-weight="bold" text-anchor="middle">Window</text>
+      <line x1="360" y1="150" x2="240" y2="150" stroke="#6c63ff" stroke-width="1.5"/>
+      <line x1="240" y1="150" x2="180" y2="200" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Frame -->
+      <rect x="30" y="268" width="100" height="30" rx="6" fill="#2d3748" stroke="#6c63ff" stroke-width="1"/>
+      <text x="80" y="287" fill="#e2e8f0" font-size="11" text-anchor="middle">Frame</text>
+      <line x1="140" y1="234" x2="80" y2="268" stroke="#6c63ff" stroke-width="1" marker-end="url(#arr)"/>
+
+      <!-- JFrame -->
+      <rect x="0" y="320" width="80" height="28" rx="6" fill="#6c63ff"/>
+      <text x="40" y="339" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">JFrame</text>
+      <line x1="60" y1="298" x2="40" y2="320" stroke="#6c63ff" stroke-width="1" marker-end="url(#arr)"/>
+
+      <!-- Dialog -->
+      <rect x="145" y="268" width="100" height="30" rx="6" fill="#2d3748" stroke="#6c63ff" stroke-width="1"/>
+      <text x="195" y="287" fill="#e2e8f0" font-size="11" text-anchor="middle">Dialog</text>
+      <line x1="200" y1="234" x2="195" y2="268" stroke="#6c63ff" stroke-width="1" marker-end="url(#arr)"/>
+
+      <!-- JDialog -->
+      <rect x="135" y="320" width="80" height="28" rx="6" fill="#6c63ff"/>
+      <text x="175" y="339" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">JDialog</text>
+      <line x1="175" y1="298" x2="175" y2="320" stroke="#6c63ff" stroke-width="1" marker-end="url(#arr)"/>
+
+      <!-- JComponent branch -->
+      <rect x="560" y="200" width="130" height="34" rx="8" fill="#0d2b1e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="625" y="222" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">JComponent</text>
+      <line x1="490" y1="150" x2="625" y2="150" stroke="#00d4aa" stroke-width="1.5"/>
+      <line x1="625" y1="150" x2="625" y2="200" stroke="#00d4aa" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- JComponent children -->
+      <rect x="430" y="268" width="110" height="26" rx="6" fill="#2d3748" stroke="#00d4aa" stroke-width="1"/>
+      <text x="485" y="285" fill="#e2e8f0" font-size="10" text-anchor="middle">JTextField / JTextArea</text>
+      <line x1="580" y1="234" x2="485" y2="268" stroke="#00d4aa" stroke-width="1" marker-end="url(#arr)"/>
+
+      <rect x="550" y="268" width="110" height="26" rx="6" fill="#2d3748" stroke="#00d4aa" stroke-width="1"/>
+      <text x="605" y="285" fill="#e2e8f0" font-size="10" text-anchor="middle">JButton / JLabel</text>
+      <line x1="610" y1="234" x2="605" y2="268" stroke="#00d4aa" stroke-width="1" marker-end="url(#arr)"/>
+
+      <rect x="670" y="268" width="110" height="26" rx="6" fill="#2d3748" stroke="#00d4aa" stroke-width="1"/>
+      <text x="725" y="285" fill="#e2e8f0" font-size="10" text-anchor="middle">JComboBox / JList</text>
+      <line x1="670" y1="234" x2="725" y2="268" stroke="#00d4aa" stroke-width="1" marker-end="url(#arr)"/>
+
+      <rect x="430" y="320" width="110" height="26" rx="6" fill="#2d3748" stroke="#00d4aa" stroke-width="1"/>
+      <text x="485" y="337" fill="#e2e8f0" font-size="10" text-anchor="middle">JMenuBar / JPanel</text>
+
+      <rect x="670" y="320" width="120" height="26" rx="6" fill="#2d3748" stroke="#00d4aa" stroke-width="1"/>
+      <text x="730" y="337" fill="#e2e8f0" font-size="10" text-anchor="middle">JOptionPane / JScrollBar</text>
+    </svg>
+
+    <div class="highlight">
+      <strong>Rule of thumb:</strong> If a class name starts with <strong>J</strong>, it is a Swing component (extends <code>JComponent</code>). Classes without the J prefix (like <code>Frame</code>, <code>Button</code>) belong to AWT.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 3 — Basic Swing Program
+════════════════════════════════════════════════════════════ -->
+<section id="basic-swing">
+  <h2>3. Basic Swing Program</h2>
+
+  <div class="card">
+    <p>Every Swing application follows a standard pattern: create a <code>JFrame</code>, configure it, add components, and make it visible — all from within <code>SwingUtilities.invokeLater()</code>.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span>Java</span> BasicSwingExample.java <button class="run-btn" onclick="runBasicSwing()">&#9654; Run</button></div>
+      <pre><code><span class="kw">import</span> javax.swing.*;
+
+<span class="kw">public class</span> <span class="cl">BasicSwingExample</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {
+        <span class="cm">// All Swing code MUST run on the Event Dispatch Thread</span>
+        SwingUtilities.<span class="fn">invokeLater</span>(() -&gt; {
+            <span class="cm">// 1. Create the top-level window</span>
+            <span class="cl">JFrame</span> frame = <span class="kw">new</span> <span class="cl">JFrame</span>(<span class="str">"Swing Example"</span>);
+
+            <span class="cm">// 2. Close the app when the window is closed</span>
+            frame.<span class="fn">setDefaultCloseOperation</span>(<span class="cl">JFrame</span>.EXIT_ON_CLOSE);
+
+            <span class="cm">// 3. Create a button</span>
+            <span class="cl">JButton</span> button = <span class="kw">new</span> <span class="cl">JButton</span>(<span class="str">"Click Me!"</span>);
+
+            <span class="cm">// 4. Attach an action listener (lambda)</span>
+            button.<span class="fn">addActionListener</span>(e -&gt;
+                <span class="cl">JOptionPane</span>.<span class="fn">showMessageDialog</span>(frame, <span class="str">"Button was clicked!"</span>)
+            );
+
+            <span class="cm">// 5. Add button to the frame's content pane</span>
+            frame.<span class="fn">getContentPane</span>().<span class="fn">add</span>(button);
+
+            <span class="cm">// 6. Size and display</span>
+            frame.<span class="fn">setSize</span>(<span class="num">300</span>, <span class="num">150</span>);
+            frame.<span class="fn">setLocationRelativeTo</span>(<span class="kw">null</span>); <span class="cm">// centre on screen</span>
+            frame.<span class="fn">setVisible</span>(<span class="kw">true</span>);
+        });
+    }
+}</code></pre>
+    </div>
+
+    <div id="basic-swing-output" class="console-box" style="display:none;"></div>
+
+    <h3>Window Mockup</h3>
+    <svg viewBox="0 0 320 160" width="320" style="display:block;margin:0 auto;">
+      <!-- Window chrome -->
+      <rect x="0" y="0" width="320" height="160" rx="10" fill="#2a2a3e" stroke="#6c63ff" stroke-width="2"/>
+      <!-- Title bar -->
+      <rect x="0" y="0" width="320" height="32" rx="10" fill="#1a1d2e"/>
+      <rect x="0" y="22" width="320" height="10" fill="#1a1d2e"/>
+      <!-- Traffic lights -->
+      <circle cx="18" cy="16" r="6" fill="#ff5f57"/>
+      <circle cx="36" cy="16" r="6" fill="#ffbd2e"/>
+      <circle cx="54" cy="16" r="6" fill="#28ca41"/>
+      <!-- Title -->
+      <text x="160" y="21" fill="#e2e8f0" font-size="12" text-anchor="middle">Swing Example</text>
+      <!-- Button -->
+      <rect x="95" y="65" width="130" height="36" rx="6" fill="#6c63ff"/>
+      <text x="160" y="88" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">Click Me!</text>
+    </svg>
+    <p class="mockup-label">SVG mockup — JFrame containing a single JButton (BorderLayout.CENTER)</p>
+
+    <h3>Interactive Demo</h3>
+    <div class="interactive-box">
+      <h4>Try it in the browser</h4>
+      <button onclick="document.getElementById('basic-swing-dialog').style.display='flex'">Click Me!</button>
+    </div>
+
+    <!-- Modal overlay -->
+    <div id="basic-swing-dialog" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:999;align-items:center;justify-content:center;">
+      <div style="background:#1a1d2e;border:2px solid #6c63ff;border-radius:12px;padding:2rem;min-width:280px;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">&#8505;</div>
+        <p style="margin-bottom:1.2rem;font-weight:600;">Button was clicked!</p>
+        <button onclick="document.getElementById('basic-swing-dialog').style.display='none'">OK</button>
+      </div>
+    </div>
+
+    <div class="highlight3">
+      <strong>EDT reminder:</strong> Never update Swing components from a background thread (e.g. inside a <code>Thread</code> or <code>ExecutorService</code>). Always wrap such updates in <code>SwingUtilities.invokeLater()</code>.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 4 — Login Screen with GridLayout
+════════════════════════════════════════════════════════════ -->
+<section id="login-swing">
+  <h2>4. Login Screen with GridLayout</h2>
+
+  <div class="card">
+    <p><code>GridLayout</code> arranges components in a grid of equal-sized cells. <code>GridLayout(rows, cols)</code> fills left-to-right, top-to-bottom.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span>Java</span> LoginScreen.java</div>
+      <pre><code><span class="kw">import</span> javax.swing.*;
+<span class="kw">import</span> java.awt.*;
+
+<span class="kw">public class</span> <span class="cl">LoginScreen</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {
+        SwingUtilities.<span class="fn">invokeLater</span>(() -&gt; {
+            <span class="cl">JFrame</span> frame = <span class="kw">new</span> <span class="cl">JFrame</span>(<span class="str">"User Login"</span>);
+            frame.<span class="fn">setDefaultCloseOperation</span>(<span class="cl">JFrame</span>.EXIT_ON_CLOSE);
+            frame.<span class="fn">setSize</span>(<span class="num">340</span>, <span class="num">160</span>);
+            frame.<span class="fn">setLocationRelativeTo</span>(<span class="kw">null</span>);
+
+            <span class="cm">// 3 rows, 2 columns → 6 cells</span>
+            <span class="cl">JPanel</span> panel = <span class="kw">new</span> <span class="cl">JPanel</span>(<span class="kw">new</span> <span class="cl">GridLayout</span>(<span class="num">3</span>, <span class="num">2</span>, <span class="num">8</span>, <span class="num">8</span>));
+            panel.<span class="fn">setBorder</span>(<span class="cl">BorderFactory</span>.<span class="fn">createEmptyBorder</span>(<span class="num">16</span>, <span class="num">16</span>, <span class="num">16</span>, <span class="num">16</span>));
+
+            <span class="cl">JLabel</span>     lblUser  = <span class="kw">new</span> <span class="cl">JLabel</span>(<span class="str">"Username:"</span>);
+            <span class="cl">JTextField</span> txtUser  = <span class="kw">new</span> <span class="cl">JTextField</span>(<span class="num">20</span>);
+
+            <span class="cl">JLabel</span>         lblPass  = <span class="kw">new</span> <span class="cl">JLabel</span>(<span class="str">"Password:"</span>);
+            <span class="cl">JPasswordField</span> txtPass  = <span class="kw">new</span> <span class="cl">JPasswordField</span>(<span class="num">20</span>);
+
+            <span class="cl">JLabel</span>  lblEmpty  = <span class="kw">new</span> <span class="cl">JLabel</span>(<span class="str">""</span>);       <span class="cm">// spacer</span>
+            <span class="cl">JButton</span> btnLogin  = <span class="kw">new</span> <span class="cl">JButton</span>(<span class="str">"Login"</span>);
+
+            btnLogin.<span class="fn">addActionListener</span>(e -&gt; {
+                String user = txtUser.<span class="fn">getText</span>();
+                <span class="cm">// getPassword() returns char[] for security; never use getText()</span>
+                <span class="kw">char</span>[] pass = txtPass.<span class="fn">getPassword</span>();
+                <span class="cl">JOptionPane</span>.<span class="fn">showMessageDialog</span>(frame,
+                    <span class="str">"Welcome, "</span> + user + <span class="str">"!\nPassword length: "</span> + pass.length,
+                    <span class="str">"Login Successful"</span>,
+                    <span class="cl">JOptionPane</span>.INFORMATION_MESSAGE);
+                <span class="cm">// Zero out the char array — security best practice</span>
+                java.util.Arrays.<span class="fn">fill</span>(pass, <span class="str">'\0'</span>);
+            });
+
+            panel.<span class="fn">add</span>(lblUser);  panel.<span class="fn">add</span>(txtUser);
+            panel.<span class="fn">add</span>(lblPass);  panel.<span class="fn">add</span>(txtPass);
+            panel.<span class="fn">add</span>(lblEmpty); panel.<span class="fn">add</span>(btnLogin);
+
+            frame.<span class="fn">add</span>(panel);
+            frame.<span class="fn">setVisible</span>(<span class="kw">true</span>);
+        });
+    }
+}</code></pre>
+    </div>
+
+    <div class="highlight2">
+      <strong>Security note:</strong> <code>JPasswordField.getPassword()</code> returns <code>char[]</code> (not <code>String</code>) because strings are immutable and remain in memory until GC. After using the password, overwrite the array with <code>Arrays.fill(pass, '\0')</code>.
+    </div>
+
+    <h3>Window Mockup</h3>
+    <svg viewBox="0 0 360 180" width="360" style="display:block;margin:0 auto;">
+      <rect x="0" y="0" width="360" height="180" rx="10" fill="#2a2a3e" stroke="#6c63ff" stroke-width="2"/>
+      <rect x="0" y="0" width="360" height="32" rx="10" fill="#1a1d2e"/>
+      <rect x="0" y="22" width="360" height="10" fill="#1a1d2e"/>
+      <circle cx="18" cy="16" r="6" fill="#ff5f57"/>
+      <circle cx="36" cy="16" r="6" fill="#ffbd2e"/>
+      <circle cx="54" cy="16" r="6" fill="#28ca41"/>
+      <text x="180" y="21" fill="#e2e8f0" font-size="12" text-anchor="middle">User Login</text>
+      <!-- Row 1 -->
+      <text x="24" y="64" fill="#94a3b8" font-size="12">Username:</text>
+      <rect x="130" y="48" width="200" height="26" rx="4" fill="#0d0f1a" stroke="#2d3748" stroke-width="1"/>
+      <text x="140" y="65" fill="#e2e8f0" font-size="11">admin</text>
+      <!-- Row 2 -->
+      <text x="24" y="104" fill="#94a3b8" font-size="12">Password:</text>
+      <rect x="130" y="88" width="200" height="26" rx="4" fill="#0d0f1a" stroke="#2d3748" stroke-width="1"/>
+      <text x="140" y="105" fill="#e2e8f0" font-size="11">&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;</text>
+      <!-- Row 3 -->
+      <rect x="220" y="130" width="110" height="30" rx="6" fill="#6c63ff"/>
+      <text x="275" y="149" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">Login</text>
+    </svg>
+    <p class="mockup-label">SVG mockup — GridLayout(3,2): labels in column 0, inputs/button in column 1</p>
+
+    <h3>Interactive Demo</h3>
+    <div class="interactive-box">
+      <h4>Browser equivalent of LoginScreen</h4>
+      <label class="form-label">Username</label>
+      <input type="text" id="sw-username" placeholder="Enter username"/>
+      <label class="form-label">Password</label>
+      <input type="password" id="sw-password" placeholder="Enter password"/>
+      <br><br>
+      <button onclick="swingLogin()">Login</button>
+      <div class="console-box" id="sw-login-output" style="display:none;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 5 — JOptionPane Dialogs
+════════════════════════════════════════════════════════════ -->
+<section id="joptionpane">
+  <h2>5. JOptionPane Dialogs</h2>
+
+  <div class="card">
+    <p><code>JOptionPane</code> provides pre-built modal dialog boxes. Four static factory methods cover the most common use-cases.</p>
+
+    <table>
+      <tr><th>Method</th><th>Dialog type</th><th>Returns</th></tr>
+      <tr><td><code>showMessageDialog</code></td><td>Information, warning, error, plain</td><td><code>void</code></td></tr>
+      <tr><td><code>showConfirmDialog</code></td><td>Yes / No / Cancel buttons</td><td><code>int</code> (0=YES, 1=NO, 2=CANCEL)</td></tr>
+      <tr><td><code>showInputDialog</code></td><td>Text-entry field</td><td><code>String</code> (null if cancelled)</td></tr>
+      <tr><td><code>showOptionDialog</code></td><td>Fully custom buttons</td><td><code>int</code> (index of chosen button)</td></tr>
+    </table>
+
+    <div class="code-block">
+      <div class="code-header"><span>Java</span> JOptionPaneExample.java</div>
+      <pre><code><span class="kw">import</span> javax.swing.*;
+
+<span class="kw">public class</span> <span class="cl">JOptionPaneExample</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {
+        <span class="cm">// 1. Message dialog — purely informational</span>
+        <span class="cl">JOptionPane</span>.<span class="fn">showMessageDialog</span>(<span class="kw">null</span>,
+            <span class="str">"Hello, World!"</span>,
+            <span class="str">"Greeting"</span>,
+            <span class="cl">JOptionPane</span>.INFORMATION_MESSAGE);
+
+        <span class="cm">// 2. Input dialog — ask the user for text</span>
+        String name = <span class="cl">JOptionPane</span>.<span class="fn">showInputDialog</span>(<span class="kw">null</span>,
+            <span class="str">"Enter your name:"</span>,
+            <span class="str">"Name Input"</span>,
+            <span class="cl">JOptionPane</span>.QUESTION_MESSAGE);
+
+        <span class="kw">if</span> (name == <span class="kw">null</span> || name.<span class="fn">isBlank</span>()) <span class="kw">return</span>; <span class="cm">// user cancelled</span>
+
+        <span class="cm">// 3. Confirm dialog — ask Yes/No/Cancel</span>
+        <span class="kw">int</span> choice = <span class="cl">JOptionPane</span>.<span class="fn">showConfirmDialog</span>(<span class="kw">null</span>,
+            <span class="str">"Greet "</span> + name + <span class="str">"?"</span>,
+            <span class="str">"Confirm"</span>,
+            <span class="cl">JOptionPane</span>.YES_NO_CANCEL_OPTION);
+
+        <span class="kw">if</span> (choice == <span class="cl">JOptionPane</span>.YES_OPTION) {
+            <span class="cm">// 4. Option dialog — custom button labels</span>
+            String[] buttons = { <span class="str">"Wave"</span>, <span class="str">"High-Five"</span>, <span class="str">"Skip"</span> };
+            <span class="kw">int</span> greeting = <span class="cl">JOptionPane</span>.<span class="fn">showOptionDialog</span>(<span class="kw">null</span>,
+                <span class="str">"How to greet "</span> + name + <span class="str">"?"</span>,
+                <span class="str">"Greet"</span>,
+                <span class="cl">JOptionPane</span>.DEFAULT_OPTION,
+                <span class="cl">JOptionPane</span>.QUESTION_MESSAGE,
+                <span class="kw">null</span>, buttons, buttons[<span class="num">0</span>]);
+
+            String msg = <span class="kw">switch</span> (greeting) {
+                <span class="kw">case</span> <span class="num">0</span> -&gt; <span class="str">"*waves at "</span> + name + <span class="str">"*"</span>;
+                <span class="kw">case</span> <span class="num">1</span> -&gt; <span class="str">"*high-fives "</span> + name + <span class="str">"*"</span>;
+                <span class="kw">default</span> -&gt; <span class="str">"Skipped greeting."</span>;
+            };
+            <span class="cl">JOptionPane</span>.<span class="fn">showMessageDialog</span>(<span class="kw">null</span>, msg);
+        } <span class="kw">else if</span> (choice == <span class="cl">JOptionPane</span>.NO_OPTION) {
+            <span class="cl">JOptionPane</span>.<span class="fn">showMessageDialog</span>(<span class="kw">null</span>,
+                <span class="str">"Goodbye, "</span> + name + <span class="str">"!"</span>,
+                <span class="str">"Farewell"</span>,
+                <span class="cl">JOptionPane</span>.WARNING_MESSAGE);
+        }
+    }
+}</code></pre>
+    </div>
+
+    <h3>Interactive Demo</h3>
+    <div class="interactive-box">
+      <h4>JOptionPane simulation</h4>
+      <button onclick="runOptionPaneDemo()">Run JOptionPane Demo</button>
+      <div class="console-box" id="opt-output" style="display:none;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 6 — JFileChooser
+════════════════════════════════════════════════════════════ -->
+<section id="jfilechooser">
+  <h2>6. JFileChooser</h2>
+
+  <div class="card">
+    <p><code>JFileChooser</code> displays a standard open/save dialog. It works purely in Java and looks consistent across platforms.</p>
+
+    <h3>Key Constructors &amp; Methods</h3>
+    <table>
+      <tr><th>API</th><th>Description</th></tr>
+      <tr><td><code>new JFileChooser()</code></td><td>Opens in the default directory (user home)</td></tr>
+      <tr><td><code>new JFileChooser(String path)</code></td><td>Opens in the specified directory</td></tr>
+      <tr><td><code>showOpenDialog(Component)</code></td><td>Show "Open" dialog; returns <code>APPROVE_OPTION</code> or <code>CANCEL_OPTION</code></td></tr>
+      <tr><td><code>showSaveDialog(Component)</code></td><td>Show "Save" dialog</td></tr>
+      <tr><td><code>getSelectedFile()</code></td><td>Returns the chosen <code>File</code> object</td></tr>
+      <tr><td><code>setFileFilter(FileFilter)</code></td><td>Restrict visible file types</td></tr>
+      <tr><td><code>setMultiSelectionEnabled(true)</code></td><td>Allow selecting multiple files</td></tr>
+    </table>
+
+    <h4>FileChooserDemo — open a file and display its content</h4>
+    <div class="code-block">
+      <div class="code-header"><span>Java</span> FileChooserDemo.java</div>
+      <pre><code><span class="kw">import</span> javax.swing.*;
+<span class="kw">import</span> java.io.*;
+<span class="kw">import</span> java.nio.file.*;
+
+<span class="kw">public class</span> <span class="cl">FileChooserDemo</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {
+        SwingUtilities.<span class="fn">invokeLater</span>(() -&gt; {
+            <span class="cl">JFrame</span> frame = <span class="kw">new</span> <span class="cl">JFrame</span>(<span class="str">"File Viewer"</span>);
+            frame.<span class="fn">setDefaultCloseOperation</span>(<span class="cl">JFrame</span>.EXIT_ON_CLOSE);
+            frame.<span class="fn">setSize</span>(<span class="num">600</span>, <span class="num">400</span>);
+
+            <span class="cl">JTextArea</span> textArea = <span class="kw">new</span> <span class="cl">JTextArea</span>();
+            textArea.<span class="fn">setEditable</span>(<span class="kw">false</span>);
+            <span class="cl">JScrollPane</span> scroll = <span class="kw">new</span> <span class="cl">JScrollPane</span>(textArea);
+
+            <span class="cl">JButton</span> openBtn = <span class="kw">new</span> <span class="cl">JButton</span>(<span class="str">"Open File..."</span>);
+            openBtn.<span class="fn">addActionListener</span>(e -&gt; {
+                <span class="cl">JFileChooser</span> chooser = <span class="kw">new</span> <span class="cl">JFileChooser</span>();
+                <span class="kw">int</span> result = chooser.<span class="fn">showOpenDialog</span>(frame);
+                <span class="kw">if</span> (result == <span class="cl">JFileChooser</span>.APPROVE_OPTION) {
+                    <span class="cl">File</span> file = chooser.<span class="fn">getSelectedFile</span>();
+                    <span class="kw">try</span> {
+                        String content = Files.<span class="fn">readString</span>(file.<span class="fn">toPath</span>());
+                        textArea.<span class="fn">setText</span>(content);
+                        frame.<span class="fn">setTitle</span>(<span class="str">"Viewing: "</span> + file.<span class="fn">getName</span>());
+                    } <span class="kw">catch</span> (<span class="cl">IOException</span> ex) {
+                        <span class="cl">JOptionPane</span>.<span class="fn">showMessageDialog</span>(frame,
+                            <span class="str">"Error reading file: "</span> + ex.<span class="fn">getMessage</span>(),
+                            <span class="str">"Error"</span>, <span class="cl">JOptionPane</span>.ERROR_MESSAGE);
+                    }
+                }
+            });
+
+            frame.<span class="fn">add</span>(openBtn, <span class="cl">BorderLayout</span>.NORTH);
+            frame.<span class="fn">add</span>(scroll,   <span class="cl">BorderLayout</span>.CENTER);
+            frame.<span class="fn">setVisible</span>(<span class="kw">true</span>);
+        });
+    }
+}</code></pre>
+    </div>
+
+    <h3>Window Mockup — FileChooserDemo</h3>
+    <svg viewBox="0 0 600 300" width="100%" style="max-width:600px;display:block;margin:0 auto;">
+      <rect x="0" y="0" width="600" height="300" rx="10" fill="#2a2a3e" stroke="#6c63ff" stroke-width="2"/>
+      <rect x="0" y="0" width="600" height="32" rx="10" fill="#1a1d2e"/>
+      <rect x="0" y="22" width="600" height="10" fill="#1a1d2e"/>
+      <circle cx="18" cy="16" r="6" fill="#ff5f57"/>
+      <circle cx="36" cy="16" r="6" fill="#ffbd2e"/>
+      <circle cx="54" cy="16" r="6" fill="#28ca41"/>
+      <text x="300" y="21" fill="#e2e8f0" font-size="12" text-anchor="middle">File Viewer</text>
+      <!-- Open button -->
+      <rect x="10" y="38" width="120" height="28" rx="5" fill="#6c63ff"/>
+      <text x="70" y="56" fill="#fff" font-size="12" text-anchor="middle">Open File...</text>
+      <!-- Text area -->
+      <rect x="10" y="72" width="580" height="216" rx="5" fill="#0d0f1a" stroke="#2d3748" stroke-width="1"/>
+      <text x="24" y="95" fill="#546e7a" font-size="11" font-style="italic">// File contents will appear here after selecting a file</text>
+      <text x="24" y="112" fill="#c3e88d" font-size="11">public class Hello {</text>
+      <text x="24" y="128" fill="#e2e8f0" font-size="11">    public static void main(String[] args) {</text>
+      <text x="24" y="144" fill="#e2e8f0" font-size="11">        System.out.println("Hello, World!");</text>
+      <text x="24" y="160" fill="#e2e8f0" font-size="11">    }</text>
+      <text x="24" y="176" fill="#c3e88d" font-size="11">}</text>
+      <!-- Scrollbar -->
+      <rect x="578" y="72" width="12" height="216" rx="4" fill="#2d3748"/>
+      <rect x="579" y="80" width="10" height="40" rx="3" fill="#6c63ff"/>
+    </svg>
+    <p class="mockup-label">SVG mockup — BorderLayout.NORTH = "Open File..." button, CENTER = JScrollPane(JTextArea)</p>
+
+    <h4>TextEditor — type text, save via JFileChooser</h4>
+    <div class="code-block">
+      <div class="code-header"><span>Java</span> TextEditor.java</div>
+      <pre><code><span class="kw">import</span> javax.swing.*;
+<span class="kw">import</span> java.io.*;
+<span class="kw">import</span> java.nio.file.*;
+
+<span class="kw">public class</span> <span class="cl">TextEditor</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {
+        SwingUtilities.<span class="fn">invokeLater</span>(() -&gt; {
+            <span class="cl">JFrame</span>    frame    = <span class="kw">new</span> <span class="cl">JFrame</span>(<span class="str">"Simple Text Editor"</span>);
+            <span class="cl">JTextArea</span> editor   = <span class="kw">new</span> <span class="cl">JTextArea</span>();
+            <span class="cl">JButton</span>   saveBtn  = <span class="kw">new</span> <span class="cl">JButton</span>(<span class="str">"Save As..."</span>);
+
+            saveBtn.<span class="fn">addActionListener</span>(e -&gt; {
+                <span class="cl">JFileChooser</span> chooser = <span class="kw">new</span> <span class="cl">JFileChooser</span>();
+                <span class="kw">if</span> (chooser.<span class="fn">showSaveDialog</span>(frame) == <span class="cl">JFileChooser</span>.APPROVE_OPTION) {
+                    <span class="kw">try</span> {
+                        Files.<span class="fn">writeString</span>(
+                            chooser.<span class="fn">getSelectedFile</span>().<span class="fn">toPath</span>(),
+                            editor.<span class="fn">getText</span>());
+                        <span class="cl">JOptionPane</span>.<span class="fn">showMessageDialog</span>(frame, <span class="str">"File saved!"</span>);
+                    } <span class="kw">catch</span> (<span class="cl">IOException</span> ex) {
+                        <span class="cl">JOptionPane</span>.<span class="fn">showMessageDialog</span>(frame,
+                            <span class="str">"Save failed: "</span> + ex.<span class="fn">getMessage</span>(),
+                            <span class="str">"Error"</span>, <span class="cl">JOptionPane</span>.ERROR_MESSAGE);
+                    }
+                }
+            });
+
+            frame.<span class="fn">setDefaultCloseOperation</span>(<span class="cl">JFrame</span>.EXIT_ON_CLOSE);
+            frame.<span class="fn">setSize</span>(<span class="num">500</span>, <span class="num">400</span>);
+            frame.<span class="fn">add</span>(<span class="kw">new</span> <span class="cl">JScrollPane</span>(editor), <span class="cl">BorderLayout</span>.CENTER);
+            frame.<span class="fn">add</span>(saveBtn, <span class="cl">BorderLayout</span>.SOUTH);
+            frame.<span class="fn">setVisible</span>(<span class="kw">true</span>);
+        });
+    }
+}</code></pre>
+    </div>
+
+    <svg viewBox="0 0 500 280" width="100%" style="max-width:500px;display:block;margin:0 auto;">
+      <rect x="0" y="0" width="500" height="280" rx="10" fill="#2a2a3e" stroke="#6c63ff" stroke-width="2"/>
+      <rect x="0" y="0" width="500" height="32" rx="10" fill="#1a1d2e"/>
+      <rect x="0" y="22" width="500" height="10" fill="#1a1d2e"/>
+      <circle cx="18" cy="16" r="6" fill="#ff5f57"/>
+      <circle cx="36" cy="16" r="6" fill="#ffbd2e"/>
+      <circle cx="54" cy="16" r="6" fill="#28ca41"/>
+      <text x="250" y="21" fill="#e2e8f0" font-size="12" text-anchor="middle">Simple Text Editor</text>
+      <rect x="10" y="38" width="480" height="200" rx="5" fill="#0d0f1a" stroke="#2d3748" stroke-width="1"/>
+      <text x="20" y="58" fill="#e2e8f0" font-size="11">Type your text here...</text>
+      <rect x="10" y="244" width="480" height="28" rx="5" fill="#6c63ff"/>
+      <text x="250" y="262" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">Save As...</text>
+    </svg>
+    <p class="mockup-label">SVG mockup — TextEditor: JTextArea (CENTER) + Save As button (SOUTH)</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 7 — Overview of JavaFX
+════════════════════════════════════════════════════════════ -->
+<section id="javafx-intro">
+  <h2>7. Overview of JavaFX</h2>
+
+  <div class="card">
+    <div class="highlight">
+      JavaFX was introduced with Java 8 as the designated successor to Swing. From Java 11 onwards it was extracted into a separate open-source module (<a href="https://openjfx.io" style="color:var(--accent2)">openjfx.io</a>) and must be added as a dependency.
+    </div>
+
+    <div class="grid3">
+      <div class="card" style="border-top:4px solid var(--accent);">
+        <h4>Scene Graph</h4>
+        <p>All UI elements are <strong>nodes</strong> in a hierarchical tree. Parents lay out children; transformations and effects compose naturally up the tree.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent2);">
+        <h4>FXML</h4>
+        <p>UI layout is declared in XML files, cleanly separating design from logic. A <code>FXMLLoader</code> inflates the file into live objects at runtime.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--yellow);">
+        <h4>CSS Styling</h4>
+        <p>JavaFX nodes accept CSS stylesheets. You can theme an entire application by swapping a single <code>.css</code> file.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent);">
+        <h4>2D &amp; 3D Graphics</h4>
+        <p>Built-in <code>Canvas</code> for 2D drawing, plus a full 3D scene graph with lighting, cameras, and mesh shapes.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent2);">
+        <h4>Animation API</h4>
+        <p><code>Timeline</code>, <code>Transition</code> subclasses, and <code>AnimationTimer</code> enable smooth, hardware-accelerated animations.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--yellow);">
+        <h4>Properties &amp; Bindings</h4>
+        <p>JavaFX properties (e.g. <code>StringProperty</code>) support bidirectional bindings — change one value and all bound properties update automatically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 8 — Primary JavaFX Elements
+════════════════════════════════════════════════════════════ -->
+<section id="javafx-elements">
+  <h2>8. Primary JavaFX Elements</h2>
+
+  <div class="card">
+    <h3>Stage / Scene / Node hierarchy</h3>
+
+    <svg viewBox="0 0 680 320" width="100%" style="max-height:320px;">
+      <defs>
+        <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#6c63ff"/>
+        </marker>
+      </defs>
+      <!-- Stage -->
+      <rect x="260" y="10" width="160" height="40" rx="10" fill="#1e1b3a" stroke="#6c63ff" stroke-width="2"/>
+      <text x="340" y="35" fill="#a78bfa" font-size="15" font-weight="bold" text-anchor="middle">Stage (window)</text>
+
+      <!-- Scene -->
+      <rect x="260" y="80" width="160" height="40" rx="10" fill="#1e1b3a" stroke="#00d4aa" stroke-width="2"/>
+      <text x="340" y="105" fill="#00d4aa" font-size="14" font-weight="bold" text-anchor="middle">Scene</text>
+      <line x1="340" y1="50" x2="340" y2="80" stroke="#6c63ff" stroke-width="2" marker-end="url(#arr2)"/>
+
+      <!-- Root Node -->
+      <rect x="220" y="155" width="240" height="36" rx="8" fill="#2d3748" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="340" y="178" fill="#f7c948" font-size="12" font-weight="bold" text-anchor="middle">Root Node (VBox / StackPane)</text>
+      <line x1="340" y1="120" x2="340" y2="155" stroke="#00d4aa" stroke-width="2" marker-end="url(#arr2)"/>
+
+      <!-- Branch Node -->
+      <rect x="80" y="230" width="160" height="32" rx="6" fill="#2d3748" stroke="#6c63ff" stroke-width="1"/>
+      <text x="160" y="250" fill="#a78bfa" font-size="11" text-anchor="middle">Branch Node (HBox)</text>
+      <line x1="260" y1="173" x2="160" y2="230" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+      <!-- Leaf under Branch -->
+      <rect x="10" y="290" width="110" height="26" rx="6" fill="#1e1b3a" stroke="#00d4aa" stroke-width="1"/>
+      <text x="65" y="307" fill="#00d4aa" font-size="10" text-anchor="middle">Leaf (Button)</text>
+      <line x1="100" y1="262" x2="65" y2="290" stroke="#00d4aa" stroke-width="1" marker-end="url(#arr2)"/>
+
+      <rect x="130" y="290" width="110" height="26" rx="6" fill="#1e1b3a" stroke="#00d4aa" stroke-width="1"/>
+      <text x="185" y="307" fill="#00d4aa" font-size="10" text-anchor="middle">Leaf (Label)</text>
+      <line x1="185" y1="262" x2="185" y2="290" stroke="#00d4aa" stroke-width="1" marker-end="url(#arr2)"/>
+
+      <!-- Leaf under Root -->
+      <rect x="430" y="230" width="140" height="32" rx="6" fill="#1e1b3a" stroke="#00d4aa" stroke-width="1"/>
+      <text x="500" y="250" fill="#00d4aa" font-size="11" text-anchor="middle">Leaf (TextField)</text>
+      <line x1="420" y1="173" x2="500" y2="230" stroke="#6c63ff" stroke-width="1.5" marker-end="url(#arr2)"/>
+    </svg>
+
+    <h3>Layout Containers</h3>
+
+    <svg viewBox="0 0 860 200" width="100%" style="max-height:200px;">
+      <!-- VBox -->
+      <rect x="10" y="10" width="140" height="180" rx="8" fill="#1a1d2e" stroke="#6c63ff" stroke-width="2"/>
+      <text x="80" y="30" fill="#6c63ff" font-size="12" font-weight="bold" text-anchor="middle">VBox</text>
+      <rect x="20" y="38" width="120" height="30" rx="4" fill="#2d3748"/>
+      <text x="80" y="57" fill="#e2e8f0" font-size="10" text-anchor="middle">Node 1</text>
+      <rect x="20" y="76" width="120" height="30" rx="4" fill="#2d3748"/>
+      <text x="80" y="95" fill="#e2e8f0" font-size="10" text-anchor="middle">Node 2</text>
+      <rect x="20" y="114" width="120" height="30" rx="4" fill="#2d3748"/>
+      <text x="80" y="133" fill="#e2e8f0" font-size="10" text-anchor="middle">Node 3</text>
+      <text x="80" y="180" fill="#94a3b8" font-size="9" text-anchor="middle">vertical stack</text>
+
+      <!-- HBox -->
+      <rect x="165" y="10" width="220" height="180" rx="8" fill="#1a1d2e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="275" y="30" fill="#00d4aa" font-size="12" font-weight="bold" text-anchor="middle">HBox</text>
+      <rect x="172" y="45" width="62" height="100" rx="4" fill="#2d3748"/>
+      <text x="203" y="100" fill="#e2e8f0" font-size="9" text-anchor="middle">Node 1</text>
+      <rect x="242" y="45" width="62" height="100" rx="4" fill="#2d3748"/>
+      <text x="273" y="100" fill="#e2e8f0" font-size="9" text-anchor="middle">Node 2</text>
+      <rect x="312" y="45" width="62" height="100" rx="4" fill="#2d3748"/>
+      <text x="343" y="100" fill="#e2e8f0" font-size="9" text-anchor="middle">Node 3</text>
+      <text x="275" y="180" fill="#94a3b8" font-size="9" text-anchor="middle">horizontal row</text>
+
+      <!-- TilePane -->
+      <rect x="400" y="10" width="170" height="180" rx="8" fill="#1a1d2e" stroke="#f7c948" stroke-width="2"/>
+      <text x="485" y="30" fill="#f7c948" font-size="12" font-weight="bold" text-anchor="middle">TilePane</text>
+      <rect x="410" y="40" width="66" height="55" rx="4" fill="#2d3748"/><text x="443" y="72" fill="#e2e8f0" font-size="9" text-anchor="middle">1</text>
+      <rect x="484" y="40" width="66" height="55" rx="4" fill="#2d3748"/><text x="517" y="72" fill="#e2e8f0" font-size="9" text-anchor="middle">2</text>
+      <rect x="410" y="103" width="66" height="55" rx="4" fill="#2d3748"/><text x="443" y="135" fill="#e2e8f0" font-size="9" text-anchor="middle">3</text>
+      <rect x="484" y="103" width="66" height="55" rx="4" fill="#2d3748"/><text x="517" y="135" fill="#e2e8f0" font-size="9" text-anchor="middle">4</text>
+      <text x="485" y="180" fill="#94a3b8" font-size="9" text-anchor="middle">equal-size tiles</text>
+
+      <!-- GridPane -->
+      <rect x="585" y="10" width="170" height="180" rx="8" fill="#1a1d2e" stroke="#6c63ff" stroke-width="1.5"/>
+      <text x="670" y="30" fill="#6c63ff" font-size="12" font-weight="bold" text-anchor="middle">GridPane</text>
+      <rect x="593" y="40" width="72" height="45" rx="3" fill="#2d3748"/><text x="629" y="67" fill="#94a3b8" font-size="9" text-anchor="middle">r0,c0</text>
+      <rect x="673" y="40" width="72" height="45" rx="3" fill="#2d3748"/><text x="709" y="67" fill="#94a3b8" font-size="9" text-anchor="middle">r0,c1</text>
+      <rect x="593" y="93" width="72" height="45" rx="3" fill="#2d3748"/><text x="629" y="120" fill="#94a3b8" font-size="9" text-anchor="middle">r1,c0</text>
+      <rect x="673" y="93" width="72" height="45" rx="3" fill="#2d3748"/><text x="709" y="120" fill="#94a3b8" font-size="9" text-anchor="middle">r1,c1</text>
+      <rect x="593" y="146" width="152" height="30" rx="3" fill="#6c63ff" opacity="0.4"/><text x="669" y="165" fill="#e2e8f0" font-size="9" text-anchor="middle">colspan=2</text>
+      <text x="670" y="193" fill="#94a3b8" font-size="9" text-anchor="middle">flexible rows/cols</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 9 — JavaFX Application Lifecycle
+════════════════════════════════════════════════════════════ -->
+<section id="lifecycle">
+  <h2>9. JavaFX Application Lifecycle</h2>
+
+  <div class="card">
+    <p>Every JavaFX app extends <code>javafx.application.Application</code> and follows a well-defined lifecycle managed by the JavaFX runtime.</p>
+
+    <svg viewBox="0 0 700 120" width="100%" style="max-height:120px;">
+      <defs>
+        <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#00d4aa"/>
+        </marker>
+      </defs>
+      <rect x="10" y="40" width="130" height="40" rx="8" fill="#1e1b3a" stroke="#6c63ff" stroke-width="2"/>
+      <text x="75" y="64" fill="#a78bfa" font-size="12" font-weight="bold" text-anchor="middle">launch()</text>
+      <text x="75" y="100" fill="#94a3b8" font-size="9" text-anchor="middle">static · starts JFX runtime</text>
+
+      <line x1="142" y1="60" x2="162" y2="60" stroke="#00d4aa" stroke-width="2" marker-end="url(#arr3)"/>
+
+      <rect x="163" y="40" width="110" height="40" rx="8" fill="#1a1d2e" stroke="#00d4aa" stroke-width="1.5"/>
+      <text x="218" y="64" fill="#00d4aa" font-size="12" font-weight="bold" text-anchor="middle">init()</text>
+      <text x="218" y="100" fill="#94a3b8" font-size="9" text-anchor="middle">optional setup</text>
+
+      <line x1="275" y1="60" x2="295" y2="60" stroke="#00d4aa" stroke-width="2" marker-end="url(#arr3)"/>
+
+      <rect x="296" y="30" width="150" height="60" rx="8" fill="#0d2b1e" stroke="#00d4aa" stroke-width="2"/>
+      <text x="371" y="58" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle">start(Stage)</text>
+      <text x="371" y="74" fill="#f7c948" font-size="9" text-anchor="middle">MUST override</text>
+      <text x="371" y="102" fill="#94a3b8" font-size="9" text-anchor="middle">build &amp; show the Stage</text>
+
+      <line x1="448" y1="60" x2="468" y2="60" stroke="#00d4aa" stroke-width="2" marker-end="url(#arr3)"/>
+
+      <text x="538" y="45" fill="#94a3b8" font-size="9" text-anchor="middle">[ app runs... ]</text>
+
+      <line x1="538" y1="52" x2="538" y2="65" stroke="#94a3b8" stroke-width="1" marker-end="url(#arr3)"/>
+
+      <rect x="468" y="66" width="130" height="36" rx="8" fill="#1a1d2e" stroke="#f7c948" stroke-width="1.5"/>
+      <text x="533" y="88" fill="#f7c948" font-size="12" font-weight="bold" text-anchor="middle">stop()</text>
+      <text x="533" y="114" fill="#94a3b8" font-size="9" text-anchor="middle">cleanup / release resources</text>
+    </svg>
+
+    <table>
+      <tr><th>Method</th><th>Thread</th><th>Notes</th></tr>
+      <tr><td><code>launch()</code></td><td>Main thread</td><td>Static; bootstraps the JavaFX Application Thread. Call once.</td></tr>
+      <tr><td><code>init()</code></td><td>JavaFX-launcher thread</td><td>Optional. Do <em>not</em> create Stages here.</td></tr>
+      <tr><td><code>start(Stage)</code></td><td>JavaFX Application Thread</td><td>Required override. All GUI setup goes here.</td></tr>
+      <tr><td><code>stop()</code></td><td>JavaFX Application Thread</td><td>Called when last window closes. Release file handles, DB connections, etc.</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 10 — EventHandler in JavaFX
+════════════════════════════════════════════════════════════ -->
+<section id="eventhandler">
+  <h2>10. EventHandler in JavaFX</h2>
+
+  <div class="card">
+    <p><code>EventHandler&lt;T extends Event&gt;</code> is a functional interface with a single method <code>handle(T event)</code>. Three ways to implement it:</p>
+
+    <div class="code-block">
+      <div class="code-header"><span>Java</span> EventHandlerStyles.java</div>
+      <pre><code><span class="kw">import</span> javafx.event.*;
+<span class="kw">import</span> javafx.scene.control.Button;
+
+<span class="cl">Button</span> btn = <span class="kw">new</span> <span class="cl">Button</span>(<span class="str">"Click"</span>);
+
+<span class="cm">// ── 1. Anonymous inner class ─────────────────────────────────</span>
+btn.<span class="fn">setOnAction</span>(<span class="kw">new</span> <span class="cl">EventHandler</span>&lt;<span class="cl">ActionEvent</span>&gt;() {
+    <span class="ann">@Override</span>
+    <span class="kw">public void</span> <span class="fn">handle</span>(<span class="cl">ActionEvent</span> event) {
+        System.out.<span class="fn">println</span>(<span class="str">"Clicked! (anonymous class)"</span>);
+    }
+});
+
+<span class="cm">// ── 2. Lambda expression (preferred) ─────────────────────────</span>
+btn.<span class="fn">setOnAction</span>(event -&gt; System.out.<span class="fn">println</span>(<span class="str">"Clicked! (lambda)"</span>));
+
+<span class="cm">// ── 3. Method reference ───────────────────────────────────────</span>
+btn.<span class="fn">setOnAction</span>(<span class="kw">this</span>::<span class="fn">handleClick</span>);
+
+<span class="kw">private void</span> <span class="fn">handleClick</span>(<span class="cl">ActionEvent</span> event) {
+    System.out.<span class="fn">println</span>(<span class="str">"Clicked! (method reference)"</span>);
+}</code></pre>
+    </div>
+
+    <div class="two-col">
+      <div class="highlight">
+        <strong>Anonymous class</strong> — verbose but useful when you need to store state or call multiple methods. Clear intent when reading unfamiliar code.
+      </div>
+      <div class="highlight2">
+        <strong>Lambda</strong> — concise, preferred in modern Java. Use when the handler body is simple (1–3 lines). The compiler infers the functional interface.
+      </div>
+    </div>
+
+    <div class="highlight3">
+      <strong>Common event types:</strong> <code>ActionEvent</code> (button/menu), <code>MouseEvent</code> (click/drag), <code>KeyEvent</code> (key press), <code>WindowEvent</code> (close/hide), <code>DragEvent</code>, <code>ScrollEvent</code>.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 11 — SimpleJavaFXApp
+════════════════════════════════════════════════════════════ -->
+<section id="simple-fx">
+  <h2>11. SimpleJavaFXApp</h2>
+
+  <div class="card">
+    <div class="code-block">
+      <div class="code-header"><span>Java</span> SimpleJavaFXApp.java</div>
+      <pre><code><span class="kw">import</span> javafx.application.Application;
+<span class="kw">import</span> javafx.scene.*;
+<span class="kw">import</span> javafx.scene.control.*;
+<span class="kw">import</span> javafx.scene.layout.VBox;
+<span class="kw">import</span> javafx.stage.Stage;
+
+<span class="kw">public class</span> <span class="cl">SimpleJavaFXApp</span> <span class="kw">extends</span> <span class="cl">Application</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public void</span> <span class="fn">start</span>(<span class="cl">Stage</span> primaryStage) {  <span class="cm">// Step 1: entry point</span>
+
+        <span class="cm">// Step 2: Create a Label (leaf node)</span>
+        <span class="cl">Label</span> label = <span class="kw">new</span> <span class="cl">Label</span>(<span class="str">"Hello, JavaFX!"</span>);
+
+        <span class="cm">// Step 3: Create a Button (leaf node)</span>
+        <span class="cl">Button</span> button = <span class="kw">new</span> <span class="cl">Button</span>(<span class="str">"Click Me"</span>);
+
+        <span class="cm">// Step 4: Attach an action handler</span>
+        button.<span class="fn">setOnAction</span>(e -&gt; label.<span class="fn">setText</span>(<span class="str">"Button Clicked!"</span>));
+
+        <span class="cm">// Step 5: Create layout container</span>
+        <span class="cl">VBox</span> layout = <span class="kw">new</span> <span class="cl">VBox</span>(<span class="num">10</span>);            <span class="cm">// 10px spacing</span>
+
+        <span class="cm">// Step 6: Add nodes to the layout</span>
+        layout.<span class="fn">getChildren</span>().<span class="fn">addAll</span>(label, button);
+
+        <span class="cm">// Step 7: Create Scene with root node and dimensions</span>
+        <span class="cl">Scene</span> scene = <span class="kw">new</span> <span class="cl">Scene</span>(layout, <span class="num">300</span>, <span class="num">250</span>);
+
+        <span class="cm">// Step 8: Set the scene on the Stage</span>
+        primaryStage.<span class="fn">setScene</span>(scene);
+
+        <span class="cm">// Step 9: Show the window</span>
+        primaryStage.<span class="fn">show</span>();
+    }
+
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {
+        <span class="fn">launch</span>(args);   <span class="cm">// triggers init() → start() lifecycle</span>
+    }
+}</code></pre>
+    </div>
+
+    <h3>Step-by-Step Breakdown</h3>
+    <div class="step"><div class="step-num">1</div><div><strong><code>start(Stage primaryStage)</code></strong> — JavaFX runtime calls this after <code>init()</code>. The <code>primaryStage</code> is the main OS window.</div></div>
+    <div class="step"><div class="step-num">2</div><div><strong>Create <code>Label</code></strong> — A read-only text node. Initial text: <em>"Hello, JavaFX!"</em>.</div></div>
+    <div class="step"><div class="step-num">3</div><div><strong>Create <code>Button</code></strong> — A clickable node with a text label: <em>"Click Me"</em>.</div></div>
+    <div class="step"><div class="step-num">4</div><div><strong>Register <code>setOnAction</code></strong> — Lambda that mutates the Label's text property when the button fires an <code>ActionEvent</code>.</div></div>
+    <div class="step"><div class="step-num">5</div><div><strong>Create <code>VBox(10)</code></strong> — A layout pane that stacks children vertically with 10 px gaps.</div></div>
+    <div class="step"><div class="step-num">6</div><div><strong><code>getChildren().addAll()</code></strong> — Adds nodes to the VBox's observable list. Order determines visual order.</div></div>
+    <div class="step"><div class="step-num">7</div><div><strong>Create <code>Scene</code></strong> — Wraps the root node (VBox) and specifies viewport dimensions (300 &times; 250 px).</div></div>
+    <div class="step"><div class="step-num">8</div><div><strong><code>primaryStage.setScene(scene)</code></strong> — Attaches the scene to the Stage. One Scene visible per Stage at a time.</div></div>
+    <div class="step"><div class="step-num">9</div><div><strong><code>primaryStage.show()</code></strong> — Makes the OS window visible. The JavaFX pulse loop begins rendering.</div></div>
+
+    <h3>Mockups — Before and After Click</h3>
+    <div class="two-col">
+      <div>
+        <svg viewBox="0 0 300 260" width="100%">
+          <rect x="0" y="0" width="300" height="260" rx="10" fill="#2a2a3e" stroke="#6c63ff" stroke-width="2"/>
+          <rect x="0" y="0" width="300" height="32" rx="10" fill="#1a1d2e"/>
+          <rect x="0" y="22" width="300" height="10" fill="#1a1d2e"/>
+          <circle cx="18" cy="16" r="6" fill="#ff5f57"/>
+          <circle cx="36" cy="16" r="6" fill="#ffbd2e"/>
+          <circle cx="54" cy="16" r="6" fill="#28ca41"/>
+          <text x="150" y="21" fill="#e2e8f0" font-size="11" text-anchor="middle">SimpleJavaFXApp</text>
+          <text x="20" y="80" fill="#e2e8f0" font-size="13">Hello, JavaFX!</text>
+          <rect x="20" y="100" width="100" height="32" rx="6" fill="#6c63ff"/>
+          <text x="70" y="121" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">Click Me</text>
+        </svg>
+        <p class="mockup-label">Before click</p>
+      </div>
+      <div>
+        <svg viewBox="0 0 300 260" width="100%">
+          <rect x="0" y="0" width="300" height="260" rx="10" fill="#2a2a3e" stroke="#00d4aa" stroke-width="2"/>
+          <rect x="0" y="0" width="300" height="32" rx="10" fill="#1a1d2e"/>
+          <rect x="0" y="22" width="300" height="10" fill="#1a1d2e"/>
+          <circle cx="18" cy="16" r="6" fill="#ff5f57"/>
+          <circle cx="36" cy="16" r="6" fill="#ffbd2e"/>
+          <circle cx="54" cy="16" r="6" fill="#28ca41"/>
+          <text x="150" y="21" fill="#e2e8f0" font-size="11" text-anchor="middle">SimpleJavaFXApp</text>
+          <text x="20" y="80" fill="#00d4aa" font-size="13" font-weight="bold">Button Clicked!</text>
+          <rect x="20" y="100" width="100" height="32" rx="6" fill="#6c63ff"/>
+          <text x="70" y="121" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">Click Me</text>
+        </svg>
+        <p class="mockup-label">After click — label text changed</p>
+      </div>
+    </div>
+
+    <h3>Interactive Demo</h3>
+    <div class="interactive-box">
+      <h4>HTML equivalent — label updates on button click</h4>
+      <p id="fx-label" style="font-size:1.1rem;font-weight:600;color:var(--text);margin-bottom:1rem;">Hello, JavaFX!</p>
+      <button onclick="fxClick()">Click Me</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 12 — LoginScreen (JavaFX GridPane)
+════════════════════════════════════════════════════════════ -->
+<section id="login-fx">
+  <h2>12. LoginScreen (JavaFX GridPane)</h2>
+
+  <div class="card">
+    <div class="code-block">
+      <div class="code-header"><span>Java</span> LoginScreenFX.java</div>
+      <pre><code><span class="kw">import</span> javafx.application.Application;
+<span class="kw">import</span> javafx.geometry.*;
+<span class="kw">import</span> javafx.scene.*;
+<span class="kw">import</span> javafx.scene.control.*;
+<span class="kw">import</span> javafx.scene.layout.GridPane;
+<span class="kw">import</span> javafx.stage.Stage;
+
+<span class="kw">public class</span> <span class="cl">LoginScreenFX</span> <span class="kw">extends</span> <span class="cl">Application</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public void</span> <span class="fn">start</span>(<span class="cl">Stage</span> stage) {
+        <span class="cl">GridPane</span> grid = <span class="kw">new</span> <span class="cl">GridPane</span>();
+
+        <span class="cm">// Centre the grid in the scene</span>
+        grid.<span class="fn">setAlignment</span>(<span class="cl">Pos</span>.CENTER);
+
+        <span class="cm">// Gaps between rows and columns</span>
+        grid.<span class="fn">setHgap</span>(<span class="num">12</span>);
+        grid.<span class="fn">setVgap</span>(<span class="num">10</span>);
+
+        <span class="cm">// Padding around the grid edges (top, right, bottom, left)</span>
+        grid.<span class="fn">setPadding</span>(<span class="kw">new</span> <span class="cl">Insets</span>(<span class="num">25</span>, <span class="num">25</span>, <span class="num">25</span>, <span class="num">25</span>));
+
+        <span class="cm">// Row 0 — title spanning 2 columns</span>
+        <span class="cl">Label</span> title = <span class="kw">new</span> <span class="cl">Label</span>(<span class="str">"Welcome Back"</span>);
+        title.<span class="fn">setStyle</span>(<span class="str">"-fx-font-size: 18px; -fx-font-weight: bold;"</span>);
+        <span class="cl">GridPane</span>.<span class="fn">setColumnSpan</span>(title, <span class="num">2</span>);
+        grid.<span class="fn">add</span>(title, <span class="num">0</span>, <span class="num">0</span>); <span class="cm">// col=0, row=0</span>
+
+        <span class="cm">// Row 1 — username</span>
+        grid.<span class="fn">add</span>(<span class="kw">new</span> <span class="cl">Label</span>(<span class="str">"Username:"</span>), <span class="num">0</span>, <span class="num">1</span>);
+        <span class="cl">TextField</span> userField = <span class="kw">new</span> <span class="cl">TextField</span>();
+        userField.<span class="fn">setPromptText</span>(<span class="str">"Enter username"</span>);
+        grid.<span class="fn">add</span>(userField, <span class="num">1</span>, <span class="num">1</span>);
+
+        <span class="cm">// Row 2 — password</span>
+        grid.<span class="fn">add</span>(<span class="kw">new</span> <span class="cl">Label</span>(<span class="str">"Password:"</span>), <span class="num">0</span>, <span class="num">2</span>);
+        <span class="cl">PasswordField</span> passField = <span class="kw">new</span> <span class="cl">PasswordField</span>();
+        passField.<span class="fn">setPromptText</span>(<span class="str">"Enter password"</span>);
+        grid.<span class="fn">add</span>(passField, <span class="num">1</span>, <span class="num">2</span>);
+
+        <span class="cm">// Row 3 — login button + feedback label</span>
+        <span class="cl">Button</span>  loginBtn = <span class="kw">new</span> <span class="cl">Button</span>(<span class="str">"Sign In"</span>);
+        <span class="cl">Label</span>   feedback = <span class="kw">new</span> <span class="cl">Label</span>();
+        feedback.<span class="fn">setStyle</span>(<span class="str">"-fx-text-fill: #00d4aa;"</span>);
+
+        loginBtn.<span class="fn">setOnAction</span>(e -&gt; {
+            String user = userField.<span class="fn">getText</span>();
+            String pass = passField.<span class="fn">getText</span>();
+            <span class="kw">if</span> (user.<span class="fn">isBlank</span>() || pass.<span class="fn">isBlank</span>()) {
+                feedback.<span class="fn">setText</span>(<span class="str">"Please fill in all fields."</span>);
+                feedback.<span class="fn">setStyle</span>(<span class="str">"-fx-text-fill: #ff6b6b;"</span>);
+            } <span class="kw">else</span> {
+                feedback.<span class="fn">setText</span>(<span class="str">"Hello, "</span> + user + <span class="str">"!"</span>);
+                feedback.<span class="fn">setStyle</span>(<span class="str">"-fx-text-fill: #00d4aa;"</span>);
+            }
+        });
+
+        grid.<span class="fn">add</span>(loginBtn, <span class="num">1</span>, <span class="num">3</span>);
+        grid.<span class="fn">add</span>(feedback, <span class="num">1</span>, <span class="num">4</span>);
+
+        stage.<span class="fn">setScene</span>(<span class="kw">new</span> <span class="cl">Scene</span>(grid, <span class="num">360</span>, <span class="num">240</span>));
+        stage.<span class="fn">setTitle</span>(<span class="str">"Login"</span>);
+        stage.<span class="fn">show</span>();
+    }
+
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) { <span class="fn">launch</span>(args); }
+}</code></pre>
+    </div>
+
+    <h3>Window Mockup</h3>
+    <svg viewBox="0 0 360 260" width="360" style="display:block;margin:0 auto;">
+      <rect x="0" y="0" width="360" height="260" rx="10" fill="#2a2a3e" stroke="#6c63ff" stroke-width="2"/>
+      <rect x="0" y="0" width="360" height="32" rx="10" fill="#1a1d2e"/>
+      <rect x="0" y="22" width="360" height="10" fill="#1a1d2e"/>
+      <circle cx="18" cy="16" r="6" fill="#ff5f57"/>
+      <circle cx="36" cy="16" r="6" fill="#ffbd2e"/>
+      <circle cx="54" cy="16" r="6" fill="#28ca41"/>
+      <text x="180" y="21" fill="#e2e8f0" font-size="12" text-anchor="middle">Login</text>
+      <!-- title row -->
+      <text x="100" y="68" fill="#e2e8f0" font-size="15" font-weight="bold">Welcome Back</text>
+      <!-- username row -->
+      <text x="52" y="104" fill="#94a3b8" font-size="12">Username:</text>
+      <rect x="138" y="88" width="180" height="26" rx="4" fill="#0d0f1a" stroke="#2d3748" stroke-width="1"/>
+      <text x="148" y="105" fill="#546e7a" font-size="10" font-style="italic">Enter username</text>
+      <!-- password row -->
+      <text x="52" y="144" fill="#94a3b8" font-size="12">Password:</text>
+      <rect x="138" y="128" width="180" height="26" rx="4" fill="#0d0f1a" stroke="#2d3748" stroke-width="1"/>
+      <text x="148" y="145" fill="#546e7a" font-size="10" font-style="italic">Enter password</text>
+      <!-- button -->
+      <rect x="138" y="168" width="90" height="30" rx="6" fill="#6c63ff"/>
+      <text x="183" y="187" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">Sign In</text>
+      <!-- feedback -->
+      <text x="138" y="220" fill="#00d4aa" font-size="11">Hello, alice!</text>
+    </svg>
+    <p class="mockup-label">SVG mockup — GridPane with Insets, row 0 title (colspan=2), rows 1-2 label+field pairs</p>
+
+    <h3>Interactive Demo</h3>
+    <div class="interactive-box">
+      <h4>Browser equivalent of LoginScreenFX</h4>
+      <label class="form-label">Username</label>
+      <input type="text" id="fx-username" placeholder="Enter username"/>
+      <label class="form-label">Password</label>
+      <input type="password" id="fx-password" placeholder="Enter password"/>
+      <br><br>
+      <button onclick="fxLogin()">Sign In</button>
+      <div id="fx-feedback" class="result-box" style="display:none;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 13 — AWT vs Swing vs JavaFX
+════════════════════════════════════════════════════════════ -->
+<section id="comparison">
+  <h2>13. AWT vs Swing vs JavaFX — Comparison</h2>
+
+  <div class="card">
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>AWT</th>
+        <th>Swing</th>
+        <th>JavaFX</th>
+      </tr>
+      <tr>
+        <td><strong>Introduced</strong></td>
+        <td>Java 1.0 (1996)</td>
+        <td>Java 1.2 (1998)</td>
+        <td>Java 8 (2014); standalone from Java 11</td>
+      </tr>
+      <tr>
+        <td><strong>Component weight</strong></td>
+        <td>Heavyweight (OS native peers)</td>
+        <td>Lightweight (Java-rendered)</td>
+        <td>Lightweight + hardware-accelerated (Prism)</td>
+      </tr>
+      <tr>
+        <td><strong>Look &amp; Feel</strong></td>
+        <td>Always OS native</td>
+        <td>Pluggable (Metal, Nimbus, OS native)</td>
+        <td>CSS + modena theme; fully customisable</td>
+      </tr>
+      <tr>
+        <td><strong>UI declaration</strong></td>
+        <td>Java code only</td>
+        <td>Java code only</td>
+        <td>Java code <em>or</em> FXML (XML)</td>
+      </tr>
+      <tr>
+        <td><strong>Styling</strong></td>
+        <td>Minimal (<code>setBackground</code>, fonts)</td>
+        <td>UIManager / synth</td>
+        <td>Full CSS3 subset</td>
+      </tr>
+      <tr>
+        <td><strong>Data binding</strong></td>
+        <td>None</td>
+        <td>None (manual listeners)</td>
+        <td>Built-in Properties + bidirectional bindings</td>
+      </tr>
+      <tr>
+        <td><strong>Animation</strong></td>
+        <td>Manual (Swing Timer)</td>
+        <td>Swing Timer / Animator</td>
+        <td>Timeline, Transitions, AnimationTimer</td>
+      </tr>
+      <tr>
+        <td><strong>3D graphics</strong></td>
+        <td>No</td>
+        <td>No</td>
+        <td>Yes (Box, Sphere, custom meshes, cameras)</td>
+      </tr>
+      <tr>
+        <td><strong>Threading model</strong></td>
+        <td>EDT (single-threaded)</td>
+        <td>EDT (single-threaded)</td>
+        <td>JavaFX Application Thread</td>
+      </tr>
+      <tr>
+        <td><strong>Rich text</strong></td>
+        <td>No</td>
+        <td>JEditorPane / JTextPane</td>
+        <td>HTMLEditor, WebView (full WebKit)</td>
+      </tr>
+      <tr>
+        <td><strong>Table / Tree</strong></td>
+        <td>No</td>
+        <td>JTable, JTree</td>
+        <td>TableView, TreeView (virtual scrolling)</td>
+      </tr>
+      <tr>
+        <td><strong>Charts</strong></td>
+        <td>No</td>
+        <td>No (third-party needed)</td>
+        <td>Yes — BarChart, LineChart, PieChart, etc.</td>
+      </tr>
+      <tr>
+        <td><strong>MVC separation</strong></td>
+        <td>Minimal</td>
+        <td>Model+UI delegate</td>
+        <td>Strong (FXML + Controller + Properties)</td>
+      </tr>
+      <tr>
+        <td><strong>Modern status</strong></td>
+        <td>Legacy — avoid for new work</td>
+        <td>Maintained; widely used</td>
+        <td>Active development; preferred for new apps</td>
+      </tr>
+    </table>
+
+    <div class="highlight2">
+      <strong>When to use Swing:</strong> Maintaining existing enterprise applications, desktop tools that need minimal dependencies, or when targeting Java environments without JavaFX on the classpath.
+    </div>
+    <div class="highlight">
+      <strong>When to use JavaFX:</strong> New GUI applications, data-rich dashboards, apps that need charts, 3D, web views, or tight CSS-based theming. Add the <code>openjfx</code> Maven/Gradle dependency and you are good to go.
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- ═══════════════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════════════ -->
+<script>
+// Section 3 — run button (simulated output)
+function runBasicSwing() {
+  var box = document.getElementById('basic-swing-output');
+  box.style.display = 'block';
+  box.textContent = '> javac BasicSwingExample.java\n> java BasicSwingExample\n[Window opens — "Swing Example" with a "Click Me!" button]\n[User clicks button → JOptionPane.showMessageDialog fires]\n[Dialog reads: "Button was clicked!"]';
+}
+
+// Section 4 — Swing login
+function swingLogin() {
+  var user = document.getElementById('sw-username').value.trim();
+  var pass = document.getElementById('sw-password').value;
+  var box  = document.getElementById('sw-login-output');
+  box.style.display = 'block';
+  if (!user || !pass) {
+    box.style.color = '#ff6b6b';
+    box.textContent = '[JOptionPane.ERROR_MESSAGE]\nPlease fill in both fields.';
+    return;
+  }
+  box.style.color = '#a8ff78';
+  box.textContent =
+    '[JOptionPane.INFORMATION_MESSAGE]\n' +
+    'Welcome, ' + user + '!\n' +
+    'Password length: ' + pass.length + '\n' +
+    '// char[] zeroed out after use.';
+}
+
+// Section 5 — JOptionPane demo
+function runOptionPaneDemo() {
+  var box = document.getElementById('opt-output');
+  box.style.display = 'block';
+  // Step 1: message dialog
+  var name = prompt('Enter your name:', '');
+  if (name === null || name.trim() === '') {
+    box.textContent = '[User cancelled input dialog — program exits early]';
+    return;
+  }
+  // Step 3: confirm dialog
+  var confirmed = confirm('Greet ' + name + '?');
+  if (confirmed) {
+    var greeting = prompt('How to greet ' + name + '?\n0 = Wave\n1 = High-Five\n2 = Skip', '0');
+    var msg;
+    switch (greeting) {
+      case '0': msg = '*waves at ' + name + '*'; break;
+      case '1': msg = '*high-fives ' + name + '*'; break;
+      default:  msg = 'Skipped greeting.'; break;
+    }
+    alert(msg);
+    box.textContent =
+      'showInputDialog  → name = "' + name + '"\n' +
+      'showConfirmDialog → YES\n' +
+      'showOptionDialog  → "' + msg + '"';
+  } else {
+    alert('Goodbye, ' + name + '!');
+    box.textContent =
+      'showInputDialog  → name = "' + name + '"\n' +
+      'showConfirmDialog → NO\n' +
+      'showMessageDialog → "Goodbye, ' + name + '!" (WARNING_MESSAGE)';
+  }
+}
+
+// Section 11 — JavaFX label click
+function fxClick() {
+  var lbl = document.getElementById('fx-label');
+  lbl.textContent = 'Button Clicked!';
+  lbl.style.color = 'var(--accent2)';
+}
+
+// Section 12 — JavaFX login
+function fxLogin() {
+  var user = document.getElementById('fx-username').value.trim();
+  var pass = document.getElementById('fx-password').value;
+  var box  = document.getElementById('fx-feedback');
+  box.style.display = 'block';
+  if (!user || !pass) {
+    box.style.color = '#ff6b6b';
+    box.style.borderColor = '#ff6b6b';
+    box.style.background = 'rgba(255,107,107,0.08)';
+    box.textContent = 'Please fill in all fields.';
+  } else {
+    box.style.color = 'var(--accent2)';
+    box.style.borderColor = 'var(--accent2)';
+    box.style.background = 'rgba(0,212,170,0.08)';
+    box.textContent = 'Hello, ' + user + '!';
+  }
+}
+
+// Nav highlight on scroll
+(function() {
+  var links = document.querySelectorAll('nav a');
+  var sections = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', function() {
+    var y = window.scrollY + 120;
+    var current = '';
+    sections.forEach(function(s) {
+      if (s.offsetTop <= y) current = s.id;
+    });
+    links.forEach(function(a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+})();
+</script>
+
+<style>
+.xn-extra-wrap{max-width:1100px;margin:2.5rem auto;padding:0 1.5rem;}
+.xn-intro{background:rgba(108,99,255,.08);border-left:4px solid #6c63ff;border-radius:0 8px 8px 0;padding:1rem 1.2rem;margin:1rem 0 1.5rem;color:var(--muted);font-size:.92rem;}
+.xn-prob{background:var(--card);border:1px solid var(--border);border-left:4px solid #6c63ff;border-radius:10px;padding:1.1rem 1.2rem;margin:1rem 0;}
+.xn-q{margin-bottom:.75rem;color:var(--text);}
+.xn-tag{display:inline-block;background:#6c63ff;color:#fff;font-size:.72rem;font-weight:700;padding:.14rem .6rem;border-radius:20px;margin-right:.45rem;vertical-align:middle;}
+.xn-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.xn-in{background:#12152a;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.5rem .85rem;font-size:.95rem;min-width:180px;font-family:'Cascadia Code','Fira Code',monospace;}
+.xn-in:focus{outline:none;border-color:#6c63ff;}
+.xn-check,.xn-toggle{border:none;border-radius:8px;padding:.5rem 1.15rem;cursor:pointer;font-weight:700;font-size:.88rem;}
+.xn-check{background:#6c63ff;color:#fff;}
+.xn-check:hover{background:#574fd6;}
+.xn-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.xn-toggle:hover{border-color:#00d4aa;color:#00d4aa;}
+.xn-fb{margin-top:.65rem;font-weight:700;font-size:.9rem;min-height:1rem;}
+.xn-fb.xn-ok{color:#00d4aa;}
+.xn-fb.xn-no{color:#ff6b6b;}
+.xn-fb.xn-warn{color:#f7c948;}
+.xn-sol{display:none;margin-top:.85rem;padding:.95rem 1.05rem;background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.3);border-radius:8px;font-size:.9rem;color:var(--text);}
+.xn-sol.open{display:block;animation:xnfade .25s ease;}
+@keyframes xnfade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.xn-sol .xf{background:#12152a;color:#f7c948;font-family:'Cascadia Code','Fira Code',monospace;padding:.55rem .85rem;border-radius:6px;margin:.45rem 0;overflow-x:auto;white-space:pre-wrap;font-size:.86rem;}
+.xn-sol b{color:#00d4aa;}
+.xn-opts{display:flex;flex-direction:column;gap:.45rem;margin-top:.4rem;}
+.xn-opt{text-align:left;background:#12152a;border:1px solid var(--border);color:var(--text);padding:.55rem .85rem;border-radius:6px;cursor:pointer;font-size:.9rem;font-family:inherit;}
+.xn-opt:hover:not(:disabled){border-color:#6c63ff;}
+.xn-opt.xn-ok{background:rgba(0,212,170,.18);border-color:#00d4aa;color:#00d4aa;font-weight:700;}
+.xn-opt.xn-no{background:rgba(255,107,107,.15);border-color:#ff6b6b;color:#ff6b6b;}
+.xn-codeblock{background:#12152a;border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;font-family:'Cascadia Code','Fira Code',monospace;font-size:.85rem;line-height:1.6;white-space:pre;overflow-x:auto;margin:.5rem 0 .8rem;color:#e2e8f0;}
+</style>
+
+<section id="xn-extra" class="xn-extra-wrap">
+  <h2>🔢 Engineered Numerical Practice</h2>
+  <div class="xn-intro">
+    Fresh exam-style computational problems built from this week's concepts. Type your answer and hit
+    <b>Check</b> for instant feedback, or reveal the worked steps. <em>(Press Enter in any answer box to check.)</em>
+  </div>
+
+  <div class="xn-prob" data-ans="2" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP1</span><b>JOptionPane return value.</b>
+      A Yes/No/Cancel confirm dialog is shown and the user clicks <b>Cancel</b>. What int does
+      <code>showConfirmDialog(...)</code> return? (Recall <code>YES_OPTION=0</code>, <code>NO_OPTION=1</code>,
+      <code>CANCEL_OPTION=2</code>.)
+      <div class="xn-codeblock">int r = JOptionPane.showConfirmDialog(null, "Save changes?",
+        "Confirm", JOptionPane.YES_NO_CANCEL_OPTION);</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="returned int">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The button constants map to fixed ints: YES=0, NO=1, CANCEL=2.
+      <div class="xf">user clicked Cancel → CANCEL_OPTION = 2</div>
+      The method returns <b>2</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="11" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP2</span><b>GridPane cell → linear index.</b>
+      A JavaFX <code>GridPane</code> with <b>3 columns</b> is filled row-by-row (row-major). A control is added
+      at <code>grid.add(node, 2, 3)</code> — i.e. <em>column 2, row 3</em> (both 0-based). What is its 0-based
+      linear position counting left-to-right, top-to-bottom?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="linear index">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      In row-major order: <code>index = row × columns + col</code>. Note <code>add(node, col, row)</code> takes
+      column first.
+      <div class="xf">index = 3 × 3 + 2 = 9 + 2 = 11</div>
+      Linear index = <b>11</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="82500" data-tol="0" data-unit=" px²">
+    <div class="xn-q"><span class="xn-tag">NP3</span><b>Scene area.</b>
+      A JavaFX scene is built with <code>new Scene(grid, 300, 275)</code> (width, height in px).
+      What is the scene's area in square pixels?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="area (px²)">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <code>Scene(root, width, height)</code> → area = width × height.
+      <div class="xf">area = 300 × 275 = 82500</div>
+      The scene area is <b>82500</b> px².
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="3" data-tol="0" data-unit=" calls">
+    <div class="xn-q"><span class="xn-tag">NP4</span><b>JavaFX lifecycle calls.</b>
+      A JavaFX <code>Application</code> is launched once, runs, then the window is closed normally.
+      Counting <code>init()</code>, <code>start()</code> and <code>stop()</code>, how many lifecycle-method
+      invocations occur in total over that single run?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="total calls">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Each of these runs exactly once per application run.
+      <div class="xf">init() = 1
+start() = 1
+stop()  = 1
+total   = 3</div>
+      Total = <b>3</b> calls.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="3" data-tol="0" data-unit=" nodes">
+    <div class="xn-q"><span class="xn-tag">NP5</span><b>Scene-graph node count.</b>
+      The code builds a layout and adds two controls to it. Counting the root container itself plus all the nodes
+      it contains, how many nodes are in this scene graph?
+      <div class="xn-codeblock">Label label = new Label("Hello, JavaFX!");
+Button button = new Button("Click Me");
+VBox layout = new VBox(10);
+layout.getChildren().addAll(label, button);</div>
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="total nodes">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">root VBox  = 1
+children   = label + button = 2
+total      = 1 + 2 = 3</div>
+      The scene graph has <b>3</b> nodes.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="5" data-tol="0" data-unit=" components">
+    <div class="xn-q"><span class="xn-tag">NP6</span><b>Container component count.</b>
+      A Swing login frame using GridLayout adds exactly these to the frame: a username JLabel, a username
+      JTextField, a password JLabel, a JPasswordField, and a Login JButton. How many components are added?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="component count">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      <div class="xf">2 labels + 1 text field + 1 password field + 1 button = 5</div>
+      <b>5</b> components are added.
+    </div>
+  </div>
+
+  <div class="xn-prob" data-ans="0" data-tol="0" data-unit="">
+    <div class="xn-q"><span class="xn-tag">NP7</span><b>YES_OPTION index.</b>
+      In a Yes/No confirm dialog the user clicks <b>Yes</b>. What int value does
+      <code>JOptionPane.YES_OPTION</code> equal (the value returned)?
+    </div>
+    <div class="xn-row">
+      <input class="xn-in" type="text" inputmode="numeric" placeholder="YES_OPTION value">
+      <button class="xn-check" onclick="xnCheck(this)">Check</button>
+      <button class="xn-toggle" onclick="xnToggle(this)">Show steps</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The Swing constants are indexed from zero: <code>YES_OPTION = 0</code>, NO = 1, CANCEL = 2.
+      <div class="xf">YES_OPTION = 0</div>
+      Answer: <b>0</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">NP8</span><b>Top-level container — concept.</b>
+      In the JavaFX primary-elements hierarchy (Stage → Scene → Nodes), which element is the
+      <em>top-level container</em> that represents the primary application window?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) Stage</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Scene</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Node</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) VBox</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The <code>Stage</code> is the top-level JavaFX container (the window). Each Stage holds one
+      <code>Scene</code>, and the Scene holds the tree of <code>Node</code>s (controls, layout panes like VBox).
+      Answer: <b>A — Stage</b>.
+    </div>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  if(window.__xnInit) return; window.__xnInit=true;
+  function num(s){
+    if(s==null) return NaN;
+    s=(''+s).replace(/−/g,'-').replace(/[^0-9.\-]/g,'');
+    if(s===''||s==='-'||s==='.') return NaN;
+    return parseFloat(s);
+  }
+  window.xnCheck=function(btn){
+    var p=btn.closest('.xn-prob'); if(!p) return;
+    var ans=parseFloat(p.getAttribute('data-ans'));
+    var tol=parseFloat(p.getAttribute('data-tol')||'0.05');
+    var unit=p.getAttribute('data-unit')||'';
+    var inp=p.querySelector('.xn-in'); var fb=p.querySelector('.xn-fb');
+    var v=num(inp.value);
+    if(isNaN(v)){ fb.className='xn-fb xn-warn'; fb.textContent='⚠ Enter a numeric answer first.'; return; }
+    if(Math.abs(v-ans)<=tol){ fb.className='xn-fb xn-ok'; fb.innerHTML='✓ Correct! Answer = '+ans+unit; }
+    else { fb.className='xn-fb xn-no'; fb.innerHTML='✗ Not quite — you entered '+v+'. Try again, or reveal the steps.'; }
+  };
+  window.xnToggle=function(btn){
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol');
+    var open=s.classList.toggle('open'); btn.textContent=open?'Hide steps':'Show steps';
+  };
+  window.xnPick=function(btn,ok){
+    var box=btn.parentElement;
+    box.querySelectorAll('.xn-opt').forEach(function(b){b.disabled=true; b.style.cursor='default';});
+    btn.classList.add(ok?'xn-ok':'xn-no');
+    if(!ok){ box.querySelectorAll('.xn-opt').forEach(function(b){ if(b.getAttribute('data-correct')==='1') b.classList.add('xn-ok'); }); }
+    var s=btn.closest('.xn-prob').querySelector('.xn-sol'); if(s) s.classList.add('open');
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter' && e.target.classList && e.target.classList.contains('xn-in')){
+      var b=e.target.closest('.xn-prob').querySelector('.xn-check'); if(b) b.click();
+    }
+  });
+})();
+</script>
+
+<section id="xn-mcq" class="xn-extra-wrap">
+  <h2>📝 Exam-Style MCQs — 2 Marks Each</h2>
+  <p style="opacity:.85;font-size:.95em;margin-bottom:1rem;">Each question is worth 2 marks — a mix of applied numerical and conceptual items. Click an option to check it; the correct answer and explanation appear instantly.</p>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q1 · 2 marks</span> A JavaFX confirmation alert offers Yes / No / Cancel. The user presses <b>Cancel</b>. Using the classic Swing constant convention <code>YES=0, NO=1, CANCEL=2</code>, what integer index corresponds to the chosen option?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 1</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">B) 2</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) 0</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 3</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      The option constants are zero-indexed in declaration order.
+      <div class="xf">YES = 0, NO = 1, CANCEL = 2</div>
+      Cancel maps to <b>2</b> (answer B).
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q2 · 2 marks</span> Nodes are placed in a JavaFX <code>GridPane</code> that has 3 columns. A button is added at column 2, row 1 with <code>gp.add(btn, 2, 1)</code> (signature <code>add(node, colIndex, rowIndex)</code>). If cells are numbered left-to-right, top-to-bottom starting at 0, what is this cell's linear index?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 3</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 4</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 5</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 7</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      For a row-major grid, <code>index = row × columns + col</code>.
+      <div class="xf">index = 1 × 3 + 2 = 5</div>
+      The cell's linear index is <b>5</b> (answer C). Note the arguments are (col, row), a common trap.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q3 · 2 marks</span> A JavaFX scene is created with <code>new Scene(root, 600, 400)</code> (width, height in px). What is the scene's area in square pixels?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) 1000 px²</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) 2400 px²</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) 240000 px²</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) 24000 px²</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Area = width × height.
+      <div class="xf">600 × 400 = 240000</div>
+      The scene covers <b>240000</b> px² (answer C). Option A is the mistake of adding 600 + 400.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q4 · 2 marks</span> What is the core architectural difference between an AWT <code>Button</code> and a Swing <code>JButton</code>?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">A) AWT Button is heavyweight (uses a native peer); JButton is lightweight (painted in Java)</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) JButton is heavyweight while AWT Button is lightweight</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Both are heavyweight, but JButton supports more event types</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) They are identical; JButton is only a renamed alias of Button</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      AWT components delegate rendering to <b>native OS peers</b> (heavyweight). Swing components are <b>lightweight</b> — they paint themselves with Java2D, giving identical appearance on every platform. Answer: <b>A</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q5 · 2 marks</span> Swing is said to support a <em>pluggable look-and-feel</em>. What does that allow a developer to do?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) Plug in C++ native libraries to speed up rendering</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) Recompile the application for each target operating system</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">C) Replace the JVM's garbage collector while the app runs</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">D) Switch the entire UI's visual theme (Metal, Nimbus, OS-native, …) at runtime with one call</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      Because Swing widgets paint themselves, the look-and-feel is decoupled from behaviour. A single <code>UIManager.setLookAndFeel(...)</code> call swaps the whole theme (Metal, Nimbus, Motif, OS-native) without changing the component code. Answer: <b>D</b>.
+    </div>
+  </div>
+
+  <div class="xn-prob">
+    <div class="xn-q"><span class="xn-tag">Q6 · 2 marks</span> In the MVC pattern as applied to a GUI form, which component is responsible for holding the application's data and business state (and is unaware of how it is displayed)?
+    </div>
+    <div class="xn-opts">
+      <button class="xn-opt" onclick="xnPick(this,false)">A) The View</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">B) The Controller</button>
+      <button class="xn-opt" data-correct="1" onclick="xnPick(this,true)">C) The Model</button>
+      <button class="xn-opt" onclick="xnPick(this,false)">D) The Scene graph</button>
+    </div>
+    <div class="xn-fb"></div>
+    <div class="xn-sol">
+      In MVC the <b>Model</b> stores data and business logic; the <b>View</b> renders it; the <b>Controller</b> handles input and updates the Model. The Model is intentionally decoupled from any display concern. Answer: <b>C</b>.
+    </div>
+  </div>
+
+</section>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>
