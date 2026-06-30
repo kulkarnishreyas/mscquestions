@@ -71,6 +71,14 @@
 
 <div class="container">
 
+<!-- EXAM-FOCUS-BANNER -->
+<div style="background:rgba(247,201,72,0.10);border:1px solid #f7c948;border-left:5px solid #f7c948;border-radius:0 12px 12px 0;padding:1rem 1.25rem;margin:0 0 2rem;">
+  <div style="font-size:0.72rem;letter-spacing:1.5px;font-weight:700;color:#f7c948;text-transform:uppercase;margin-bottom:0.4rem;">⭐ COMPULSORY / HIGH-PRIORITY · FAT 2026</div>
+  <p style="margin:0;color:#e2e8f0;line-height:1.65;"><b>Stacking ensemble is a compulsory question.</b> Explain <b>how stacking works</b> (base learners → meta-model), <b>how it differs</b> from bagging &amp; boosting, and the <b>pros and cons</b> of all three. Boosting &amp; bagging may appear as slightly smaller questions.</p>
+  <a href="exam_questions.html" style="display:inline-block;margin-top:0.7rem;color:#f7c948;font-weight:600;text-decoration:none;font-size:0.88rem;">→ See all important questions &amp; exam guidance</a>
+</div>
+
+
 <!-- SECTION 1: BAGGING -->
 <section id="bagging">
   <h2>1. Bagging (Bootstrap Aggregating)</h2>
@@ -1044,6 +1052,24 @@
 </section>
 
 </div><!-- /container -->
+
+
+<style>
+.week-pagination{max-width:1100px;margin:1.5rem auto 2.5rem;padding:0 1.5rem;display:flex;gap:1rem;align-items:stretch;justify-content:space-between;font-family:inherit}
+.week-pagination .pg{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:.25rem;text-decoration:none;padding:1rem 1.25rem;background:var(--card,#1a1d2e);border:1px solid var(--border,#2d3748);border-radius:12px;color:var(--text,#e2e8f0);transition:transform .15s,border-color .15s,box-shadow .15s}
+.week-pagination .pg:hover{transform:translateY(-2px);border-color:var(--accent,#6c63ff);box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.week-pagination .pg-next{text-align:right;align-items:flex-end}
+.week-pagination .pg-index{flex:0 0 auto;justify-content:center;align-items:center;font-weight:700;color:var(--accent,#6c63ff)}
+.week-pagination .pg-dir{font-size:.78rem;color:var(--muted,#94a3b8);font-weight:700;letter-spacing:.03em;text-transform:uppercase}
+.week-pagination .pg-title{font-size:.95rem;font-weight:600;line-height:1.3}
+.week-pagination .pg-disabled{visibility:hidden;pointer-events:none}
+@media(max-width:640px){.week-pagination{flex-wrap:wrap}.week-pagination .pg-index{order:-1;flex:1 0 100%}.week-pagination .pg-next{text-align:left;align-items:flex-start}}
+</style>
+<nav class="week-pagination" aria-label="Week navigation"><!--PAGINATION-->
+<a class="pg pg-prev" href="week11.html"><span class="pg-dir">← Previous</span><span class="pg-title">Week 11 – Bias-Variance, Sampling &amp; Ensemble Learning</span></a>
+<a class="pg pg-index" href="index.html">⌂ All Weeks</a>
+<span class="pg pg-next pg-disabled" aria-hidden="true"></span>
+</nav>
 
 <script>
 // === ADABOOST SIMULATOR ===

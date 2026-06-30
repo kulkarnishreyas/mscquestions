@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Important Questions — FAT 2026 Exam Guidance</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d2e; --card2:#1e2235; --accent:#6c63ff; --accent2:#00d4aa; --accent3:#f7c948; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --code:#2d3748; --red:#f87171; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+  header { background:linear-gradient(135deg,#f7c948,#6c63ff 60%,#00d4aa); padding:3rem 2rem; text-align:center; position:relative; }
+  header .badge { display:inline-block; background:rgba(0,0,0,0.25); color:#fff; border:1px solid rgba(255,255,255,0.4); padding:5px 16px; border-radius:20px; font-size:0.72rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; }
+  header h1 { font-size:2.4rem; font-weight:800; color:#fff; }
+  header p { font-size:1.05rem; color:rgba(255,255,255,0.9); margin-top:0.5rem; max-width:680px; margin-left:auto; margin-right:auto; }
+  nav { background:var(--card); border-bottom:2px solid var(--accent3); display:flex; flex-wrap:wrap; gap:0.25rem; padding:0.75rem 1rem; position:sticky; top:0; z-index:100; }
+  nav a { color:var(--muted); text-decoration:none; padding:0.4rem 1rem; border-radius:6px; font-size:0.9rem; transition:all 0.2s; }
+  nav a:hover, nav a.active { background:var(--accent3); color:#000; }
+  .container { max-width:1050px; margin:0 auto; padding:2rem 1.5rem 4rem; }
+  section { margin-bottom:2.5rem; scroll-margin-top:70px; }
+  h2 { font-size:1.7rem; color:var(--accent3); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  h3 { font-size:1.15rem; color:var(--accent2); margin:1.2rem 0 0.6rem; }
+  p { margin-bottom:0.8rem; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .source-note { background:rgba(108,99,255,0.08); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:1rem 1.2rem; margin:1rem 0; color:var(--muted); font-size:0.92rem; }
+  .source-note b { color:var(--text); }
+
+  /* Compulsory topic cards */
+  .topic { border-radius:12px; padding:1.3rem 1.4rem; margin-bottom:1.1rem; border:1px solid var(--border); background:var(--card); position:relative; overflow:hidden; }
+  .topic::before { content:''; position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--t,#6c63ff); }
+  .topic h3 { margin-top:0; color:#fff; font-size:1.15rem; display:flex; align-items:center; gap:0.6rem; }
+  .topic .pill { font-size:0.66rem; letter-spacing:1px; font-weight:700; text-transform:uppercase; padding:3px 10px; border-radius:20px; }
+  .pill.comp { background:rgba(247,201,72,0.18); color:var(--accent3); border:1px solid var(--accent3); }
+  .pill.imp { background:rgba(0,212,170,0.15); color:var(--accent2); border:1px solid var(--accent2); }
+  .topic ul { padding-left:1.3rem; margin:0.6rem 0 0; }
+  .topic li { margin-bottom:0.35rem; }
+  .topic .links { margin-top:0.8rem; font-size:0.85rem; }
+  .topic .links a { color:var(--accent2); text-decoration:none; font-weight:600; margin-right:1rem; }
+  .topic .links a:hover { text-decoration:underline; }
+
+  .qbox { background:var(--card2); border:1px dashed var(--accent); border-radius:8px; padding:0.8rem 1rem; margin:0.7rem 0; font-size:0.93rem; }
+  .qbox b { color:var(--accent3); }
+
+  table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+  th { background:var(--accent); color:#fff; padding:0.7rem 1rem; text-align:left; }
+  td { padding:0.6rem 1rem; border-bottom:1px solid var(--border); vertical-align:top; }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.03); }
+  .formula { background:var(--code); border-radius:8px; padding:0.7rem 1rem; font-family:monospace; color:var(--accent3); margin:0.4rem 0; overflow-x:auto; }
+  .do, .dont { border-radius:8px; padding:1rem 1.2rem; margin:0.6rem 0; }
+  .do { background:rgba(0,212,170,0.08); border-left:4px solid var(--accent2); }
+  .dont { background:rgba(248,113,113,0.08); border-left:4px solid var(--red); }
+  .do b { color:var(--accent2); } .dont b { color:var(--red); }
+  .backlink { display:inline-block; margin-bottom:1rem; color:var(--muted); text-decoration:none; font-size:0.9rem; }
+  .backlink:hover { color:var(--accent2); }
+  @media(max-width:700px){ header h1{font-size:1.7rem;} }
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">VIT · MSc Data Science · Machine Learning</div>
+  <h1>⭐ Important Questions — FAT 2026</h1>
+  <p>Exam guidance from the professor's final synchronization (revision) class. What to focus on, the compulsory topics, the simple numericals, and how to attempt the paper.</p>
+</header>
+
+<nav>
+  <a href="index.html">← All Modules</a>
+  <a href="#structure" class="active">Paper Structure</a>
+  <a href="#compulsory">Compulsory Topics</a>
+  <a href="#emphasized">Other Emphasized</a>
+  <a href="#numericals">Simple Numericals</a>
+  <a href="#advice">Attempt Strategy</a>
+  <a href="#dont">What to Skip</a>
+</nav>
+
+<div class="container">
+
+  <div class="source-note">
+    <b>Source:</b> Last synchronization (revision) class for the Machine Learning course, transcribed from the recorded session.
+    These notes capture exactly what the professor said to emphasize for the <b>Final Assessment Test (FAT)</b>. Each topic links to the
+    relevant week module where the full theory, diagrams, and worked numericals already live.
+  </div>
+
+  <!-- PAPER STRUCTURE -->
+  <section id="structure">
+    <h2>🧩 Paper Structure</h2>
+    <div class="card">
+      <table>
+        <tr><th>Part</th><th>Type</th><th>Marks</th><th>Notes</th></tr>
+        <tr><td><b>Part A</b></td><td>Multiple Choice</td><td>~10 × 1 mark</td><td rowspan="2">≈ <b>40 marks</b> come from MCQs. They can be drawn from <i>anywhere</i> in the uploaded LMS study material — so skim everything for these.</td></tr>
+        <tr><td><b>Part B</b></td><td>Multiple Choice</td><td>15 × 2 marks</td></tr>
+        <tr><td><b>Part C</b></td><td>Long answer (descriptive)</td><td>6 questions</td><td>Mostly <b>theory</b> with a few <b>simple</b> numericals. Attempt <i>all</i> questions.</td></tr>
+      </table>
+      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:0;">The professor stressed the numericals are deliberately <b>simple this semester</b> — no multi-step / complex problems, even though some shared sample papers looked harder.</p>
+    </div>
+  </section>
+
+  <!-- COMPULSORY -->
+  <section id="compulsory">
+    <h2>⭐ Compulsory / High-Priority Topics</h2>
+    <p style="color:var(--muted);">The professor explicitly called these <b>compulsory</b> or <b>"very, very important."</b> Prepare these thoroughly first.</p>
+
+    <div class="topic" style="--t:#f7c948;">
+      <h3>Reinforcement Learning <span class="pill comp">Compulsory</span></h3>
+      <ul>
+        <li>How RL works — the <b>agent ⇄ environment</b> loop (state, action, reward).</li>
+        <li>The <b>benefits</b> and the core idea of learning from rewards (no labels).</li>
+        <li>The <b>different types</b> of RL.</li>
+      </ul>
+      <div class="qbox"><b>Likely Q:</b> "Explain how reinforcement learning works, its benefits, and the different types of RL." Write as clear steps + a diagram.</div>
+      <div class="links">📘 <a href="week7.html">Week 7 — Reinforcement Learning</a></div>
+    </div>
+
+    <div class="topic" style="--t:#f7c948;">
+      <h3>Stacking &amp; Ensemble Learning <span class="pill comp">Compulsory</span></h3>
+      <ul>
+        <li><b>How stacking works</b> — base learners feed a meta-model (2-layer model).</li>
+        <li><b>How stacking differs</b> from bagging and boosting.</li>
+        <li><b>Pros and cons</b> of bagging, boosting, and stacking.</li>
+        <li>Boosting &amp; bagging may also appear as slightly smaller questions.</li>
+      </ul>
+      <div class="qbox"><b>Likely Q:</b> "Explain how stacking works and how it differs from other ensemble techniques," and/or "Give the pros and cons of bagging, boosting and stacking."</div>
+      <div class="links">📘 <a href="week12.html">Week 12 — Bagging, Boosting &amp; Stacking</a> · <a href="week11.html">Week 11 — Ensembles &amp; Voting</a></div>
+    </div>
+
+    <div class="topic" style="--t:#f7c948;">
+      <h3>Bayes' Theorem &amp; Discriminant Functions <span class="pill comp">Compulsory</span></h3>
+      <ul>
+        <li>Classify which class an event belongs to <b>using Bayes' theorem</b>.</li>
+        <li>Use <b>discriminant functions</b> to find the <b>decision boundary</b> via Bayes.</li>
+      </ul>
+      <div class="formula">P(h|D) = P(D|h)·P(h) / P(D)</div>
+      <div class="qbox"><b>Likely Q:</b> "Using Bayes' theorem, classify the given event," or "How is the decision boundary found using a discriminant function?"</div>
+      <div class="links">📘 <a href="week5.html">Week 5 — Bayesian Learning &amp; Naive Bayes</a></div>
+    </div>
+
+    <div class="topic" style="--t:#f7c948;">
+      <h3>Confusion Matrix → Accuracy / Precision / Recall / F1 <span class="pill comp">Very Important</span></h3>
+      <ul>
+        <li>Called <b>"very, very important"</b> — expect <b>MCQs and a big question</b>.</li>
+        <li>Also a likely <b>numerical</b>: given a confusion matrix, compute the metrics.</li>
+      </ul>
+      <div class="formula">Accuracy = (TP+TN)/Total &nbsp;|&nbsp; Precision = TP/(TP+FP) &nbsp;|&nbsp; Recall = TP/(TP+FN) &nbsp;|&nbsp; F1 = 2·P·R/(P+R)</div>
+      <div class="links">📘 <a href="week2.html">Week 2 — Evaluation Metrics</a> · <a href="Numerical_Practice.html">🧮 Practice</a></div>
+    </div>
+
+    <div class="topic" style="--t:#f7c948;">
+      <h3>Perceptron / Neural-Network Output <span class="pill comp">Guaranteed Numerical</span></h3>
+      <ul>
+        <li>Given inputs X1, X2, weights, and an activation (sigmoid / ReLU / step), <b>compute the neuron's output</b>.</li>
+        <li>Know how the perceptron updates its weights.</li>
+      </ul>
+      <div class="formula">z = Σ wᵢxᵢ + b &nbsp;→&nbsp; output = f(z) &nbsp; (e.g. sigmoid 1/(1+e⁻ᶻ))</div>
+      <div class="links">📘 <a href="week8.html">Week 8 — Neural Network Fundamentals</a> · <a href="week2.html">Week 2 — Perceptron</a></div>
+    </div>
+  </section>
+
+  <!-- EMPHASIZED -->
+  <section id="emphasized">
+    <h2>📌 Other Emphasized Theory Topics</h2>
+    <p style="color:var(--muted);">Strongly recommended — likely to appear in Part C and across the MCQs.</p>
+
+    <div class="topic" style="--t:#00d4aa;">
+      <h3>CNN vs RNN vs Transformers &amp; Transfer Learning <span class="pill imp">Emphasized</span></h3>
+      <ul>
+        <li>General architecture of CNN, RNN, and transformer-based models.</li>
+        <li><b>When to use CNN vs RNN vs transformer</b>; what transfer learning is.</li>
+      </ul>
+      <div class="links">📘 <a href="week10.html">Week 10 — CNN, Transfer Learning &amp; RNNs</a> · <a href="week9.html">Week 9 — Deep Learning</a></div>
+    </div>
+
+    <div class="topic" style="--t:#00d4aa;">
+      <h3>SVM — Working Principle &amp; Kernel Strategy <span class="pill imp">Emphasized</span></h3>
+      <ul><li>Explain how SVM works and the kernel trick (steps + diagram where possible).</li></ul>
+      <div class="links">📘 <a href="week3.html">Week 3 — SVM</a> · <a href="week4.html">Week 4 — Kernel SVM</a></div>
+    </div>
+
+    <div class="topic" style="--t:#00d4aa;">
+      <h3>KNN vs K-Means Clustering <span class="pill imp">Emphasized</span></h3>
+      <ul><li>KNN = supervised (nearest-neighbour class label); K-Means = unsupervised clustering. Know both working principles.</li></ul>
+      <div class="links">📘 <a href="week1.html">Week 1 — KNN</a> · <a href="week6.html">Week 6 — K-Means Clustering</a></div>
+    </div>
+
+    <div class="topic" style="--t:#00d4aa;">
+      <h3>Regression Performance Metrics <span class="pill imp">Emphasized</span></h3>
+      <ul><li>For logistic &amp; linear regression: assess with <b>R², MSE, MAE</b> — know how to compute each.</li></ul>
+      <div class="formula">R² = 1 − RSS/TSS &nbsp;|&nbsp; MSE = (1/n)Σ(y−ŷ)² &nbsp;|&nbsp; MAE = (1/n)Σ|y−ŷ|</div>
+      <div class="links">📘 <a href="week2.html">Week 2 — Metrics</a> · <a href="week3.html">Week 3 — Regression</a></div>
+    </div>
+  </section>
+
+  <!-- NUMERICALS -->
+  <section id="numericals">
+    <h2>🧮 The Simple Numericals (don't over-prepare)</h2>
+    <div class="card">
+      <p>The professor repeated several times that numericals are <b>simple — few steps, no complex operations</b>. The expected types:</p>
+      <table>
+        <tr><th>Numerical</th><th>What you're asked</th></tr>
+        <tr><td><b>Confusion matrix</b></td><td>Given the matrix, compute accuracy / precision / recall / F1.</td></tr>
+        <tr><td><b>Perceptron / neuron</b></td><td>Given inputs, weights &amp; activation, find the output of the neuron.</td></tr>
+        <tr><td><b>KNN</b></td><td>Find the class label of a new point from its nearest neighbours.</td></tr>
+        <tr><td><b>K-Means</b></td><td>Assign points to clusters / show one iteration.</td></tr>
+        <tr><td><b>Ensemble majority voting</b></td><td>e.g. M1→class 1, M2→class 2, M3→class 1 ⇒ majority vote = class 1.</td></tr>
+      </table>
+      <div class="links" style="font-size:0.9rem;">🧮 <a href="Numerical_Practice.html" style="color:var(--accent2);font-weight:600;">Interactive Practice</a> &nbsp; 📖 <a href="Numerical_Problems.html" style="color:var(--accent2);font-weight:600;">Worked Examples</a></div>
+    </div>
+  </section>
+
+  <!-- ADVICE -->
+  <section id="advice">
+    <h2>✅ How to Attempt the Paper (the professor's advice)</h2>
+    <div class="do"><b>Attempt every question.</b> Write all the long-answer questions (whether 4 or 6) — don't leave any blank. Grace marks are only possible if you write reasonable, relevant content.</div>
+    <div class="do"><b>Stay relevant.</b> Irrelevant answers earn no grace marks — answer exactly what is asked.</div>
+    <div class="do"><b>5-mark questions:</b> point-wise answers and comparison tables are fine. For "working principle" questions, write the steps and <b>draw a diagram wherever possible</b> (CNN, RNN, RL, KNN, SVM, etc.).</div>
+    <div class="do"><b>The uploaded LMS study material is "more than enough"</b> to clear the exam — go through all of it, especially for the MCQs.</div>
+  </section>
+
+  <!-- DONT -->
+  <section id="dont">
+    <h2>🚫 What NOT to Do</h2>
+    <div class="dont"><b>Don't study from the mid-term / CAT / digital-assignment papers.</b> The professor said that pattern was framed for those evaluations, not the FAT — his FAT question style is different now.</div>
+    <div class="dont"><b>Don't rely on the earlier "sample FAT 2026" PDF as the pattern.</b> His mindset has changed since sharing it; some of its numericals look complex, but he is <b>not</b> asking anything that complex this semester. Follow this revision-class guidance instead.</div>
+    <div class="dont"><b>Don't over-prepare complex numericals.</b> Keep numerical practice to the simple types listed above.</div>
+  </section>
+
+  <a href="index.html" class="backlink">← Back to all modules</a>
+
+</div>
+
+<script src="../claude-tutor.js"></script>
+</body>
+</html>
