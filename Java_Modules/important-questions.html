@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Important Questions — Exam Revision (Professor's Hints)</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d2e; --accent:#6c63ff; --accent2:#00d4aa; --yellow:#f7c948; --red:#f87171; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --code:#2d3748; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.7; }
+  header { background:linear-gradient(135deg,#6c63ff,#00d4aa); padding:3rem 2rem 2.5rem; text-align:center; position:relative; overflow:hidden; }
+  header .badge { display:inline-block; background:rgba(255,255,255,0.18); color:#fff; border:1px solid rgba(255,255,255,0.35); padding:.35rem 1.1rem; border-radius:20px; font-size:.8rem; margin-bottom:1rem; letter-spacing:.03em; }
+  header h1 { font-size:2.5rem; font-weight:800; color:#fff; line-height:1.2; }
+  header p { font-size:1.05rem; color:rgba(255,255,255,0.9); margin-top:0.6rem; max-width:640px; margin-left:auto; margin-right:auto; }
+  nav { background:var(--card); border-bottom:2px solid var(--accent); display:flex; flex-wrap:wrap; gap:0.25rem; padding:0.75rem 1rem; position:sticky; top:0; z-index:100; }
+  nav a { color:var(--muted); text-decoration:none; padding:0.4rem 0.9rem; border-radius:6px; font-size:0.82rem; transition:all 0.2s; }
+  nav a:hover, nav a.active { background:var(--accent); color:#fff; }
+  .container { max-width:1050px; margin:0 auto; padding:2rem 1.5rem 4rem; }
+  section { margin-bottom:2.8rem; scroll-margin-top:70px; }
+  h2 { font-size:1.7rem; color:var(--accent); margin-bottom:0.4rem; display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; }
+  .mod-sub { color:var(--muted); font-size:0.92rem; margin-bottom:1.2rem; }
+  h3 { font-size:1.12rem; color:var(--accent2); margin:1.4rem 0 0.7rem; display:flex; align-items:center; gap:.5rem; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  p { margin-bottom:0.7rem; }
+  /* Professor tip banner */
+  .prof-tip { border-left:4px solid var(--yellow); background:rgba(247,201,72,0.09); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1rem 0; font-size:0.95rem; }
+  .prof-tip strong { color:var(--yellow); }
+  /* weightage pills */
+  .weight { display:flex; gap:.4rem; flex-wrap:wrap; margin:0 0 1rem; }
+  .pill { font-size:.72rem; font-weight:700; padding:.25rem .7rem; border-radius:20px; }
+  .pill-prog { background:rgba(0,212,170,0.18); color:var(--accent2); }
+  .pill-mcq { background:rgba(108,99,255,0.22); color:#a78bfa; }
+  .pill-theory { background:rgba(247,201,72,0.16); color:var(--yellow); }
+  /* Question list */
+  ol.q { list-style:none; counter-reset:q; padding:0; }
+  ol.q > li { counter-increment:q; position:relative; background:#12152a; border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:8px; padding:0.9rem 1rem 0.9rem 3rem; margin-bottom:0.7rem; }
+  ol.q > li::before { content:"Q" counter(q); position:absolute; left:0.7rem; top:0.85rem; font-size:0.72rem; font-weight:700; color:var(--accent); }
+  ol.q > li.starred { border-left-color:var(--yellow); }
+  ol.q > li.prog { border-left-color:var(--accent2); }
+  .qtype { font-size:.66rem; font-weight:700; padding:.12rem .5rem; border-radius:10px; margin-left:.4rem; vertical-align:middle; }
+  .t-mcq { background:rgba(108,99,255,0.2); color:#a78bfa; }
+  .t-prog { background:rgba(0,212,170,0.18); color:var(--accent2); }
+  .t-theory { background:rgba(247,201,72,0.16); color:var(--yellow); }
+  .star { color:var(--yellow); }
+  .ans { display:block; margin-top:.4rem; font-size:0.85rem; color:var(--muted); }
+  .ans b { color:var(--accent2); font-weight:600; }
+  code { background:var(--code); color:#89ddff; padding:0.1rem 0.4rem; border-radius:4px; font-family:'Fira Code',monospace; font-size:0.85em; }
+  a.wk { color:var(--accent); text-decoration:none; font-size:0.82rem; border:1px solid var(--border); padding:.25rem .7rem; border-radius:20px; }
+  a.wk:hover { border-color:var(--accent); }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.88rem; }
+  th { background:var(--accent); color:#fff; padding:0.6rem 0.9rem; text-align:left; }
+  td { padding:0.55rem 0.9rem; border-bottom:1px solid var(--border); }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.03); }
+  ul.plain { padding-left:1.3rem; margin-bottom:0.6rem; }
+  ul.plain li { margin-bottom:0.3rem; }
+  .legend { display:flex; gap:1rem; flex-wrap:wrap; font-size:.8rem; color:var(--muted); margin:1rem 0 0; }
+  .legend span { display:inline-flex; align-items:center; gap:.35rem; }
+  .dot { width:12px; height:12px; border-radius:3px; display:inline-block; }
+  .toc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:.8rem; }
+  .toc-item { background:#12152a; border:1px solid var(--border); border-radius:10px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; border-top:3px solid var(--accent); transition:transform .15s,border-color .2s; }
+  .toc-item:hover { transform:translateY(-3px); border-color:var(--accent); }
+  .toc-item b { display:block; color:var(--accent2); font-size:.95rem; margin-bottom:.2rem; }
+  .toc-item span { font-size:.8rem; color:var(--muted); }
+  @media(max-width:700px){ header h1{font-size:1.8rem;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">📌 Exam Revision — Based on Professor's Last Class</div>
+  <h1>Important Questions</h1>
+  <p>Distilled from the final revision session — the exact topics, MCQs, and programs the professor said to expect, organised by the 7 exam modules.</p>
+</header>
+
+<nav>
+  <a href="index.html">🏠 Home</a>
+  <a href="#tips">⭐ Exam Tips</a>
+  <a href="#m1">M1 · Core Java</a>
+  <a href="#m2">M2 · Exceptions &amp; Threads</a>
+  <a href="#m3">M3 · GUI</a>
+  <a href="#m4">M4 · JDBC</a>
+  <a href="#m5">M5 · Servlets &amp; JSP</a>
+  <a href="#m6">M6 · Frameworks</a>
+  <a href="#m7">M7 · Networking &amp; RMI</a>
+</nav>
+
+<div class="container">
+
+  <!-- ═══ OVERVIEW / TIPS ═══ -->
+  <section id="tips">
+    <h2>⭐ Professor's Golden Rules</h2>
+    <div class="card">
+      <div class="prof-tip"><strong>Answer everything — never leave a blank.</strong> "Even if you don't know the syntax, write at least the outline / a few relevant lines. Generally marks are given for attempts."</div>
+      <div class="prof-tip"><strong>The uploaded slides are enough.</strong> No need to study from outside sources — but you <em>must understand the code</em>, not just memorise it (e.g. why <code>RemoteException</code>, why <code>UnicastRemoteObject</code>, what each line does).</div>
+      <div class="prof-tip"><strong>Every module carries a program + MCQs.</strong> The paper is 3 sets of questions covering all 7 modules — expect 1-mark MCQs, 2-mark MCQs, and program-based questions from each.</div>
+      <div class="prof-tip"><strong>For paired programs, one side is enough.</strong> In networking (TCP/UDP), write <em>either</em> the server <em>or</em> the client program — not both.</div>
+
+      <h3>🗺️ Jump to a Module</h3>
+      <div class="toc-grid">
+        <a class="toc-item" href="#m1"><b>Module 1</b><span>Core Java &amp; OOP — classes, inheritance, interfaces, packages</span></a>
+        <a class="toc-item" href="#m2"><b>Module 2</b><span>Exception Handling &amp; Multithreading</span></a>
+        <a class="toc-item" href="#m3"><b>Module 3</b><span>GUI — Swing &amp; JavaFX (not AWT)</span></a>
+        <a class="toc-item" href="#m4"><b>Module 4</b><span>JDBC — database connectivity</span></a>
+        <a class="toc-item" href="#m5"><b>Module 5</b><span>Servlets &amp; JSP</span></a>
+        <a class="toc-item" href="#m6"><b>Module 6</b><span>Frameworks — Spring, Spring Boot, Hibernate</span></a>
+        <a class="toc-item" href="#m7"><b>Module 7</b><span>Networking &amp; RMI</span></a>
+      </div>
+
+      <div class="legend">
+        <span><i class="dot" style="background:var(--yellow)"></i> ⭐ High-priority (professor emphasised)</span>
+        <span><i class="dot" style="background:var(--accent2)"></i> Program-based</span>
+        <span><i class="dot" style="background:var(--accent)"></i> MCQ / Theory</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ MODULE 1 ═══ -->
+  <section id="m1">
+    <h2>Module 1 — Core Java &amp; OOP <a class="wk" href="week1.html">Week 1</a> <a class="wk" href="week2.html">Week 2</a></h2>
+    <div class="mod-sub">Classes, constructors, inheritance, <code>super</code>, <code>abstract</code>, <code>final</code>, interfaces, packages — all the basics.</div>
+    <div class="weight">
+      <span class="pill pill-prog">Program expected</span>
+      <span class="pill pill-mcq">1-mark MCQ</span>
+      <span class="pill pill-mcq">2-mark MCQ</span>
+    </div>
+    <div class="card">
+      <div class="prof-tip"><strong>Professor:</strong> "I tried to cover all topics from here — classes, constructors, inheritance, super keyword, abstract keyword, final keyword, interface, package-related keywords. It's the basics only."</div>
+      <ol class="q">
+        <li class="starred prog">Write a program demonstrating <strong>inheritance</strong> with the <code>super</code> keyword (call parent constructor / method). <span class="qtype t-prog">program</span> <span class="star">⭐</span></li>
+        <li class="starred">What is the difference between an <strong>abstract class</strong> and an <strong>interface</strong>? <span class="qtype t-theory">theory</span> <span class="star">⭐</span><span class="ans">An interface has only <b>abstract methods + final variables</b> (declaration only); a class can have abstract/non-abstract methods and final/non-final variables. An interface <b>must be implemented</b> by a class.</span></li>
+        <li>What is the use of the <code>final</code> keyword (final variable / method / class)? <span class="qtype t-mcq">MCQ</span></li>
+        <li>What is a constructor? Difference between a default and parameterized constructor. <span class="qtype t-mcq">MCQ</span></li>
+        <li>How do you create and use a <strong>package</strong>? Which keyword imports a package? <span class="qtype t-mcq">MCQ</span></li>
+        <li class="prog">Write a class with a constructor and demonstrate object creation &amp; method calls (e.g. area of a circle, bank account). <span class="qtype t-prog">program</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══ MODULE 2 ═══ -->
+  <section id="m2">
+    <h2>Module 2 — Exception Handling &amp; Multithreading <a class="wk" href="week3.html">Week 3</a> <a class="wk" href="week4.html">Week 4</a></h2>
+    <div class="mod-sub">Two likely programs: one exception-handling program + one multithreaded program.</div>
+    <div class="weight">
+      <span class="pill pill-prog">2 programs likely</span>
+      <span class="pill pill-mcq">1-mark MCQ</span>
+      <span class="pill pill-mcq">2-mark MCQ</span>
+    </div>
+    <div class="card">
+      <h3>🔴 Exception Handling</h3>
+      <ol class="q">
+        <li class="starred">If you divide <code>5 / 0</code>, what type of exception is raised? <span class="qtype t-mcq">MCQ</span> <span class="star">⭐</span><span class="ans"><b>ArithmeticException</b> (divide by zero).</span></li>
+        <li class="starred">What is the difference between the <code>catch</code> block and the <code>finally</code> block? <span class="qtype t-theory">theory</span> <span class="star">⭐</span><span class="ans"><b>finally</b> always executes (last); <b>catch</b> runs only if the matching error is generated in <code>try</code>.</span></li>
+        <li>Name the exception-handling keywords. <span class="qtype t-mcq">MCQ</span><span class="ans"><b>try, catch, finally, throw, throws.</b></span></li>
+        <li>What is the purpose of the <code>throw</code> keyword? <span class="qtype t-theory">theory</span><span class="ans">To <b>manually throw</b> an exception/error.</span></li>
+        <li class="starred prog">Write a <strong>user-defined exception</strong> program (e.g. if age &lt; 18 throw "invalid citizen"; or validate subject marks / product quantity). <span class="qtype t-prog">program</span> <span class="star">⭐</span></li>
+      </ol>
+      <h3>🧵 Multithreading</h3>
+      <ol class="q">
+        <li class="starred prog">Write a multithreaded program using either the <code>Thread</code> class <em>or</em> the <code>Runnable</code> interface (either is allowed). <span class="qtype t-prog">program</span> <span class="star">⭐</span></li>
+        <li>What is the purpose of <code>Thread.sleep(1000)</code>? <span class="qtype t-mcq">MCQ</span><span class="ans">Pauses the thread for the given milliseconds.</span></li>
+        <li>What is the purpose of the <code>wait()</code> method? What do <code>start()</code> and <code>run()</code> do? <span class="qtype t-mcq">MCQ</span></li>
+        <li>Name the thread <strong>lifecycle</strong> states / methods. <span class="qtype t-theory">theory</span></li>
+        <li class="starred">What is <strong>synchronization</strong>? What is the <code>synchronized</code> keyword used for? <span class="qtype t-theory">theory</span> <span class="star">⭐</span><span class="ans">Locks a shared resource so only one thread accesses it at a time, then unlocks it for the next request.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══ MODULE 3 ═══ -->
+  <section id="m3">
+    <h2>Module 3 — GUI Programming <a class="wk" href="week6.html">Week 6</a></h2>
+    <div class="mod-sub">Only <strong>Swing</strong> and <strong>JavaFX</strong> — <span style="color:var(--red)">AWT is NOT asked.</span></div>
+    <div class="weight">
+      <span class="pill pill-prog">Design-your-own-form program</span>
+      <span class="pill pill-mcq">MCQ</span>
+    </div>
+    <div class="card">
+      <div class="prof-tip"><strong>Professor:</strong> "I take questions from Swing and JavaFX only, not AWT. You will get one program — design your own GUI/form using <em>either</em> Swing or JavaFX."</div>
+      <ol class="q">
+        <li class="starred prog">Design a form (your own interface) using <strong>either Swing or JavaFX</strong>. <span class="qtype t-prog">program</span> <span class="star">⭐</span></li>
+        <li>In Swing, which components create a label, button, and text field? <span class="qtype t-mcq">MCQ</span><span class="ans"><b>JLabel, JButton, JTextField.</b></span></li>
+        <li>In JavaFX, how do you create a label? Which is the top-level container? <span class="qtype t-mcq">MCQ</span><span class="ans">Top layer = <b>Stage</b> → Scene → nodes.</span></li>
+        <li class="starred">What is a <strong>GridLayout</strong>? What are <strong>HBox</strong> and <strong>VBox</strong> layouts? <span class="qtype t-mcq">MCQ</span> <span class="star">⭐</span><span class="ans">GridLayout = rows×columns grid; HBox = horizontal row; VBox = vertical column.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══ MODULE 4 ═══ -->
+  <section id="m4">
+    <h2>Module 4 — JDBC <a class="wk" href="week7.html">Week 7</a></h2>
+    <div class="mod-sub">Theory MCQs + a connectivity program. Only the <strong>middle (connectivity) code</strong> — no front-end/table design needed.</div>
+    <div class="weight">
+      <span class="pill pill-prog">Program (one CRUD operation)</span>
+      <span class="pill pill-theory">Theory MCQ</span>
+    </div>
+    <div class="card">
+      <div class="prof-tip"><strong>Professor:</strong> "Write only the JDBC middle part — <code>Class.forName</code>, <code>DriverManager</code>, connection, statement, ResultSet. Expect any ONE operation: insert OR read OR update."</div>
+      <ol class="q">
+        <li class="starred prog">Write a JDBC program to <strong>insert / read / update</strong> a record (any one operation). <span class="qtype t-prog">program</span> <span class="star">⭐</span></li>
+        <li class="starred">List the JDBC API components and their roles. <span class="qtype t-theory">theory</span> <span class="star">⭐</span><span class="ans"><b>Driver, Connection, Statement, PreparedStatement, CallableStatement, ResultSet.</b></span></li>
+        <li>Difference between <code>Statement</code>, <code>PreparedStatement</code>, and <code>CallableStatement</code>. <span class="qtype t-mcq">MCQ</span></li>
+        <li>Given a statement/code snippet, identify the correct answer/output. <span class="qtype t-mcq">MCQ</span></li>
+        <li>What are the steps to connect Java to a database? <span class="qtype t-theory">theory</span><span class="ans">Load driver (<code>Class.forName</code>) → get Connection (<code>DriverManager</code>) → create Statement → execute query → process ResultSet → close.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══ MODULE 5 ═══ -->
+  <section id="m5">
+    <h2>Module 5 — Servlets &amp; JSP <a class="wk" href="week8.html">Week 8</a> <a class="wk" href="week9.html">Week 9</a></h2>
+    <div class="mod-sub">MCQs + programs. Expect <strong>two program questions</strong>: one form-based, one JDBC-based.</div>
+    <div class="weight">
+      <span class="pill pill-prog">Form program</span>
+      <span class="pill pill-prog">JDBC program</span>
+      <span class="pill pill-mcq">1 &amp; 2-mark MCQ</span>
+    </div>
+    <div class="card">
+      <div class="prof-tip"><strong>Professor:</strong> "Study the program from servlet and JSP thoroughly. Expect one form-handling question and one JDBC-with-servlet/JSP question. Theory = JSP objects + lifecycles."</div>
+      <ol class="q">
+        <li class="starred prog">Write a program to <strong>handle a form</strong> (text boxes / radio buttons / check boxes) using a Servlet or JSP. <span class="qtype t-prog">program</span> <span class="star">⭐</span></li>
+        <li class="starred prog">Write a <strong>JDBC-with-Servlet/JSP</strong> program (form → database). <span class="qtype t-prog">program</span> <span class="star">⭐</span></li>
+        <li class="starred">What is the <strong>Servlet lifecycle</strong>? What is the <strong>JSP lifecycle</strong>? <span class="qtype t-theory">theory</span> <span class="star">⭐</span><span class="ans">Servlet: load → <code>init()</code> → <code>service()</code> → <code>destroy()</code>. JSP: translation → compilation → init → service → destroy.</span></li>
+        <li>What are the JSP <strong>implicit objects</strong>? <span class="qtype t-mcq">MCQ</span><span class="ans">request, response, out, session, application, config, pageContext, page, exception.</span></li>
+        <li>What is a servlet? How do you read form data (<code>getParameter</code>)? <span class="qtype t-mcq">MCQ</span></li>
+        <li>Study JSP tags (theory). <span class="qtype t-theory">theory</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══ MODULE 6 ═══ -->
+  <section id="m6">
+    <h2>Module 6 — Frameworks in Java <a class="wk" href="week10.html">Week 10</a></h2>
+    <div class="mod-sub">Focus on <strong>Spring, Spring Boot, Hibernate</strong>. (JSF / Struts front-end left out.) Programs = mostly the <strong>controller</strong> part.</div>
+    <div class="weight">
+      <span class="pill pill-theory">Theory MCQ (heavy)</span>
+      <span class="pill pill-prog">Controller program</span>
+    </div>
+    <div class="card">
+      <div class="prof-tip"><strong>Professor:</strong> "Concentrate on Spring &amp; Hibernate. If a program is asked, it's mostly the controller part (controller is common; front-end can be JSP or Thymeleaf). Study one program and the theory follows."</div>
+      <h3>📖 Theory</h3>
+      <ol class="q">
+        <li class="starred">What is <strong>Dependency Injection</strong> and the <strong>IoC container</strong>? <span class="qtype t-theory">theory</span> <span class="star">⭐</span></li>
+        <li class="starred">What is <strong>coupling</strong> / <strong>loose coupling</strong>? <span class="qtype t-theory">theory</span> <span class="star">⭐</span></li>
+        <li>What is <strong>Aspect-Oriented Programming (AOP)</strong> / an "aspect"? <span class="qtype t-theory">theory</span></li>
+        <li>Difference between <strong>Struts and Spring</strong>; what is <strong>Hibernate</strong> / <strong>Spring Boot</strong>? <span class="qtype t-mcq">MCQ</span></li>
+        <li class="starred">Which <strong>annotation</strong> marks a Spring app? Which annotation makes a REST controller? <span class="qtype t-mcq">MCQ</span> <span class="star">⭐</span><span class="ans">e.g. <code>@SpringBootApplication</code>, <code>@RestController</code>, <code>@Controller</code>, <code>@Autowired</code>, <code>@RequestMapping</code>.</span></li>
+      </ol>
+      <h3>💻 Program</h3>
+      <ol class="q">
+        <li class="prog">Write a <strong>Spring controller</strong> (map a URL to a method returning a view/response). <span class="qtype t-prog">program</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══ MODULE 7 ═══ -->
+  <section id="m7">
+    <h2>Module 7 — Networking &amp; RMI <a class="wk" href="week11.html">Week 11</a> <a class="wk" href="week12.html">Week 12</a></h2>
+    <div class="mod-sub">"The easiest chapter." Networking = program-heavy; RMI = one program + theory.</div>
+    <div class="weight">
+      <span class="pill pill-prog">TCP / UDP program</span>
+      <span class="pill pill-prog">RMI program</span>
+      <span class="pill pill-mcq">MCQ + theory</span>
+    </div>
+
+    <div class="card">
+      <h3>🌐 Networking — Theory &amp; MCQ</h3>
+      <div class="prof-tip"><strong>Professor:</strong> "From networking you expect the program; from the program you also get theory MCQs. Only the 4 programs (TCP client/server, UDP client/server) matter."</div>
+      <ol class="q">
+        <li class="starred">Which class is used for the <strong>client</strong> vs the <strong>server</strong> in TCP? <span class="qtype t-mcq">MCQ</span> <span class="star">⭐</span><span class="ans">Client = <code>Socket</code>; Server = <code>ServerSocket</code>. (Package: <code>java.net.*</code>)</span></li>
+        <li class="starred">Which classes are used for UDP? <span class="qtype t-mcq">MCQ</span> <span class="star">⭐</span><span class="ans"><code>DatagramSocket</code> (connection) + <code>DatagramPacket</code> (message) — used in BOTH client &amp; server.</span></li>
+        <li class="starred">Difference between <strong>TCP and UDP</strong> (connection-oriented vs connectionless, reliable vs unreliable). <span class="qtype t-theory">theory</span> <span class="star">⭐</span><span class="ans">TCP = connection-oriented, sends acknowledgement, reliable. UDP = connectionless, no acknowledgement, unreliable but faster.</span></li>
+        <li class="starred">What is the equivalent IP address of <code>localhost</code>? <span class="qtype t-mcq">MCQ</span> <span class="star">⭐</span><span class="ans"><b>127.0.0.1</b></span></li>
+        <li>Given a URL, what do <code>getProtocol()</code>, <code>getHost()</code>, <code>getPort()</code>, <code>getFile()</code>, <code>getPath()</code>, <code>getQuery()</code> return? <span class="qtype t-mcq">MCQ</span><span class="ans">Requires the <code>URL</code> class from <code>java.net.*</code>.</span></li>
+        <li>What does <code>InetAddress.getByName(...)</code> return? <span class="qtype t-mcq">MCQ</span><span class="ans">The IP address details of the given host name.</span></li>
+        <li>Difference between IPv4 and IPv6? <span class="qtype t-mcq">MCQ</span><span class="ans">IPv4 = 32-bit; IPv6 = 128-bit (far more addresses).</span></li>
+      </ol>
+      <h3>💻 Networking — Programs</h3>
+      <ol class="q">
+        <li class="starred prog">Write a <strong>TCP</strong> program (client OR server — one side is enough). <span class="qtype t-prog">program</span> <span class="star">⭐</span></li>
+        <li class="starred prog">Write a <strong>UDP</strong> program (client OR server). May include string handling — e.g. convert received text to uppercase, count words, or sentence length. <span class="qtype t-prog">program</span> <span class="star">⭐</span></li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>🛰️ RMI — Remote Method Invocation</h3>
+      <div class="prof-tip"><strong>Professor:</strong> "Only one program. Understand the code — why RemoteException, why UnicastRemoteObject, purpose of rebind. Expect code-based MCQs (find the answer from the code)."</div>
+      <ol class="q">
+        <li class="starred">What is <strong>RMI</strong>? What are <strong>stub</strong> and <strong>skeleton</strong>? <span class="qtype t-theory">theory</span> <span class="star">⭐</span><span class="ans">Stub (client-side) packages the request; skeleton (server-side) passes it to the remote method and returns the result.</span></li>
+        <li class="starred">A remote interface extends which interface? Which exception does it throw? <span class="qtype t-mcq">MCQ</span> <span class="star">⭐</span><span class="ans">Extends <code>Remote</code>; throws <code>RemoteException</code>. Package: <code>java.rmi.*</code></span></li>
+        <li class="starred">The implementation class extends which superclass? <span class="qtype t-mcq">MCQ</span> <span class="star">⭐</span><span class="ans"><code>UnicastRemoteObject</code>.</span></li>
+        <li>What is the purpose of the <code>Naming.rebind()</code> / <code>bind()</code> method? And <code>Naming.lookup()</code>? <span class="qtype t-mcq">MCQ</span><span class="ans">bind/rebind = register a remote object under a name; lookup = get a reference to a remote object.</span></li>
+        <li>Name the <code>Naming</code> class methods. <span class="qtype t-mcq">MCQ</span><span class="ans">bind, rebind, unbind, lookup, list.</span></li>
+        <li>What is the <code>rmic</code> tool / <code>rmiregistry</code> used for? <span class="qtype t-theory">theory</span><span class="ans"><code>rmic</code> generates the stub/skeleton; the registry stores remote services on a port.</span></li>
+        <li class="starred prog">Write an <strong>RMI program</strong> (e.g. remote <code>add(a,b)</code>) — follow the 6 steps: interface → implementation → server (rebind) → client (lookup). <span class="qtype t-prog">program</span> <span class="star">⭐</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <div style="text-align:center;margin-top:2rem;padding:2rem;color:var(--muted);font-size:.85rem;border-top:1px solid var(--border)">
+    Important Questions compiled from the professor's final revision class &nbsp;•&nbsp; ⭐ = high-priority &nbsp;•&nbsp;
+    <a href="index.html" style="color:var(--accent)">Back to Module Index</a> &nbsp;•&nbsp;
+    <a href="mcqs-2mark.html" style="color:var(--accent2)">Practise Exam MCQs →</a>
+  </div>
+</div>
+
+<script>
+// active nav highlight on scroll
+const secs=[...document.querySelectorAll('section')];
+const links=[...document.querySelectorAll('nav a[href^="#"]')];
+const map={}; links.forEach(l=>map[l.getAttribute('href').slice(1)]=l);
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting){ links.forEach(l=>l.classList.remove('active')); if(map[e.target.id]) map[e.target.id].classList.add('active'); } });
+},{rootMargin:'-40% 0px -55% 0px'});
+secs.forEach(s=>io.observe(s));
+</script>
+<script src="../claude-tutor.js"></script>
+</body>
+</html>
